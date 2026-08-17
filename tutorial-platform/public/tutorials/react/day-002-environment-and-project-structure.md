@@ -6,7 +6,9 @@ level: Beginner
 estimatedMinutes: 30
 order: 2
 track: react
+youtubeVideos: []
 ---
+
 # Day 2 [Beginner]: Environment and Project Structure
 
 ## Index

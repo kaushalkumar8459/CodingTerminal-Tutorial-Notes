@@ -137,7 +137,9 @@ function buildFrontmatter(document: TutorialDocument) {
 export async function loadTutorialDocument(
   tutorial: TutorialMeta,
 ): Promise<TutorialDocument> {
-  const response = await fetch(`/${tutorial.contentPath}`);
+  const response = await fetch(`/${tutorial.contentPath}`, {
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     throw new Error(`Unable to load ${tutorial.contentPath}`);

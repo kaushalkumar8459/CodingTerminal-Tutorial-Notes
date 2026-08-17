@@ -9,7 +9,6 @@ track: react
 youtubeVideos: [{"title":"Create Application in MFA","url":"https://www.youtube.com/watch?v=4tLBRy25xOQ&list=PLHX7ZNz5nHXnPLODZc_UsTmZ5z9xi49rP"}]
 ---
 
-
 # Day 1 [Beginner]: Introduction to React
 
 ## Index

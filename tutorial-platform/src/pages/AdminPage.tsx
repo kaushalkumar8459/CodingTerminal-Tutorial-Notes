@@ -4,6 +4,7 @@ import { MarkdownLesson } from "../components/MarkdownLesson";
 import { tracks, type TrackKey } from "../data/tracks";
 import { tutorials } from "../data/tutorials";
 import { formatYouTubeVideoList, loadTutorialDocument, parseYouTubeVideosField, saveTutorialDocument, type TutorialDocument } from "../services/contentAdmin";
+import { invalidateLessonMarkdownCache } from "./TutorialPage";
 import type { TutorialMeta } from "../types/tutorial";
 
 function buildEmptyDocument(tutorial: TutorialMeta): TutorialDocument {
@@ -128,6 +129,7 @@ function useTutorialSave(
         return;
       }
 
+      invalidateLessonMarkdownCache(document.contentPath);
       setStatusMessage(result.message);
     } finally {
       setIsSaving(false);

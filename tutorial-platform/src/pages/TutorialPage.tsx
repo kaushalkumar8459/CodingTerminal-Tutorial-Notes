@@ -20,6 +20,15 @@ type CachedLessonContent = {
 
 const lessonMarkdownCache = new Map<string, CachedLessonContent>();
 
+// Called after an admin save so the learner view refetches instead of showing stale cached content.
+export function invalidateLessonMarkdownCache(contentPath?: string) {
+  if (contentPath) {
+    lessonMarkdownCache.delete(contentPath);
+  } else {
+    lessonMarkdownCache.clear();
+  }
+}
+
 function getYouTubeEmbedUrl(url: string) {
   try {
     const parsedUrl = new URL(url);
@@ -123,8 +132,18 @@ function MobileTocDrawer({ items, isOpen, onClose, onHashLinkClick }: MobileTocD
   }
 
   return (
-    <dialog open className="fixed inset-0 z-50 bg-slate-900/45 backdrop-blur-[1px] xl:hidden" aria-label="On this page menu">
-      <section className="absolute inset-x-0 bottom-0 max-h-[78vh] rounded-t-3xl border border-slate-200 bg-white p-4 shadow-2xl">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="On this page menu"
+      className="fixed inset-0 z-50 bg-slate-900/45 backdrop-blur-[1px] xl:hidden"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <section className="absolute inset-x-0 bottom-0 max-h-[78vh] overflow-y-auto rounded-t-3xl border border-slate-200 bg-white p-4 shadow-2xl">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">On This Page</h3>
           <button
@@ -155,7 +174,7 @@ function MobileTocDrawer({ items, isOpen, onClose, onHashLinkClick }: MobileTocD
           </ul>
         </nav>
       </section>
-    </dialog>
+    </div>
   );
 }
 
@@ -223,8 +242,10 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
       return;
     }
 
-    const previousOverflow = document.body.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -235,7 +256,8 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
     window.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
       window.removeEventListener("keydown", handleEscape);
     };
   }, [isMobileTocDrawerOpen]);
@@ -286,7 +308,7 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
           return;
         }
 
-        const response = await fetch(`/${tutorial.contentPath}`);
+        const response = await fetch(`/${tutorial.contentPath}`, { cache: "no-store" });
 
         if (!response.ok) {
           throw new Error(`Unable to load ${tutorial.fileName}`);
