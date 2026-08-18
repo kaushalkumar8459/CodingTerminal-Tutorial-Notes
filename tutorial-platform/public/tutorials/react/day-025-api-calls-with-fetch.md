@@ -3,226 +3,340 @@ title: API Calls with Fetch
 slug: day-025-api-calls-with-fetch
 dayLabel: Day 25
 level: Intermediate
-estimatedMinutes: 150
+estimatedMinutes: 180
 order: 25
 track: react
 ---
 # Day 25 [Intermediate]: API Calls with `fetch`
 
+## Index
+
+- [Goal](#goal)
+- [Prerequisites](#prerequisites)
+- [Learning Outcomes](#learning-outcomes)
+- [API Request Mental Model](#api-request-mental-model)
+- [Topic by Topic](#topic-by-topic)
+- [Request State Machine](#request-state-machine)
+- [End-to-End Practical](#end-to-end-practical)
+- [Reference Implementation](#reference-implementation)
+- [Common Mistakes](#common-mistakes)
+- [Debugging Lab](#debugging-lab)
+- [Hands-on Exercises](#hands-on-exercises)
+- [Assessment Quiz](#assessment-quiz)
+- [Interview Questions and Answers](#interview-questions-and-answers)
+- [Production Checklist](#production-checklist)
+- [Verification Checklist](#verification-checklist)
+- [Day 25 Outcome](#day-25-outcome)
+
 ## Goal
 
-Build robust API-driven React UI using `fetch`, `useEffect`, loading/error/success states, HTTP validation, cancellation, retries, empty states, and race-condition protection.
+Build a production-minded React screen that fetches remote data with the browser `fetch` API and correctly handles:
 
-This lesson connects Days 22–24 into a complete asynchronous data flow.
+- request lifecycle
+- loading, success, empty, and error states
+- HTTP errors
+- JSON parsing errors
+- cancellation
+- changing query dependencies
+- stale responses and race conditions
+- retry
+- query parameters
+- GET and POST requests
+- client/server security boundaries
+
+The important lesson is not memorizing `fetch()`. It is learning how to connect **React state + effects + asynchronous work + UI state** without creating stale or incorrect UI.
 
 ## Prerequisites
 
-- `useEffect`
-- dependency arrays
-- cleanup
+- Days 22–24
+- `useEffect` and dependency arrays
+- cleanup functions
 - `AbortController`
-- JavaScript promises and `async/await`
+- promises and `async/await`
+- JavaScript arrays and objects
+- controlled inputs
 
-## API Request Mental Model
+## Learning Outcomes
 
-A network request is not just "get data." A useful UI models a state machine:
+By the end of Day 25, you should be able to:
+
+1. Explain what `fetch()` resolves and rejects for.
+2. Validate HTTP status using `response.ok` / `response.status`.
+3. Parse JSON safely.
+4. Model request state explicitly.
+5. Handle successful empty results separately from failures.
+6. Cancel obsolete requests with `AbortController`.
+7. Explain why cancellation alone is not a universal race-condition solution.
+8. Prevent stale asynchronous work from overwriting current UI.
+9. Implement retry without hiding the request lifecycle.
+10. Build GET and POST requests.
+11. Explain when work belongs in an effect versus an event handler.
+12. Identify when manual fetching has become complex enough for a server-state solution.
+
+# API Request Mental Model
+
+A network request is asynchronous and can outlive the render that started it.
 
 ```text
-idle
- ↓
+React state/query
+      ↓
+start request
+      ↓
 loading
- ↓
- ┌───────────────┐
- ↓               ↓
-success         error
- ↓               ↓
-empty/data      retry
+      ↓
+┌───────────────┐
+│ HTTP response │
+└───────────────┘
+      ↓
+validate status
+      ↓
+parse body
+      ↓
+┌──────────┬──────────┐
+│ success  │ failure  │
+└──────────┴──────────┘
+     ↓          ↓
+ data/empty   error
 ```
 
-The UI should communicate the current request state explicitly.
+A useful rule:
 
-## Topic 1 — Basic Fetch
+> **Every request should have a clearly defined owner, lifecycle, and terminal outcome.**
+
+## Request State Machine
+
+For a simple screen:
+
+```text
+idle → loading → success
+             ↘ error → loading (retry)
+```
+
+Success can contain either data or an empty collection:
+
+```text
+success
+ ├── data
+ └── empty
+```
+
+Do not confuse:
+
+- `loading` with `empty`
+- `empty` with `error`
+- `abort` with `error`
+
+An intentionally aborted obsolete request normally should not display an error to the user.
+
+# Topic by Topic
+
+## 1. Basic `fetch`
 
 ```jsx
 const response = await fetch(url);
 const data = await response.json();
 ```
 
-Two asynchronous operations are involved:
+There are two important asynchronous steps:
 
-1. receiving the HTTP response
-2. reading/parsing its body
+1. receive the `Response`
+2. consume and parse the response body
 
-`response.json()` can fail if the body is not valid JSON.
+`response.json()` can itself reject if the body cannot be parsed as valid JSON.
 
-## Topic 2 — HTTP Errors
+## 2. `fetch` Does Not Reject for Normal HTTP Errors
 
-A critical `fetch` rule:
-
-> `fetch` rejects for network-level failures, but HTTP 404/500 responses normally still resolve to a `Response`.
-
-Therefore:
+This is one of the most important interview points.
 
 ```jsx
+const response = await fetch(url);
+
 if (!response.ok) {
-  throw new Error(`Request failed: ${response.status}`);
+  throw new Error(`HTTP ${response.status}`);
 }
 ```
 
-Do not assume `catch` automatically handles HTTP errors.
+A `404` or `500` normally gives you a resolved `Response` object. `catch` is therefore not a substitute for HTTP status validation.
 
-## Topic 3 — Request State
+Think in layers:
 
-A practical initial model:
+```text
+network/transport failure → fetch may reject
+HTTP 404/500              → fetch normally resolves
+invalid JSON               → response.json() may reject
+application validation     → your code may reject/handle
+```
+
+## 3. Request State
+
+A practical state model:
 
 ```jsx
 const [data, setData] = useState([]);
 const [status, setStatus] = useState("idle");
-const [error, setError] = useState("");
+const [error, setError] = useState(null);
 ```
 
-A single status can make impossible combinations less likely than several unrelated booleans:
+Prefer a single status over contradictory booleans such as:
 
-```text
-idle | loading | success | error
+```jsx
+isLoading === true
+isError === true
+isSuccess === true
 ```
 
-For more complex screens, you can model richer state such as `refreshing`, `empty`, or `retrying` separately from the main request status.
+unless your state model explicitly allows those combinations.
 
-## Topic 4 — Fetch in an Effect
+For richer applications, distinguish request state from display state, for example `loading`, `refreshing`, or `retrying`.
 
-For initial data synchronization:
+## 4. Fetching Initial Data with `useEffect`
+
+If the request is synchronization driven by component inputs:
 
 ```jsx
 useEffect(() => {
-  loadUsers();
+  const controller = new AbortController();
+
+  async function load() {
+    // request
+  }
+
+  load();
+
+  return () => controller.abort();
 }, []);
 ```
 
-The function itself should be asynchronous; do not make the effect callback directly async:
-
-Avoid:
+Do **not** make the effect callback itself `async`:
 
 ```jsx
+// Avoid
 useEffect(async () => {
   // ...
 }, []);
 ```
 
-because an effect callback must return either nothing or a cleanup function, not a Promise.
+An async function returns a Promise, while React expects an effect callback to return either nothing or a cleanup function.
 
-## Topic 5 — Loading, Success, Empty, Error
+## 5. Event-Driven Requests
+
+Not every request belongs in an effect.
+
+A request caused directly by a user action can belong in the event handler:
+
+```jsx
+async function handleDelete(id) {
+  await fetch(`/api/todos/${id}`, { method: "DELETE" });
+}
+```
+
+Use an effect when the request synchronizes with reactive inputs such as a selected ID or search query. Use an event handler when the user action itself is the cause.
+
+## 6. Loading, Success, Empty, Error
 
 ```jsx
 if (status === "loading") return <p>Loading...</p>;
-if (status === "error") return <p role="alert">{error}</p>;
+
+if (status === "error") {
+  return <p role="alert">Unable to load data.</p>;
+}
+
 if (status === "success" && data.length === 0) {
   return <p>No results found.</p>;
 }
 ```
 
-A successful empty response is **not necessarily an error**.
+An empty successful response is valid application state.
 
-## Topic 6 — Complete Fetch Pattern
+## 7. Cleanup with `AbortController`
 
 ```jsx
 useEffect(() => {
   const controller = new AbortController();
 
-  async function loadUsers() {
-    try {
-      setStatus("loading");
-      setError("");
-
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users",
-        { signal: controller.signal }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const users = await response.json();
-      setData(users);
-      setStatus("success");
-    } catch (error) {
-      if (error.name === "AbortError") return;
-
-      setError(error.message || "Unable to load data");
-      setStatus("error");
-    }
-  }
-
-  loadUsers();
+  fetch(url, { signal: controller.signal });
 
   return () => controller.abort();
-}, []);
+}, [url]);
 ```
 
-## Topic 7 — Retry
+When `url` changes, cleanup aborts the previous request when the platform/request implementation supports it.
 
-A retry action should be an explicit event:
+This is especially valuable for search, route changes, and rapidly changing filters.
+
+## 8. Abort Is Not the Same as Ignoring
+
+Cancellation and stale-result protection are related but different concerns.
+
+```text
+AbortController
+→ asks the underlying operation to stop
+
+Request identity / ignore strategy
+→ prevents old async work from winning the UI race
+```
+
+A robust architecture should make it impossible for obsolete work to commit current UI state, even if cancellation is too late or not supported by an underlying operation.
+
+## 9. Race Conditions
+
+Example:
+
+```text
+query = "react"
+Request A starts
+
+query = "react hooks"
+Request B starts
+
+B finishes first → show B
+A finishes later → old result must NOT replace B
+```
+
+For search, the cleanup/abort boundary is helpful. For more complex async workflows, explicit request IDs or a dedicated data layer may provide a stronger ownership model.
+
+## 10. `finally` and Overlapping Requests
+
+Be careful with this pattern:
+
+```jsx
+finally {
+  setStatus("success");
+}
+```
+
+An older request could execute its `finally` after a newer request has started.
+
+The principle is:
+
+> **Only the current request should be allowed to finalize current request state.**
+
+For a single effect instance, checking whether its controller was aborted can be enough to avoid stale cleanup updates. More complex flows should track request identity explicitly.
+
+## 11. Retry
+
+Retry is a user action, so it can naturally be triggered from an event handler.
+
+One simple pattern is a retry token:
 
 ```jsx
 const [retryToken, setRetryToken] = useState(0);
 
 useEffect(() => {
-  // fetch...
+  // request
 }, [retryToken]);
 
-<button type="button" onClick={() => setRetryToken((n) => n + 1)}>
+<button
+  type="button"
+  onClick={() => setRetryToken((value) => value + 1)}
+>
   Retry
 </button>
 ```
 
-Another common architecture is to extract the request into a function and call it from both the effect and an event handler. Choose the approach that keeps request ownership clear.
+For production systems, consider retry limits, exponential backoff, jitter, and whether the failure is retryable.
 
-## Topic 8 — Search and Changing Dependencies
-
-```jsx
-useEffect(() => {
-  const controller = new AbortController();
-
-  loadResults(query, controller.signal);
-
-  return () => controller.abort();
-}, [query]);
-```
-
-Every query represents a new synchronization. Cleanup cancels the previous request when possible.
-
-## Topic 9 — Race Conditions
-
-Without cancellation:
-
-```text
-request A: query = react
-request B: query = react hooks
-
-B finishes first → display B
-A finishes later → accidentally display A
-```
-
-The latest request should own the current UI. Cleanup + cancellation helps enforce that boundary.
-
-## Topic 10 — Abort and Loading State
-
-Be careful with `finally` in overlapping requests. An aborted old request should not turn off loading for a newer request.
-
-One approach is to check the signal:
-
-```jsx
-finally {
-  if (!controller.signal.aborted) {
-    setStatus("success");
-  }
-}
-```
-
-A request abstraction can also track request identity explicitly. The important principle is that **old asynchronous work must not overwrite current state**.
-
-## Topic 11 — Query Parameters
+## 12. Query Parameters
 
 ```jsx
 const params = new URLSearchParams({
@@ -233,9 +347,21 @@ const params = new URLSearchParams({
 const response = await fetch(`/api/search?${params}`);
 ```
 
-Using `URLSearchParams` avoids hand-building encoded query strings incorrectly.
+`URLSearchParams` avoids common encoding mistakes.
 
-## Topic 12 — Headers and POST
+## 13. GET Request
+
+```jsx
+const response = await fetch("/api/users");
+
+if (!response.ok) {
+  throw new Error(`HTTP ${response.status}`);
+}
+
+const users = await response.json();
+```
+
+## 14. POST Request
 
 ```jsx
 const response = await fetch("/api/todos", {
@@ -245,39 +371,117 @@ const response = await fetch("/api/todos", {
   },
   body: JSON.stringify({ title }),
 });
+
+if (!response.ok) {
+  throw new Error(`HTTP ${response.status}`);
+}
 ```
 
-Always validate the response status. `fetch` does not treat HTTP error statuses as rejected promises by default.
+HTTP method, headers, body format, authentication, and response contract are API-specific. `fetch` itself does not validate your application schema.
 
-## Topic 13 — Authentication and Security Boundaries
+## 15. Response Validation
 
-Never put secrets such as private API keys in browser-side React code. Anything shipped to the browser can be inspected by the user.
+A successful HTTP status does not guarantee the shape you expected.
 
-For authenticated applications, the frontend should use the application's intended authentication mechanism and backend authorization. CORS is a browser security policy, not a replacement for server-side authorization.
+For example, this can still be wrong:
 
-## Topic 14 — Error Messages
+```json
+{"message":"unexpected payload"}
+```
 
-Do not expose raw internal server details to users:
+when your UI expects:
+
+```json
+[{"id":1,"name":"A"}]
+```
+
+In production, validate important response shapes with a schema/validation layer when the cost of malformed data is significant.
+
+## 16. Authentication and Security
+
+Never put private server secrets in client-side React source.
+
+Important boundaries:
+
+- frontend code is inspectable
+- CORS is not authorization
+- authentication identifies a caller
+- authorization decides what that caller may do
+- sensitive operations should be enforced by the server
+
+## 17. Safe Error Messages
+
+Avoid rendering raw internal error details directly to users:
 
 ```jsx
 <p role="alert">Unable to load users. Please try again.</p>
 ```
 
-Log technical details appropriately for development/observability, while showing a safe user-facing message.
+Technical details can be logged through an appropriate development/observability mechanism.
 
-## End-to-End Project — User Directory
+## 18. Derived Filtering
 
-Requirements:
+Do not create an effect just to filter fetched data:
 
-- fetch users on initial render
-- show loading UI
-- show error UI
-- show empty UI
-- render users with stable keys
-- provide Retry
-- cancel obsolete request
-- search users by query
-- avoid stale results
+```jsx
+const visibleUsers = users.filter((user) =>
+  user.name.toLowerCase().includes(query.toLowerCase())
+);
+```
+
+This is derived data and belongs in render unless the calculation itself is expensive enough to justify memoization.
+
+## 19. Debouncing Search
+
+If every keystroke triggers a request, you may want to debounce the query.
+
+```jsx
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedQuery(query);
+  }, 300);
+
+  return () => clearTimeout(timer);
+}, [query]);
+```
+
+Then fetch from `debouncedQuery`.
+
+Important distinction:
+
+> Debouncing prevents a scheduled request from starting; it does not cancel a request that has already started.
+
+## 20. Caching and Server State
+
+Manual `fetch` is excellent for learning and simple flows. Production applications may need:
+
+- caching
+- deduplication
+- invalidation
+- background refetching
+- pagination
+- retries
+- optimistic updates
+- offline support
+
+At that point, a dedicated server-state/data-fetching solution can reduce complexity.
+
+# End-to-End Practical
+
+## Project: User Directory
+
+Build a User Directory that:
+
+- fetches users on initial render
+- displays loading state
+- displays error state
+- distinguishes empty success
+- supports retry
+- supports search
+- cancels obsolete requests
+- prevents stale results
+- uses stable keys
+- exposes accessible labels and error messaging
 
 ### Suggested architecture
 
@@ -289,12 +493,24 @@ UserDirectory
     └── UserCard
 ```
 
-Keep API/request logic at a level that owns the data lifecycle; keep presentational children focused on display and callback contracts.
+The component that owns the request lifecycle should own the data state. Presentational children should receive data and callback contracts rather than directly owning the request lifecycle.
 
-## Reference Implementation
+### Acceptance Criteria
+
+- [ ] HTTP failures are detected with `response.ok`.
+- [ ] JSON parsing failures are handled.
+- [ ] Loading, success, empty, and error are distinguishable.
+- [ ] Retry works.
+- [ ] Obsolete requests are aborted where possible.
+- [ ] Old responses cannot overwrite current UI.
+- [ ] Search filtering is derived rather than duplicated in state.
+- [ ] Inputs have accessible labels.
+- [ ] Error messages use an appropriate accessible mechanism.
+
+# Reference Implementation
 
 ```jsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const API_URL = "https://jsonplaceholder.typicode.com/users";
 
@@ -302,17 +518,18 @@ export default function UserDirectory() {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("loading");
-  const [error, setError] = useState("");
-  const [retry, setRetry] = useState(0);
+  const [error, setError] = useState(null);
+  const [retryToken, setRetryToken] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
+    let isCurrent = true;
 
     async function loadUsers() {
-      try {
-        setStatus("loading");
-        setError("");
+      setStatus("loading");
+      setError(null);
 
+      try {
         const response = await fetch(API_URL, {
           signal: controller.signal,
         });
@@ -321,35 +538,50 @@ export default function UserDirectory() {
           throw new Error(`HTTP ${response.status}`);
         }
 
-        const data = await response.json();
-        setUsers(data);
+        const result = await response.json();
+
+        if (!isCurrent) return;
+
+        setUsers(result);
         setStatus("success");
       } catch (error) {
-        if (error.name === "AbortError") return;
+        if (error?.name === "AbortError" || !isCurrent) return;
 
-        setError("Unable to load users.");
+        setError("Unable to load users. Please try again.");
         setStatus("error");
       }
     }
 
     loadUsers();
 
-    return () => controller.abort();
-  }, [retry]);
+    return () => {
+      isCurrent = false;
+      controller.abort();
+    };
+  }, [retryToken]);
 
-  const visibleUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(query.toLowerCase())
-  );
+  const visibleUsers = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    if (!normalizedQuery) return users;
+
+    return users.filter((user) =>
+      user.name.toLowerCase().includes(normalizedQuery)
+    );
+  }, [users, query]);
 
   if (status === "loading") {
-    return <p>Loading users...</p>;
+    return <p role="status">Loading users...</p>;
   }
 
   if (status === "error") {
     return (
       <section>
         <p role="alert">{error}</p>
-        <button type="button" onClick={() => setRetry((n) => n + 1)}>
+        <button
+          type="button"
+          onClick={() => setRetryToken((value) => value + 1)}
+        >
           Retry
         </button>
       </section>
@@ -381,45 +613,63 @@ export default function UserDirectory() {
 }
 ```
 
-Notice that filtering is derived during render; it does **not** require another effect.
+### Why this implementation is safe
 
-## Common Mistakes
+- The effect owns the request and its cancellation controller.
+- Cleanup marks the effect instance as no longer current.
+- `AbortController` requests cancellation.
+- `isCurrent` protects against stale async completion even if cancellation arrives too late.
+- HTTP errors are explicitly converted into failures.
+- Empty success is represented by an empty array rather than an error.
+- Search filtering is derived from current `users` and `query`.
+- Retry is an explicit user action.
+- The input is properly labelled.
 
-### 1. Assuming 404 triggers catch
+# Common Mistakes
 
-It does not. Check `response.ok`.
+## 1. Assuming `404` triggers `catch`
 
-### 2. Fetching during render
+It normally does not. Check `response.ok`.
 
-Render should remain pure. Use an effect for initial external synchronization or an event handler for user-triggered requests.
+## 2. Fetching during render
 
-### 3. `useEffect(async () => {})`
+Render must remain pure. Use an effect for synchronization or an event handler for direct user actions.
 
-Use an inner async function instead.
+## 3. `useEffect(async () => {})`
 
-### 4. Ignoring cancellation
+The callback must return cleanup or nothing, not a Promise.
 
-Changing queries can leave obsolete requests active and create stale results.
+## 4. No cancellation for changing requests
 
-### 5. Using effects for filtering
+Rapidly changing inputs can leave obsolete requests running.
 
-Filter current data during render.
+## 5. Assuming cancellation alone solves every race
 
-### 6. Loading state stuck forever
+Cancellation is cooperative. Protect the state commit as well when correctness requires it.
 
-Use a request lifecycle that guarantees a terminal status for non-aborted requests.
+## 6. Storing derived filtered data in state
 
-### 7. Exposing secrets
+Usually derive it from current data and query.
 
-Browser code cannot protect a private API key.
+## 7. Treating empty results as an error
 
-### 8. Treating all errors as the same
+A successful empty list is valid state.
 
-Distinguish user-visible errors, empty results, aborted requests, and unexpected failures.
+## 8. Loading state gets overwritten by an old request
 
-## Debugging Lab
+Old asynchronous work must not finalize the current request state.
 
-### Bug 1
+## 9. Exposing secrets in frontend code
+
+Client-delivered code cannot keep a private API key secret.
+
+## 10. Blindly retrying every error
+
+Some errors are not retryable. Production retry policies need limits and backoff.
+
+# Debugging Lab
+
+## Bug 1 — Async effect callback
 
 ```jsx
 useEffect(async () => {
@@ -427,110 +677,239 @@ useEffect(async () => {
 }, [url]);
 ```
 
-Explain why the effect callback should not return the Promise.
+**Fix:** define an inner async function and invoke it from the effect.
 
-### Bug 2
+## Bug 2 — HTTP error handling
 
 ```jsx
 const response = await fetch(url);
 const data = await response.json();
 ```
 
-Explain what happens for HTTP 500 and why `response.ok` matters.
+**Fix:** check `response.ok` before treating the response as successful.
 
-### Bug 3
+## Bug 3 — Race condition
 
-Search requests can complete out of order. Reproduce the race with artificial delays and fix it with `AbortController`.
+Add artificial delays to two search requests and reproduce out-of-order completion.
 
-### Bug 4
+**Fix:** abort obsolete work and protect the state commit with request ownership/currentness.
 
-The UI displays "No results" before the first request finishes. Add an explicit request status.
+## Bug 4 — False empty state
 
-## Exercises
+The UI says “No results” before the first request completes.
 
-### Level 1
-- Fetch posts.
-- Add loading and error states.
-- Add Retry.
+**Fix:** model `loading` separately from successful empty data.
 
-### Level 2
-- Add search.
-- Add query parameters.
-- Add request cancellation.
+## Bug 5 — Stale loading finalization
 
-### Level 3
-- Add pagination.
-- Add create/update/delete requests.
-- Handle optimistic updates and rollback.
-- Design a reusable `useFetch`-style abstraction and discuss its limitations.
-- Compare manual fetch state with a dedicated server-state library.
+An old request's `finally` sets `status = "success"` after a new request has started.
 
-## Assessment
+**Fix:** only the current request can finalize current request state.
+
+# Hands-on Exercises
+
+## Level 1 — Basic Fetch
+
+Fetch posts and display:
+
+- loading
+- success
+- empty
+- error
+
+**Acceptance:**
+
+- [ ] `response.ok` is checked.
+- [ ] `response.json()` is awaited.
+- [ ] Error state is user-friendly.
+
+## Level 2 — Retry
+
+Add a Retry button.
+
+**Acceptance:**
+
+- [ ] Retry starts a new request.
+- [ ] Previous error is cleared.
+- [ ] Loading is visible during retry.
+
+## Level 3 — Search
+
+Add a search query and request filtered results.
+
+**Acceptance:**
+
+- [ ] Query is encoded correctly.
+- [ ] Old request is cancelled/ignored.
+- [ ] Latest result wins.
+
+## Level 4 — POST
+
+Build a form that creates a todo.
+
+**Acceptance:**
+
+- [ ] Uses `POST`.
+- [ ] Sends JSON with `Content-Type`.
+- [ ] Checks HTTP status.
+- [ ] Prevents duplicate submission while appropriate.
+
+## Level 5 — Production Design
+
+Design a reusable request abstraction.
+
+Discuss:
+
+- request identity
+- cancellation
+- retries
+- caching
+- invalidation
+- pagination
+- optimistic updates
+- server-state libraries
+
+# Assessment Quiz
 
 1. What does `fetch` reject automatically?
-2. Why check `response.ok`?
-3. Why should initial API calls usually be outside render?
-4. Why can't the effect callback itself be `async`?
-5. What are idle/loading/success/error states?
-6. What is an empty-success response?
-7. How does `AbortController` help?
-8. What is a stale-response race?
-9. Why should filtering fetched data usually be derived during render?
-10. Why must secrets stay off the client?
+2. Why must `response.ok` be checked?
+3. Why should a request not run during render?
+4. Why can't an effect callback itself be `async`?
+5. What is the difference between empty success and error?
+6. How does `AbortController` help?
+7. Why can stale results occur?
+8. Why is cancellation not the only race-protection technique?
+9. When should a request be started from an event handler?
+10. Why should filtered data usually be derived?
+11. Why should secrets stay on the server?
+12. What does `URLSearchParams` solve?
+13. Why might a successful response still contain invalid application data?
+14. When should you consider a server-state library?
+15. Why can retry need exponential backoff?
 
-## Interview Questions
+### Answers
 
-**Does `fetch` throw for HTTP 404?**  
-Normally no. The promise resolves with a `Response`; check `response.ok` or `status`.
+1. Primarily network/transport failures and certain abort failures; normal HTTP error statuses generally resolve.
+2. Because `fetch` does not reject merely because the server returned 4xx/5xx.
+3. Render must be pure and may run more than once or be discarded.
+4. An async callback returns a Promise, while an effect callback must return cleanup or nothing.
+5. Empty success is a valid successful response with no matching records; error means the request/application failed.
+6. It provides a standard cancellation signal that can be passed to `fetch`.
+7. Multiple requests can finish in a different order from the order in which they started.
+8. Cancellation can be late or unavailable; state ownership/request identity can still prevent stale commits.
+9. When the user action itself directly causes the request, such as submit, save, delete, or load-more.
+10. It is derived from existing state and does not need another synchronization state variable.
+11. Browser code can be inspected by users, so private secrets cannot be protected there.
+12. Correct encoding and construction of URL query parameters.
+13. HTTP success only tells you about the transport/status contract; the JSON shape may still violate the application contract.
+14. When caching, deduplication, invalidation, retries, background refetching, pagination, or synchronization becomes complex.
+15. Immediate repeated retries can overload a failing service and create a retry storm.
 
-**How do you cancel an API request when a component changes?**  
-Create an `AbortController`, pass its signal to `fetch`, and abort it in effect cleanup.
+# Interview Questions and Answers
 
-**Why is `useEffect(async () => {})` discouraged?**  
-The effect callback is expected to return cleanup or nothing, while an async function returns a Promise.
+### Beginner
+
+**What is `fetch`?**  
+A browser API for making HTTP/network requests and receiving a `Response` asynchronously.
+
+**Does `fetch` reject for 404?**  
+Normally no. Inspect `response.ok` or `response.status`.
+
+**How do you parse JSON?**  
+`await response.json()`.
+
+### Intermediate
+
+**Why use `AbortController` with React effects?**  
+To cancel obsolete asynchronous work when the effect is cleaned up, such as when a query changes or a component unmounts.
+
+**How do you model loading/error/success?**  
+Use an explicit request status and associated data/error state rather than contradictory booleans.
+
+**Why is `useEffect(async () => {})` wrong?**  
+Because the async callback returns a Promise instead of the cleanup function React expects.
 
 **How do you prevent stale search results?**  
-Cancel obsolete requests when possible and/or ignore results that no longer correspond to the latest request.
+Abort obsolete requests where possible and ensure only the current request is allowed to commit state.
 
-**Should you store filtered API results in state?**  
-Usually no. If filtering is a pure calculation from current data and query, derive it during render.
+### Advanced
 
-**When would you choose a server-state library?**  
-When caching, deduplication, retries, invalidation, pagination, background refetching, and request lifecycle complexity exceed what is reasonable to maintain manually.
+**Why is `response.ok` not enough for production validation?**  
+It validates HTTP success semantics, not whether the response body matches the application's expected schema.
 
-## Production Considerations
+**How do you distinguish cancellation from an actual failure?**  
+Check for an abort condition and avoid presenting intentional obsolete-request cancellation as a user-facing error.
 
-For production applications also consider:
+**Why can a request's `finally` be dangerous?**  
+An older request may finalize after a newer request starts and accidentally overwrite current loading/error state.
 
-- authentication
-- authorization
-- CORS configuration
-- request timeouts
-- retries/backoff
-- caching
-- pagination
-- schema validation
-- observability
-- request deduplication
-- optimistic updates
-- offline behavior
-- server-state management
+**When should API work live in an event handler rather than an effect?**  
+When a discrete user event is the direct cause, such as submit, delete, or explicit retry.
 
-## Final Checklist
+**Why is a server-state library useful?**  
+It can provide caching, deduplication, invalidation, retries, background refetching, and synchronization that would otherwise require substantial custom state machinery.
 
-- [ ] Fetch JSON
-- [ ] Check `response.ok`
-- [ ] Model request states
-- [ ] Handle empty success
-- [ ] Handle errors
-- [ ] Retry failed requests
-- [ ] Cancel obsolete requests
-- [ ] Prevent stale responses
-- [ ] Keep derived filtering out of effects
-- [ ] Understand client/server security boundaries
+**What is the difference between debouncing and cancellation?**  
+Debouncing delays work until input settles; cancellation attempts to stop work that has already started.
 
-## Day 25 Outcome
+# Production Checklist
 
-You can now build a robust API-driven React screen rather than a simplistic `fetch` demo. You understand request lifecycle, HTTP errors, cancellation, race conditions, retries, derived UI, and the boundary between client and server responsibilities.
+Before shipping a fetch-driven screen, ask:
 
-The next lessons can build on this foundation with more advanced data fetching, caching, and server-state patterns.
+- [ ] Is the request triggered from the correct boundary?
+- [ ] Is `response.ok` checked?
+- [ ] Is response parsing handled?
+- [ ] Is response shape validated where appropriate?
+- [ ] Are loading, success, empty, and error states distinct?
+- [ ] Are obsolete requests cancelled when possible?
+- [ ] Can stale async work overwrite current UI?
+- [ ] Are retries bounded and appropriate?
+- [ ] Are retryable vs non-retryable failures considered?
+- [ ] Are secrets kept server-side?
+- [ ] Is user-facing error text safe?
+- [ ] Are accessibility states communicated?
+- [ ] Is caching/server-state complexity growing beyond manual fetch?
+
+# Verification Checklist
+
+- [ ] Can explain the complete `fetch` lifecycle.
+- [ ] Can explain network failure vs HTTP failure.
+- [ ] Can use `response.ok` correctly.
+- [ ] Can parse JSON and handle parsing failure.
+- [ ] Can model request state.
+- [ ] Can distinguish empty success from error.
+- [ ] Can explain effect vs event-handler boundaries.
+- [ ] Can use `AbortController`.
+- [ ] Can explain stale-response races.
+- [ ] Can protect state commits from obsolete async work.
+- [ ] Can implement retry.
+- [ ] Can build query parameters.
+- [ ] Can implement GET and POST.
+- [ ] Understand client/server security boundaries.
+- [ ] Understand why derived filtering does not need an effect.
+- [ ] Can explain when a server-state library becomes valuable.
+- [ ] Can complete the User Directory project without copying the reference blindly.
+
+# Day 25 Outcome
+
+You can now build a robust React API screen rather than a simplistic `fetch()` demo.
+
+You understand:
+
+```text
+React state
+   ↓
+request lifecycle
+   ↓
+HTTP validation
+   ↓
+JSON/application validation
+   ↓
+loading / success / empty / error
+   ↓
+cancellation + stale-response protection
+   ↓
+retry + production concerns
+```
+
+**Next:** Day 26 — API calls with Axios and query basics, building on the same request-state and error-handling principles rather than starting over.
