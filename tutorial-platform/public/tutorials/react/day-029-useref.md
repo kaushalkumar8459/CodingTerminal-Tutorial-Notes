@@ -3,270 +3,314 @@ title: useRef
 slug: day-029-useref
 dayLabel: Day 29
 level: Intermediate
-estimatedMinutes: 35
+estimatedMinutes: 90
 order: 29
 track: react
 ---
-# Day 29 [Beginner to Intermediate]: useRef
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 29 Outcome](#day-29-outcome)
+# Day 29 [Intermediate]: `useRef`
 
 ## Goal
 
-Understand `useRef` for mutable values and safe DOM access without triggering re-render.
+Understand `useRef` as a stable mutable container and as React's escape hatch for imperative DOM operations, while knowing when **not** to use it.
 
 ## Prerequisites
 
-- Day 28 completed
-- Basic hooks knowledge (`useState`, `useEffect`)
+- Days 22–28
+- `useState` and `useEffect`
+- Basic DOM concepts
 
-## Explanation
+## Core Mental Model
 
-`useRef` stores a value in `.current` that survives re-renders. Updating ref value does not re-render component. This makes it useful for direct DOM access and tracking mutable data like previous values or timers.
+```jsx
+const ref = useRef(initialValue);
+```
 
-## Topic by Topic
+React returns the same ref object across renders:
 
-### Topic 1: Basic Ref Creation
+```text
+{ current: initialValue }
+```
 
-Theory:
-Create ref using `useRef(initialValue)`.
+Changing `ref.current` does **not** schedule a render.
 
-Code Example:
+That gives two major use cases:
+
+1. reference a DOM node
+2. store mutable information that does not belong in rendered UI
+
+## Ref vs State
+
+| Need | State | Ref |
+|---|---|---|
+| UI must update | ✅ | ❌ |
+| Value survives renders | ✅ | ✅ |
+| Updating value triggers render | ✅ | ❌ |
+| DOM node reference | ❌ | ✅ |
+| Timer/request handle | Usually unnecessary | ✅ |
+| Previous mutable value | Sometimes | ✅ |
+
+A useful question is:
+
+> If this value changes, should React render a different UI?
+
+If yes, state is usually the better choice.
+
+## DOM References
 
 ```jsx
 const inputRef = useRef(null);
-```
 
-**Explanation:** Ref object stays stable across re-renders, so you can keep mutable references safely.
-
-**Key Points:**
-
-- Ref has shape `{ current: value }`.
-- Initial value set in `useRef(...)`.
-- Same ref object is reused across renders.
-
-### Topic 2: Access DOM Element
-
-Theory:
-Attach ref to JSX element using `ref` prop.
-
-Code Example:
-
-```jsx
 <input ref={inputRef} />
 ```
 
-**Explanation:** React assigns the input element to `inputRef.current` after render.
+After the element is committed, React assigns the DOM node to `inputRef.current`.
 
-**Key Points:**
-
-- Use `ref` prop on target element.
-- Access actual DOM node with `.current`.
-- Avoid global DOM selectors.
-
-### Topic 3: Focus Input Programmatically
-
-Theory:
-Use `.current.focus()` for focus behavior.
-
-Code Example:
+Use it for imperative actions such as:
 
 ```jsx
 inputRef.current?.focus();
+inputRef.current?.scrollIntoView({ behavior: "smooth" });
+inputRef.current?.select();
 ```
 
-**Explanation:** Optional chaining avoids runtime errors if element is not ready yet.
+Do not use refs to recreate declarative rendering.
 
-**Key Points:**
-
-- Useful for search, chat, and forms.
-- Can be used in click handlers or effects.
-- Keep imperative usage minimal.
-
-### Topic 4: Ref vs State
-
-Theory:
-State changes trigger re-render, ref changes do not.
-
-Practical:
-Use ref for values that do not need UI refresh.
-
-**Explanation:** Choose state when UI must update, and choose ref when value is internal and render-independent.
-
-**Key Points:**
-
-- State update triggers re-render.
-- Ref update does not re-render.
-- Wrong choice can hurt readability.
-
-### Topic 5: Store Previous Value
-
-Theory:
-Ref can keep previous render information.
-
-**Explanation:** You can assign current value to ref in an effect, then read it on next render as previous value.
-
-**Key Points:**
-
-- Great for previous count/form value.
-- Avoid extra state for non-UI data.
-- Keeps comparison logic simple.
-
-## Key Concepts
-
-- Persistent mutable container
-- DOM access without query selectors
-- No re-render on ref update
-- Best use cases: focus, timers, previous values
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[useRef] --> B[DOM Reference]
-		A --> C[Mutable Value]
-		C --> D[No Re-render]
-		B --> E[Focus / Scroll / Select]
-```
-
-## End-to-End Practical
-
-1. Create input ref.
-2. Attach ref to input.
-3. Add button to focus input.
-4. Track previous count in ref.
-
-## Hands-on Coding
-
-### Example 1: Focus Input Button
+## Focus Example
 
 ```jsx
-import { useRef } from "react";
-
-export default function App() {
+function SearchBox() {
   const inputRef = useRef(null);
 
+  function focusSearch() {
+    inputRef.current?.focus();
+  }
+
   return (
-    <div>
-      <input ref={inputRef} placeholder="Type here" />
-      <button onClick={() => inputRef.current?.focus()}>Focus Input</button>
-    </div>
+    <>
+      <input ref={inputRef} aria-label="Search" />
+      <button type="button" onClick={focusSearch}>Focus search</button>
+    </>
   );
 }
 ```
 
-### Example 2: Previous Count Tracker
+## Refs Persist Across Renders
 
 ```jsx
-import { useEffect, useRef, useState } from "react";
+function RenderCounter() {
+  const renders = useRef(0);
+  renders.current += 1;
 
+  return <p>Rendered: {renders.current}</p>;
+}
+```
+
+This demonstrates persistence, but it is not a recommendation to count renders in production UI. If a render count needs to be visible and reactive, state may be more appropriate.
+
+## Previous Value Pattern
+
+A common pattern is:
+
+```jsx
 function Counter() {
   const [count, setCount] = useState(0);
-  const prevCountRef = useRef(0);
+  const previous = useRef();
 
   useEffect(() => {
-    prevCountRef.current = count;
+    previous.current = count;
   }, [count]);
 
   return (
-    <div>
+    <>
       <p>Current: {count}</p>
-      <p>Previous: {prevCountRef.current}</p>
-      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
-    </div>
+      <p>Previous: {previous.current ?? "None"}</p>
+      <button onClick={() => setCount((value) => value + 1)}>
+        Increment
+      </button>
+    </>
   );
 }
 ```
 
-## Mini Exercise
+The effect runs after the render that displays the current value, so the next render can read the previous value.
 
-Scenario:
-Build a chat input where clicking "Reply" auto-focuses message box, and track previous typed length using ref.
+## Timer Handles
 
-Expected output:
+Refs are useful for timer IDs because the ID is operational data, not necessarily rendered UI:
 
-- Input focuses on button click
-- Previous length displays correctly
+```jsx
+const intervalRef = useRef(null);
 
-## Assessment Quiz
+function start() {
+  if (intervalRef.current) return;
+  intervalRef.current = setInterval(() => {
+    // do work
+  }, 1000);
+}
 
-### Quiz Questions
+function stop() {
+  clearInterval(intervalRef.current);
+  intervalRef.current = null;
+}
+```
 
-1. Does updating ref trigger re-render?
-2. What property stores ref value?
-3. Why use ref for input focus?
-4. When choose state over ref?
-5. Can refs store non-DOM values?
+Pair timers with cleanup when the component owns the timer lifecycle.
 
-### Quiz Answers
+## Request Handles
 
-1. No
-2. `.current`
-3. For direct safe DOM access
-4. When UI should re-render on value change
-5. Yes
+Refs can also hold an active `AbortController`:
 
-## Task
+```jsx
+const controllerRef = useRef(null);
 
-- Implement input focus feature using `useRef`
-- Add one example storing mutable value in ref
-- Explain why state is not needed there
+function cancelRequest() {
+  controllerRef.current?.abort();
+}
+```
 
-## Self Check
+This is useful when an event handler needs access to the current controller without causing a render every time it changes.
 
-- You can access DOM using refs
-- You can differentiate ref and state usage
-- You can use refs for previous value tracking
+## Ref Writes and Rendering
 
-## Interview Questions and Answers
+Avoid using a ref as a hidden state store:
 
-### Beginner
+```jsx
+ref.current = value;
+```
 
-**Question:** What is `useRef` in React?
+If the UI should reflect `value`, React needs state or another reactive mechanism. A ref write can be invisible to the user because it does not trigger rendering.
 
-**Answer:** A hook that stores mutable value across renders without re-rendering.
+## Refs and Effects
 
-**Question:** How do you focus input using ref?
+A DOM ref is populated after React commits the element. Reading it during render is usually the wrong place for imperative DOM work.
 
-**Answer:** Attach ref to input and call `ref.current.focus()`.
+Good:
 
-### Middle
+```jsx
+useEffect(() => {
+  inputRef.current?.focus();
+}, []);
+```
 
-**Question:** Why not use document query methods in React components?
+For layout-sensitive measurement that must happen before the browser paints, `useLayoutEffect` may be appropriate. Use it only when the timing requirement justifies it.
 
-**Answer:** Refs are safer and component-scoped.
+## Callback Refs
 
-**Question:** Can refs help with timer IDs?
+Sometimes you need to react when a DOM node is attached or replaced:
 
-**Answer:** Yes, refs can store interval/timeout IDs between renders.
+```jsx
+function Example() {
+  const setNode = useCallback((node) => {
+    if (node) {
+      console.log(node.getBoundingClientRect());
+    }
+  }, []);
 
-### Advanced
+  return <div ref={setNode}>Measure me</div>;
+}
+```
 
-**Question:** How does ref avoid stale closures for mutable values?
+Callback refs are useful for dynamic lists or measurement lifecycles where an object ref alone is insufficient.
 
-**Answer:** `.current` can be read/written without causing re-render cycles.
+## Forwarding Refs
 
-**Question:** Why should ref writes be controlled carefully?
+A custom component does not automatically expose its internal DOM node to its parent. When a reusable component intentionally needs an imperative API, React supports ref forwarding patterns.
 
-**Answer:** Untracked mutable writes can make logic harder to reason about.
+Use this sparingly. Prefer a declarative component API whenever possible.
+
+## Common Mistakes
+
+### Mistake 1: Ref for UI state
+
+```jsx
+const count = useRef(0);
+count.current += 1;
+```
+
+If the count must render, use state.
+
+### Mistake 2: Mutating the DOM instead of state
+
+Don't use a ref to manually maintain a CSS class that should simply be determined by state.
+
+### Mistake 3: Reading `ref.current` too early
+
+The DOM node may be `null` before commit or after unmount.
+
+### Mistake 4: Forgetting cleanup
+
+A ref can store a timer or controller, but storing it does not automatically clean it up.
+
+### Mistake 5: Assuming refs are reactive
+
+Changing `.current` does not cause React to render again.
+
+## Practical Labs
+
+1. Build an accessible autofocus search form.
+2. Implement a timer whose ID is stored in a ref and cleaned up correctly.
+3. Track the previous value of a slider.
+4. Store an AbortController in a ref and add Cancel.
+5. Measure a dynamic element and compare object refs with callback refs.
+
+## Debugging Scenarios
+
+**The UI doesn't update after changing `ref.current`.** That's expected. Use state if the UI depends on the value.
+
+**`ref.current` is null.** The element may not be mounted yet or may have been conditionally removed.
+
+**A timer continues after navigation.** Add cleanup for the timer lifecycle.
+
+**Previous value equals current value unexpectedly.** Check when the ref is assigned; assigning during render can destroy the intended previous-render relationship.
+
+## Assessment
+
+1. What does `useRef` return?
+2. Why doesn't `.current` trigger a render?
+3. When should a value be state instead of ref?
+4. Why are refs useful for DOM focus?
+5. How can refs store timer IDs safely?
+6. Why can ref-based mutable state make code harder to reason about?
+7. When might `useLayoutEffect` be preferable for DOM measurement?
+8. What problem do callback refs solve?
+9. Does a ref automatically clean up a timer?
+10. Does a child DOM node become accessible through a parent's ref automatically?
+
+## Interview Questions
+
+**What is the main difference between state and ref?** State is reactive and schedules rendering; refs persist mutable values without scheduling rendering.
+
+**When would you use a ref for non-DOM data?** For operational mutable handles such as timer IDs, AbortControllers, or previous values that do not independently determine rendered UI.
+
+**Why not use a global DOM selector?** A ref is scoped to the component instance and follows React's ownership model more closely.
+
+**Can a ref cause a render?** Not by changing `.current` itself. A separate state update or external reactive mechanism would be required.
+
+**When is a ref a code smell?** When it is being used to bypass state/props for ordinary UI data or to manually synchronize a DOM representation that React should own.
+
+## Final Project
+
+Build a `FocusAndTimerLab` containing:
+
+- autofocus input
+- focus button
+- start/stop timer
+- previous-count display
+- request cancellation demo
+- cleanup verification
+
+Acceptance criteria:
+
+- [ ] UI state uses state
+- [ ] DOM actions use refs
+- [ ] Timer is cleaned up
+- [ ] AbortController is cleaned up/cancelled
+- [ ] No global selectors
+- [ ] No unnecessary DOM mutation
+- [ ] Previous-value behavior is correct
 
 ## Day 29 Outcome
 
-- You can use `useRef` for DOM and mutable storage
-- You can pick ref vs state correctly
-- You are ready for controlled DOM manipulation patterns
+You can distinguish reactive state from stable mutable references, use refs for DOM and operational handles, and avoid turning refs into an untracked second state system.
+
+Day 30 applies these principles to DOM manipulation and measurement.
