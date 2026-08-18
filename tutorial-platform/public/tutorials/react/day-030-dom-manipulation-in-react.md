@@ -3,296 +3,453 @@ title: DOM Manipulation in React
 slug: day-030-dom-manipulation-in-react
 dayLabel: Day 30
 level: Intermediate
-estimatedMinutes: 40
+estimatedMinutes: 100
 order: 30
 track: react
 ---
-# Day 30 [Beginner to Intermediate]: DOM Manipulation in React
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 30 Outcome](#day-30-outcome)
+# Day 30 [Intermediate]: DOM Manipulation in React
 
 ## Goal
 
-Perform DOM interactions the React way using refs and effects while avoiding unsafe direct manipulation.
+Learn when imperative DOM access is justified in React, how refs interact with effects, how to measure/layout safely, and how to avoid fighting React's declarative rendering model.
 
 ## Prerequisites
 
-- Day 29 completed
-- Comfortable with `useRef` and `useEffect`
+- Day 29: `useRef`
+- `useEffect`
+- Basic browser DOM concepts
 
-## Explanation
+## React-first Rule
 
-React controls UI through state and props. Most DOM updates should come from state, not manual manipulation. But some tasks like focus, scroll, text selection, or measuring element size need direct DOM access. For these, use refs in a controlled way.
-
-## Topic by Topic
-
-### Topic 1: React-first Principle
-
-Theory:
-Prefer state-driven rendering before direct DOM writes.
-
-Practical:
-Toggle classes via state instead of `classList` edits.
-
-**Explanation:** Let React own visual state so UI stays predictable and easier to maintain.
-
-**Key Points:**
-
-- Prefer declarative rendering first.
-- Keep manual DOM work minimal.
-- Avoid state and manual style conflicts.
-
-### Topic 2: Safe DOM Access with Ref
-
-Theory:
-Use ref to read or call methods on a specific element.
-
-Code Example:
+React should normally own the rendered DOM through props and state:
 
 ```jsx
-const boxRef = useRef(null);
+className={isActive ? "active" : ""}
 ```
 
-**Explanation:** Refs provide controlled access to specific elements without searching the whole document.
-
-**Key Points:**
-
-- Element is available via `.current`.
-- Works well for one-off DOM actions.
-- Keep scope local to component.
-
-### Topic 3: Scroll into View
-
-Theory:
-Useful for chat, forms, and validation flows.
-
-Code Example:
+Prefer this over:
 
 ```jsx
-boxRef.current?.scrollIntoView({ behavior: "smooth" });
+element.classList.add("active");
 ```
 
-**Explanation:** Smooth scrolling improves navigation experience in long pages and forms.
+Imperative DOM access is appropriate when the browser exposes behavior that is naturally imperative:
 
-**Key Points:**
+- focus
+- scroll
+- text selection
+- media playback
+- measuring layout
+- integrating third-party DOM libraries
+- reading a browser property that is not naturally represented as React state
 
-- Useful for jump links and validation.
-- Trigger from user actions.
-- Keep behavior intentional.
+## Declarative vs Imperative
 
-### Topic 4: Measure Element Size
+| Problem | Preferred approach |
+|---|---|
+| Show/hide UI | State + conditional rendering |
+| CSS class | State + `className` |
+| Input value | Controlled input when appropriate |
+| Focus | Ref |
+| Scroll | Ref + DOM method |
+| Measure size | Ref + effect/layout effect |
+| Chart library | Ref container + library lifecycle |
+| Video play/pause | Ref to media element |
 
-Theory:
-Read layout values in effect after render.
-
-Code Example:
+## Focus
 
 ```jsx
+const inputRef = useRef(null);
+
 useEffect(() => {
-  const width = boxRef.current?.offsetWidth;
-  console.log(width);
+  inputRef.current?.focus();
 }, []);
 ```
 
-**Explanation:** DOM size is available only after render, so read measurements in an effect.
-
-**Key Points:**
-
-- Measure after mount.
-- Save result in state if UI must show it.
-- Re-measure when layout dependencies change.
-
-### Topic 5: Avoid Anti-patterns
-
-Theory:
-Avoid frequent manual style changes that conflict with React rendering.
-
-Practical:
-Use state for visual changes whenever possible.
-
-**Explanation:** Directly mutating DOM styles repeatedly can drift from React state and cause hard-to-track bugs.
-
-**Key Points:**
-
-- Keep source of truth in state.
-- Use refs for imperative exceptions only.
-- Keep DOM actions isolated and documented.
-
-## Key Concepts
-
-- State-driven UI first
-- Refs for targeted DOM operations
-- Effects for post-render DOM reads/writes
-- Avoid conflicting manual DOM changes
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[React State] --> B[Render UI]
-		B --> C[Need DOM-only Operation?]
-		C -->|Yes| D[useRef + useEffect]
-		C -->|No| E[Stay State-driven]
-```
-
-## End-to-End Practical
-
-1. Build section list with "Jump to details" button.
-2. Use ref to scroll target block into view.
-3. Auto-focus search field on page load.
-4. Measure a card width and display it.
-
-## Hands-on Coding
-
-### Example 1: Focus and Scroll
+A user action can also trigger focus directly without an effect:
 
 ```jsx
-import { useEffect, useRef } from "react";
+<button type="button" onClick={() => inputRef.current?.focus()}>
+  Focus search
+</button>
+```
 
-export default function App() {
-  const inputRef = useRef(null);
-  const detailsRef = useRef(null);
+Use an effect when focus is a synchronization that should happen after a render, not simply because effects are available.
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+## Scroll
 
-  return (
-    <div>
-      <input ref={inputRef} placeholder="Search here" />
-      <button
-        onClick={() =>
-          detailsRef.current?.scrollIntoView({ behavior: "smooth" })
-        }
-      >
-        Jump to Details
-      </button>
+```jsx
+sectionRef.current?.scrollIntoView({
+  behavior: "smooth",
+  block: "start",
+});
+```
 
-      <div style={{ height: 300 }} />
+Useful for validation summaries, chat windows, onboarding steps, and navigation.
 
-      <section ref={detailsRef}>
-        <h3>Details</h3>
-        <p>This section is reached with smooth scroll.</p>
-      </section>
-    </div>
-  );
+## Text Selection
+
+```jsx
+inputRef.current?.select();
+```
+
+This is an imperative browser operation; state alone cannot request text selection.
+
+## Media Controls
+
+```jsx
+const videoRef = useRef(null);
+
+function play() {
+  videoRef.current?.play();
+}
+
+function pause() {
+  videoRef.current?.pause();
 }
 ```
 
-### Example 2: Size Measurement
+This is a good example of a browser API that does not map neatly to declarative JSX props.
+
+## Measuring Layout
+
+```jsx
+const boxRef = useRef(null);
+const [width, setWidth] = useState(0);
+
+useLayoutEffect(() => {
+  const element = boxRef.current;
+  if (!element) return;
+
+  setWidth(element.getBoundingClientRect().width);
+}, []);
+```
+
+### `useEffect` vs `useLayoutEffect`
+
+`useEffect` runs after the browser has generally painted. `useLayoutEffect` runs after DOM mutation but before the browser paints, making it useful when a measurement must be read and synchronously reflected without a visible intermediate layout.
+
+Do not default to `useLayoutEffect`. It can block painting and should be reserved for layout-sensitive work.
+
+## Responsive Measurement
+
+A one-time measurement is insufficient if the element can resize.
+
+For a robust solution, `ResizeObserver` can watch the element:
+
+```jsx
+useEffect(() => {
+  const element = boxRef.current;
+  if (!element) return;
+
+  const observer = new ResizeObserver(([entry]) => {
+    setWidth(entry.contentRect.width);
+  });
+
+  observer.observe(element);
+  return () => observer.disconnect();
+}, []);
+```
+
+The cleanup prevents the observer from continuing after unmount.
+
+## DOM Ownership
+
+React should not compete with another system for the same DOM properties.
+
+Bad architecture:
+
+```text
+React changes className
+        ↓
+third-party script changes className
+        ↓
+React renders again
+        ↓
+DOM becomes difficult to reason about
+```
+
+For third-party libraries, isolate their DOM ownership to a dedicated container:
+
+```jsx
+<div ref={containerRef} />
+```
+
+Then initialize and destroy the library inside an effect.
+
+## Third-Party Integration Pattern
+
+```jsx
+useEffect(() => {
+  const container = containerRef.current;
+  if (!container) return;
+
+  const chart = createChart(container, options);
+
+  return () => {
+    chart.destroy();
+  };
+}, [options]);
+```
+
+The lifecycle is:
+
+```text
+render container
+→ effect initializes library
+→ dependency changes
+→ cleanup old library
+→ effect initializes new configuration
+→ unmount
+→ cleanup
+```
+
+## Avoid `document.querySelector`
+
+This:
+
+```jsx
+document.querySelector("#search")?.focus();
+```
+
+is usually inferior inside a component because it can cross component boundaries, depend on global IDs, and become fragile with multiple component instances.
+
+Prefer:
+
+```jsx
+searchRef.current?.focus();
+```
+
+## Avoid Manual DOM State
+
+Do not write:
+
+```jsx
+buttonRef.current.classList.toggle("active");
+```
+
+when the active state belongs to React.
+
+Use:
+
+```jsx
+<button className={active ? "active" : ""} />
+```
+
+The ref should perform the imperative exception, not become a second source of truth.
+
+## Strict Mode and Effects
+
+In development, React Strict Mode may run an effect setup/cleanup cycle more than once to reveal unsafe side effects. Correct imperative integrations should therefore be restartable:
+
+```text
+setup → cleanup → setup
+```
+
+If an integration breaks under this sequence, its lifecycle is probably not implemented correctly.
+
+## Complete Example: Accessible Jump Navigation + Measurement
 
 ```jsx
 import { useEffect, useRef, useState } from "react";
 
-function CardSize() {
+export default function App() {
+  const searchRef = useRef(null);
+  const detailsRef = useRef(null);
   const cardRef = useRef(null);
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    setWidth(cardRef.current?.offsetWidth || 0);
+    searchRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const element = cardRef.current;
+    if (!element) return;
+
+    const update = () => {
+      setWidth(element.getBoundingClientRect().width);
+    };
+
+    update();
+
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div>
-      <div ref={cardRef} style={{ padding: 16, border: "1px solid #ddd" }}>
-        Measure me
-      </div>
-      <p>Card width: {width}px</p>
-    </div>
+    <main>
+      <h1>DOM Interaction Lab</h1>
+
+      <label htmlFor="search">Search</label>
+      <input id="search" ref={searchRef} />
+
+      <button
+        type="button"
+        onClick={() =>
+          detailsRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          })
+        }
+      >
+        Jump to details
+      </button>
+
+      <section ref={detailsRef} aria-labelledby="details-title">
+        <h2 id="details-title">Details</h2>
+        <div ref={cardRef}>
+          <p>Measured width: {Math.round(width)}px</p>
+        </div>
+      </section>
+    </main>
   );
 }
 ```
 
-## Mini Exercise
+## Focus Management After Conditional Rendering
 
-Scenario:
-Build FAQ page where clicking question scrolls to answer block and focuses search input.
+A common real-world pattern is focusing a newly opened dialog or error summary.
 
-Expected output:
+```jsx
+useEffect(() => {
+  if (isOpen) {
+    dialogRef.current?.focus();
+  }
+}, [isOpen]);
+```
 
-- Input auto-focuses on mount
-- Button smooth-scrolls to answer section
-- No manual query selectors used
+The element must actually be mounted before the ref can point to it. For dialogs, use an accessible dialog implementation and manage focus return to the triggering element as well.
 
-## Assessment Quiz
+## Measurement Pitfalls
 
-### Quiz Questions
+Be careful with:
 
-1. What is preferred for UI changes: state or manual DOM edits?
-2. Which hook gives direct element reference?
-3. When is direct DOM access reasonable in React?
-4. Why run DOM measurements in effect?
-5. What risk comes from heavy manual DOM manipulation?
+- hidden elements (`display: none`)
+- fonts loading after initial measurement
+- responsive resizing
+- scrollbars
+- transforms
+- layout shifts
 
-### Quiz Answers
+A measurement is a snapshot of layout, not application state that should automatically be stored forever.
 
-1. State-driven rendering
-2. `useRef`
-3. Focus, scroll, measure, selection
-4. Element exists after render
-5. Conflicts with React's virtual DOM updates
+## Performance
 
-## Task
+Avoid reading layout and immediately writing layout repeatedly in loops because this can cause layout thrashing.
 
-- Implement one focus feature and one scroll feature
-- Add one measurement example using `offsetWidth`
-- Keep styling/state changes React-driven
+Prefer batching reads and writes and use browser observers when appropriate.
 
-## Self Check
+Do not put every DOM read into `useLayoutEffect`. Measure only what the feature actually needs.
 
-- You can decide when direct DOM access is needed
-- You can use refs/effects safely
-- You can avoid common DOM manipulation anti-patterns
+## Accessibility Checklist
 
-## Interview Questions and Answers
+- preserve keyboard focus order
+- use semantic controls
+- do not move focus unexpectedly without a user/task reason
+- announce important dynamic changes
+- ensure custom focus behavior has a logical fallback
+- restore focus when closing dialogs or popovers where appropriate
 
-### Beginner
+## Common Mistakes
 
-**Question:** How do you get input DOM element in React?
+### 1. Using refs for ordinary UI state
 
-**Answer:** Create ref with `useRef` and attach to input via `ref` prop.
+If a value controls rendering, state is usually the correct source of truth.
 
-**Question:** Can we manipulate DOM directly in React?
+### 2. Querying the whole document
 
-**Answer:** Yes, but only for specific cases like focus/scroll/measurement.
+Use component-scoped refs instead.
 
-### Middle
+### 3. Forgetting cleanup
 
-**Question:** Why avoid direct `document.getElementById` in components?
+Observers, subscriptions, timers, and third-party widgets must be cleaned up.
 
-**Answer:** It bypasses React component boundaries and is harder to maintain.
+### 4. Measuring only once
 
-**Question:** How do you trigger smooth scroll to a section?
+Responsive elements may need `ResizeObserver` or another explicit re-measure strategy.
 
-**Answer:** Use `ref.current.scrollIntoView({ behavior: 'smooth' })`.
+### 5. Using `useLayoutEffect` everywhere
 
-### Advanced
+It can delay painting. Use it when pre-paint measurement is actually required.
 
-**Question:** What problems happen when style is changed manually and via state together?
+### 6. Two owners for one DOM property
 
-**Answer:** UI inconsistencies and hard-to-debug rendering conflicts.
+React and a third-party imperative system should not both control the same property without a clear boundary.
 
-**Question:** How do refs support performance-sensitive DOM reads?
+## Practical Labs
 
-**Answer:** They give direct access without extra state updates for transient reads.
+1. Build a search input with autofocus.
+2. Add a "scroll to results" action.
+3. Add a text-select button.
+4. Measure a responsive card with `ResizeObserver`.
+5. Integrate a small third-party widget into a dedicated ref container and destroy it on cleanup.
+6. Build a modal with focus-in and focus-return behavior.
+
+## Debugging Scenarios
+
+**Focus fails on first render:** the element may not exist yet or is conditionally rendered; move synchronization to an appropriate effect.
+
+**Width is always zero:** check whether the element is hidden or whether measurement occurs before it has meaningful layout.
+
+**Observer keeps firing after navigation:** cleanup is missing.
+
+**UI class changes disappear:** React is re-rendering from state and overwriting manual DOM changes; move the source of truth into state.
+
+**Third-party widget duplicates itself in development:** effect setup is not idempotent or cleanup is incomplete; verify the setup → cleanup → setup lifecycle.
+
+## Assessment
+
+1. What should React own declaratively?
+2. When is direct DOM access justified?
+3. Why are refs preferable to global selectors?
+4. When is `useLayoutEffect` appropriate?
+5. Why can `ResizeObserver` be better than a one-time width measurement?
+6. What is layout thrashing?
+7. Why must third-party DOM integrations clean up?
+8. What does Strict Mode reveal about effect design?
+9. How should focus be managed in a dialog?
+10. Why should a ref not become a second source of truth?
+
+## Interview Questions
+
+**When should you manipulate the DOM directly in React?** For imperative browser capabilities such as focus, scroll, selection, media controls, measurement, or isolated third-party integrations.
+
+**Why use `useLayoutEffect` instead of `useEffect`?** When a DOM measurement or synchronous layout adjustment must happen before the browser paints to avoid visible flicker. It should not be the default effect.
+
+**How do you integrate a DOM library?** Give the library an isolated container ref, initialize it in an effect, and destroy it in cleanup.
+
+**How do you measure a responsive element?** Use a ref plus `ResizeObserver`, updating reactive state only if the measurement is needed by the UI.
+
+**What is the biggest DOM manipulation anti-pattern in React?** Manually changing DOM state that React is also responsible for rendering.
+
+## Final Project
+
+Build a `DOM Interaction Playground` with:
+
+- autofocus search
+- scroll-to-section
+- select-all text action
+- responsive measurement
+- accessible modal focus management
+- third-party widget lifecycle simulation
+
+Acceptance criteria:
+
+- [ ] State drives ordinary UI
+- [ ] Refs handle imperative operations
+- [ ] Effects have correct dependencies
+- [ ] All observers/widgets are cleaned up
+- [ ] Responsive measurement works
+- [ ] Focus behavior is accessible
+- [ ] No global DOM selectors
+- [ ] No competing DOM owners
+- [ ] Strict Mode lifecycle is safe
 
 ## Day 30 Outcome
 
-- You can perform practical DOM interactions in React safely
-- You understand when to use refs versus state updates
-- You are ready for memoization and performance-focused topics
+You now understand React's boundary between declarative rendering and imperative browser APIs. You can use refs and effects deliberately without turning the DOM into a competing source of truth.
+
+The next stage can build on this foundation with memoization, referential equality, and performance optimization.
