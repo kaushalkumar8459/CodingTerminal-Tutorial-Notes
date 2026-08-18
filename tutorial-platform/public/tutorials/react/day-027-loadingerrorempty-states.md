@@ -3,257 +3,271 @@ title: Loading Error and Empty States
 slug: day-027-loadingerrorempty-states
 dayLabel: Day 27
 level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 75
 order: 27
 track: react
 ---
-# Day 27 [Beginner to Intermediate]: Loading Error and Empty States
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 27 Outcome](#day-27-outcome)
+# Day 27 [Intermediate]: Loading, Error, Empty and Success States
 
 ## Goal
 
-Design user-friendly request states: loading, error, empty, and success.
+Design API-driven React UI as an explicit request state machine rather than a collection of unrelated booleans.
 
 ## Prerequisites
 
-- Day 26 completed
-- Basic API handling in React
+- Day 25: Fetch
+- Day 26: Axios and query basics
+- `useState`, `useEffect`, async/await, conditional rendering
 
-## Explanation
+## The Mental Model
 
-Good products are not only about successful data. They also handle waiting, failures, and no-result cases gracefully. This lesson focuses on clean UI branches so users always know what is happening.
+A request is not simply `data` or `error`. A useful UI distinguishes:
 
-## Topic by Topic
-
-### Topic 1: Why State-based UI Matters
-
-Theory:
-Users need clear feedback for every stage of request lifecycle.
-
-Practical:
-Create separate UI for each state.
-
-**Explanation:** Users should never guess what the app is doing. Clear state screens improve trust and usability.
-
-**Key Points:**
-
-- Every request has multiple UI phases.
-- State-specific messages reduce confusion.
-- Better UX comes from predictable feedback.
-
-### Topic 2: Loading State
-
-Theory:
-Show progress while waiting.
-
-Code Example:
-
-```jsx
-if (loading) return <p>Loading...</p>;
+```text
+idle → loading → success
+              ↘ error
 ```
 
-**Explanation:** Loading UI confirms that work is in progress and app is responsive.
+Success can then have two meaningful outcomes:
 
-**Key Points:**
-
-- Show loading immediately when request starts.
-- Keep message simple and visible.
-- Disable repeated actions if needed.
-
-### Topic 3: Error State
-
-Theory:
-Show meaningful message and retry action.
-
-Code Example:
-
-```jsx
-if (error) return <button onClick={refetch}>Retry</button>;
+```text
+success + data
+success + empty
 ```
 
-**Explanation:** Error UI should explain the problem and provide a direct recovery path.
+For a production screen you may also need refreshing, retrying, cancelled, unauthorized, or offline states.
 
-**Key Points:**
+## Why Four States Matter
 
-- Show readable error text.
-- Offer retry action.
-- Avoid silent failure screens.
+A blank screen is ambiguous. The user cannot tell whether the app is loading, failed, has no data, or is broken.
 
-### Topic 4: Empty State
+| State | Meaning | Typical UI |
+|---|---|---|
+| Idle | Nothing requested yet | Search instructions |
+| Loading | Request in progress | Spinner/skeleton |
+| Success + data | Request succeeded | Content |
+| Success + empty | Request succeeded with zero results | Helpful empty state |
+| Error | Request failed | Message + retry |
 
-Theory:
-When request succeeds but data list is empty, guide users.
+## Avoid Boolean Explosion
 
-Code Example:
+This can create impossible combinations:
 
 ```jsx
-if (!loading && !error && items.length === 0) {
-  return <p>No results found</p>;
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
+const [hasLoaded, setHasLoaded] = useState(false);
+const [isEmpty, setIsEmpty] = useState(false);
+```
+
+For a simple request, prefer a single status plus data/error:
+
+```jsx
+const [status, setStatus] = useState("idle");
+const [data, setData] = useState([]);
+const [error, setError] = useState(null);
+```
+
+Possible statuses:
+
+```text
+idle | loading | success | error
+```
+
+Empty is derived from `status === "success" && data.length === 0`.
+
+## Complete Request Example
+
+```jsx
+async function loadProducts() {
+  setStatus("loading");
+  setError(null);
+
+  try {
+    const response = await fetch("/api/products");
+    if (!response.ok) throw new Error("Unable to load products");
+
+    const result = await response.json();
+    setData(result);
+    setStatus("success");
+  } catch (error) {
+    setError(error instanceof Error ? error.message : "Request failed");
+    setStatus("error");
+  }
 }
 ```
 
-**Explanation:** Empty state means request succeeded but data list has no items.
-
-**Key Points:**
-
-- Different from request error.
-- Add guidance like "change filter".
-- Keep tone helpful, not alarming.
-
-### Topic 5: Success State
-
-Theory:
-Render list/data only when available.
-
-**Explanation:** Success state is shown only after loading and error branches are handled safely.
-
-**Key Points:**
-
-- Render final data content here.
-- Keep rendering logic focused.
-- Pair with strong key usage in lists.
-
-## Key Concepts
-
-- Status-specific UI branches
-- Retry for recoverable failures
-- Empty state is different from error state
-- Better UX through clear communication
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-		A[Request Start] --> B{State}
-		B -->|Loading| C[Show Spinner/Text]
-		B -->|Error| D[Show Error + Retry]
-		B -->|Success + Empty| E[Show Empty Message]
-		B -->|Success + Data| F[Render Data List]
-```
-
-## End-to-End Practical
-
-1. Build API component with request states.
-2. Add conditional returns for loading and error.
-3. Add explicit empty state branch.
-4. Render data list for success state.
-
-## Hands-on Coding
-
-### Example 1: Complete Status Handling
+## Rendering Order
 
 ```jsx
-if (loading) return <p>Loading products...</p>;
-if (error) return <button onClick={loadProducts}>Retry</button>;
-if (products.length === 0) return <p>No products available</p>;
+if (status === "idle") return <p>Choose a filter to begin.</p>;
+if (status === "loading") return <p aria-live="polite">Loading...</p>;
+if (status === "error") {
+  return (
+    <section role="alert">
+      <p>{error}</p>
+      <button type="button" onClick={loadProducts}>Retry</button>
+    </section>
+  );
+}
 
-return (
-  <ul>
-    {products.map((p) => (
-      <li key={p.id}>{p.title}</li>
-    ))}
-  </ul>
-);
+if (data.length === 0) {
+  return <p>No products found. Try changing your filters.</p>;
+}
+
+return <ProductList products={data} />;
 ```
 
-### Example 2: Better Empty State Text
+## Loading: Spinner vs Skeleton
+
+A spinner communicates progress. A skeleton preserves page structure and often feels better for content-heavy screens.
+
+Do not show a loading indicator so briefly that it causes distracting flashes without a product reason. More importantly, never hide a slow request behind an apparently frozen interface.
+
+## Error States
+
+Separate technical details from user-facing messages:
 
 ```jsx
-<p>No matching items. Try changing your filter.</p>
+const message = "We couldn't load products. Please try again.";
 ```
 
-## Mini Exercise
+Log diagnostic details separately when appropriate. Never expose API keys, stack traces, or internal server details to users.
 
-Scenario:
-Create a user list page with all four states and a retry button.
+Retry should repeat the request using the current parameters.
 
-Expected output:
+## Empty States Are Not Errors
 
-- Loading message appears first
-- Error message with retry appears on failure
-- Empty message appears for zero data
-- List appears for successful data
+An empty successful response means the system worked.
 
-## Assessment Quiz
+Good:
 
-### Quiz Questions
+```text
+No results for “react”. Try another search.
+```
 
-1. Is empty state same as error state?
-2. Why provide retry in error UI?
-3. What should loading UI tell user?
-4. When should success list render?
-5. Why are explicit state branches useful?
+Bad:
 
-### Quiz Answers
+```text
+ERROR: 0 records
+```
 
-1. No
-2. To recover quickly without refresh
-3. Request is in progress
-4. When data exists and no error/loading
-5. Predictable behavior and better user experience
+An empty state can provide a next action such as clearing filters or creating the first item.
 
-## Task
+## Preserving Existing Data During Refresh
 
-- Refactor one API page to support all four states
-- Add retry behavior
-- Improve empty-state message
+There is a difference between initial loading and background refresh.
 
-## Self Check
+Instead of replacing a populated screen with a blank spinner on every refresh:
 
-- You can separate all request states clearly
-- You can avoid blank screen confusion
-- You can design resilient data-loading UI
+```text
+Initial request: skeleton
+Refresh request: keep current data + small refreshing indicator
+```
 
-## Interview Questions and Answers
+This distinction improves perceived performance and prevents unnecessary layout shifts.
 
-### Beginner
+## Retry and Idempotency
 
-**Question:** What is empty state in UI?
+Retrying a GET is usually straightforward. Retrying a mutation such as payment or order creation can have side effects. Never blindly apply the same retry strategy to every HTTP operation.
 
-**Answer:** A screen shown when request succeeds but has no data.
+## Accessibility
 
-**Question:** Why show loading state?
+Use:
 
-**Answer:** To indicate work is happening.
+- `role="alert"` for important errors
+- `aria-live="polite"` for non-critical loading/status messages
+- descriptive button text such as `Retry products`
+- keyboard-accessible controls
+- sufficient status contrast
 
-### Middle
+Do not rely only on color to communicate state.
 
-**Question:** How do you structure conditional rendering for API UI?
+## Reusable State Components
 
-**Answer:** Check loading, then error, then empty, then success.
+A larger application can extract consistent UI:
 
-**Question:** Why add retry button?
+```jsx
+function ErrorState({ message, onRetry }) {
+  return (
+    <section role="alert">
+      <p>{message}</p>
+      <button type="button" onClick={onRetry}>Try again</button>
+    </section>
+  );
+}
+```
 
-**Answer:** It gives users a direct recovery action.
+Keep domain-specific actions outside generic presentation components.
 
-### Advanced
+## Debugging Lab
 
-**Question:** How can state handling improve perceived performance?
+### Bug 1
+`error` remains visible after a successful retry.
 
-**Answer:** Immediate feedback reduces uncertainty and improves trust.
+**Fix:** clear the previous error when the new request starts.
 
-**Question:** Why should error text be actionable?
+### Bug 2
+Empty state appears while loading.
 
-**Answer:** Actionable guidance helps users resolve issues faster.
+**Fix:** derive empty only after successful completion.
+
+### Bug 3
+Old results disappear during every refresh.
+
+**Fix:** distinguish initial loading from background refreshing.
+
+### Bug 4
+Two requests finish out of order and the older result wins.
+
+**Fix:** use cancellation or a request identity strategy; Day 25 introduced this problem and Day 28 will apply it in a project.
+
+## Hands-on Labs
+
+1. Refactor a boolean-based API component to a `status` state machine.
+2. Add retry to an error state.
+3. Create separate first-load and refreshing UI.
+4. Build an empty state with a clear-filter action.
+5. Add accessible status announcements.
+
+## Assessment
+
+1. Why is empty different from error?
+2. What impossible states can boolean flags create?
+3. Why should empty be derived from successful data?
+4. When should existing data remain visible during refresh?
+5. Why is retrying a mutation different from retrying a GET?
+6. How would you model unauthorized separately from generic errors?
+7. Why should error details be sanitized?
+8. How can loading UI improve perceived performance?
+
+## Interview Questions
+
+**What are the common API UI states?** Idle, loading, success-with-data, success-empty, and error; production systems may add refreshing, cancelled, unauthorized, and offline states.
+
+**Why not store `isEmpty` in state?** It can be derived from successful data, so storing it creates another synchronization point.
+
+**How do you avoid a stale error after retry?** Clear the error at request start and set a terminal status only after the request completes.
+
+**How would you preserve data while refetching?** Keep the existing data and represent refresh separately from initial loading.
+
+## Final Project
+
+Build a reusable `ResourceView` demo that supports idle, loading, success, empty, error, and retry states for a searchable product list.
+
+Acceptance criteria:
+
+- [ ] No blank request state
+- [ ] Loading is distinguishable from empty
+- [ ] Errors have recovery actions
+- [ ] Empty state has useful guidance
+- [ ] Refresh does not unnecessarily erase existing data
+- [ ] Status announcements are accessible
+- [ ] No impossible boolean combinations
+- [ ] Request race conditions are handled
 
 ## Day 27 Outcome
 
-- You can design robust API state UIs
-- You can separate loading, error, empty, and success clearly
-- You are ready for a full weather app mini project
+You can model API UI explicitly, communicate request state clearly, design resilient error/empty experiences, and choose the right state representation before building the UI.
+
+Day 28 applies these principles in the Weather App.
