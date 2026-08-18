@@ -3,7 +3,7 @@ title: JSX Fundamentals
 slug: day-003-jsx-fundamentals
 dayLabel: Day 3
 level: Beginner
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 3
 track: react
 ---
@@ -13,12 +13,13 @@ track: react
 
 - [Goal](#goal)
 - [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
+- [What JSX Is](#what-jsx-is)
 - [Topic by Topic](#topic-by-topic)
 - [Key Concepts](#key-concepts)
 - [Visual Concept Map](#visual-concept-map)
 - [End-to-End Practical](#end-to-end-practical)
 - [Hands-on Coding](#hands-on-coding)
+- [Common Mistakes](#common-mistakes)
 - [Mini Exercise](#mini-exercise)
 - [Assessment Quiz](#assessment-quiz)
 - [Task](#task)
@@ -28,58 +29,54 @@ track: react
 
 ## Goal
 
-Understand JSX deeply and use it to build clean, dynamic UI structures in React.
+By the end of this lesson, you should be able to write JSX confidently, embed JavaScript expressions, render arrays, use conditional rendering, choose between elements and fragments, understand JSX attributes, and explain at a high level how JSX is transformed before React renders the UI.
 
 ## Prerequisites
 
 - Day 1 and Day 2 completed
-- React app running locally
-- Basic JavaScript objects and arrays
+- Basic JavaScript variables, objects, arrays, functions, and `.map()`
+- A React application running with Vite
 
-## Explanation
+## What JSX Is
 
-JSX is the most common way to write UI in React. It looks like HTML, but it is JavaScript syntax that gets converted into function calls by your build tool. React uses that JSX description to figure out what should appear on screen, then updates the real DOM only where needed.
+JSX is a JavaScript syntax extension commonly used to describe React UI. It looks similar to HTML, but it is not HTML and it is not a string.
+
+For example:
+
+```jsx
+function App() {
+  const name = "Karan";
+
+  return <h1>Hello, {name}</h1>;
+}
+```
+
+The JSX is transformed by the project's compiler/build tooling into JavaScript that React can use. Modern React projects commonly use the **automatic JSX runtime**, so you should not assume every JSX file directly becomes an explicit `React.createElement(...)` call.
 
 ## Topic by Topic
 
 ### Topic 1: JSX Basics
 
-Theory:
-JSX allows HTML-like structure in component code for better readability.
-
-Practical:
-Replace plain text in App with heading and paragraph.
-
-Code Example:
+JSX lets you describe nested UI in a readable way:
 
 ```jsx
 function App() {
   return (
-    <div>
+    <main>
       <h1>JSX Basics</h1>
-      <p>This is written using JSX.</p>
-    </div>
+      <p>This UI is described with JSX.</p>
+    </main>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** JSX looks like HTML but lives inside JavaScript. It's **not** a string - it's a special syntax that gets converted into function calls by the build tool. The outer `<div>` is required because a component must return only one parent element.
+A component must return one JSX tree. That tree can contain many children. If there is no semantic wrapper you want in the DOM, use a Fragment.
 
-**Key Points:**
+### Topic 2: JavaScript Expressions with `{}`
 
-- JSX is not a string - it's converted to function calls
-- Components must return ONE parent element (wrapper required)
-- JSX syntax is more readable than JavaScript alone
-
-### Topic 2: Dynamic Values with Curly Braces
-
-Theory:
-Curly braces allow JavaScript expressions inside JSX.
-
-Practical:
-Render values from variables and objects.
-
-Code Example:
+Curly braces switch from JSX markup into a JavaScript **expression**:
 
 ```jsx
 function App() {
@@ -87,30 +84,51 @@ function App() {
   const score = 95;
 
   return (
-    <h2>
-      {learner} scored {score}
-    </h2>
+    <section>
+      <h2>{learner}</h2>
+      <p>Score: {score}</p>
+      <p>{score >= 90 ? "Excellent" : "Keep practicing"}</p>
+    </section>
   );
 }
 ```
 
-**Explanation:** Curly braces `{}` inside JSX allow any JavaScript expression. Here we use them to insert variable values into the HTML-like markup. Without the braces, `{learner}` would print as literal text.
+Expressions can include variables, property access, function calls, arithmetic, logical operators, and ternaries.
 
-**Key Points:**
+A JavaScript statement such as a standalone `if` cannot be placed directly inside JSX braces. Move that logic outside JSX or use an expression appropriate for rendering.
 
-- Curly braces `{}` embed JavaScript expressions in JSX
-- Variable values display their content inside braces
-- Numbers, strings, booleans all work inside `{}`
+### Topic 3: JSX Attributes
 
-### Topic 3: Rendering Lists in JSX
+JSX attributes use JavaScript-style names in many cases:
 
-Theory:
-Use map to convert arrays into UI elements.
+```jsx
+function App() {
+  const imageUrl = "/logo.png";
 
-Practical:
-Show a skills list from an array.
+  return (
+    <img
+      src={imageUrl}
+      alt="CodingTerminals logo"
+      className="logo"
+    />
+  );
+}
+```
 
-Code Example:
+Common examples:
+
+| HTML | JSX |
+|---|---|
+| `class` | `className` |
+| `for` | `htmlFor` |
+| `onclick` | `onClick` |
+| `tabindex` | `tabIndex` |
+
+Some attributes remain lowercase or use their standard React/DOM naming. Check React documentation for less-common attributes instead of guessing.
+
+### Topic 4: Rendering Lists
+
+Use `.map()` when converting an array into JSX:
 
 ```jsx
 const skills = [
@@ -130,327 +148,501 @@ function App() {
 }
 ```
 
-**Explanation:** This shows list rendering with `.map()`. For each skill object, we create an `<li>` element. The `key` prop is crucial - it tells React which item is which when the list changes. Always use a stable unique value for `key` (like `id`), not array index.
+### Why `key` matters
 
-**Key Points:**
-
-- Use `.map()` to convert arrays into JSX elements
-- Always provide a unique, stable `key` prop for list items
-- Never use array index as a key - use unique IDs instead
-- Each item in the list must have a `key` prop
-
-### Topic 4: JSX Rules You Must Follow
-
-Theory:
-JSX requires a single parent element and camelCase attributes like className.
-
-Practical:
-Wrap sibling elements in one container (or React Fragment) and use className.
-
-Code Example:
+A key gives React stable identity for an item among its siblings. Prefer a stable identifier from the data:
 
 ```jsx
-function App() {
-  return (
-    <section className="container">
-      <h1>Title</h1>
-      <p>Single parent element used.</p>
-    </section>
-  );
-}
+<li key={skill.id}>{skill.name}</li>
 ```
 
-**Explanation:** JSX has two strict rules: (1) Use `className` instead of `class` (because `class` is a reserved JavaScript keyword), and (2) Return only one parent element. All siblings must be wrapped.
+Using an array index is **not always forbidden**. It can be acceptable when the list is static and items never change order or identity. It becomes risky when items can be inserted, removed, or reordered.
 
-**Key Points:**
+### Topic 5: Conditional Rendering
 
-- Use `className` instead of `class` - `class` is reserved in JavaScript
-- All JSX must have ONE parent element wrapping siblings
-- `htmlFor` is used instead of `for` in labels
-- Camel case attributes: `onClick`, `onChange`, etc.
-
-### Topic 5: Conditional UI in JSX
-
-Theory:
-JSX supports conditional rendering using ternary and logical operators.
-
-Practical:
-Show message based on login status.
-
-Code Example:
+Use expressions to describe different UI for different conditions:
 
 ```jsx
 function App() {
   const isLoggedIn = true;
 
-  return <p>{isLoggedIn ? "Welcome back" : "Please login"}</p>;
+  return (
+    <section>
+      {isLoggedIn ? (
+        <p>Welcome back</p>
+      ) : (
+        <p>Please log in</p>
+      )}
+    </section>
+  );
 }
 ```
 
-**Explanation:** Conditional rendering uses the ternary operator (`?:`). If `isLoggedIn` is true, render "Welcome back"; if false, render "Please login". This pattern is common for showing/hiding UI based on app state.
+For showing something only when a condition is truthy:
 
-**Key Points:**
+```jsx
+{isLoggedIn && <button>Open Dashboard</button>}
+```
 
-- Ternary operator: `condition ? trueValue : falseValue`
-- Use for simple if/else rendering
-- Works for both text and JSX elements
-- Often combined with boolean state
+Be careful with `&&` when the left side can be `0`, because `0` can be rendered as text. Use an explicit boolean condition when necessary.
 
-### Topic 6: Fragments and Safe Rendering Rules
+### Topic 6: Fragments
 
-Theory:
-JSX can render only one parent at the top level, but React Fragments solve that without adding extra DOM. JSX also escapes normal text output by default, which helps prevent unsafe HTML rendering mistakes.
-
-Practical:
-Use a Fragment instead of an unnecessary wrapper `div` when structure should stay clean.
-
-Code Example:
+Fragments group multiple elements without adding an extra DOM element:
 
 ```jsx
 function App() {
-  const title = "React Basics";
-
   return (
     <>
-      <h1>{title}</h1>
-      <p>No extra wrapper div needed.</p>
+      <h1>Profile</h1>
+      <p>No unnecessary wrapper is added.</p>
     </>
   );
 }
 ```
 
-**Explanation:** A **Fragment** (written as `<>` and `</>`) groups elements without adding extra DOM nodes. When you don't need a wrapper `<div>`, use a Fragment to keep the HTML structure clean.
-
-**Key Points:**
-
-- Fragments (`<>...</>`) group elements without extra DOM
-- Use fragments when you don't need a wrapper element
-- Fragments don't affect styling or layout
-- Helps keep semantic HTML clean
-
-### Topic 7: How JSX reaches the DOM
-
-Theory:
-JSX is not inserted into the browser directly. First it becomes JavaScript, then React uses that result to decide how to update the DOM.
-
-Practical:
-Change one variable value in JSX and observe that only the related text updates in the browser.
-
-Code Example:
+The long form is useful when a Fragment needs a key:
 
 ```jsx
-function App() {
-  const name = "React Learner";
+import { Fragment } from "react";
 
-  return <h1>Hello, {name}</h1>;
+function App({ items }) {
+  return items.map((item) => (
+    <Fragment key={item.id}>
+      <h2>{item.title}</h2>
+      <p>{item.description}</p>
+    </Fragment>
+  ));
 }
 ```
 
-**Explanation:** JSX becomes JavaScript function calls during build time. React uses the returned UI description to compare the old output and the new output. After that comparison, React updates the real DOM only where something changed.
+### Topic 7: JSX and the Browser
 
-**Key Points:**
+The browser does not receive raw JSX as executable JavaScript. The project's build/compiler pipeline transforms JSX into JavaScript.
 
-- JSX is a UI description, not direct HTML pasted into the DOM
-- React compares previous and next UI output before DOM updates
-- The browser DOM is updated only where needed
+Conceptually:
 
-### Topic 8: Babel and React.createElement at a high level
+```text
+JSX source
+   ↓
+JS/JSX compiler transformation
+   ↓
+JavaScript module
+   ↓
+React rendering
+   ↓
+React reconciliation/commit
+   ↓
+Browser DOM
+```
 
-Theory:
-JSX is convenient to write, but browsers do not understand JSX directly. A build tool transforms it into normal JavaScript.
+Do not equate "JSX compilation" with "DOM update". Compilation happens before the application runs; rendering and DOM updates happen at runtime.
 
-Practical:
-Compare one JSX line with the idea of what it becomes after compilation.
+### Topic 8: JSX Runtime and `createElement`
 
-Code Example:
+Historically, JSX was commonly explained using an example like:
 
 ```jsx
 const element = <h1>Hello</h1>;
-
-// Conceptually becomes something like:
-const compiledElement = React.createElement("h1", null, "Hello");
 ```
 
-**Explanation:** Tools such as Babel transform JSX into standard JavaScript. You usually do not write `React.createElement()` yourself in day-to-day React, but understanding this helps explain why JSX is JavaScript syntax, not HTML.
+being conceptually represented as:
 
-**Key Points:**
+```js
+React.createElement("h1", null, "Hello");
+```
 
-- Browsers do not run JSX directly
-- Build tools transform JSX into JavaScript
-- `React.createElement()` is the lower-level idea behind JSX
+That mental model is still useful for understanding the relationship between JSX and React elements. However, modern React tooling often uses the automatic JSX runtime, which can emit calls to JSX runtime functions rather than requiring `React.createElement` directly.
+
+Therefore, the safe interview answer is:
+
+> JSX is transformed by the compiler into JavaScript representation that React can render; the exact generated code depends on the JSX transform/runtime configuration.
+
+### Topic 9: Values React Can Render
+
+Common renderable values include:
+
+```jsx
+function App() {
+  const name = "Asha";
+  const count = 5;
+  const active = true;
+
+  return (
+    <div>
+      <p>{name}</p>
+      <p>{count}</p>
+      <p>{active ? "Active" : "Inactive"}</p>
+    </div>
+  );
+}
+```
+
+A boolean, `null`, or `undefined` does not normally produce visible text. Objects cannot be rendered directly as children:
+
+```jsx
+// ❌ Do not do this
+// <p>{user}</p>
+```
+
+Instead render a property:
+
+```jsx
+<p>{user.name}</p>
+```
+
+### Topic 10: Safe Text Rendering
+
+React escapes ordinary text values inserted into JSX, which helps prevent accidental HTML interpretation:
+
+```jsx
+function App() {
+  const message = "<script>not executed</script>";
+  return <p>{message}</p>;
+}
+```
+
+This does not mean every React application is automatically secure. APIs such as `dangerouslySetInnerHTML` require special care and are outside today's fundamentals.
 
 ## Key Concepts
 
-- JSX syntax
-- JSX to JavaScript conversion
-- Babel compilation step
-- React.createElement mental model
-- DOM: The actual browser page structure
-- Virtual DOM: React's internal UI comparison model
-- Expressions inside curly braces
-- List rendering with keys
-- Single parent element
-- Conditional rendering
-- Fragment: A wrapper that does not add extra DOM nodes
-- Safe text rendering: JSX escapes plain text values by default
+- JSX is a syntax extension, not HTML or a string.
+- `{}` accepts JavaScript expressions inside JSX.
+- JSX attributes commonly use React/JavaScript naming conventions.
+- Lists are commonly rendered with `.map()`.
+- Keys provide stable identity among siblings.
+- Index keys are context-dependent, not universally forbidden.
+- Conditional rendering uses JavaScript expressions.
+- Fragments group elements without extra DOM nodes.
+- JSX is transformed before runtime.
+- The JSX runtime may use different generated functions depending on configuration.
+- Rendering/reconciliation happens at runtime and is distinct from JSX compilation.
 
 ## Visual Concept Map
 
 ```mermaid
 flowchart TD
-    A[JSX] --> B[Static Markup]
-    A --> C[Dynamic Expressions]
-    A --> D[List Rendering]
-    A --> E[Conditional Rendering]
-  A --> F[React UI Description]
-  F --> G[DOM Update]
+    A[JSX Source] --> B[Compiler / JSX Transform]
+    B --> C[JavaScript Module]
+    C --> D[React Rendering]
+    D --> E[Element Tree]
+    E --> F[Reconciliation]
+    F --> G[Commit]
+    G --> H[Browser DOM]
+    A --> I[Expressions]
+    A --> J[Attributes]
+    A --> K[Lists + Keys]
+    A --> L[Conditions]
+    A --> M[Fragments]
 ```
 
 ## End-to-End Practical
 
-1. Open App component.
-2. Add static JSX structure.
-3. Add dynamic user data.
-4. Render list from array.
-5. Add one conditional message.
-6. Verify all output in browser.
+Build a small learner profile dashboard.
+
+### Step 1: Static JSX
+
+```jsx
+function App() {
+  return (
+    <main>
+      <h1>Learner Dashboard</h1>
+      <p>Track your React learning progress.</p>
+    </main>
+  );
+}
+```
+
+### Step 2: Add dynamic data
+
+```jsx
+const learner = {
+  name: "Karan",
+  course: "React",
+  progress: 65,
+};
+```
+
+Render it:
+
+```jsx
+<h2>{learner.name}</h2>
+<p>{learner.course} — {learner.progress}% complete</p>
+```
+
+### Step 3: Add a list
+
+```jsx
+const topics = [
+  { id: 1, name: "JSX" },
+  { id: 2, name: "Components" },
+  { id: 3, name: "Props" },
+];
+```
+
+```jsx
+<ul>
+  {topics.map((topic) => (
+    <li key={topic.id}>{topic.name}</li>
+  ))}
+</ul>
+```
+
+### Step 4: Add conditional UI
+
+```jsx
+{learner.progress === 100 ? (
+  <p>Course completed!</p>
+) : (
+  <p>Keep learning.</p>
+)}
+```
 
 ## Hands-on Coding
 
-### Example 1: Profile Card with JSX
+### Challenge 1: Profile Card
+
+Create a profile card using:
+
+- `name`
+- `role`
+- `experience`
+- `skills`
+
+Do not hard-code each skill as a separate `<li>`; use an array and `.map()`.
+
+### Challenge 2: Product List
+
+Render five products. Each product must contain a stable `id`, name, and price.
+
+### Challenge 3: Conditional Status
+
+Show:
+
+- `Active` when status is active.
+- `Inactive` otherwise.
+
+### Challenge 4: Fragment Practice
+
+Render two sibling sections without adding an unnecessary wrapper element.
+
+### Challenge 5: Debugging
+
+Fix this JSX:
 
 ```jsx
 function App() {
-  const user = { name: "Karan", role: "React Learner" };
   return (
-    <div>
-      <h1>{user.name}</h1>
-      <p>{user.role}</p>
+    <div class="card">
+      <label for="name">Name</label>
+      <input id="name" />
     </div>
   );
 }
 ```
 
-### Example 2: Dynamic Skills List
+Correct version:
 
 ```jsx
 function App() {
-  const skills = [
-    { id: 1, name: "HTML" },
-    { id: 2, name: "CSS" },
-    { id: 3, name: "React" },
-  ];
   return (
-    <div>
-      <h2>Skills</h2>
-      <ul>
-        {skills.map((item) => (
-          <li key={item.id}>{item.name}</li>
-        ))}
-      </ul>
+    <div className="card">
+      <label htmlFor="name">Name</label>
+      <input id="name" />
     </div>
   );
 }
 ```
 
-### Example 3: Fragment and Logical Rendering
+## Common Mistakes
+
+### Mistake 1: Treating JSX as HTML
+
+JSX resembles HTML but follows JavaScript/React rules.
+
+### Mistake 2: Using `class`
+
+Use `className` in JSX.
+
+### Mistake 3: Returning sibling roots without a wrapper
+
+Use a semantic element or Fragment:
 
 ```jsx
-function App() {
-  const showTips = true;
-
-  return (
-    <>
-      <h2>JSX Fragment Example</h2>
-      <p>Fragment avoids extra wrapper div in DOM.</p>
-      {showTips && <p>Tip: Use className, not class.</p>}
-    </>
-  );
-}
+return (
+  <>
+    <h1>Title</h1>
+    <p>Description</p>
+  </>
+);
 ```
+
+### Mistake 4: Rendering objects directly
+
+Render a property instead of the whole object.
+
+### Mistake 5: Using unstable keys
+
+Prefer stable identifiers from your data.
+
+### Mistake 6: Assuming JSX compilation happens at runtime
+
+The JSX transform is part of the build/compiler pipeline; runtime rendering is a separate process.
+
+### Mistake 7: Overusing `&&`
+
+If a numeric value may be `0`, explicit conditional logic can avoid accidentally displaying `0`.
 
 ## Mini Exercise
 
-Scenario:
-You are building a student progress widget for an LMS dashboard.
+Create a student dashboard with:
 
-Create a student dashboard section showing name, course, progress percentage, and three learning topics from array data.
+```js
+const student = {
+  name: "Asha",
+  course: "React",
+  progress: 82,
+};
 
-Expected output:
+const topics = [
+  { id: 1, title: "JSX" },
+  { id: 2, title: "Components" },
+  { id: 3, title: "Props" },
+];
+```
 
-- One heading with student name
-- One line showing course and progress
-- One list rendered from topic array
+Requirements:
+
+- Display student name.
+- Display course and progress.
+- Render all topics with stable keys.
+- Show `Almost there!` when progress is at least 80.
+- Use a Fragment if an extra DOM wrapper is unnecessary.
 
 ## Assessment Quiz
 
-### Quiz Questions
+### Q1. Is JSX HTML?
 
-1. Why is JSX preferred in React?
-2. What is the purpose of key in list rendering?
-3. Can you use JavaScript expressions inside JSX?
-4. True or False: JSX can return multiple root elements without a wrapper.
-5. Which attribute is used instead of class in JSX?
-6. Why are Fragments useful?
+**Answer:** No. JSX is a JavaScript syntax extension that resembles HTML.
 
-### Quiz Answers
+### Q2. What can be placed inside `{}` in JSX?
 
-1. Readability and maintainability
-2. To uniquely identify list items during updates
-3. Yes
-4. False
-5. className
-6. They group elements without adding unnecessary DOM wrappers.
+**Answer:** JavaScript expressions.
+
+### Q3. Why are keys used in lists?
+
+**Answer:** To provide stable identity for sibling items across renders.
+
+### Q4. Is using an array index as a key always wrong?
+
+**Answer:** No. It can be acceptable for a static list whose order and identity never change, but it is risky for dynamic/reordered lists.
+
+### Q5. Why use a Fragment?
+
+**Answer:** To group multiple JSX elements without adding an extra DOM element.
+
+### Q6. What happens to JSX before the browser executes the application?
+
+**Answer:** The JSX is transformed by the project's compiler/build pipeline into JavaScript.
+
+### Q7. Can an object be rendered directly as a React child?
+
+**Answer:** No. Render its properties or transform it into renderable elements/data first.
+
+### Q8. What is the difference between JSX compilation and React reconciliation?
+
+**Answer:** Compilation transforms source JSX into JavaScript before runtime. Reconciliation occurs at runtime as React determines how the rendered element tree differs from the previous one.
 
 ## Task
 
-- Build one JSX profile card
-- Render one array as list
-- Add one conditional message
-- Complete mini exercise
+Build a **Student Progress Dashboard** containing:
+
+- Student profile section
+- Progress percentage
+- Course status
+- Topics list
+- At least one conditional message
+- At least one Fragment
+- Stable keys for list rendering
+- At least one dynamic attribute such as `className`, `src`, or `href`
+
+### Acceptance criteria
+
+- [ ] JSX contains no invalid HTML-style attributes.
+- [ ] Lists have appropriate stable keys.
+- [ ] No object is rendered directly.
+- [ ] Conditional rendering works.
+- [ ] Fragment is used where it improves the DOM structure.
+- [ ] `npm run build` succeeds.
 
 ## Self Check
 
-- You can write clean JSX
-- You can render variables and arrays
-- You can explain key and className usage
-- You can answer at least 4 out of 5 quiz questions correctly
+You should be able to explain without notes:
+
+- What JSX is
+- Why JSX is not HTML
+- What `{}` means in JSX
+- Why `className` is used
+- Why `key` exists
+- When an index key can be acceptable
+- What a Fragment does
+- How conditional rendering works
+- How JSX is transformed
+- Why JSX compilation and reconciliation are different
 
 ## Interview Questions and Answers
 
-### Beginner
+### 1. What is JSX?
 
-**Question:** What is JSX?
+JSX is a JavaScript syntax extension that allows developers to describe React UI using markup-like syntax. A compiler transforms it into JavaScript that React can use.
 
-**Answer:** JSX is HTML-like syntax used in React components.
+### 2. Can JSX contain JavaScript?
 
-**Question:** Can JSX include JavaScript values?
+Yes. JavaScript expressions can be embedded inside JSX using curly braces.
 
-**Answer:** Yes, by using curly braces.
+### 3. Why do we use `className` instead of `class`?
 
-### Middle
+`className` is the React/JSX property used for assigning a CSS class to an element.
 
-**Question:** Why do lists in JSX need key values?
+### 4. Why does React need keys for lists?
 
-**Answer:** Keys help React track each element efficiently during re-renders.
+Keys provide stable identity for sibling items so React can correctly reason about insertions, removals, and reordering.
 
-**Question:** What are common JSX syntax mistakes?
+### 5. Is an array index always a bad key?
 
-**Answer:** Missing parent element, using class instead of className, and missing key in mapped lists.
+No. It can be reasonable for an immutable, static list. It is problematic when list items can change position or identity.
 
-### Advanced
+### 6. What is a Fragment?
 
-**Question:** How does JSX become browser-readable code?
+A Fragment groups multiple elements without adding an extra DOM node.
 
-**Answer:** Build tools transform JSX into JavaScript function calls.
+### 7. Is JSX directly understood by browsers?
 
-**Question:** Why does proper key selection improve performance?
+No. The project's tooling transforms JSX into JavaScript before it is executed by the browser.
 
-**Answer:** Stable keys help React minimize unnecessary DOM updates.
+### 8. Does every JSX expression become `React.createElement`?
+
+Not necessarily. That was a common mental model for the classic transform. Modern projects can use the automatic JSX runtime, so generated code depends on configuration.
+
+### 9. What is conditional rendering?
+
+Conditional rendering means returning different JSX depending on current values or state, commonly using ternaries, `&&`, or logic outside the JSX expression.
+
+### 10. Why shouldn't an object be rendered directly?
+
+React children must be renderable values such as strings, numbers, elements, arrays of renderable values, or other supported values. A plain object is not a valid direct child; render its properties instead.
 
 ## Day 3 Outcome
 
-- You can write static and dynamic JSX
-- You can render lists and conditions correctly
-- You can avoid common JSX errors
-- You are ready for component design in Day 4
+You can now:
+
+- Write valid JSX confidently.
+- Embed JavaScript expressions.
+- Use JSX attributes correctly.
+- Render arrays with appropriate keys.
+- Use conditional rendering.
+- Use Fragments intentionally.
+- Explain the difference between JSX transformation and runtime reconciliation.
+- Debug common JSX errors.
+
+Day 4 builds on this foundation with **React Components and component design**.
