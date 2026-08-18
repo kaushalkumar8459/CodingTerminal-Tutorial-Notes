@@ -1,369 +1,471 @@
 ---
-title: Props Deep Dive
+title: React Props Deep Dive
 slug: day-006-props-deep-dive
 dayLabel: Day 6
-level: Beginner
-estimatedMinutes: 30
+level: Beginner to Advanced
+estimatedMinutes: 120
 order: 6
 track: react
 ---
-# Day 6 [Beginner to Intermediate]: Props Deep Dive
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 6 Outcome](#day-6-outcome)
+# Day 6: Props Deep Dive — Basic to Advanced
 
 ## Goal
-
-Master parent-to-child data flow using props and build dynamic UI from external inputs.
+Master React props deeply enough to design reusable components, pass every common data type, communicate from child to parent with callbacks, compose UI with `children`, use spread/rest correctly, pass components as props, and recognize prop-design problems.
 
 ## Prerequisites
+- Day 4 Components
+- Day 5 Reusable Components
+- JavaScript objects, arrays, functions, destructuring, rest/spread
 
-- Day 5 completed
-- Reusable components created
-
-## Explanation
-
-Props are how components receive data in React. They support one-way data flow, which keeps apps predictable.
-
-## Topic by Topic
-
-### Topic 1: Props Fundamentals
-
-Theory:
-Props are read-only inputs passed to components.
-
-Practical:
-Pass text prop from App to child.
-
-Code Example:
+## 1. What Are Props?
+Props are inputs supplied to a component by its parent. Treat received props as read-only.
 
 ```jsx
-function Welcome({ name }) {
-  return <h2>Welcome {name}</h2>;
+function User({ name }) {
+  return <h2>Hello {name}</h2>;
+}
+
+function App() {
+  return <User name="Asha" />;
 }
 ```
 
-**Explanation:** Props are inputs that flow from parent to child (one-way). The child component can **read** props but cannot change them - they're read-only. Here `Welcome` displays whatever name is passed in.
+Mental model:
 
-**Key Points:**
-
-- Props flow one-way: parent → child
-- Props are read-only in the child
-- Child receives but cannot modify props
-- Parent owns and controls prop values
-
-### Topic 2: Multiple Props
-
-Theory:
-Component can accept many props for richer UI.
-
-Practical:
-Pass title, price, description.
-
-Code Example:
-
-```jsx
-// Usage: <ProductCard title="Keyboard" price={1200} description="Mechanical" />
-// (Note: price is passed as a number, not a string)
+```text
+Parent state/data
+      ↓ props
+Child render
 ```
 
-**Explanation:** Components can accept multiple props. Props can be strings, numbers, booleans, objects, or even functions. When passing numbers, use curly braces `{1200}` instead of quotes. This makes the component flexible for different use cases.
+Props are not a second state mechanism. They describe what the parent wants the child to render or how the child should behave.
 
-**Key Points:**
+## 2. Passing Different Data Types
+### String
+```jsx
+<User name="Asha" />
+```
+### Number
+```jsx
+<User age={25} />
+```
+### Boolean
+```jsx
+<User active={true} />
+<User active />
+```
+### Array
+```jsx
+<User skills={["React", "Angular"]} />
+```
+### Object
+```jsx
+<User profile={{ name: "Asha", role: "Developer" }} />
+```
+### Function
+```jsx
+<User onSelect={handleSelect} />
+```
+Curly braces mean “evaluate this JavaScript expression”; they are not specifically a number syntax.
 
-- Components can accept many props together.
-- Props can have different data types.
-- Use curly braces for numbers and expressions.
-
-### Topic 3: Destructuring Props
-
-Theory:
-Destructuring improves readability.
-
-Practical:
-Use function parameter destructuring.
-
-Code Example:
+## 3. Destructuring Props
+Both forms are valid:
 
 ```jsx
-function ProductCard({ title, price }) {
-  return (
-    <p>
-      {title} - ${price}
-    </p>
-  );
+function User(props) {
+  return <h2>{props.name}</h2>;
 }
 ```
 
-**Explanation:** **Destructuring** extracts props in the function signature. Instead of accessing `props.title`, we directly use `title`. This improves readability, especially with many props.
+```jsx
+function User({ name }) {
+  return <h2>{name}</h2>;
+}
+```
 
-**Key Points:**
+Destructuring is a readability choice. It is not a special React feature.
 
-- Destructuring: extract props in function parameters
-- Cleaner than accessing `props.title` repeatedly
-- Makes component logic easier to read
-- Can destructure any number of props
-
-### Topic 4: Default Values
-
-Theory:
-Default values prevent empty UI when props are missing.
-
-Practical:
-Add default value for optional prop.
-
-Code Example:
+## 4. Default Prop Values
+Use JavaScript destructuring defaults:
 
 ```jsx
-function Tag({ label = "General" }) {
+function Badge({ label = "General" }) {
   return <span>{label}</span>;
 }
 ```
 
-**Explanation:** Default values protect against missing props. If a prop is optional and the parent doesn't provide it, the component uses the default instead of showing `undefined`. This makes components more resilient.
+The default applies when `label` is `undefined`.
 
-**Key Points:**
+For required props, the best “documentation” is often the component's type/interface contract in TypeScript and clear component documentation.
 
-- Default values prevent undefined errors
-- Use `prop = "default"` syntax in destructuring
-- Protects against missing optional props
-- Makes components work without all props
-
-### Topic 5: One-way Data Flow
-
-Theory:
-Data travels from parent to child, improving debugging.
-
-Practical:
-Trace values from App into nested components.
-
-Code Example:
+## 5. Nested Objects and Arrays
 
 ```jsx
-function App() {
-  return <Profile name="Karan" role="Developer" />;
+function EmployeeCard({ employee }) {
+  return (
+    <article>
+      <h3>{employee.name}</h3>
+      <p>{employee.job.title}</p>
+      <ul>
+        {employee.skills.map((skill) => <li key={skill}>{skill}</li>)}
+      </ul>
+    </article>
+  );
 }
 ```
 
-**Explanation:** **One-way data flow** means data travels from parent → child via props. This unidirectional flow makes apps predictable and easier to debug. If you need to change data in the child, you pass a callback function through props (Day 6-8).
+Prefer a stable, understandable data contract. Do not make every component depend on a huge domain object if it only needs two fields.
 
-**Key Points:**
-
-- Data flows one-way: parent to child
-- Child cannot change parent's data
-- Predictable data flow = easier debugging
-- Callbacks enable child → parent communication
-
-### Topic 6: Props as Objects, Functions, and UI Composition
-
-Theory:
-Props are not limited to text and numbers. They can also carry objects, callback functions, and even UI fragments.
-
-Practical:
-Pass a product object and one callback prop to a child component.
-
-Code Example:
+You can pass the whole object:
 
 ```jsx
-function ProductCard({ product, onSelect }) {
-  return <button onClick={() => onSelect(product.id)}>{product.title}</button>;
+<EmployeeCard employee={employee} />
+```
+
+or pass only what the component needs:
+
+```jsx
+<EmployeeCard name={employee.name} role={employee.job.title} />
+```
+
+Choose based on coupling and reuse.
+
+## 6. Callback Props: Child to Parent Communication
+React's data flow remains downward even when a child triggers a parent update.
+
+```jsx
+function Child({ onSelect }) {
+  return (
+    <button onClick={() => onSelect("React")}>
+      Select React
+    </button>
+  );
+}
+
+function Parent() {
+  function handleSelect(value) {
+    console.log("Selected:", value);
+  }
+
+  return <Child onSelect={handleSelect} />;
 }
 ```
 
-**Explanation:** Props aren't limited to data. You can pass callback functions to let children notify parents about actions. Here `onSelect` is a function the parent provides, and the child calls it with data.
+The child does **not** directly change parent state. It invokes a function supplied by the parent.
 
-**Key Points:**
+## 7. Callback With Parameters
 
-- Props can carry objects and functions, not just primitives
-- Callback functions let children notify parents
-- Parent controls the response to child actions
-- Maintains unidirectional data flow
+```jsx
+function ProductCard({ product, onAddToCart }) {
+  return (
+    <button onClick={() => onAddToCart(product.id)}>
+      Add {product.name}
+    </button>
+  );
+}
+```
 
-### Topic 7: props.children and layout composition
+The parent decides what `onAddToCart` does. The child only reports the event and relevant data.
 
-Theory:
-Sometimes a component should wrap other UI instead of receiving every piece as a named prop. React provides `props.children` for this composition pattern.
-
-Practical:
-Create a wrapper card that can render any nested content inside it.
-
-Code Example:
+## 8. `children`
+`children` contains the nested React content supplied between opening and closing component tags.
 
 ```jsx
 function Card({ children }) {
   return <section className="card">{children}</section>;
 }
 
+<Card>
+  <h2>Profile</h2>
+  <p>React Developer</p>
+</Card>
+```
+
+`children` can contain text, elements, arrays of elements, or other renderable React content. It can also be empty. Treat it as a composition mechanism, not simply “a string inside a component.”
+
+## 9. Passing Components as Props
+A component itself can be passed as a prop.
+
+```jsx
+function Header() {
+  return <header>Dashboard</header>;
+}
+
+function Page({ HeaderComponent }) {
+  return (
+    <>
+      <HeaderComponent />
+      <main>Content</main>
+    </>
+  );
+}
+
 function App() {
+  return <Page HeaderComponent={Header} />;
+}
+```
+
+This is useful for layouts, dashboards, dynamic shells, and pluggable UI. Be precise about the contract: `HeaderComponent` is a component value that React will render.
+
+You can also pass an already-created element:
+
+```jsx
+function Page({ header }) {
+  return <main>{header}</main>;
+}
+
+<Page header={<Header />} />
+```
+
+These are related but not identical: one receives a component type/value, the other receives an element.
+
+## 10. Spread Props
+Spread can forward a group of properties:
+
+```jsx
+const user = { name: "John", age: 20 };
+
+<User {...user} />
+```
+
+Equivalent conceptually to:
+
+```jsx
+<User name={user.name} age={user.age} />
+```
+
+Spread is useful when forwarding a known set of compatible props, but blindly spreading large objects can make a component API unclear.
+
+## 11. Rest Props
+Rest syntax collects remaining properties during destructuring:
+
+```jsx
+function User({ name, ...rest }) {
+  console.log(rest);
+  return <p>{name}</p>;
+}
+```
+
+For:
+
+```jsx
+<User name="John" age={20} city="Delhi" />
+```
+
+`rest` contains:
+
+```js
+{ age: 20, city: "Delhi" }
+```
+
+Rest is especially useful for wrapper components and controlled forwarding, but forwarding arbitrary props to DOM elements can accidentally pass invalid or unintended attributes.
+
+## 12. Prop Forwarding
+A common wrapper pattern:
+
+```jsx
+function TextInput({ label, ...inputProps }) {
   return (
-    <Card>
-      <h3>Team Update</h3>
-      <p>Quarterly goals are on track.</p>
-    </Card>
+    <label>
+      {label}
+      <input {...inputProps} />
+    </label>
   );
 }
 ```
 
-**Explanation:** `children` is a special prop that contains whatever is written between a component's opening and closing tags. This is a core React composition pattern for layouts, modals, wrappers, and reusable UI shells.
-
-**Key Points:**
-
-- `children` holds nested UI passed inside a component
-- Useful for wrappers, cards, modals, and layouts
-- Reduces the need for too many rigid named props
-
-## Key Concepts
-
-- One-way data flow
-- Prop immutability
-- Destructuring
-- Optional/default props
-- props.children composition
-- Dynamic rendering
-- Props can carry callbacks and objects
-- Parent-controlled interaction flow
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-    A[Parent Component] -->|props| B[Child Component]
-    B --> C[Rendered UI]
-```
-
-## End-to-End Practical
-
-1. Build ProductCard component.
-2. Pass three props from parent.
-3. Render three product cards.
-4. Add one optional prop with default.
-
-## Hands-on Coding
-
-### Example 1: Case - Product Listing Card
-
-Scenario:
-An ecommerce page needs to show different product details in the same card component.
+Usage:
 
 ```jsx
-function ProductCard({ title, price, description }) {
-  return (
-    <div
-      style={{ border: "1px solid #ddd", padding: "12px", marginTop: "10px" }}
-    >
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <strong>${price}</strong>
-    </div>
-  );
+<TextInput
+  label="Email"
+  type="email"
+  placeholder="you@example.com"
+  name="email"
+/>
+```
+
+This creates a useful API while forwarding standard input attributes.
+
+## 13. Props Are Read-Only
+Do not mutate received props:
+
+```jsx
+function User(props) {
+  // props.name = "Changed"; // Do not do this
+  return <p>{props.name}</p>;
 }
 ```
 
-### Example 2: Case - Status Badge With Default Label
+If data needs to change, the owner of that data should update it and pass the new value down, or the child should invoke an appropriate callback.
 
-Scenario:
-A dashboard badge should show a default label when the parent does not send one.
+## 14. Props vs State
+
+| Props | State |
+|---|---|
+| Input from outside component | Data managed by component/state owner |
+| Read-only from receiver's perspective | Updated through state API |
+| Controlled by parent/owner | Owned by state holder |
+| Used to configure a component | Used for changing UI data |
+
+A component can receive props and also own state. They are complementary concepts.
+
+## 15. Avoiding Prop Drilling
+Prop drilling means passing data through intermediate components that do not themselves need it:
+
+```text
+App → Layout → Sidebar → UserMenu
+```
+
+If only `UserMenu` needs `user`, repeatedly forwarding `user` may become noisy. Solutions depend on the application: composition, context, state-management libraries, or restructuring the component tree. Do not introduce Context merely because two components need a value.
+
+## 16. Props and Immutability
+Props can contain objects/arrays. The child should not mutate them:
 
 ```jsx
-function StatusBadge({ text = "Active" }) {
-  return <span>{text}</span>;
+function User({ user }) {
+  // user.name = "Changed"; // avoid
+  return <p>{user.name}</p>;
 }
 ```
 
-## Mini Exercise
+If a child needs an updated object, it should request the change through a callback and let the owner create the new value.
 
-Scenario:
-You are building an employee directory page where every card receives external data.
+## 17. Real-World API Design
+### Bad
+```jsx
+<ProductCard
+  showImage
+  showPrice
+  showRating
+  showDescription
+  showButton
+  showWishlist
+  compact={false}
+  bordered
+  rounded
+  large
+/>
+```
 
-Create EmployeeCard component with props: name, designation, department, and location (optional). Render at least 4 cards.
+### Better
+```jsx
+<ProductCard
+  product={product}
+  actions={<ProductActions productId={product.id} />}
+/>
+```
 
-Expected output:
+The better design can use composition when the consumer needs meaningful control over a section.
 
-- Same EmployeeCard reused for all entries
-- Different prop values shown per card
-- Optional location handled gracefully when missing
+## 18. Type-Safe Props with TypeScript
+In TypeScript projects:
+
+```tsx
+type UserCardProps = {
+  name: string;
+  role: string;
+  active?: boolean;
+};
+
+function UserCard({ name, role, active = true }: UserCardProps) {
+  return <article>{name} — {role} — {active ? "Active" : "Inactive"}</article>;
+}
+```
+
+TypeScript helps document required/optional inputs and catches many incorrect usages before runtime.
+
+## 19. End-to-End Props Lab
+Build a dashboard with:
+
+```text
+App
+├── Dashboard
+│   ├── HeaderComponent (component prop)
+│   ├── UserCard (object props)
+│   ├── ActionButton (callback prop)
+│   └── Panel (children)
+└── Footer
+```
+
+Acceptance criteria:
+- [ ] At least four prop types are demonstrated.
+- [ ] Object prop is treated immutably.
+- [ ] Child invokes a callback.
+- [ ] `children` is used for composition.
+- [ ] A component is passed as a prop.
+- [ ] Spread/rest is used intentionally.
+- [ ] TypeScript prop types are defined if using `.tsx`.
+
+## Hands-on Challenges
+### Challenge 1 — Product Card
+`product`, `onAddToCart`, optional `discount`.
+
+### Challenge 2 — Search Input Wrapper
+Use rest props to forward native input attributes while keeping `label` separate.
+
+### Challenge 3 — Dynamic Layout
+Pass `HeaderComponent` and `FooterComponent` into a `PageLayout`.
+
+### Challenge 4 — Composition
+Build `Modal` using `children`, then place different forms inside it.
+
+### Challenge 5 — Refactor Prop Drilling
+Given `App → Layout → Sidebar → UserMenu`, identify where composition or Context would reduce unnecessary forwarding.
+
+## Common Mistakes
+- Passing numbers as quoted strings when a number is required.
+- Mutating props.
+- Passing a callback incorrectly: `onClick={handleClick()}` when you intend to pass the function.
+- Confusing a component prop with a rendered element prop.
+- Blindly spreading large objects into DOM elements.
+- Adding props for every possible layout instead of using composition.
+- Using Context as the first solution to every prop-drilling problem.
 
 ## Assessment Quiz
-
-### Quiz Questions
-
-1. Can child component change received props?
-2. Why is one-way data flow useful?
-3. What is destructuring in props?
-4. True or False: Props can be numbers, objects, and functions.
-5. How do defaults help?
-6. Why pass callback props from parent to child?
-
-### Quiz Answers
-
-1. No
-2. It keeps data flow predictable
-3. Extracting values from props object
-4. True
-5. Prevents undefined UI values
-6. So children can notify the parent about user actions without owning the data flow.
-
-## Task
-
-- Build one prop-driven card component
-- Pass at least 4 props
-- Add one optional/default prop
-- Complete mini exercise
-
-## Self Check
-
-- You can pass and use props confidently
-- You understand one-way data flow
-- You can answer at least 4 out of 5 quiz questions correctly
+1. What are props?
+2. Are props read-only?
+3. How do you pass an object?
+4. What is destructuring?
+5. What is a callback prop?
+6. What is `children`?
+7. Difference between `<Page header={<Header />} />` and `<Page HeaderComponent={Header} />`?
+8. What does spread do?
+9. What does rest do?
+10. Why can excessive prop drilling be a design problem?
+11. Why should a child not mutate an object received through props?
+12. When is composition better than adding another prop?
 
 ## Interview Questions and Answers
+**1. Props vs state?** Props are external read-only inputs; state is data managed by a state owner and updated through its state API.
 
-### Beginner
+**2. Can props be objects?** Yes. Objects, arrays, functions, elements, and component values can all be passed as props.
 
-**Question:** What are props?
+**3. How does child-to-parent communication work?** The parent passes a callback; the child invokes it with the event/value it wants to report.
 
-**Answer:** Inputs passed from parent to child components.
+**4. What is `children`?** The special prop containing nested content supplied between a component's opening and closing tags.
 
-**Question:** Are props mutable?
+**5. Spread vs rest?** Spread expands values into a new context; rest collects remaining values during destructuring.
 
-**Answer:** No, props are read-only.
+**6. Component vs element prop?** A component prop receives a component value/type that can be rendered; an element prop receives an already-created React element.
 
-### Middle
+**7. What is prop drilling?** Passing data through intermediate components solely so a deeper component can receive it.
 
-**Question:** Why use props instead of hardcoding values?
+**8. How do you reduce prop drilling?** Consider composition, Context, restructuring, or an appropriate state-management solution based on actual application needs.
 
-**Answer:** Props make components reusable and dynamic.
+**9. Why avoid prop mutation?** It breaks the ownership model and can create unpredictable state/data flow.
 
-**Question:** What is prop destructuring?
+**10. How do you design good props?** Start from real use cases, keep the API small and semantic, use composition for flexible nested UI, type the contract, and avoid speculative options.
 
-**Answer:** Extracting specific properties directly in function parameters.
-
-### Advanced
-
-**Question:** How do props and state differ conceptually?
-
-**Answer:** Props are external read-only inputs, state is internal mutable component data.
-
-**Question:** Why does one-way flow simplify large apps?
-
-**Answer:** It reduces side effects and makes data origins explicit.
+## Final Practical Project
+Build a **Product Management Dashboard** with:
+- `ProductCard` receiving an object prop
+- `ProductCard` callback for Add to Cart
+- `SearchInput` forwarding native props with rest
+- `Modal` using `children`
+- `PageLayout` accepting header/footer components
+- TypeScript prop definitions
+- At least one optional/default prop
 
 ## Day 6 Outcome
-
-- You can build dynamic, prop-driven UI components
-- You can apply defaults and destructuring
-- You are ready for the integrated mini project in Day 7
+You can now design and consume React component APIs from basic primitives through advanced composition. This is the required depth for Props in the course. Day 7 applies these patterns in an integrated product project.
