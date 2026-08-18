@@ -3,363 +3,416 @@ title: Custom Hooks Basics
 slug: day-033-custom-hooks-basics
 dayLabel: Day 33
 level: Intermediate
-estimatedMinutes: 30
-order: 33
-track: react
----
----
-title: Custom Hooks Basics
-slug: day-033-custom-hooks-basics
-dayLabel: Day 33
-level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 33
 track: react
 ---
 # Day 33 [Intermediate]: Custom Hooks Basics
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 33 Outcome](#day-33-outcome)
-
 ## Goal
 
-Create and use custom hooks to reuse stateful logic across multiple components.
+Learn how to extract **reusable stateful logic** into custom hooks while keeping UI rendering inside components. The goal is not to make everything a hook; it is to create a small, clear API around behavior that genuinely repeats.
 
 ## Prerequisites
 
-- Day 32 completed
-- Comfort with core hooks
+- Days 22–32
+- `useState`, `useEffect`, `useRef`
+- hook rules
+- controlled components
+- async state basics
 
-## Explanation
+## 1. What Is a Custom Hook?
 
-Custom hooks are JavaScript functions that start with `use` and can call other hooks. They help extract reusable behavior from components.
-
-## Topic by Topic
-
-### Topic 1: Why Custom Hooks
-
-Theory:
-They prevent duplicated hook logic across components.
-
-Practical:
-Extract toggle logic from multiple panels.
-
-Code Example:
+A custom hook is a JavaScript function whose name starts with `use` and that can call React hooks.
 
 ```jsx
 function useToggle(initial = false) {
   const [value, setValue] = useState(initial);
-  const toggle = () => setValue((v) => !v);
-  return [value, toggle];
+
+  const toggle = () => setValue((current) => !current);
+
+  return { value, toggle };
 }
 ```
 
-**Explanation:** This topic explains Why Custom Hooks in a practical way so you can apply it confidently in real React projects.
+A custom hook does **not** create shared state between every consumer. Each component calling the hook gets its own hook state.
 
-**Key Points:**
-
-- Understand the core idea of Why Custom Hooks.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 2: Hook Naming Rules
-
-Theory:
-Custom hooks must start with `use` and follow hook rules.
-
-Practical:
-Create `useCounter` and call at top-level.
-
-Code Example:
-
-```jsx
-function useCounter() {}
+```text
+Component A → useToggle() → state A
+Component B → useToggle() → state B
 ```
 
-**Explanation:** This topic explains Hook Naming Rules in a practical way so you can apply it confidently in real React projects.
+The reusable part is the logic, not the state instance.
 
-**Key Points:**
+## 2. Why Extract Logic?
 
-- Understand the core idea of Hook Naming Rules.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 3: Parameterized Hooks
-
-Theory:
-Hooks can accept arguments for flexible behavior.
-
-Practical:
-Pass storage key into useLocalStorage.
-
-Code Example:
+Before:
 
 ```jsx
-const [theme, setTheme] = useLocalStorage("theme", "light");
-```
-
-**Explanation:** This topic explains Parameterized Hooks in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Parameterized Hooks.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 4: Returning State + Actions
-
-Theory:
-Custom hooks usually return data and helper functions.
-
-Practical:
-Return value, setValue, and reset.
-
-Code Example:
-
-```jsx
-return { value, setValue, reset };
-```
-
-**Explanation:** This topic explains Returning State + Actions in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Returning State + Actions.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 5: Testing and Reuse
-
-Theory:
-Hooks can be unit-tested separately for predictable behavior.
-
-Practical:
-Use same hook in two components.
-
-Code Example:
-
-```jsx
-const [open, toggle] = useToggle(false);
-```
-
-**Explanation:** This topic explains Testing and Reuse in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Testing and Reuse.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 6: Hook API Consistency
-
-Theory:
-Consistent return patterns (object or tuple) improve readability and lower onboarding time.
-
-Practical:
-Use object return for multi-action hooks and tuple return for simple value/action pairs.
-
-Code Example:
-
-```jsx
-return { value, setValue, reset };
-```
-
-**Explanation:** This topic explains Hook API Consistency in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Hook API Consistency.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-## Key Concepts
-
-- Logic extraction
-- Hook naming and rules
-- Reusable state patterns
-- Parameterized behavior
-- Clean component composition
-- Consistent hook APIs
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Component Logic] --> B[Extract to Custom Hook]
-		B --> C[Reusable API]
-		C --> D[Use in Many Components]
-```
-
-## End-to-End Practical
-
-1. Build duplicated toggle logic in 2 components.
-2. Extract to `useToggle` hook.
-3. Build `useLocalStorage` hook.
-4. Reuse hook in different screens.
-5. Verify cleaner component code.
-
-## Hands-on Coding
-
-### Example 1: Case - Dashboard Panel Toggle Hook
-
-Scenario:
-An admin dashboard has multiple collapsible panels sharing same open/close logic.
-
-```jsx
-import { useState } from "react";
-
-function useToggle(initial = false) {
-  const [isOn, setIsOn] = useState(initial);
-  const toggle = () => setIsOn((v) => !v);
-  return [isOn, toggle];
+function PanelA() {
+  const [open, setOpen] = useState(false);
+  // repeated behavior
 }
 
-function ReportsPanel() {
-  const [open, toggle] = useToggle(true);
-  return (
-    <div>
-      <button onClick={toggle}>{open ? "Hide" : "Show"} Reports</button>
-      {open && <p>Reports Content</p>}
-    </div>
-  );
+function PanelB() {
+  const [open, setOpen] = useState(false);
+  // same behavior again
 }
 ```
 
-### Example 2: Case - Persistent Theme Hook
-
-Scenario:
-A learning portal should remember selected theme after refresh.
+After:
 
 ```jsx
-import { useEffect, useState } from "react";
+const panelA = useToggle();
+const panelB = useToggle();
+```
+
+The components remain responsible for rendering their own UI.
+
+## 3. Custom Hooks Must Follow Hook Rules
+
+Good:
+
+```jsx
+function useCounter() {
+  const [count, setCount] = useState(0);
+  return count;
+}
+```
+
+Bad:
+
+```jsx
+function useCounter(enabled) {
+  if (enabled) {
+    const [count, setCount] = useState(0); // ❌ conditional hook
+  }
+}
+```
+
+Hooks must be called at the top level of components or other custom hooks, not inside conditions, loops, or nested callbacks.
+
+## 4. Hook Naming Is More Than Style
+
+The `use` prefix signals that the function participates in hook rules and allows lint tooling to identify invalid usage patterns.
+
+Do not hide hooks inside ordinary helper functions:
+
+```jsx
+function createThing() {
+  const [value] = useState(); // ❌
+}
+```
+
+## 5. Designing the Hook API
+
+For a simple pair, a tuple is concise:
+
+```jsx
+return [value, toggle];
+```
+
+For multiple actions, an object is often clearer:
+
+```jsx
+return {
+  value,
+  increment,
+  decrement,
+  reset,
+};
+```
+
+Choose a consistent contract based on the consumer experience, not personal preference alone.
+
+## 6. Parameterized Hooks
+
+```jsx
+function useCounter(initial = 0) {
+  const [count, setCount] = useState(initial);
+
+  const increment = () => setCount((current) => current + 1);
+  const reset = () => setCount(initial);
+
+  return { count, increment, reset };
+}
+```
+
+Parameters make a hook reusable while keeping application-specific decisions outside the hook.
+
+## 7. `useLocalStorage`: A Realistic Example
+
+A robust version must handle malformed storage and browser access failures.
+
+```jsx
+function readStoredValue(key, initialValue) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw === null ? initialValue : JSON.parse(raw);
+  } catch {
+    return initialValue;
+  }
+}
 
 function useLocalStorage(key, initialValue) {
-  const [value, setValue] = useState(() => {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : initialValue;
-  });
+  const [value, setValue] = useState(() =>
+    readStoredValue(key, initialValue)
+  );
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      // Storage may be unavailable or full.
+    }
   }, [key, value]);
 
   return [value, setValue];
 }
 ```
 
-### Example 3: Case - Reusable Counter Hook
+This is still a browser-oriented learning abstraction. It is not a replacement for server persistence.
 
-Scenario:
-Different widgets need the same counter increment/decrement behavior.
+## 8. Hooks Do Not Share State Automatically
+
+This is a critical concept.
 
 ```jsx
-import { useState } from "react";
+function CounterA() {
+  const { count } = useCounter();
+}
 
-function useCounter(initial = 0) {
-  const [count, setCount] = useState(initial);
-  const increment = () => setCount((c) => c + 1);
-  const decrement = () => setCount((c) => c - 1);
-  const reset = () => setCount(initial);
-  return { count, increment, decrement, reset };
+function CounterB() {
+  const { count } = useCounter();
 }
 ```
 
-## Mini Exercise
+These counters are independent. If multiple components need the **same source of truth**, use an appropriate state-sharing mechanism such as lifted state, Context, an external store, or a server-state library depending on the problem.
 
-Scenario:
-You are building a recruitment dashboard.
+## 9. Hooks Should Not Render UI
 
-Create:
+A hook can return state, data, actions, refs, or status.
 
-- `useToggle` for side panel
-- `useSearch` for keyword state and clear action
-- `useLocalStorage` to persist selected department
+```jsx
+function useToggle() {
+  // logic
+  return { value, toggle };
+}
+```
 
-Expected output:
+The component renders:
 
-- Components become shorter and cleaner
-- Reusable hooks power multiple widgets
-- Stored values persist across refresh
+```jsx
+const { value, toggle } = useToggle();
+return <button onClick={toggle}>{value ? "Open" : "Closed"}</button>;
+```
 
-## Assessment Quiz
+This separation keeps logic reusable across different UI designs.
 
-### Quiz Questions
+## 10. Custom Hooks and Effects
 
-1. Why create custom hooks?
-2. What naming convention is required?
-3. True or False: custom hooks can call other hooks.
-4. What should custom hooks typically return?
-5. How do custom hooks improve maintainability?
+A hook can encapsulate an effect when that effect belongs to the reusable behavior.
 
-### Quiz Answers
+```jsx
+function useDocumentTitle(title) {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+}
+```
 
-1. Reuse stateful logic and reduce duplication
-2. Must start with `use`
-3. True
-4. State values and action helpers
-5. Centralized logic is easier to evolve and test
+The component only expresses intent:
 
-## Task
+```jsx
+useDocumentTitle(`${count} notifications`);
+```
 
-- Build at least 2 custom hooks
-- Reuse each in more than one component
-- Complete mini exercise
+## 11. Avoid Over-Generalization
+
+This can be a smell:
+
+```jsx
+useSomething({
+  mode: "x",
+  strategy: "y",
+  feature: "z",
+  transform: fn,
+  customBehavior: fn2,
+  ...
+});
+```
+
+If a hook requires many flags to support unrelated use cases, split it into smaller hooks or keep some logic in the component.
+
+## 12. Testing Custom Hooks
+
+Test observable behavior, not implementation details.
+
+For `useCounter`, test:
+
+- initial value
+- increment
+- decrement
+- reset
+
+For an async hook, test:
+
+- loading
+- success
+- error
+- cancellation/unmount behavior
+
+The exact testing library is less important than verifying the public hook contract.
+
+## 13. Three Practical Hooks
+
+### `useToggle`
+
+```jsx
+function useToggle(initial = false) {
+  const [value, setValue] = useState(initial);
+  const toggle = () => setValue((current) => !current);
+  const setOn = () => setValue(true);
+  const setOff = () => setValue(false);
+
+  return { value, toggle, setOn, setOff };
+}
+```
+
+### `useCounter`
+
+```jsx
+function useCounter(initial = 0) {
+  const [count, setCount] = useState(initial);
+
+  return {
+    count,
+    increment: () => setCount((c) => c + 1),
+    decrement: () => setCount((c) => c - 1),
+    reset: () => setCount(initial),
+  };
+}
+```
+
+### `useSearch`
+
+```jsx
+function useSearch(initial = "") {
+  const [query, setQuery] = useState(initial);
+  const clear = () => setQuery("");
+
+  return { query, setQuery, clear };
+}
+```
+
+## 14. Complete Example
+
+```jsx
+function SearchPanel() {
+  const { query, setQuery, clear } = useSearch();
+
+  return (
+    <section>
+      <label htmlFor="search">Search</label>
+      <input
+        id="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+      />
+      <button type="button" onClick={clear}>Clear</button>
+      <p>Searching for: {query || "everything"}</p>
+    </section>
+  );
+}
+```
+
+The hook knows nothing about HTML, CSS, or the visual design.
+
+## 15. Common Mistakes
+
+### Mistake 1: Thinking custom hooks share state
+
+They reuse logic; each invocation normally has independent state.
+
+### Mistake 2: Conditional hook calls
+
+Never call hooks conditionally.
+
+### Mistake 3: Putting JSX into hooks
+
+Return behavior/data, not UI.
+
+### Mistake 4: Hiding business decisions inside generic hooks
+
+Keep domain-specific policy at the appropriate application layer.
+
+### Mistake 5: Returning an unstable API without a reason
+
+If consumers need stable actions for memoized children, consider `useCallback`; otherwise don't add it automatically.
+
+## Hands-on Labs
+
+### Lab 1 — Extract
+Take duplicated toggle logic from two components and create `useToggle`.
+
+### Lab 2 — Persistence
+Create `useLocalStorage` with malformed JSON recovery.
+
+### Lab 3 — Async Contract
+Design a hook API for loading/error/data/refetch without implementing it first. Explain why each returned field exists.
+
+### Lab 4 — State Sharing
+Use the same custom hook in two components and demonstrate that their state is independent. Then redesign the example using lifted state when shared state is required.
+
+## Assessment
+
+1. What is a custom hook?
+2. Does a custom hook share state automatically?
+3. Why must custom hook names start with `use`?
+4. Where can hooks be called?
+5. When should you return an object instead of a tuple?
+6. Should hooks render JSX?
+7. When should logic remain in a component?
+8. How would you test a hook?
+
+## Interview Questions
+
+**Q: What problem do custom hooks solve?**  
+They extract reusable stateful behavior so multiple components can use the same logic without duplicating it.
+
+**Q: Do custom hooks create global state?**  
+No. Each call has its own state unless the hook connects to a shared state mechanism.
+
+**Q: Can a custom hook call another custom hook?**  
+Yes, provided normal hook rules are respected.
+
+**Q: When would you not create a custom hook?**  
+When the logic is simple, local, and unlikely to be reused. Abstraction has a maintenance cost.
+
+**Q: How should a custom hook handle errors?**  
+Expose a predictable error/status contract and let the consuming component decide how the UI should present it.
+
+## Final Project
+
+Build a **Reusable Dashboard Toolkit** containing:
+
+- `useToggle`
+- `useCounter`
+- `useSearch`
+- `useLocalStorage`
+- one domain-specific hook of your own
+
+Use each in at least two components where reuse is justified. Document the public API of every hook.
 
 ## Self Check
 
-- You can extract and design custom hook APIs
-- You can apply hook rules while reusing logic
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** What is a custom hook?
-
-**Answer:** A reusable function that uses React hooks and starts with `use`.
-
-**Question:** Can custom hook render JSX?
-
-**Answer:** No, hooks return data/logic; components render JSX.
-
-### Middle
-
-**Question:** What should stay in component vs custom hook?
-
-**Answer:** UI rendering in component, reusable stateful logic in hook.
-
-**Question:** How can you make custom hooks configurable?
-
-**Answer:** Accept parameters and return flexible API.
-
-### Advanced
-
-**Question:** How would you avoid tight coupling in custom hooks?
-
-**Answer:** Keep APIs generic and avoid direct app-specific assumptions.
-
-**Question:** Why are custom hooks useful in large teams?
-
-**Answer:** Shared patterns become standardized and easier to maintain.
+- [ ] I can explain logic reuse vs state sharing.
+- [ ] I know hook rules.
+- [ ] I can design a clean hook API.
+- [ ] I can parameterize a hook.
+- [ ] I know when not to abstract.
+- [ ] I can test behavior through a public contract.
 
 ## Day 33 Outcome
 
-- You can create practical reusable custom hooks
-- You can keep components focused on presentation
-- You are ready for advanced reusable logic patterns in Day 34
-
+You can now extract reusable stateful behavior without coupling it to a specific UI. Day 34 builds more advanced hooks around **async operations, debouncing, pagination, composition, and cancellation**.
