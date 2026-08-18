@@ -1,111 +1,71 @@
 ---
-title: Components Basics
+title: React Components Basics
 slug: day-004-components-basics
 dayLabel: Day 4
 level: Beginner
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 4
 track: react
 ---
-# Day 4 [Beginner]: Components Basics
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 4 Outcome](#day-4-outcome)
+# Day 4: React Components Basics
 
 ## Goal
-
-Build and compose basic React components to create maintainable UI.
+Build, name, compose, reuse, and organize React function components correctly. By the end, you should understand component boundaries, component instances, props at a high level, and why composition is the foundation of React UI architecture.
 
 ## Prerequisites
+- Day 1–3 completed
+- JavaScript functions and modules
+- JSX fundamentals
 
-- Day 3 completed
-- JSX fundamentals clear
-
-## Explanation
-
-Components are reusable UI building blocks. In modern React, most components are written as functions, but older React codebases may still use class components. React apps are built by combining many small components.
-
-## Topic by Topic
-
-### Topic 1: What Is a Component?
-
-Theory:
-Component is an isolated UI unit.
-
-Practical:
-Create a simple Header component.
-
-Code Example:
+## 1. What Is a Component?
+A component is a reusable unit of UI represented in modern React by a function that returns a React element tree.
 
 ```jsx
 function Header() {
-  return <h1>My App Header</h1>;
+  return <header><h1>My App</h1></header>;
 }
 ```
 
-**Explanation:** This is a **component** - a reusable piece of UI. It's simply a function that returns JSX. Component names must start with uppercase (e.g., `Header`, not `header`). This naming convention helps React recognize it as a component.
+A component is not merely an HTML wrapper. It can contain markup, calculations, event handlers, and later state/effects. Keep responsibilities focused, but do not interpret “one responsibility” as “one HTML tag.”
 
-**Key Points:**
-
-- Components are functions that return JSX
-- Component names must start with UPPERCASE letters
-- Lowercase names are treated as HTML tags
-- Components encapsulate UI logic
-
-### Topic 2: Function Components vs Class Components
-
-Theory:
-React supports two main component styles: function components and class components. Modern React mainly uses function components.
-
-Practical:
-Compare the same UI written once as a function component and once as a class component.
-
-Code Example:
+## 2. Function Components
+Function components are the standard approach for new React code.
 
 ```jsx
-function WelcomeFunction() {
-  return <h2>Welcome from function component</h2>;
+function Welcome() {
+  return <h2>Welcome to React</h2>;
 }
 
-class WelcomeClass extends React.Component {
+export default Welcome;
+```
+
+A component is used with JSX syntax:
+
+```jsx
+function App() {
+  return <Welcome />;
+}
+```
+
+`<Welcome />` creates a React element describing an instance of `Welcome`; it does not mean you manually call `Welcome()` in your JSX.
+
+## 3. Class Components: Read, Don't Start With Them
+Older React applications may contain class components:
+
+```jsx
+import { Component } from "react";
+
+class Welcome extends Component {
   render() {
-    return <h2>Welcome from class component</h2>;
+    return <h2>Welcome</h2>;
   }
 }
 ```
 
-**Explanation:** A **function component** is a normal JavaScript function that returns JSX. A **class component** is an ES6 class that extends `React.Component` and returns JSX from a `render()` method. Today, function components are preferred because they are simpler to read and work directly with Hooks like `useState` and `useEffect`.
+Function components are preferred for new code. Understanding classes remains useful when maintaining legacy applications, error boundaries, or older interview code.
 
-**Key Points:**
-
-- Function components are the modern standard in React
-- Class components are common in older React codebases
-- Class components use `render()` while function components return JSX directly
-- Hooks work in function components, not class components
-
-### Topic 3: Component Naming Rules
-
-Theory:
-Component names start with uppercase letters.
-
-Practical:
-Rename incorrect component names.
-
-Code Example:
+## 4. Naming Rules
+Custom component names conventionally begin with an uppercase letter:
 
 ```jsx
 function ProfileCard() {
@@ -113,371 +73,258 @@ function ProfileCard() {
 }
 ```
 
-**Explanation:** React requires component names to start with uppercase. This tells React "this is a component, not a regular HTML tag". Lowercase names are treated as regular HTML tags.
+```jsx
+<ProfileCard />
+```
 
-**Key Points:**
+Lowercase JSX names are interpreted as intrinsic DOM elements such as `div`, `button`, and `section`. This is why `<profileCard />` is not equivalent to `<ProfileCard />`.
 
-- UPPERCASE first letter = React component
-- lowercase first letter = HTML tag or built-in element
-- Naming convention is critical for React to recognize components
-
-### Topic 4: Reusing the Same Component
-
-Theory:
-Reusable components reduce duplication.
-
-Practical:
-Render Card component multiple times.
-
-Code Example:
+## 5. Reusing a Component
+One component can have many instances:
 
 ```jsx
 function Card() {
-  return <div>Reusable Card</div>;
-}
-
-function App() {
-  return (
-    <div>
-      <Card />
-      <Card />
-      <Card />
-    </div>
-  );
-}
-```
-
-**Explanation:** Components can be used multiple times. Here `<Card />` appears three times, reducing code duplication. Each usage is independent, but they all have the same UI. This is the power of React - write once, use many times.
-
-**Key Points:**
-
-- Reuse components multiple times by repeating them
-- Each instance is independent
-- Reduces code duplication significantly
-- Self-closing tag: `<Card />` not `<Card></Card>`
-
-### Topic 5: Composing Components
-
-Theory:
-Composition means combining smaller components into larger UI.
-
-Practical:
-Build page using Header and Card components in one screen.
-
-Code Example:
-
-```jsx
-function Header() {
-  return <h1>Header</h1>;
-}
-
-function Card() {
-  return <div>Card</div>;
-}
-
-function App() {
-  return (
-    <div>
-      <Header />
-      <Card />
-      <Card />
-    </div>
-  );
-}
-```
-
-**Explanation:** **Composition** means building larger components from smaller ones. `App` uses `Header` and `Card` components. This pattern keeps code modular - each component is small and focused.
-
-**Key Points:**
-
-- Composition = building large components from small ones
-- Each component has one clear responsibility
-- Easier to test, reuse, and maintain
-- Natural hierarchy mimics app structure
-
-### Topic 6: Keeping Components Focused
-
-Theory:
-Each component should handle one responsibility.
-
-Practical:
-Split long App UI into smaller pieces.
-
-Code Example:
-
-```jsx
-function Footer() {
-  return <footer>Footer section</footer>;
-}
-```
-
-**Explanation:** Focused components are easier to test, reuse, and understand because each one solves only one small UI problem.
-
-**Key Points:**
-
-- Keep components small and purpose-driven.
-- Split large UI into simpler pieces.
-- One responsibility improves maintainability.
-
-### Topic 7: Props-driven Reuse and Container Thinking
-
-Theory:
-Reusable components become more useful when data comes from props instead of hardcoded text. Also, page-level components often coordinate data, while smaller UI components focus on display.
-
-Practical:
-Convert one hardcoded component into a reusable component using props.
-
-Code Example:
-
-```jsx
-function InfoCard({ title, description }) {
-  return (
-    <div>
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
-  );
-}
-```
-
-**Explanation:** This is the **Single Responsibility Principle** - each component should have one clear job. `InfoCard` only displays information; it doesn't fetch data or manage complex logic. This makes components easier to test and reuse.
-
-**Key Points:**
-
-- Single Responsibility: each component does one job
-- Display components just show data, don't fetch it
-- Easier to test and maintain
-- Promotes reusability across different pages
-
-## Key Concepts
-
-- Component function
-- Function component
-- Class component
-- Reusability
-- Composition
-- Naming conventions
-- Single responsibility
-- Props-driven reuse
-- Page component vs presentational component role
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-    A[App] --> B[Header]
-    A --> C[MainContent]
-    A --> D[Footer]
-    C --> E[Reusable Cards]
-```
-
-## End-to-End Practical
-
-1. Create Header, Card, Footer components.
-2. Import and render them in App.
-3. Render Card two times.
-4. Change one component and verify impact.
-
-## Hands-on Coding
-
-### Example 1: Case - Ecommerce Home Banner
-
-Scenario:
-An ecommerce homepage needs a reusable top banner and footer for marketing campaigns.
-
-```jsx
-function PromoHeader() {
-  return <h1>Big Sale Weekend</h1>;
-}
-
-function PromoFooter() {
-  return <p>Free shipping above $50</p>;
-}
-
-function App() {
-  return (
-    <div>
-      <PromoHeader />
-      <PromoFooter />
-    </div>
-  );
-}
-```
-
-### Example 2: Case - HR Team Directory
-
-Scenario:
-An HR page should display the same employee card component for multiple team members.
-
-```jsx
-function EmployeeCard() {
-  return (
-    <div style={{ border: "1px solid #ddd", padding: "10px" }}>
-      Name: Asha | Role: Recruiter
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <div>
-      <EmployeeCard />
-      <EmployeeCard />
-    </div>
-  );
-}
-```
-
-### Example 3: Case - Learning Portal Feature Blocks
-
-Scenario:
-A learning portal dashboard needs reusable feature blocks with different titles and descriptions.
-
-```jsx
-function FeatureBlock({ title, description }) {
-  return (
-    <div
-      style={{ border: "1px solid #ddd", padding: "10px", marginTop: "10px" }}
-    >
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <div>
-      <FeatureBlock
-        title="Daily Lessons"
-        description="Step-by-step concept learning with practice tasks."
-      />
-      <FeatureBlock
-        title="Interview Prep"
-        description="Beginner, middle, and advanced Q&A per day."
-      />
-    </div>
-  );
-}
-```
-
-### Example 4: Case - Hospital Appointment Page Composition
-
-Scenario:
-A clinic app needs separate sections for header, appointment list, and footer to keep code maintainable.
-
-```jsx
-function ClinicHeader() {
-  return <h2>City Clinic Appointments</h2>;
-}
-
-function AppointmentList() {
-  return (
-    <ul>
-      <li>09:00 AM - Dr. Rao</li>
-      <li>10:30 AM - Dr. Mehta</li>
-    </ul>
-  );
-}
-
-function ClinicFooter() {
-  return <p>Emergency: 1800-111-222</p>;
+  return <article>Reusable card</article>;
 }
 
 function App() {
   return (
     <main>
-      <ClinicHeader />
-      <AppointmentList />
-      <ClinicFooter />
+      <Card />
+      <Card />
+      <Card />
     </main>
   );
 }
 ```
 
-## Mini Exercise
+Each `<Card />` is a separate usage. If the component later receives state, each instance can maintain its own state.
 
-Scenario:
-You are creating a simple landing page for a training portal.
+## 6. Composition
+Composition means assembling a screen from smaller components.
 
-Build a page with four components: Header, Hero, FeatureList, Footer. Render them in App in proper order.
+```jsx
+function Header() { return <header>Header</header>; }
+function Sidebar() { return <aside>Sidebar</aside>; }
+function Content() { return <section>Content</section>; }
+function Footer() { return <footer>Footer</footer>; }
 
-Expected output:
+function App() {
+  return (
+    <>
+      <Header />
+      <Sidebar />
+      <Content />
+      <Footer />
+    </>
+  );
+}
+```
 
-- Four separate components created
-- App composes all components in order
-- Changing one component updates only that section
+This creates a component hierarchy:
 
-## Assessment Quiz
+```text
+App
+├── Header
+├── Sidebar
+├── Content
+└── Footer
+```
 
-### Quiz Questions
+Composition is more important than creating one giant `App` component.
 
-1. Why should component names start with uppercase?
-2. What is composition?
-3. True or False: Components can be reused many times.
-4. What is a benefit of small components?
-5. Which component should contain page-level layout?
+## 7. Component Responsibility and Boundaries
+A useful component boundary usually has one or more of these characteristics:
 
-### Quiz Answers
+- a meaningful UI section
+- reusable behavior or presentation
+- a clear data contract
+- independent testing value
+- a reason to change separately
 
-1. React identifies custom components this way
-2. Combining smaller components to build larger UI
-3. True
-4. Better maintainability
-5. App or page component
+Do not split every `<div>` into a component. Excessive fragmentation can make code harder to follow.
 
-6. Why are props important for reusable components?
+## 8. Props at a High Level
+Components become reusable when values are supplied by the parent.
 
-### Quiz Answers
+```jsx
+function UserCard({ name, role }) {
+  return <article><h3>{name}</h3><p>{role}</p></article>;
+}
 
-6. They let the same component render different data without duplicating code.
+function App() {
+  return <UserCard name="Asha" role="Developer" />;
+}
+```
 
-## Task
+Day 6 will cover props deeply: objects, arrays, callbacks, children, spread/rest, component props, defaults, and design patterns.
 
-- Create 3 to 4 components
-- Reuse one component at least twice
-- Complete mini exercise
+## 9. Imports and Exports
+A component can live in its own file:
+
+```jsx
+// Header.jsx
+export default function Header() {
+  return <header>Header</header>;
+}
+```
+
+```jsx
+// App.jsx
+import Header from "./Header";
+
+function App() {
+  return <Header />;
+}
+
+export default App;
+```
+
+Named exports are another option:
+
+```jsx
+export function Header() { return <header>Header</header>; }
+```
+
+```jsx
+import { Header } from "./Header";
+```
+
+## 10. Component Tree vs DOM Tree
+The React component tree represents your application structure; the browser DOM is the host UI produced after React renders and commits updates.
+
+```text
+Component tree
+App → Header → Navigation
+          └→ Logo
+
+Rendered host tree
+main → header → nav → ...
+```
+
+A component does not have to map one-to-one to a DOM element.
+
+## End-to-End Practical: Dashboard Shell
+Create:
+
+```text
+src/
+├── App.jsx
+└── components/
+    ├── Header.jsx
+    ├── Sidebar.jsx
+    ├── DashboardContent.jsx
+    └── Footer.jsx
+```
+
+`Header.jsx`:
+
+```jsx
+export default function Header() {
+  return <header><h1>Learning Dashboard</h1></header>;
+}
+```
+
+`Sidebar.jsx`:
+
+```jsx
+export default function Sidebar() {
+  return <aside><nav><a href="#courses">Courses</a></nav></aside>;
+}
+```
+
+`DashboardContent.jsx`:
+
+```jsx
+export default function DashboardContent() {
+  return <main><h2>My Courses</h2><p>Continue learning.</p></main>;
+}
+```
+
+`Footer.jsx`:
+
+```jsx
+export default function Footer() {
+  return <footer>© 2026 CodingTerminals</footer>;
+}
+```
+
+`App.jsx`:
+
+```jsx
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import DashboardContent from "./components/DashboardContent";
+import Footer from "./components/Footer";
+
+export default function App() {
+  return (
+    <>
+      <Header />
+      <Sidebar />
+      <DashboardContent />
+      <Footer />
+    </>
+  );
+}
+```
+
+## Hands-on Challenges
+1. Build a `ProfilePage` from `ProfileHeader`, `ProfileDetails`, and `ProfileActions`.
+2. Extract a repeated `FeatureCard` and render it three times.
+3. Convert hardcoded user text into props.
+4. Move each major component into its own file.
+5. Explain why you chose each component boundary.
+
+## Common Mistakes
+
+### Mistake: lowercase component
+```jsx
+function card() { return <div>Card</div>; }
+```
+Use `Card` instead.
+
+### Mistake: manually calling components
+Avoid:
+```jsx
+{Card()}
+```
+Prefer:
+```jsx
+<Card />
+```
+
+### Mistake: over-fragmenting
+A component for every tiny `<span>` is usually unnecessary. Extract when the unit has a meaningful responsibility or reuse value.
+
+### Mistake: confusing re-render with DOM replacement
+A component may render again without every DOM node being recreated.
+
+## Assessment
+1. What is a React component?
+2. Why does a custom component start with uppercase?
+3. What is composition?
+4. Why are function components preferred for new React code?
+5. Can one component have multiple instances?
+6. Does one component always equal one DOM element?
+7. When should you split a component?
+8. Why are imports/exports important?
+
+## Interview Questions
+**Beginner:** What is a function component? — A JavaScript function that returns React UI.
+
+**Beginner:** Why uppercase? — JSX uses casing to distinguish user-defined components from intrinsic DOM elements.
+
+**Intermediate:** What is composition? — Building larger UI by combining smaller components.
+
+**Intermediate:** Why avoid a giant component? — Large components become harder to understand, test, reuse, and change safely.
+
+**Advanced:** How do you choose component boundaries? — Based on cohesive responsibility, reuse, data/behavior ownership, independent change, and maintainability—not arbitrary size.
+
+**Advanced:** Component vs element? — A component is a reusable definition; a React element is a lightweight description of what React should render.
 
 ## Self Check
-
-- You can create function components
-- You can compose components into one page
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** What is a component in React?
-
-**Answer:** A reusable function returning UI.
-
-**Question:** Why use components?
-
-**Answer:** To split UI into manageable reusable parts.
-
-### Middle
-
-**Question:** What is component composition?
-
-**Answer:** Building larger UI by combining smaller components.
-
-**Question:** How does reusability reduce bugs?
-
-**Answer:** Shared logic and UI reduce duplicate code paths.
-
-### Advanced
-
-**Question:** What is single responsibility in components?
-
-**Answer:** One component should focus on one concern.
-
-**Question:** Why is component granularity important?
-
-**Answer:** Proper granularity improves testing, readability, and refactoring.
+You are ready for Day 5 if you can create components from scratch, compose a page, explain component boundaries, split components across files, and distinguish components, elements, and DOM nodes.
 
 ## Day 4 Outcome
-
-- You can build and compose components confidently
-- You can design reusable UI blocks
-- You are ready for advanced reusable patterns in Day 5
+You can confidently build and compose React components and are ready to design reusable component APIs in Day 5.
