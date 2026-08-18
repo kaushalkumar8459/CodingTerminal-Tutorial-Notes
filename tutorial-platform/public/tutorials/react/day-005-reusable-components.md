@@ -1,406 +1,293 @@
 ---
-title: Reusable Components
+title: Reusable React Components
 slug: day-005-reusable-components
 dayLabel: Day 5
-level: Beginner
-estimatedMinutes: 30
+level: Beginner to Intermediate
+estimatedMinutes: 75
 order: 5
 track: react
 ---
-# Day 5 [Beginner to Intermediate]: Reusable Components
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 5 Outcome](#day-5-outcome)
+# Day 5: Reusable Components — From Simple Props to Component APIs
 
 ## Goal
-
-Design reusable components that accept different content while keeping consistent UI behavior.
+Learn how to turn UI patterns into reusable components without creating either duplication or overly generic “god components”. You will learn props-driven APIs, defaults, `children`, composition, variants, callbacks, and how to decide when abstraction is appropriate.
 
 ## Prerequisites
-
 - Day 4 completed
-- Components and JSX clear
+- Components, JSX, imports/exports understood
+- Basic JavaScript objects and functions
 
-## Explanation
-
-Reusable components are a key React strength. They reduce repeated code and speed up development.
-
-## Topic by Topic
-
-### Topic 1: Reusability Mindset
-
-Theory:
-One generic component is better than many similar copies.
-
-Practical:
-Identify repeated UI and convert to one component.
-
-Code Example:
-
-Code Example:
+## 1. The Reusability Mindset
+Start with a real repeated pattern. If three screens have nearly identical cards, first identify what is fixed and what varies.
 
 ```jsx
 function Badge({ text }) {
-  return <span>{text}</span>;
+  return <span className="badge">{text}</span>;
 }
 ```
 
-**Explanation:** A reusable component accepts **props** (inputs) rather than hardcoding values. By passing different `text` values, `Badge` renders different content each time. This single component replaces the need for `ActiveBadge`, `InactiveBadge`, etc.
-
-**Key Points:**
-
-- Props make components flexible and reusable
-- Different data = different output from same component
-- Eliminates need for multiple similar components
-- Props are the component's "API"
-
-### Topic 2: Flexible Inputs
-
-Theory:
-Flexible components accept props such as label, variant, icon, and children.
-
-Practical:
-Create Button component with label and variant.
-
-Code Example:
-
-Code Example:
-
 ```jsx
-function Button({ label, variant = "primary" }) {
-  return <button className={`btn ${variant}`}>{label}</button>;
-}
+<Badge text="Active" />
+<Badge text="Pending" />
+<Badge text="Completed" />
 ```
 
-**Explanation:** This shows a reusable `Button` with props `label` (required) and `variant` (optional with default). The component adapts based on inputs, avoiding the need to create separate `PrimaryButton` and `DangerButton` components.
+The component's **props form its public API**. A good API exposes meaningful variation without leaking unnecessary implementation details.
 
-**Key Points:**
-
-- Use default values for optional props
-- Props control component appearance and behavior
-- One generic component replaces many specialized ones
-- More flexible than hardcoded variations
-
-### Topic 3: Reusable Card Pattern
-
-Theory:
-Card is a common reusable pattern across apps.
-
-Practical:
-Render same card with different props.
-
-Code Example:
-
-Code Example:
+## 2. Props and Default Values
 
 ```jsx
-function Card({ title, description }) {
+function Button({ label, variant = "primary", disabled = false }) {
   return (
-    <div>
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
+    <button className={`btn btn-${variant}`} disabled={disabled}>
+      {label}
+    </button>
   );
 }
 ```
 
-**Explanation:** Rather than creating `ReactCard` and `JavaScriptCard`, one generic `Card` component is reused with different props. This reduces code duplication and makes maintenance easier.
+Default values apply when the prop is `undefined`. They do not replace an explicitly supplied `null`.
 
-**Key Points:**
-
-- Generic components are more maintainable than specialized ones
-- Change one component = update all usages automatically
-- Props drive the differences, not separate component files
-- Follows DRY principle (Don't Repeat Yourself)
-
-### Topic 4: Maintainability Through Reuse
-
-Theory:
-Changing one component updates all usages.
-
-Practical:
-Update Card style once and inspect all cards.
-
-Code Example:
-
-```jsx
-<Card title="React" description="Build UI with reusable components" />
-```
-
-**Explanation:** Maintainability improves when one shared component controls common layout and style for many similar UI cases.
-
-**Key Points:**
-
-- Update one reusable component instead of many copies.
-- Shared components keep UI consistent.
-- Reuse reduces long-term maintenance cost.
-
-### Topic 5: Reusability Boundaries
-
-Theory:
-Avoid over-generalizing too early.
-
-Practical:
-Keep props simple for beginner-level apps.
-
-Code Example:
-
-Code Example:
-
-```jsx
-function Alert({ message }) {
-  return <p>{message}</p>;
-}
-```
-
-**Explanation:** Keep components simple for beginner-level apps. As your app grows, you can add more props gradually instead of over-generalizing from the start.
-
-**Key Points:**
-
-- Start simple, add complexity gradually
-- Avoid over-designing components too early
-- Props should match real use cases
-- Refactor when patterns emerge
-
-### Topic 6: Children and Composition Slots
-
-Theory:
-Reusable components become more flexible when they accept nested content through `children`, instead of a large number of special-purpose props.
-
-Practical:
-Create a wrapper component that can render different inner content while keeping one shared layout.
-
-Code Example:
-
-Code Example:
+## 3. `children` and Composition
+Use `children` when the wrapper controls layout but the caller controls inner content.
 
 ```jsx
 function Panel({ title, children }) {
   return (
-    <section>
-      <h3>{title}</h3>
-      <div>{children}</div>
+    <section className="panel">
+      <h2>{title}</h2>
+      <div className="panel-body">{children}</div>
+    </section>
+  );
+}
+
+function App() {
+  return (
+    <Panel title="Announcement">
+      <p>New React lesson is available.</p>
+    </Panel>
+  );
+}
+```
+
+This is often better than adding props such as `paragraph`, `listItems`, `image`, `buttonText`, and `buttonUrl` for every possible child layout.
+
+## 4. Variants Instead of Duplicate Components
+Avoid:
+
+```text
+PrimaryButton.jsx
+DangerButton.jsx
+SuccessButton.jsx
+```
+
+when the differences are only visual. Prefer a clear variant API:
+
+```jsx
+function Button({ children, variant = "primary" }) {
+  return <button className={`button button--${variant}`}>{children}</button>;
+}
+```
+
+```jsx
+<Button variant="primary">Save</Button>
+<Button variant="danger">Delete</Button>
+```
+
+The component should validate or constrain variants in production-quality applications rather than accepting arbitrary strings blindly.
+
+## 5. Flexible Content: Data Props vs `children`
+Use a named prop when the value has a semantic meaning:
+
+```jsx
+<ProductCard title="Keyboard" price={1200} />
+```
+
+Use `children` when callers should control nested content:
+
+```jsx
+<Card>
+  <ProductSummary />
+  <BuyButton />
+</Card>
+```
+
+The distinction helps keep component APIs understandable.
+
+## 6. Callback Props
+Reusable components often need to report user actions without owning the application's business state.
+
+```jsx
+function DeleteButton({ onDelete }) {
+  return <button onClick={onDelete}>Delete</button>;
+}
+
+function App() {
+  function handleDelete() {
+    console.log("Delete requested");
+  }
+
+  return <DeleteButton onDelete={handleDelete} />;
+}
+```
+
+Flow remains explicit:
+
+```text
+Parent owns decision/state
+       ↓ callback prop
+Child reports user action
+       ↓
+Parent handles action
+```
+
+## 7. Passing Data Through Reusable Components
+A reusable list can receive data without knowing where it came from:
+
+```jsx
+function UserList({ users }) {
+  return (
+    <ul>
+      {users.map((user) => <li key={user.id}>{user.name}</li>)}
+    </ul>
+  );
+}
+```
+
+This makes the component compatible with local arrays, API responses, or state managed elsewhere—as long as the input contract is the same.
+
+## 8. Avoiding Over-Abstraction
+Not every duplicate-looking line needs a component.
+
+A useful rule:
+
+- duplicate UI with a meaningful shared contract → consider abstraction
+- tiny one-off markup → keep it local
+- abstraction requires many boolean props → reconsider the design
+- abstraction hides important behavior → simplify it
+
+### Warning sign
+
+```jsx
+<Button primary danger large rounded outlined iconOnly loading compact ... />
+```
+
+A component with many interacting boolean props may have too many responsibilities. Prefer a smaller API or composition.
+
+## 9. Container and Presentational Thinking
+This is a useful design model, not a mandatory React architecture.
+
+```jsx
+function ProductList({ products }) {
+  return products.map((product) => (
+    <ProductCard key={product.id} product={product} />
+  ));
+}
+
+function ProductCard({ product }) {
+  return <article>{product.name}</article>;
+}
+```
+
+The list coordinates collection rendering; the card focuses on presentation. In larger applications, data fetching may live elsewhere entirely.
+
+## 10. Component API Design Checklist
+Before publishing a reusable component, ask:
+
+1. What is the minimum useful API?
+2. Which props are required?
+3. Which props are optional?
+4. Should nested content use `children`?
+5. Should events be callback props?
+6. Are defaults sensible?
+7. Can consumers understand the API without reading implementation?
+8. Are there too many booleans or special cases?
+9. Is the abstraction actually reused?
+10. Can accessibility semantics be preserved?
+
+## End-to-End Practical: Reusable Dashboard UI
+Build:
+
+```text
+Dashboard
+├── Button
+├── StatCard
+├── Panel
+└── UserList
+```
+
+```jsx
+function StatCard({ label, value, trend }) {
+  return (
+    <article className="stat-card">
+      <p>{label}</p>
+      <strong>{value}</strong>
+      <span>{trend}</span>
+    </article>
+  );
+}
+
+function Panel({ title, children }) {
+  return (
+    <section className="panel">
+      <h2>{title}</h2>
+      {children}
     </section>
   );
 }
 ```
 
-**Explanation:** The **`children` prop** is special - it represents content nested inside a component. This allows a single `Panel` component to wrap different types of content (paragraphs, lists, etc.) while keeping the outer layout consistent. This is more flexible than adding many special-purpose props.
-
-**Key Points:**
-
-- `children` prop receives content between opening and closing tags
-- Allows composition without adding many specialized props
-- Perfect for wrapper components like Panel, Modal, Card
-- Makes layouts consistent while content varies
-
-## Key Concepts
-
-- Reusability
-- Generic component API
-- Props-driven rendering
-- Consistency
-- Maintainability
-- children-based composition
-- Reuse without over-generalization
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-    A[Reusable Component] --> B[Button]
-    A --> C[Card]
-    A --> D[Badge]
-    B --> E[Different labels]
-    C --> F[Different content]
-```
-
-## End-to-End Practical
-
-1. Create reusable Button and Card components.
-2. Pass different props for each use case.
-3. Render multiple instances.
-4. Change one shared style and verify all updates.
+Use the same components for users, sales, orders, and revenue. Then add a `Button` variant and callback.
 
 ## Hands-on Coding
+### Challenge 1 — Product Card
+Build a reusable card with `name`, `price`, `rating`, `image`, and `onAddToCart`.
 
-### Example 1: Case - E-commerce Action Buttons
+### Challenge 2 — Flexible Panel
+Build a `Panel` that accepts `title` and `children`.
 
-Scenario:
-An online store needs the same styled buttons for Add to Cart, Buy Now, and Wishlist actions.
+### Challenge 3 — Button API
+Support `primary`, `secondary`, and `danger` variants and a disabled state.
 
-```jsx
-function Button({ label }) {
-  return (
-    <button style={{ marginRight: "8px", padding: "8px 12px" }}>{label}</button>
-  );
-}
+### Challenge 4 — Refactor
+Start with three duplicated cards. Refactor them into one component. Explain which values became props and why.
 
-function App() {
-  return (
-    <div>
-      <Button label="Add to Cart" />
-      <Button label="Buy Now" />
-      <Button label="Wishlist" />
-    </div>
-  );
-}
-```
+### Challenge 5 — Design Review
+Create a component with six props, then reduce it to the smallest sensible API. Explain every removed prop.
 
-### Example 2: Case - Support Dashboard Ticket Cards
-
-Scenario:
-A support team dashboard shows repeated ticket summaries in the same visual card layout.
-
-```jsx
-function Card({ title, description }) {
-  return (
-    <div
-      style={{ border: "1px solid #ddd", padding: "12px", marginTop: "10px" }}
-    >
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <div>
-      <Card title="Login Issue" description="User cannot access account" />
-      <Card title="Payment Failed" description="Checkout is blocked" />
-    </div>
-  );
-}
-```
-
-### Example 3: Case - Learning Portal Info Panels
-
-Scenario:
-A learning platform uses shared panels for notices, tips, and announcements.
-
-```jsx
-function Panel({ title, children }) {
-  return (
-    <section
-      style={{ border: "1px solid #ccc", padding: "12px", marginTop: "12px" }}
-    >
-      <h3>{title}</h3>
-      <div>{children}</div>
-    </section>
-  );
-}
-
-function App() {
-  return (
-    <div>
-      <Panel title="Notice">
-        <p>Server maintenance at 10 PM.</p>
-      </Panel>
-      <Panel title="Tips">
-        <ul>
-          <li>Reuse components</li>
-          <li>Keep props simple</li>
-        </ul>
-      </Panel>
-    </div>
-  );
-}
-```
-
-## Mini Exercise
-
-Scenario:
-You are building an admin dashboard KPI section with repeatable tiles.
-
-Build a reusable InfoTile component and use it for 4 dashboard metrics: Users, Sales, Orders, Revenue.
-
-Expected output:
-
-- One InfoTile component reused 4 times
-- Each tile shows different title and value
-- Common style stays same for all tiles
+## Common Mistakes
+- Creating a separate component for every tiny variation.
+- Passing dozens of unrelated props.
+- Using `children` when a semantic named prop is clearer.
+- Using named props for every possible nested layout instead of composition.
+- Making reusable components depend directly on a specific API response shape when a simpler contract is possible.
+- Forgetting accessibility semantics while focusing only on visual reuse.
 
 ## Assessment Quiz
+1. What makes a component reusable?
+2. Why are props considered a component API?
+3. When is `children` preferable to many named props?
+4. What is a variant?
+5. Why can too many boolean props be a design smell?
+6. Should every repeated `<div>` become a component?
+7. How does a callback prop preserve one-way data flow?
+8. Why separate collection rendering from card presentation?
 
-### Quiz Questions
+## Interview Questions
+**Q: What is component reusability?**  A: Designing a component around a stable contract so it can render different data or content without duplicating implementation.
 
-1. Why are reusable components important?
-2. What should a reusable component receive as input?
-3. True or False: Duplicate UI should always become a reusable component.
-4. What is the benefit of changing one reusable component?
-5. What is a risk of too many unnecessary props?
-6. When is `children` useful in reusable components?
+**Q: What is composition in React?** A: Combining components and nested content to build larger UI, commonly using `children` and component props.
 
-### Quiz Answers
+**Q: When should you use `children`?** A: When the parent controls the wrapper/layout and the caller should control the nested content.
 
-1. Less duplication and easier maintenance
-2. Props
-3. Usually true, but context matters
-4. All usages update consistently
-5. Component becomes hard to understand
-6. When the outer layout stays same but the inner content may vary.
+**Q: How do callback props work?** A: The parent supplies a function; the child invokes it to report an event or value, while the parent remains the owner of the resulting state/decision.
 
-## Task
+**Q: What is over-abstraction?** A: Introducing a generic abstraction whose complexity exceeds its reuse or value, making code harder to understand.
 
-- Build at least two reusable components
-- Use each component multiple times
-- Complete mini exercise
+**Q: How do you design a reusable component API?** A: Start from real use cases, identify stable variation, minimize props, use composition where appropriate, preserve semantics/accessibility, and avoid speculative flexibility.
 
 ## Self Check
-
-- You can design flexible component APIs
-- You can reuse components without duplicate code
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** What is a reusable component?
-
-**Answer:** A component that can be used multiple times with different props.
-
-**Question:** Give one reusable UI example.
-
-**Answer:** Button component.
-
-### Middle
-
-**Question:** How do props improve reusability?
-
-**Answer:** Props make one component render different content without rewriting logic.
-
-**Question:** Why avoid code duplication in UI?
-
-**Answer:** Duplication increases bugs and maintenance cost.
-
-### Advanced
-
-**Question:** How do you decide component boundaries?
-
-**Answer:** Group highly related UI and behavior, keep public API simple.
-
-**Question:** What is over-abstraction in reusable components?
-
-**Answer:** Making components too generic too early, hurting readability.
+You are ready for Day 6 if you can build a reusable component with required/optional props, `children`, variants, and callback props, and can justify why an abstraction should or should not exist.
 
 ## Day 5 Outcome
-
-- You can design and use reusable components effectively
-- You understand prop-driven flexibility
-- You are ready for deep props usage in Day 6
+You can design reusable component APIs rather than merely copy UI. Day 6 will take props to an advanced practical level.
