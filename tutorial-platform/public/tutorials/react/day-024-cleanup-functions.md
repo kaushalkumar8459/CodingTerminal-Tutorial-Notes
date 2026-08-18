@@ -3,73 +3,63 @@ title: Cleanup Functions
 slug: day-024-cleanup-functions
 dayLabel: Day 24
 level: Intermediate
-estimatedMinutes: 35
+estimatedMinutes: 120
 order: 24
 track: react
 ---
-# Day 24 [Beginner to Intermediate]: Cleanup Functions
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 24 Outcome](#day-24-outcome)
+# Day 24 [Intermediate]: Effect Cleanup, Cancellation & Race Conditions
 
 ## Goal
 
-Learn how and why to clean up effects to prevent memory leaks and side-effect bugs.
+Master the cleanup function returned by `useEffect`, including timers, event listeners, subscriptions, async work, `AbortController`, dependency changes, Strict Mode, and race-condition prevention.
 
 ## Prerequisites
 
-- Day 23 completed
-- Comfortable with `useEffect` dependencies
+- Days 22–23
+- `useEffect` dependencies
+- JavaScript promises and events
 
-## Explanation
+## The Core Rule
 
-Some effects start ongoing work, such as timers, event listeners, or subscriptions. If you do not stop that work during unmount or re-run, bugs can appear. Cleanup functions solve this by returning a function from `useEffect`.
-
-## Topic by Topic
-
-### Topic 1: What is Cleanup?
-
-Theory:
-Cleanup is a function React calls before running effect again and when component unmounts.
-
-Code Example:
+An effect can return a cleanup function:
 
 ```jsx
 useEffect(() => {
+  const connection = connect();
+
   return () => {
-    console.log("Cleanup runs");
+    connection.disconnect();
   };
 }, []);
 ```
 
-**Explanation:** Cleanup is a teardown step. React calls it before the next effect run and when component leaves the screen.
+Cleanup runs:
 
-**Key Points:**
+1. before React runs the effect again because dependencies changed
+2. when the component is removed from the tree
+3. during development Strict Mode's extra setup/cleanup cycle
 
-- Cleanup is returned from the effect callback.
-- It prevents leftover side work.
-- Important for stable app behavior.
+Cleanup is not "only for unmount." Its primary purpose is to **stop or undo the synchronization established by the previous effect setup**.
 
-### Topic 2: Cleanup for Timers
+## Setup → Cleanup Pair
 
-Theory:
-Always clear interval or timeout created in effect.
+Think in pairs:
 
-Code Example:
+```text
+setup external synchronization
+        ↓
+external system is active
+        ↓
+dependencies change / component unmounts
+        ↓
+cleanup previous synchronization
+        ↓
+new setup, if needed
+```
+
+A good cleanup should be safe and should undo what the setup created.
+
+## Topic 1 — Timers
 
 ```jsx
 useEffect(() => {
@@ -81,193 +71,378 @@ useEffect(() => {
 }, []);
 ```
 
-**Explanation:** Without `clearInterval`, timer keeps running even after component unmounts.
+Without cleanup, the interval can continue after the component is removed.
 
-**Key Points:**
-
-- Save interval id in local variable.
-- Clear interval in cleanup.
-- Prevent hidden background work.
-
-### Topic 3: Cleanup for Event Listeners
-
-Theory:
-Remove listeners to avoid duplicate handlers.
-
-Code Example:
+### Timeout
 
 ```jsx
 useEffect(() => {
-  const onResize = () => console.log(window.innerWidth);
-  window.addEventListener("resize", onResize);
-  return () => window.removeEventListener("resize", onResize);
+  const id = setTimeout(() => {
+    console.log("done");
+  }, 1000);
+
+  return () => clearTimeout(id);
 }, []);
 ```
 
-**Explanation:** Removing listeners avoids duplicated callbacks and memory growth over time.
+## Topic 2 — Event Listeners
 
-**Key Points:**
+The same function reference must be removed:
 
-- Add and remove the same handler reference.
-- Listener cleanup avoids repeated events.
-- Always cleanup global subscriptions.
+```jsx
+useEffect(() => {
+  function handleResize() {
+    console.log(window.innerWidth);
+  }
 
-### Topic 4: Cleanup for API Race Safety
+  window.addEventListener("resize", handleResize);
 
-Theory:
-Ignore outdated async responses when component unmounts or query changes quickly.
-
-Practical:
-Use a cancellation flag.
-
-**Explanation:** If old request finishes after new request, old data can overwrite new data. Cleanup helps ignore old responses.
-
-**Key Points:**
-
-- Handle stale async responses.
-- Guard state updates after unmount.
-- Keep request logic race-safe.
-
-### Topic 5: Re-run + Cleanup Order
-
-Theory:
-When dependency changes: old cleanup runs first, then new effect runs.
-
-**Explanation:** This order guarantees only one active version of your side effect at a time.
-
-**Key Points:**
-
-- Old effect cleans first.
-- New effect starts after cleanup.
-- Predictable lifecycle sequence.
-
-## Key Concepts
-
-- Return function from `useEffect` for cleanup
-- Cleanup runs on unmount and before next effect run
-- Essential for timers, listeners, and subscriptions
-- Prevents memory leaks and stale updates
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Effect Runs] --> B[Start Side Work]
-		C[Dependency Changes] --> D[Cleanup Old Work]
-		D --> A
-		E[Unmount] --> D
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+}, []);
 ```
 
-## End-to-End Practical
+Do not create one anonymous function for `addEventListener` and a different anonymous function for removal; they are different references.
 
-1. Create live clock with interval.
-2. Add cleanup with `clearInterval`.
-3. Add window resize listener.
-4. Remove listener in cleanup.
+## Topic 3 — Subscriptions
 
-## Hands-on Coding
+Any external subscription should have a matching unsubscribe operation:
 
-### Example 1: Timer with Cleanup
+```jsx
+useEffect(() => {
+  const unsubscribe = store.subscribe(() => {
+    console.log("store changed");
+  });
+
+  return unsubscribe;
+}, []);
+```
+
+This pattern is common with event emitters, WebSockets, browser observers, and external stores.
+
+## Topic 4 — Cleanup on Dependency Change
+
+```jsx
+useEffect(() => {
+  const id = setInterval(() => {
+    console.log(roomId);
+  }, 1000);
+
+  return () => clearInterval(id);
+}, [roomId]);
+```
+
+When `roomId` changes:
+
+```text
+old interval cleanup
+        ↓
+new effect setup
+```
+
+This prevents multiple room-specific timers from remaining active.
+
+## Topic 5 — Abort Fetch Requests
+
+For network requests, `AbortController` can cancel a fetch that is no longer relevant:
+
+```jsx
+useEffect(() => {
+  const controller = new AbortController();
+
+  async function loadUser() {
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        setError(error);
+      }
+    }
+  }
+
+  loadUser();
+
+  return () => controller.abort();
+}, [userId]);
+```
+
+When `userId` changes, the previous request is aborted before the new synchronization starts.
+
+## Topic 6 — Cancellation vs Ignore Flag
+
+Another approach is to allow the request to finish but ignore a stale result:
+
+```jsx
+useEffect(() => {
+  let ignore = false;
+
+  async function load() {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!ignore) {
+      setData(data);
+    }
+  }
+
+  load();
+
+  return () => {
+    ignore = true;
+  };
+}, [url]);
+```
+
+This does **not cancel the network request**. It only prevents a stale response from updating this component's state. `AbortController` is preferable when the underlying API supports cancellation and you want to stop unnecessary work.
+
+## Topic 7 — Race Conditions
+
+Suppose the user searches:
+
+```text
+react → react hooks → react hooks useEffect
+```
+
+Request A may start first but finish last. Without cancellation or stale-result protection, an old response can overwrite newer data.
+
+Correct mental model:
+
+```text
+Query A starts
+Query B starts
+B finishes → show B
+A finishes later → ignore/cancel A
+```
+
+Cleanup creates the boundary between the old synchronization and the new one.
+
+## Topic 8 — Cleanup Is Not Needed Everywhere
+
+No cleanup is necessary for an effect that only performs a one-way synchronization such as:
+
+```jsx
+useEffect(() => {
+  document.title = title;
+}, [title]);
+```
+
+There is no ongoing resource created that needs teardown.
+
+Do not return meaningless cleanup functions merely because every effect "should" have one.
+
+## Topic 9 — Strict Mode
+
+In development Strict Mode, React may execute:
+
+```text
+setup → cleanup → setup
+```
+
+This is intentional. If this causes duplicate subscriptions or timers, the effect likely does not clean up correctly.
+
+Do not solve the symptom by adding a ref that prevents setup from running. Make the setup/cleanup pair correct.
+
+## Topic 10 — Idempotent Cleanup
+
+Cleanup should be safe to run as part of the normal effect lifecycle.
+
+Good:
+
+```jsx
+return () => clearInterval(id);
+```
+
+The intent is straightforward: release the resource established by setup.
+
+## Topic 11 — Dependency and Cleanup Together
+
+```jsx
+useEffect(() => {
+  const socket = connect(roomId);
+
+  return () => {
+    socket.disconnect();
+  };
+}, [roomId]);
+```
+
+The dependency describes **which synchronization is active**; cleanup describes **how to stop the previous synchronization**.
+
+## End-to-End Practical — Search With Cancellation
 
 ```jsx
 import { useEffect, useState } from "react";
 
-export default function App() {
-  const [seconds, setSeconds] = useState(0);
+export default function Search({ query }) {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const id = setInterval(() => setSeconds((s) => s + 1), 1000);
-    return () => clearInterval(id);
-  }, []);
+    if (!query.trim()) {
+      setResults([]);
+      setLoading(false);
+      return;
+    }
 
-  return <h2>Seconds: {seconds}</h2>;
+    const controller = new AbortController();
+
+    async function runSearch() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}`,
+          { signal: controller.signal }
+        );
+
+        if (!response.ok) {
+          throw new Error("Search failed");
+        }
+
+        const data = await response.json();
+        setResults(data);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error.message);
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    runSearch();
+
+    return () => controller.abort();
+  }, [query]);
+
+  if (loading) return <p>Searching...</p>;
+  if (error) return <p>{error}</p>;
+
+  return <pre>{JSON.stringify(results, null, 2)}</pre>;
 }
 ```
 
-### Example 2: Resize Listener with Cleanup
+### Why the `finally` guard?
+
+If an old request is aborted because a newer query started, its `finally` block can still execute. The guard prevents that old request from incorrectly turning off the loading state for the newer request.
+
+## Common Mistakes
+
+### 1. Forgetting cleanup for intervals
+
+Creates background work that survives the intended lifetime.
+
+### 2. Removing the wrong event handler reference
+
+`removeEventListener` must receive the same function identity used for registration.
+
+### 3. Treating `AbortController` as a stale-data guarantee
+
+Cancellation and stale-result protection are related but distinct concerns. A server may have already processed a request even if the browser aborts reading it.
+
+### 4. Updating state after an old request wins
+
+Use cancellation or an ignore strategy.
+
+### 5. Adding cleanup to every effect
+
+Only ongoing/teardown-required work needs cleanup.
+
+### 6. Disabling Strict Mode
+
+Strict Mode is useful for finding effects that cannot be safely started and stopped.
+
+## Debugging Lab
+
+### Bug 1 — Duplicate interval
 
 ```jsx
 useEffect(() => {
-  const handleResize = () => setWidth(window.innerWidth);
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
+  setInterval(() => console.log("tick"), 1000);
 }, []);
 ```
 
-## Mini Exercise
+Find the missing cleanup.
 
-Scenario:
-Build a component that starts interval on mount and stops when component unmounts.
+### Bug 2 — Duplicate resize listeners
 
-Expected output:
+Explain why failing to remove a listener can cause the handler to fire multiple times after remount/re-synchronization.
 
-- Counter increments each second
-- No background interval after component is removed
+### Bug 3 — Search race
 
-## Assessment Quiz
+Simulate two delayed requests and make the older response arrive last. Add cancellation or an ignore strategy so the newest query wins.
 
-### Quiz Questions
+## Exercises
 
-1. Where is cleanup function written?
-2. When does cleanup run?
-3. Why clear intervals?
-4. Why remove event listeners?
-5. Is cleanup needed for every effect?
+### Level 1
+- Build a timer with cleanup.
+- Build a window resize listener.
 
-### Quiz Answers
+### Level 2
+- Build a debounced search using `setTimeout` cleanup.
+- Add `AbortController` to a fetch effect.
 
-1. Returned from `useEffect`
-2. Before next run and on unmount
-3. To avoid leaks and duplicate timers
-4. To avoid duplicate handlers and memory issues
-5. No, only for effects that start ongoing work
+### Level 3
+- Build a room subscription that changes when `roomId` changes.
+- Explain setup/cleanup behavior under Strict Mode.
+- Implement both abort and ignore approaches and compare them.
 
-## Task
+## Assessment
 
-- Implement one timer effect with cleanup
-- Implement one event listener effect with cleanup
-- Explain cleanup timing in your own words
+1. When does cleanup run?
+2. Why is cleanup needed for an interval?
+3. Why must event-listener references match?
+4. What happens when a dependency changes?
+5. What is a race condition in async effects?
+6. What does `AbortController` actually do?
+7. How does an ignore flag differ from aborting?
+8. Why does Strict Mode run setup/cleanup again in development?
+9. Which effects do not need cleanup?
+10. What does a correct setup/cleanup pair look like?
 
-## Self Check
+## Interview Questions
 
-- You know when cleanup is required
-- You can safely manage timers/listeners
-- You can explain effect lifecycle order
+**Does cleanup run only on unmount?**  
+No. It also runs before an effect re-runs because its dependencies changed.
 
-## Interview Questions and Answers
+**How do you cancel a fetch?**  
+Create an `AbortController`, pass its signal to `fetch`, and call `controller.abort()` in cleanup.
 
-### Beginner
+**Does abort guarantee the server never processed the request?**  
+No. It primarily cancels the client-side fetch operation; the server may already have received or processed the request.
 
-**Question:** What is cleanup in React effect?
+**How do you prevent stale search results?**  
+Cancel obsolete requests when possible, or ignore responses that no longer correspond to the latest synchronization.
 
-**Answer:** A return function from effect used to stop previous side work.
+**Why does Strict Mode help test cleanup?**  
+It intentionally exercises setup/cleanup behavior in development, exposing effects that leave resources behind.
 
-**Question:** Why use `clearInterval` in cleanup?
+## Final Checklist
 
-**Answer:** To stop timer when component unmounts or effect re-runs.
-
-### Middle
-
-**Question:** Can cleanup run even if component does not unmount?
-
-**Answer:** Yes, it runs before effect re-runs due to dependency change.
-
-**Question:** What bug appears without listener cleanup?
-
-**Answer:** Multiple listeners stack up and fire multiple times.
-
-### Advanced
-
-**Question:** How does cleanup reduce race conditions in async effects?
-
-**Answer:** It allows ignoring stale responses after dependencies change.
-
-**Question:** Why keep cleanup idempotent?
-
-**Answer:** Cleanup may run multiple times across re-renders; safe repetition avoids errors.
+- [ ] Can clean up timers
+- [ ] Can remove event listeners
+- [ ] Can unsubscribe from external subscriptions
+- [ ] Understand dependency-change cleanup
+- [ ] Can use `AbortController`
+- [ ] Understand stale-response races
+- [ ] Understand ignore vs cancellation
+- [ ] Understand Strict Mode setup/cleanup
+- [ ] Know when cleanup is unnecessary
 
 ## Day 24 Outcome
 
-- You can write safe cleanup logic in effects
-- You can avoid memory leaks and duplicate side effects
-- You are ready to fetch external data in React
+You can now build reversible effect synchronizations and protect asynchronous UI from stale work. Day 25 applies this to API fetching with loading, errors, retries, and request cancellation.
