@@ -9,24 +9,44 @@ track: react
 ---
 # Day 22 [Beginner → Intermediate]: `useEffect` Basics
 
+## Index
+
+- [Goal](#goal)
+- [Prerequisites](#prerequisites)
+- [Core Mental Model](#core-mental-model)
+- [What Is an Effect](#what-is-an-effect)
+- [Effect Lifecycle](#effect-lifecycle)
+- [Topic by Topic](#topic-by-topic)
+- [End-to-End Practical](#end-to-end-practical)
+- [Common Mistakes](#common-mistakes)
+- [Debugging Lab](#debugging-lab)
+- [Hands-on Exercises](#hands-on-exercises)
+- [Assessment](#assessment)
+- [Interview Questions](#interview-questions)
+- [Verification Checklist](#verification-checklist)
+- [Day 22 Outcome](#day-22-outcome)
+
 ## Goal
 
-Understand **when an effect is appropriate, when it runs, what it synchronizes, and why effects are not a general-purpose place for derived state or event logic**.
+Understand **when an effect is appropriate, when it runs, what it synchronizes, how cleanup works, and why effects are not a general-purpose place for derived state or event logic**.
 
-This lesson introduces the mental model needed for the next days: dependency arrays, cleanup, and API calls.
+By the end of this lesson you should be able to answer a more useful question than “How do I use `useEffect`?”:
+
+> **What external system am I synchronizing with, and what reactive values determine that synchronization?**
 
 ## Prerequisites
 
 - Days 1–21
-- Components, props, state, events
+- Components, props, and state
+- Events and forms
 - Rendering and derived data
 - Basic JavaScript functions and promises
 
-## The Core Mental Model
+## Core Mental Model
 
 A React component has two broad kinds of work:
 
-1. **Calculate the UI from props/state.** This belongs in render and should be pure.
+1. **Calculate UI from props/state.** This belongs in render and should be pure.
 2. **Synchronize React with something outside React.** This is where an effect can be appropriate.
 
 Examples of external systems:
@@ -39,11 +59,28 @@ Examples of external systems:
 - network connections
 - browser storage
 
-A useful question is:
+If there is no external system, first ask whether the problem belongs in render or an event handler instead.
 
-> "What external system am I synchronizing with?"
-
-If there is no external system, first ask whether you can solve the problem during render or in an event handler instead.
+```text
+                 React render
+                     │
+              calculate UI only
+                     │
+                   commit
+                     │
+                     ▼
+              useEffect setup
+                     │
+          synchronize external system
+                     │
+             later dependency change
+                     │
+                     ▼
+             previous cleanup
+                     │
+                     ▼
+               new setup
+```
 
 ## What Is an Effect?
 
@@ -55,9 +92,9 @@ useEffect(() => {
 });
 ```
 
-The callback runs after React commits the render. React then runs cleanup, when present, before a later eligible effect run and when the component is removed.
+The setup function runs after React commits the render. If the effect returns a cleanup function, React uses that cleanup to undo the previous synchronization before a later eligible setup and when the component is removed.
 
-Do not think of `useEffect` as simply "componentDidMount for function components." The dependency model is about **synchronization with reactive values**, not lifecycle-name translation.
+Do not teach `useEffect` as simply “`componentDidMount` for function components.” Its more useful model is **synchronization with external systems based on reactive values**.
 
 ## Effect Lifecycle
 
@@ -68,20 +105,24 @@ Render
   ↓
 React commits DOM changes
   ↓
-Effect setup runs
+Effect setup
   ↓
-External system is synchronized
+External system synchronized
   ↓
-Props/state change and another render commits
+Relevant reactive value changes
   ↓
-Previous cleanup runs
+Render + commit
   ↓
-New effect setup runs
+Previous cleanup
+  ↓
+New effect setup
 ```
 
-The exact browser scheduling details can differ between effect types and rendering conditions, so avoid promising that every effect is synchronously after paint. For normal `useEffect`, think "after commit, generally after the browser has had an opportunity to paint."
+For normal `useEffect`, think “after commit, generally after the browser has had an opportunity to paint.” Do not rely on an oversimplified promise that every effect is synchronously after paint in every rendering situation.
 
-## Topic 1 — A Simple External Synchronization
+## Topic by Topic
+
+### 1. Synchronizing the Document Title
 
 ```jsx
 function PageTitle({ title }) {
@@ -95,19 +136,7 @@ function PageTitle({ title }) {
 
 `title` is reactive input. When it changes, React synchronizes the browser's document title again.
 
-## Topic 2 — Empty Dependency Array
-
-```jsx
-useEffect(() => {
-  console.log("Initial effect");
-}, []);
-```
-
-An empty dependency array means the effect does not re-run because of later changes to reactive values used by the component. In production, development Strict Mode can intentionally perform an extra setup/cleanup cycle to expose unsafe side effects. Therefore, do not teach `[]` as an absolute guarantee that setup executes exactly once in every environment.
-
-Use it only when the synchronization really has no reactive dependencies.
-
-## Topic 3 — No Dependency Array
+### 2. Dependency Array: No Array
 
 ```jsx
 useEffect(() => {
@@ -115,9 +144,21 @@ useEffect(() => {
 });
 ```
 
-This is valid, but it is often too broad. If the effect updates state, it can create a render/effect loop.
+This is valid but often broader than necessary. If it updates state that causes another render, it can create a loop.
 
-## Topic 4 — Dependency-Based Synchronization
+### 3. Dependency Array: Empty Array
+
+```jsx
+useEffect(() => {
+  console.log("No later reactive dependencies");
+}, []);
+```
+
+An empty dependency array means the effect does not re-run because of later reactive changes. It does **not** mean “this code is universally guaranteed to execute exactly once.” Development Strict Mode may intentionally perform an extra setup → cleanup → setup cycle to expose unsafe side effects.
+
+Use `[]` only when the synchronization genuinely has no reactive dependencies.
+
+### 4. Dependency-Based Synchronization
 
 ```jsx
 useEffect(() => {
@@ -125,13 +166,13 @@ useEffect(() => {
 }, [count]);
 ```
 
-The effect synchronizes whenever `count` changes relative to the previous committed render.
+The effect re-synchronizes when `count` changes relative to the previous committed render.
 
-Do not manually "guess" dependencies simply to make an effect run less often. The dependency list should represent the reactive values used by the effect, with deliberate restructuring when you need to remove a dependency.
+Do not remove dependencies merely to reduce executions. Instead, restructure the code when a dependency is unnecessary or the effect itself is unnecessary.
 
-## Topic 5 — Effects vs Event Handlers
+### 5. Effects vs Event Handlers
 
-A user action should normally stay in the event handler:
+A direct user action normally belongs in its event handler:
 
 ```jsx
 function handleBuy() {
@@ -139,7 +180,7 @@ function handleBuy() {
 }
 ```
 
-Do not convert it into:
+Avoid turning it into state + effect solely to react to the click:
 
 ```jsx
 useEffect(() => {
@@ -147,9 +188,9 @@ useEffect(() => {
 }, [shouldBuy]);
 ```
 
-unless synchronization with an external system genuinely requires that design. Event handlers represent **events**; effects represent **synchronization after rendering**.
+Event handlers represent **events**. Effects represent **post-render synchronization**.
 
-## Topic 6 — Effects vs Derived State
+### 6. Effects vs Derived State
 
 Avoid:
 
@@ -167,11 +208,9 @@ Prefer:
 const fullName = `${firstName} ${lastName}`;
 ```
 
-The second version has no unnecessary render cycle and no synchronization problem because `fullName` is derived from current inputs.
+The second version is synchronous, simpler, and avoids an unnecessary state transition.
 
-## Topic 7 — Multiple Effects
-
-Separate unrelated synchronization concerns:
+### 7. Multiple Independent Effects
 
 ```jsx
 useEffect(() => {
@@ -183,9 +222,9 @@ useEffect(() => {
 }, [theme]);
 ```
 
-This makes dependencies and cleanup easier to reason about.
+There are two external systems, so separate effects make each synchronization and dependency list easier to reason about.
 
-## Topic 8 — State Updates Inside Effects
+### 8. State Updates Inside Effects
 
 State updates are allowed, but they deserve scrutiny:
 
@@ -195,13 +234,13 @@ useEffect(() => {
 }, []);
 ```
 
-Ask whether `ready` is actually derived or whether the effect is synchronizing with something external. If the state only exists to mirror another state value, the effect is probably unnecessary.
+Ask whether `ready` is actually synchronization state. If it merely mirrors another state/prop, it may be unnecessary derived state.
 
-## Topic 9 — Strict Mode
+### 9. Strict Mode
 
-During development, React Strict Mode may run an extra setup → cleanup → setup cycle for effects. This helps expose code that is not correctly reversible.
+Development Strict Mode can perform an extra setup → cleanup → setup cycle for effects. This helps expose missing cleanup and non-idempotent setup.
 
-Good effect code should tolerate this:
+Good effect code should tolerate:
 
 ```text
 setup
@@ -209,9 +248,39 @@ cleanup
 setup
 ```
 
-without creating duplicate listeners, timers, subscriptions, or requests that cannot be reconciled.
+without accumulating duplicate listeners, timers, subscriptions, or connections.
 
-## Topic 10 — Browser Storage Example
+### 10. Cleanup
+
+A cleanup function should undo the external work performed by setup.
+
+```jsx
+useEffect(() => {
+  const handler = () => console.log(window.scrollY);
+
+  window.addEventListener("scroll", handler);
+
+  return () => {
+    window.removeEventListener("scroll", handler);
+  };
+}, []);
+```
+
+The same function reference is important when removing the listener.
+
+Timer example:
+
+```jsx
+useEffect(() => {
+  const id = setInterval(() => {
+    console.log("tick");
+  }, 1000);
+
+  return () => clearInterval(id);
+}, []);
+```
+
+### 11. Browser Storage
 
 ```jsx
 useEffect(() => {
@@ -219,16 +288,22 @@ useEffect(() => {
 }, [theme]);
 ```
 
-This is a reasonable effect because `localStorage` is outside React.
+`localStorage` is outside React, so synchronization is a reasonable effect.
 
-However, reading initial state from storage is often better done with a lazy state initializer than with an effect that first renders an incorrect value and then fixes it.
-
-## Topic 11 — A Focused Effect Example
+For initial reads, a lazy initializer is often preferable when you want the initial render to use stored data directly:
 
 ```jsx
-import { useEffect, useState } from "react";
+const [theme, setTheme] = useState(() => {
+  return localStorage.getItem("theme") ?? "light";
+});
+```
 
-export default function Counter() {
+The effect can then persist later changes.
+
+### 12. Focused Counter Example
+
+```jsx
+function Counter() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -243,23 +318,53 @@ export default function Counter() {
 }
 ```
 
-### What happens?
+Sequence:
 
 1. Initial render calculates the button.
 2. React commits the UI.
 3. Effect synchronizes `document.title`.
-4. Clicking updates state.
+4. Click updates state.
 5. React renders and commits again.
-6. The effect runs because `count` changed.
+6. Effect runs because `count` changed.
 
-## End-to-End Practical — Theme Synchronization
+### 13. Effects Do Not Make Render Impure
+
+Keep external synchronization out of the component body:
+
+```jsx
+// Avoid side effects during render.
+document.title = title;
+```
+
+Render can run more than once and can be started or discarded under modern React rendering behavior. Side effects in render are therefore unsafe.
+
+### 14. Dependency Completeness
+
+Consider:
+
+```jsx
+function Greeting({ name }) {
+  useEffect(() => {
+    document.title = `Hello ${name}`;
+  }, [name]);
+
+  return <h1>Hello {name}</h1>;
+}
+```
+
+The dependency list describes which reactive value the synchronization uses. If an effect reads a reactive value, do not arbitrarily omit it just to control frequency. Prefer restructuring the effect or removing the effect if the synchronization is unnecessary.
+
+## End-to-End Practical
+
+### Theme Synchronization
 
 Build a theme toggle that:
 
 - stores the selected theme in React state
 - updates a DOM attribute
 - persists the selection in `localStorage`
-- separates DOM synchronization from storage synchronization
+- keeps DOM and storage synchronization separate
+- provides a cleanup story when an external subscription is later introduced
 
 ```jsx
 useEffect(() => {
@@ -271,41 +376,110 @@ useEffect(() => {
 }, [theme]);
 ```
 
-This is intentionally two effects because there are two external systems.
+These are intentionally separate synchronization processes.
+
+### Acceptance Criteria
+
+- [ ] Theme is rendered from React state.
+- [ ] DOM attribute matches current theme.
+- [ ] Storage is updated when theme changes.
+- [ ] No derived state is created with an effect.
+- [ ] No side effects occur during render.
+- [ ] The student can explain why two effects are used.
+
+## Hands-on Exercises
+
+### Level 1 — Document Title
+
+Build a counter that synchronizes `document.title` with the count.
+
+Acceptance:
+
+- [ ] Initial title is correct.
+- [ ] Title changes when count changes.
+- [ ] No effect is used to calculate a derived label.
+
+### Level 2 — Timer Cleanup
+
+Create an interval that logs once per second and clear it in cleanup.
+
+Acceptance:
+
+- [ ] Interval starts in setup.
+- [ ] Interval is cleared in cleanup.
+- [ ] No accumulating timers in Strict Mode development.
+
+### Level 3 — External Event Listener
+
+Subscribe to `window.resize` and clean up the exact handler.
+
+Acceptance:
+
+- [ ] Listener is added in setup.
+- [ ] Same handler is removed in cleanup.
+- [ ] Dependency choices are explained.
+
+### Level 4 — Refactor an Incorrect Effect
+
+Given:
+
+```jsx
+const [fullName, setFullName] = useState("");
+
+useEffect(() => {
+  setFullName(`${firstName} ${lastName}`);
+}, [firstName, lastName]);
+```
+
+Replace it with derived render-time calculation and explain why.
 
 ## Common Mistakes
 
 ### 1. Using an effect for derived values
 
-Calculate derived values during render.
+Calculate pure derived values during render.
 
-### 2. Calling an API directly in render
+### 2. Calling an API or browser API during render
 
-Render must stay pure; network synchronization belongs in an event or effect depending on the interaction.
+Render should remain pure. Put synchronization in an event handler or effect as appropriate.
 
 ### 3. Using `[]` blindly
 
-An empty dependency array is not a magic "run once" switch that makes stale values safe.
+An empty dependency array does not make stale values safe and does not eliminate development Strict Mode's extra setup/cleanup behavior.
 
-### 4. Ignoring Strict Mode
+### 4. Ignoring cleanup
 
-If development produces duplicate setup behavior, investigate whether cleanup is correct instead of simply disabling Strict Mode.
+Listeners, timers, subscriptions, and connections need reversible cleanup.
 
-### 5. One giant effect
+### 5. Disabling Strict Mode to hide duplicate setup
 
-Split independent synchronization processes so each effect has a clear purpose.
+Fix setup/cleanup correctness instead.
 
-### 6. State-update loops
+### 6. One giant effect
 
-An effect that updates a dependency it watches can repeatedly render. Understand the state transition before adding the update.
+Separate independent synchronization processes.
+
+### 7. Infinite effect loops
+
+If setup updates state that changes a dependency, the effect can repeatedly run. Model the state transition before adding the update.
+
+### 8. Suppressing dependency warnings without understanding why
+
+A warning can reveal stale closures or incorrect synchronization design. Do not silence it mechanically.
 
 ## Debugging Lab
 
-For each example, decide whether an effect is needed:
+For each example, decide whether an effect is needed and explain why.
+
+### A
 
 ```jsx
 const fullName = `${firstName} ${lastName}`;
 ```
+
+**Expected:** No effect. Pure derived data.
+
+### B
 
 ```jsx
 useEffect(() => {
@@ -313,11 +487,19 @@ useEffect(() => {
 }, [title]);
 ```
 
+**Expected:** Effect. Browser document is external to React.
+
+### C
+
 ```jsx
 useEffect(() => {
   setFiltered(items.filter(matches));
 }, [items, matches]);
 ```
+
+**Expected:** Usually no effect. Derive `filtered` during render.
+
+### D
 
 ```jsx
 function handleSubmit() {
@@ -325,64 +507,108 @@ function handleSubmit() {
 }
 ```
 
-Expected reasoning: derived values and event actions usually do not need effects; external synchronization does.
+**Expected:** Event handler. The action is caused by the user event.
 
-## Exercises
+### E
 
-### Level 1
-- Sync document title with a counter.
-- Persist a theme preference.
+```jsx
+useEffect(() => {
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, [handleResize]);
+```
 
-### Level 2
-- Synchronize a `<div>` attribute with state.
-- Split one large effect into independent effects.
-
-### Level 3
-- Build a chat-room connection abstraction and explain what setup and cleanup should do.
-- Explain why Strict Mode exposes missing cleanup.
-- Refactor a component that uses effects for derived state.
+**Expected:** Effect, because it synchronizes an external event subscription. Explain the identity/dependency implications of `handleResize`.
 
 ## Assessment
 
 1. What problem does `useEffect` solve?
-2. What does "external system" mean?
+2. What is an external system?
 3. Why should render remain pure?
 4. When is an event handler preferable to an effect?
 5. When is derived data preferable to state + effect?
 6. What does `[count]` communicate?
-7. Why can an empty dependency array still require careful reasoning?
-8. Why can Strict Mode expose bugs in effects?
-9. Why split unrelated effects?
-10. What makes an effect setup/cleanup pair safe?
+7. What is the difference between no dependency array and `[]`?
+8. Why can Strict Mode expose effect bugs?
+9. Why does cleanup need to reverse setup?
+10. Why split unrelated effects?
+11. Why can an effect loop?
+12. Why should dependency warnings not be suppressed blindly?
+
+### Answers
+
+1. It lets a component synchronize with systems outside React after a render commits.
+2. Something React does not control as part of render, such as the DOM, timers, event targets, storage, subscriptions, or network connections.
+3. React may render more than once or discard work; render must only calculate UI.
+4. When a specific user action directly causes the work.
+5. Derived data is synchronous and avoids duplicate state and synchronization.
+6. Re-synchronize when `count` changes.
+7. No array means the effect is eligible after every committed render; `[]` means no later reactive dependencies trigger it.
+8. Development Strict Mode can intentionally run setup → cleanup → setup to reveal missing cleanup or unsafe setup.
+9. So the previous synchronization does not accumulate stale listeners, timers, subscriptions, or connections.
+10. Each synchronization then has a smaller dependency and cleanup surface.
+11. Setup can update state, which changes a dependency and causes another render/effect cycle.
+12. Missing dependencies can produce stale closures or incorrect synchronization.
 
 ## Interview Questions
 
-**Is `useEffect` a lifecycle hook?**  
-It can express lifecycle-like behavior, but the better mental model is synchronization with external systems based on reactive dependencies.
+### Beginner
 
-**When should you avoid `useEffect`?**  
-Avoid it for pure calculations, derived state, and direct event responses that can be handled during render or in an event handler.
+**What is `useEffect`?**  
+A React Hook for synchronizing a component with external systems after commit.
+
+**Give a simple effect example.**  
+Synchronizing `document.title` with a `title` prop.
+
+### Intermediate
+
+**What is the difference between render and an effect?**  
+Render calculates React's UI; an effect performs post-commit synchronization with something outside React.
 
 **What does an empty dependency array mean?**  
-The effect does not re-run because of later reactive changes. Development Strict Mode may still perform an additional setup/cleanup cycle.
+The effect does not re-run because of later reactive changes, although development Strict Mode can perform an extra setup/cleanup cycle.
 
-**Why can effects loop?**  
-An effect can update state, causing a render, causing the effect to run again, especially when the updated state is itself a dependency.
+**Why is derived state often an effect smell?**  
+Because a value that can be calculated from current props/state does not need a second state value and synchronization step.
 
-**Why should effects be focused?**  
-Each effect then represents a clear synchronization process with a clear dependency and cleanup story.
+### Advanced
 
-## Final Checklist
+**Why does cleanup run before a new setup?**  
+It lets the previous synchronization be reversed before React establishes the new one for changed dependencies.
 
-- [ ] Can explain side effects
-- [ ] Can identify an external system
-- [ ] Can distinguish render/event/effect work
-- [ ] Can use dependencies intentionally
-- [ ] Understand cleanup conceptually
-- [ ] Understand Strict Mode behavior
-- [ ] Avoid derived-state effects
-- [ ] Can split unrelated effects
+**Why should you not use an effect as a response to a click?**  
+The click already has a natural event-handler boundary. Introducing an effect often adds an unnecessary state transition and makes causality harder to follow.
+
+**How do you handle an event listener effect?**  
+Create/setup the listener in the effect and remove the exact listener in cleanup, while making dependency identity intentional.
+
+**Why is Strict Mode useful for effects?**  
+It exposes assumptions that setup runs only once and catches missing or non-reversible cleanup during development.
+
+**When would `useLayoutEffect` be considered?**  
+For DOM measurement or visual synchronization that must happen before the browser paints. It should not be used as a default replacement for `useEffect`.
+
+**How should API calls be approached?**  
+An API call can be an event-driven action in an event handler or a synchronization triggered by reactive inputs in an effect. Day 25 will cover practical fetch patterns in detail.
+
+## Verification Checklist
+
+- [ ] Can explain what an effect is.
+- [ ] Can identify the external system being synchronized.
+- [ ] Can distinguish render, event handler, and effect responsibilities.
+- [ ] Understand no dependency array vs `[]` vs specific dependencies.
+- [ ] Understand cleanup and setup symmetry.
+- [ ] Understand development Strict Mode behavior.
+- [ ] Can identify unnecessary derived-state effects.
+- [ ] Can split unrelated synchronization processes.
+- [ ] Can reason about dependency completeness.
+- [ ] Can implement a timer cleanup.
+- [ ] Can implement event-listener cleanup.
+- [ ] Can explain when `useLayoutEffect` might be appropriate.
+- [ ] Can explain why API calls belong in different boundaries depending on the trigger.
 
 ## Day 22 Outcome
 
-You now understand the **purpose and mental model of `useEffect`**, not just its syntax. Day 23 will focus on dependency arrays and stale closures in greater depth.
+You now understand the **purpose, lifecycle, dependencies, cleanup, and boundaries of `useEffect`**, rather than memorizing syntax. You can distinguish render-time derivation, event-driven actions, and external synchronization.
+
+**Next:** Day 23 — dependency arrays, reactive dependencies, and stale-closure reasoning.
