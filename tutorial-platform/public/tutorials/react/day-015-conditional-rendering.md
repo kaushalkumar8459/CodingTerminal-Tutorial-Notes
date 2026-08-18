@@ -2,356 +2,332 @@
 title: Conditional Rendering
 slug: day-015-conditional-rendering
 dayLabel: Day 15
-level: Beginner
-estimatedMinutes: 30
+level: Beginner to Intermediate
+estimatedMinutes: 60
 order: 15
 track: react
 ---
-# Day 15 [Beginner to Intermediate]: Conditional Rendering
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 15 Outcome](#day-15-outcome)
+# Day 15 [Beginner → Intermediate]: Conditional Rendering
 
 ## Goal
 
-Render different UI states based on conditions like login status, loading, role, and data availability.
+Learn how to model UI states clearly using JavaScript conditions, ternaries, logical operators, guard clauses, state machines, and reusable status components.
 
-## Prerequisites
+## Why It Matters
 
-- Day 14 completed
-- Comfortable with state and JSX
+Real applications rarely have only a single "success" screen. A page may be loading, failed, empty, unauthorized, partially complete, or ready. Conditional rendering turns those states into explicit UI.
 
-## Explanation
+## Mental Model
 
-Conditional rendering allows React components to show or hide elements based on logic.
-
-## Topic by Topic
-
-### Topic 1: if-else Rendering
-
-Theory:
-Use if-else when two branches are clearly separate.
-
-Practical:
-Show logged-in or guest message.
-
-Code Example:
-
-```jsx
-if (isLoggedIn) return <h2>Welcome back</h2>;
-return <h2>Please login</h2>;
+```text
+Application state
+      ↓
+Choose the valid UI branch
+      ↓
+Render that branch
+      ↓
+User understands current state
 ```
 
-**Explanation:** This returns one message when logged in and another message when not logged in.
+## 1. `if` and Early Returns
 
-**Key Points:**
-
-- `if-else` is clear for separate branches.
-- `return` can exit early with JSX.
-- Useful when branch logic is larger.
-
-### Topic 2: Ternary Operator
-
-Theory:
-Ternary works well for inline branch rendering.
-
-Practical:
-Toggle button label with condition.
-
-Code Example:
+Use `if` when the branch represents a substantial part of the component.
 
 ```jsx
-<button>{isSaved ? "Saved" : "Save"}</button>
-```
-
-**Explanation:** Ternary is a short way to show one of two values directly inside JSX.
-
-**Key Points:**
-
-- Best for small inline conditions.
-- Format: `condition ? A : B`.
-- Keep it simple for readability.
-
-### Topic 3: Logical AND Rendering
-
-Theory:
-Use && for rendering block only when condition is true.
-
-Practical:
-Show badge only when notifications exist.
-
-Code Example:
-
-```jsx
-{
-  count > 0 && <span>{count} new</span>;
+function Profile({ user }) {
+  if (!user) return <p>Please sign in.</p>;
+  return <h1>Welcome, {user.name}</h1>;
 }
 ```
 
-**Explanation:** The right side renders only when the left condition is true.
+Early returns are often clearer than deeply nested JSX.
 
-**Key Points:**
+## 2. Ternary Operator
 
-- Great for optional UI blocks.
-- No `else` branch is needed.
-- Common for badges and alerts.
-
-### Topic 4: Loading, Error, Empty States
-
-Theory:
-Real apps need multiple conditional branches.
-
-Practical:
-Show loading first, then error or data.
-
-Code Example:
+Use a ternary for a concise two-way choice.
 
 ```jsx
-if (loading) return <p>Loading...</p>;
-if (error) return <p>Error occurred</p>;
+<button type="button">
+  {isSaved ? "Saved" : "Save"}
+</button>
 ```
 
-**Explanation:** This checks high-priority UI states first so users always see the correct message.
+Avoid nested ternaries that require the reader to mentally decode multiple branches.
 
-**Key Points:**
+## 3. Logical AND (`&&`)
 
-- Handle loading before data UI.
-- Show clear error message when needed.
-- Use early returns for cleaner logic.
-
-### Topic 5: Role-based UI
-
-Theory:
-Render actions based on user role permission.
-
-Practical:
-Show admin controls only to admin.
-
-Code Example:
+Use `&&` when there is an optional branch and no alternative UI.
 
 ```jsx
-{
-  role === "admin" && <button>Delete User</button>;
+{unreadCount > 0 && <span>{unreadCount} unread</span>}
+```
+
+### Important falsy-value pitfall
+
+JavaScript returns the left operand when it is falsy. React can render some values such as `0`, so this can be surprising:
+
+```jsx
+{count && <Badge />}
+```
+
+If `count` is `0`, the expression evaluates to `0`.
+
+Prefer:
+
+```jsx
+{count > 0 && <Badge />}
+```
+
+or an explicit ternary when appropriate.
+
+## 4. `null` Means Render Nothing
+
+A component can intentionally return `null` when it should render no UI.
+
+```jsx
+function AdminButton({ canDelete }) {
+  if (!canDelete) return null;
+  return <button type="button">Delete</button>;
 }
 ```
 
-**Explanation:** Only users with `admin` role will see this button in the interface.
+This is useful for optional UI, but permission checks in the UI are not security controls.
 
-**Key Points:**
+## 5. Loading, Error, Empty, Success
 
-- Role checks control visible actions.
-- Keep permission logic explicit.
-- UI checks should also be backed by backend checks.
-
-### Topic 6: Render Priority with Guard Clauses
-
-Theory:
-When multiple conditions exist, use a fixed priority order (loading -> error -> empty -> success) to avoid conflicting UI.
-
-Practical:
-Return early for high-priority states before rendering the final list view.
-
-Code Example:
+A robust data-driven component should distinguish these states.
 
 ```jsx
-if (loading) return <p>Loading...</p>;
-if (error) return <p>Something went wrong</p>;
-if (items.length === 0) return <p>No items found</p>;
+function ProductState({ loading, error, products }) {
+  if (loading) return <p>Loading products…</p>;
+  if (error) return <p role="alert">Unable to load products.</p>;
+  if (products.length === 0) return <p>No products found.</p>;
+
+  return <ProductList products={products} />;
+}
 ```
 
-**Explanation:** Guard clauses define a fixed order, so only the most relevant state is shown.
+The exact priority depends on the domain. Do not blindly apply `loading → error → empty` when the application needs a different state model.
 
-**Key Points:**
+## 6. Authentication vs Authorization
 
-- Decide one state priority order.
-- Return early to avoid conflicting UI.
-- Improves clarity for users and developers.
+These concepts should not be confused.
 
-## Key Concepts
+- **Authentication:** Who is the user?
+- **Authorization:** What is the user allowed to do?
 
-- if-else branching
-- Ternary rendering
-- Logical AND blocks
-- Multi-state UI flow
-- Permission-based rendering
-- Guard-clause rendering order
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-		A[Condition] --> B{True or False}
-		B -->|True| C[Render Branch A]
-		B -->|False| D[Render Branch B]
-		C --> E[UI Output]
-		D --> E
+```jsx
+{user?.role === "admin" && <AdminPanel />}
 ```
 
-## End-to-End Practical
+This controls what the current browser displays. The backend must independently enforce authorization for protected operations.
 
-1. Add one boolean login state.
-2. Render two branches for logged in/logged out.
-3. Add loading state branch.
-4. Add empty data condition.
-5. Add role-based action button.
+## 7. Multiple Conditions
 
-## Hands-on Coding
+Prefer a readable state model over a giant expression.
 
-### Example 1: Case - Portal Login Status
+```jsx
+function CheckoutStatus({ status }) {
+  if (status === "loading") return <p>Processing…</p>;
+  if (status === "success") return <p>Order placed.</p>;
+  if (status === "error") return <p>Payment failed.</p>;
+  return <p>Ready for payment.</p>;
+}
+```
 
-Scenario:
-An employee portal should show different content for logged-in and logged-out users.
+If the number of states grows, consider representing the state explicitly rather than creating many unrelated booleans.
+
+## 8. Boolean Explosion
+
+This can become difficult to reason about:
+
+```js
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(false);
+const [success, setSuccess] = useState(false);
+```
+
+Impossible combinations can occur, such as `loading === true` and `success === true`.
+
+For a simple component, a single status can be clearer:
+
+```js
+const [status, setStatus] = useState("idle");
+// idle | loading | success | error
+```
+
+This is a lightweight state-machine mindset.
+
+## 9. Conditional Attributes and Styles
+
+Conditions can affect props too.
+
+```jsx
+<button
+  type="button"
+  disabled={isSubmitting}
+  aria-busy={isSubmitting}
+>
+  {isSubmitting ? "Saving…" : "Save"}
+</button>
+```
+
+Prefer semantic HTML and native attributes over custom visual-only behavior.
+
+## 10. Conditional Component Composition
+
+Instead of putting every branch inside one large component, extract meaningful states:
+
+```jsx
+function Dashboard({ status }) {
+  if (status === "loading") return <LoadingState />;
+  if (status === "error") return <ErrorState />;
+  return <DashboardContent />;
+}
+```
+
+This makes each state easier to test and maintain.
+
+## Complete Practical Example
 
 ```jsx
 import { useState } from "react";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function Dashboard() {
+  const [status, setStatus] = useState("idle");
+  const [role, setRole] = useState("user");
+
+  function simulateLoad() {
+    setStatus("loading");
+    setTimeout(() => setStatus("success"), 800);
+  }
+
+  if (status === "loading") {
+    return <p aria-live="polite">Loading dashboard…</p>;
+  }
+
+  if (status === "error") {
+    return <p role="alert">Could not load dashboard.</p>;
+  }
+
+  if (status === "success") {
+    return (
+      <section>
+        <h1>Dashboard</h1>
+        {role === "admin" && <button type="button">Manage Users</button>}
+        <button type="button" onClick={() => setStatus("idle")}>
+          Reset
+        </button>
+      </section>
+    );
+  }
 
   return (
-    <div>
-      <h2>{isLoggedIn ? "Welcome Employee" : "Please Login"}</h2>
-      <button onClick={() => setIsLoggedIn(!isLoggedIn)}>
-        {isLoggedIn ? "Logout" : "Login"}
-      </button>
-    </div>
+    <section>
+      <p>Ready to load.</p>
+      <button type="button" onClick={simulateLoad}>Load</button>
+      <button type="button" onClick={() => setRole("admin")}>Become Admin (demo)</button>
+    </section>
   );
 }
 ```
 
-### Example 2: Case - API State Screen
+## Common Mistakes
 
-Scenario:
-A product dashboard needs loading, error, and empty-state handling.
+### Mistake 1: Nested ternaries
 
-```jsx
-function ProductState({ loading, error, products }) {
-  if (loading) return <p>Loading products...</p>;
-  if (error) return <p>Unable to load products.</p>;
-  if (products.length === 0) return <p>No products available.</p>;
+Replace unreadable nested expressions with variables, helper components, or guard clauses.
 
-  return (
-    <ul>
-      {products.map((product) => (
-        <li key={product.id}>{product.name}</li>
-      ))}
-    </ul>
-  );
-}
-```
+### Mistake 2: `count && ...`
 
-### Example 3: Case - Role-based Admin Panel
+If `count` can be `0`, use `count > 0 && ...`.
 
-Scenario:
-Only admins should see high-risk actions in management UI.
+### Mistake 3: UI authorization as security
 
-```jsx
-function AdminActions({ role }) {
-  return (
-    <div>
-      <button>View Users</button>
-      {role === "admin" && <button>Delete User</button>}
-    </div>
-  );
-}
-```
+Hiding a Delete button does not secure the Delete API. The server must authorize the operation.
 
-## Mini Exercise
+### Mistake 4: Conflicting booleans
 
-Scenario:
-You are building an online course dashboard.
+Prefer a single status when states are mutually exclusive.
 
-Show:
+### Mistake 5: Overusing conditional CSS
 
-- Login prompt if user is not logged in
-- Loading message while lessons are fetching
-- Empty message if no lessons
-- Lessons list when data exists
+Use semantic attributes such as `disabled`, `hidden` where appropriate, and accessible structure instead of visually hiding important state without communicating it.
 
-Expected output:
+## Hands-on Challenges
 
-- Correct branch appears for each state
-- No conflicting UI blocks
-- User experience is clear and consistent
+### Challenge 1 — Course Dashboard
+
+Model `idle`, `loading`, `error`, `empty`, and `success` states and render a distinct UI for each.
+
+### Challenge 2 — Permission Matrix
+
+Create `viewer`, `editor`, and `admin` roles. Show different actions for each role and explain why the UI is not a security boundary.
+
+### Challenge 3 — Refactor Boolean Explosion
+
+Start with three booleans (`isLoading`, `hasError`, `hasData`) and refactor to a single status model.
+
+### Challenge 4 — Accessibility
+
+Add `role="alert"` for errors and `aria-live="polite"` for status changes where appropriate.
 
 ## Assessment Quiz
 
-### Quiz Questions
+1. When is a ternary appropriate?
+2. What happens with `{count && <Badge />}` when count is `0`?
+3. What does returning `null` do?
+4. Why can multiple booleans create impossible states?
+5. What is the difference between authentication and authorization?
+6. Why is conditional UI not a security boundary?
+7. When should a branch become a separate component?
 
-1. When is ternary better than if-else?
-2. How does && rendering work?
-3. True or False: Conditional rendering only works with booleans.
-4. Why are loading and empty states both needed?
-5. How do you hide admin actions from normal users?
+**Answers:**
 
-### Quiz Answers
+1. A concise two-way UI choice.
+2. The expression evaluates to `0`, which React can render.
+3. The component renders no UI.
+4. Independent booleans can represent contradictory combinations.
+5. Authentication identifies the user; authorization determines allowed actions.
+6. Users can bypass browser UI and call APIs directly.
+7. When the branch has meaningful complexity, repeated use, or an independent responsibility.
 
-1. For concise inline two-branch UI
-2. It renders right side only when left condition is truthy
-3. False
-4. They represent different user situations
-5. Check role condition before rendering
+## Interview Questions
 
-## Task
+**How does React perform conditional rendering?**  
+React uses ordinary JavaScript expressions and control flow such as `if`, ternary, `&&`, and explicit returns to decide which elements are produced.
 
-- Build one component with at least 3 rendering branches
-- Add role-based conditional action
-- Complete mini exercise
+**When would you avoid a ternary?**  
+When the expression becomes nested, lengthy, or contains business logic that is easier to understand in a guard clause or separate component.
 
-## Self Check
+**Why can `&&` be dangerous with numbers?**  
+A falsy numeric `0` is returned by the JavaScript expression and may appear in the UI. Use an explicit boolean condition such as `count > 0`.
 
-- You can choose the right conditional pattern
-- You can model realistic UI states
-- You can answer at least 4 out of 5 quiz questions correctly
+**How would you model API UI state?**  
+Start with explicit mutually exclusive states such as idle/loading/success/error, then add domain-specific states like empty or unauthorized when necessary.
 
-## Interview Questions and Answers
+## Final Task
 
-### Beginner
+Build a **Course Dashboard** with:
 
-**Question:** What is conditional rendering?
+- login/logout state
+- loading state
+- error state
+- empty lessons state
+- success state
+- role-based actions
+- retry action
+- accessible status/error messaging
 
-**Answer:** Rendering different UI based on conditions.
+### Acceptance Criteria
 
-**Question:** Name two common ways to do conditional rendering in React.
-
-**Answer:** Ternary and logical AND.
-
-### Middle
-
-**Question:** Why is handling empty state important?
-
-**Answer:** It prevents blank UI and guides users.
-
-**Question:** How do you avoid nested complex ternaries?
-
-**Answer:** Move logic into variables or helper render functions.
-
-### Advanced
-
-**Question:** How would you structure multiple state branches cleanly?
-
-**Answer:** Early returns for loading/error and focused final render for success.
-
-**Question:** What risks come with permission-based conditional rendering?
-
-**Answer:** UI checks alone are not security; backend authorization is still required.
+- [ ] Branches are readable.
+- [ ] No unnecessary nested ternaries.
+- [ ] Numeric `&&` pitfall is avoided.
+- [ ] Mutually exclusive states use a clear model.
+- [ ] Role checks are explicitly described as UI behavior, not security.
+- [ ] Loading/error states are accessible.
 
 ## Day 15 Outcome
 
-- You can build logic-driven UI branches confidently
-- You can handle auth, loading, empty, and role states
-- You are ready for list + condition integration in upcoming lessons
+You can now model real UI state instead of merely showing/hiding elements. This prepares you for Day 16, where the same state-driven thinking will be applied to dynamic collections.
