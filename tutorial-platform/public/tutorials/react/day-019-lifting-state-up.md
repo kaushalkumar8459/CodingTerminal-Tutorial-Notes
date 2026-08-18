@@ -2,366 +2,882 @@
 title: Lifting State Up
 slug: day-019-lifting-state-up
 dayLabel: Day 19
-level: Beginner
-estimatedMinutes: 30
+level: Intermediate
+estimatedMinutes: 60
 order: 19
 track: react
 ---
-# Day 19 [Beginner to Intermediate]: Lifting State Up
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 19 Outcome](#day-19-outcome)
+# Day 19: Lifting State Up
 
 ## Goal
 
-Move shared state to the nearest common parent so sibling components stay synchronized.
+Learn how to decide **where state should live** when multiple components need the same information. You will learn the nearest common owner pattern, single source of truth, controlled components, derived state, sibling synchronization, minimal lifting, state-shape design, prop drilling, composition, and when Context or another state solution may be justified.
 
 ## Prerequisites
 
-- Day 18 completed
-- Comfortable with props and useState
+- Days 1–18 completed
+- Comfortable with components, props, `useState`, events, lists, and conditional rendering
+- Comfortable passing callback props
 
-## Explanation
+## Core Mental Model
 
-When two or more children need the same data, keep that state in their parent and pass values/actions via props.
+When two components need to coordinate around the same changing data, do not make them maintain independent copies of that data.
 
-## Topic by Topic
-
-### Topic 1: Why Lift State Up
-
-Theory:
-Sibling components with duplicate local state become inconsistent.
-
-Practical:
-Move shared value to parent.
-
-Code Example:
-
-```jsx
-const [value, setValue] = useState("");
+```text
+                Common Parent
+                     │
+              owns shared state
+                 /       \
+                /         \
+          Child A         Child B
+          reads/updates   reads data
+                │
+                └── callback ──► Parent
 ```
 
-**Explanation:** Shared value is stored once in parent state so multiple children can use the same latest data.
+The usual strategy is:
 
-**Key Points:**
+1. Identify the state that must be shared.
+2. Find the nearest common ancestor of the components that need it.
+3. Move that state to the common owner.
+4. Pass the current value down through props.
+5. Pass narrowly defined callbacks down for actions.
+6. Keep state that is truly local in the component that owns it.
 
-- Lift state when siblings need same data.
-- One state source avoids mismatch.
-- Parent becomes central owner of shared value.
+> **Lifting state up is a state-placement technique, not a rule that all state belongs at the top of the application.**
 
-### Topic 2: Parent as Source of Truth
+## 1. What Problem Does Lifting State Up Solve?
 
-Theory:
-Single source of truth avoids mismatch across children.
-
-Practical:
-Pass value down to both children.
-
-Code Example:
+Suppose a search input and a result list each maintain their own copy of `query`:
 
 ```jsx
-<ChildA value={value} />
-<ChildB value={value} />
+function SearchBox() {
+  const [query, setQuery] = useState("");
+  // ...
+}
+
+function Results() {
+  const [query, setQuery] = useState("");
+  // ...
+}
 ```
 
-**Explanation:** Both children read the same parent value, so they always stay in sync.
+These values can drift apart. The input might display `react`, while the result list still filters using `rea`.
 
-**Key Points:**
-
-- Parent sends data through props.
-- Siblings do not keep duplicate shared state.
-- Any parent update reflects everywhere.
-
-### Topic 3: Child Updates Parent State
-
-Theory:
-Parent passes setter or callback to children.
-
-Practical:
-Child input updates parent.
-
-Code Example:
+Instead, the common parent owns the query:
 
 ```jsx
-<ChildA onChange={setValue} />
-```
-
-**Explanation:** Parent gives child a callback. Child calls it to request a state update in parent.
-
-**Key Points:**
-
-- Data goes down, actions go up.
-- Callbacks enable child-to-parent communication.
-- Parent still controls final state.
-
-### Topic 4: Sibling Synchronization
-
-Theory:
-One child updates and all sibling views reflect latest data.
-
-Practical:
-Text input + preview panel sync.
-
-Code Example:
-
-```jsx
-<Preview text={value} />
-```
-
-**Explanation:** When input child changes `value`, preview child receives the new prop and updates immediately.
-
-**Key Points:**
-
-- Shared parent state synchronizes siblings.
-- No direct child-to-child dependency needed.
-- Real-time preview becomes easy.
-
-### Topic 5: Minimal Lift Strategy
-
-Theory:
-Lift only shared state, keep local-only state near component.
-
-Practical:
-Keep button hover local, form data in parent.
-
-Code Example:
-
-```jsx
-const [profile, setProfile] = useState({ name: "", role: "" });
-const [isHovered, setIsHovered] = useState(false);
-```
-
-**Explanation:** Keep shared business data lifted, but keep UI-only details local when they are not needed elsewhere.
-
-**Key Points:**
-
-- Do not lift every state blindly.
-- Shared state in parent, local UI state near child.
-- This keeps components simpler.
-
-### Topic 6: State Shape Before Lifting
-
-Theory:
-Design state structure first (single object vs split fields) so lifted state stays easy to update.
-
-Practical:
-Use one profile object when fields are saved together, or separate states when they change independently.
-
-Code Example:
-
-```jsx
-const [profile, setProfile] = useState({ name: "", role: "" });
-```
-
-**Explanation:** Plan state shape before lifting so updates stay clear and predictable.
-
-**Key Points:**
-
-- Group fields when they belong together.
-- Choose shape based on update patterns.
-- Good structure reduces future refactoring.
-
-## Key Concepts
-
-- Single source of truth
-- Parent-managed shared state
-- Callback props for updates
-- Sibling synchronization
-- Scoped state placement
-- State shape design
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-		A[Parent State] --> B[Child Input]
-		A --> C[Child Preview]
-		B --> D[Callback Update]
-		D --> A
-```
-
-## End-to-End Practical
-
-1. Create shared state in parent.
-2. Pass value to two child components.
-3. Pass callback to child input.
-4. Update state from child action.
-5. Verify sibling components stay synced.
-
-## Hands-on Coding
-
-### Example 1: Case - Temperature Converter Sync
-
-Scenario:
-Two input fields (Celsius and Fahrenheit) should stay synchronized via parent state.
-
-```jsx
-import { useState } from "react";
-
 function App() {
-  const [celsius, setCelsius] = useState("");
-
-  const handleCelsius = (value) => setCelsius(value);
-  const fahrenheit = celsius === "" ? "" : (Number(celsius) * 9) / 5 + 32;
+  const [query, setQuery] = useState("");
 
   return (
-    <div>
-      <input
-        value={celsius}
-        onChange={(e) => handleCelsius(e.target.value)}
-        placeholder="Celsius"
-      />
-      <input value={fahrenheit} readOnly placeholder="Fahrenheit" />
-    </div>
+    <>
+      <SearchBox query={query} onQueryChange={setQuery} />
+      <Results query={query} />
+    </>
   );
 }
 ```
 
-### Example 2: Case - Shared Search Across Components
+Now there is one authoritative value.
 
-Scenario:
-A search box in one component should instantly filter list in another component.
+### Key points
+
+- Lift state when multiple components need the same changing value.
+- Avoid duplicate sources of truth for the same concept.
+- The common owner coordinates the shared state.
+
+## 2. Find the Nearest Common Owner
+
+Consider:
+
+```text
+App
+├── Header
+├── Editor
+└── Preview
+```
+
+If `Editor` and `Preview` need the same `profile`, `App` is the nearest common owner.
+
+Do **not** automatically move the state to the application root if a lower component can own it.
+
+```text
+Too high:
+App owns every piece of state
+
+Better:
+FeaturePanel owns feature state
+├── Editor
+└── Preview
+```
+
+Keeping state close to where it is used reduces unnecessary prop plumbing and makes component responsibilities easier to understand.
+
+## 3. Single Source of Truth
+
+If two components need the same logical value, store that value once whenever practical.
 
 ```jsx
-function SearchBox({ query, setQuery }) {
+function EditorPreview() {
+  const [name, setName] = useState("");
+
   return (
-    <input
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      placeholder="Search"
+    <section>
+      <ProfileEditor name={name} onNameChange={setName} />
+      <ProfilePreview name={name} />
+    </section>
+  );
+}
+```
+
+Both children use the same `name`.
+
+### Important distinction
+
+A **single source of truth** applies to a particular piece of shared information. It does not mean your entire application must have one giant state object.
+
+## 4. Data Down, Actions Up
+
+The common React communication pattern is:
+
+```text
+Parent state
+    ↓ props/value
+Child
+    ↓ callback/intent
+Parent state update
+```
+
+Example:
+
+```jsx
+function Parent() {
+  const [value, setValue] = useState("");
+
+  return (
+    <Child
+      value={value}
+      onChange={setValue}
     />
   );
 }
 
-function Results({ query, items }) {
-  const filtered = items.filter((item) =>
-    item.toLowerCase().includes(query.toLowerCase()),
+function Child({ value, onChange }) {
+  return (
+    <input
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+    />
   );
-  return filtered.map((item, index) => <p key={index}>{item}</p>);
 }
 ```
 
-### Example 3: Case - Billing Summary Sync
+The child does not reach into the parent's state. It communicates an event/action through the callback contract.
 
-Scenario:
-An invoice form and summary card should always show same latest amount and tax values.
+For larger APIs, prefer semantic names:
 
 ```jsx
-function BillingForm({ amount, tax, setAmount, setTax }) {
+<ProductEditor
+  product={product}
+  onPriceChange={handlePriceChange}
+/>
+```
+
+rather than exposing implementation details such as:
+
+```jsx
+<ProductEditor setProduct={setProduct} />
+```
+
+Both can work, but semantic callbacks can make ownership and allowed actions clearer.
+
+## 5. Controlled Components
+
+A component is commonly called **controlled** when its important value is driven by props from its parent.
+
+```jsx
+function SearchBox({ value, onChange }) {
+  return (
+    <input
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+    />
+  );
+}
+```
+
+The parent owns the state:
+
+```jsx
+function SearchPage() {
+  const [query, setQuery] = useState("");
+
+  return <SearchBox value={query} onChange={setQuery} />;
+}
+```
+
+This makes synchronization easy because there is one current value.
+
+## 6. Derived State Should Usually Stay Derived
+
+Do not create another state variable for a value that can be calculated from existing state.
+
+Avoid:
+
+```jsx
+const [items, setItems] = useState([]);
+const [itemCount, setItemCount] = useState(0);
+```
+
+when `itemCount` is always `items.length`.
+
+Prefer:
+
+```jsx
+const [items, setItems] = useState([]);
+const itemCount = items.length;
+```
+
+For filtering:
+
+```jsx
+const visibleItems = items.filter((item) =>
+  item.name.toLowerCase().includes(query.toLowerCase()),
+);
+```
+
+This reduces synchronization bugs.
+
+> A value being displayed in multiple places does not automatically mean it needs separate state.
+
+## 7. Lift Only What Is Actually Shared
+
+Not every state variable should be lifted.
+
+```jsx
+function SearchPanel() {
+  const [query, setQuery] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  // query may be shared with Results
+  // focus state may only matter inside SearchPanel
+}
+```
+
+If `isFocused` is only used by `SearchPanel`, keep it local.
+
+### Decision rule
+
+Ask:
+
+> “Does another component need this exact state to render correctly or coordinate an action?”
+
+- **Yes:** consider lifting it.
+- **No:** keep it local.
+
+## 8. State Shape Before Lifting
+
+The location of state and its shape are separate design decisions.
+
+Related values can be grouped:
+
+```jsx
+const [profile, setProfile] = useState({
+  name: "",
+  role: "",
+  city: "",
+});
+```
+
+Update immutably:
+
+```jsx
+setProfile((current) => ({
+  ...current,
+  role: "Frontend Developer",
+}));
+```
+
+Independent values can also be separate:
+
+```jsx
+const [name, setName] = useState("");
+const [role, setRole] = useState("");
+```
+
+Choose the shape based on how the data changes and how the components consume it. Do not combine everything into one object merely because the state is lifted.
+
+## 9. Sibling Synchronization
+
+A common example is an editor and preview:
+
+```jsx
+function ProfileFeature() {
+  const [profile, setProfile] = useState({
+    name: "",
+    role: "",
+  });
+
+  return (
+    <>
+      <ProfileEditor profile={profile} onProfileChange={setProfile} />
+      <ProfilePreview profile={profile} />
+    </>
+  );
+}
+```
+
+The flow is:
+
+```text
+Editor input
+   ↓
+onProfileChange
+   ↓
+Parent updates profile
+   ↓
+Parent renders
+   ↓
+Preview receives latest profile
+```
+
+There is no need for the editor and preview to know how to find each other.
+
+## 10. Temperature Converter: Two Views, One State
+
+A classic example is Celsius/Fahrenheit conversion.
+
+The parent owns the source value and remembers which scale was edited:
+
+```jsx
+import { useState } from "react";
+
+function toCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+function toFahrenheit(celsius) {
+  return celsius * 9 / 5 + 32;
+}
+
+function TemperatureInput({ scale, value, onChange }) {
+  return (
+    <label>
+      {scale === "c" ? "Celsius" : "Fahrenheit"}
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
+export default function Calculator() {
+  const [scale, setScale] = useState("c");
+  const [temperature, setTemperature] = useState("");
+
+  const celsius = scale === "c"
+    ? temperature
+    : temperature === ""
+      ? ""
+      : toCelsius(Number(temperature));
+
+  const fahrenheit = scale === "f"
+    ? temperature
+    : temperature === ""
+      ? ""
+      : toFahrenheit(Number(temperature));
+
   return (
     <div>
-      <input
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        placeholder="Amount"
+      <TemperatureInput
+        scale="c"
+        value={celsius}
+        onChange={(value) => {
+          setScale("c");
+          setTemperature(value);
+        }}
       />
-      <input
-        value={tax}
-        onChange={(e) => setTax(e.target.value)}
-        placeholder="Tax %"
+
+      <TemperatureInput
+        scale="f"
+        value={fahrenheit}
+        onChange={(value) => {
+          setScale("f");
+          setTemperature(value);
+        }}
       />
     </div>
   );
 }
+```
 
-function BillingSummary({ amount, tax }) {
-  const total =
-    Number(amount || 0) + (Number(amount || 0) * Number(tax || 0)) / 100;
-  return <p>Total: {total}</p>;
+The important lesson is not the temperature formula. It is that **the parent owns the state required to keep two views synchronized**.
+
+## 11. Shared Search and Derived Results
+
+```jsx
+function SearchBox({ query, onQueryChange }) {
+  return (
+    <input
+      value={query}
+      onChange={(event) => onQueryChange(event.target.value)}
+      placeholder="Search technologies"
+    />
+  );
+}
+
+function Results({ items, query }) {
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const filtered = items.filter((item) =>
+    item.toLowerCase().includes(normalizedQuery),
+  );
+
+  if (filtered.length === 0) {
+    return <p>No matching technologies.</p>;
+  }
+
+  return (
+    <ul>
+      {filtered.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+export default function SearchPage() {
+  const [query, setQuery] = useState("");
+  const items = ["React", "Angular", "Vue", "Svelte"];
+
+  return (
+    <>
+      <SearchBox query={query} onQueryChange={setQuery} />
+      <Results items={items} query={query} />
+    </>
+  );
 }
 ```
 
-## Mini Exercise
+Notice that `filtered` is **derived**. It does not need its own state.
 
-Scenario:
-You are building a profile editor with live preview.
+## 12. Prop Drilling: When Is It Actually a Problem?
 
-Create parent state for name, role, and location. Update values from one child form and display in another child preview panel.
+Prop drilling means passing data through components that do not themselves need that data.
 
-Expected output:
+```text
+App
+ ↓
+Layout
+ ↓
+Panel
+ ↓
+Section
+ ↓
+Button
+```
 
-- Parent holds shared profile state
-- Form child updates via callback props
-- Preview child updates instantly
+If every intermediate component only forwards `user`, the API can become noisy.
+
+However, prop drilling is not automatically bad. A few explicit prop layers can be clearer than introducing global state.
+
+Consider alternatives only when there is a real problem:
+
+- Move the consumer closer to the state owner.
+- Use composition.
+- Use Context for broadly shared values.
+- Use a state-management solution for genuinely cross-cutting application state.
+
+## 13. Composition Can Be Better Than More Lifting
+
+Suppose a layout needs to render arbitrary content. Instead of lifting every detail into the layout:
+
+```jsx
+function Panel({ title, children }) {
+  return (
+    <section>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  );
+}
+```
+
+Composition can reduce the amount of state and configuration that must travel through intermediate components.
+
+## 14. Lifting State vs Context vs External State
+
+Use the simplest solution that matches the scope.
+
+| Situation | Good starting point |
+|---|---|
+| Used by one component | Local state |
+| Shared by siblings | Lift to common parent |
+| Needed by a subtree | Consider Context |
+| Cross-cutting application state | Context or a dedicated state solution, depending on complexity |
+| Server/cache data | A data-fetching/cache solution may be more appropriate than UI state |
+
+Do not introduce Context merely because two components share a value.
+
+## 15. Performance Considerations
+
+Lifting state can increase the number of components that re-render when the owner updates. That does **not** mean lifting state is bad.
+
+First make ownership correct and the data flow understandable. Then measure performance if there is an actual problem.
+
+Possible optimizations include:
+
+- Keeping unrelated local state local.
+- Splitting large components.
+- Avoiding unnecessary derived work.
+- Memoizing only when measurement and component behavior justify it.
+- Structuring state so unrelated updates do not unnecessarily involve large subtrees.
+
+Avoid optimizing based only on assumptions.
+
+## 16. Common Mistakes
+
+### Mistake 1: Duplicating shared state
+
+Two siblings independently store the same logical value.
+
+**Fix:** identify the common owner and keep one source of truth.
+
+### Mistake 2: Lifting everything to `App`
+
+**Fix:** lift only to the nearest common owner.
+
+### Mistake 3: Storing derived values separately
+
+**Fix:** calculate them from existing state when practical.
+
+### Mistake 4: Passing raw setters through many layers
+
+**Fix:** use semantic callbacks where they make the component contract clearer.
+
+### Mistake 5: Introducing Context too early
+
+**Fix:** start with local state and props; use Context when the sharing problem actually warrants it.
+
+### Mistake 6: Using child-to-child communication hacks
+
+**Fix:** coordinate siblings through their common owner or another appropriate shared-state mechanism.
+
+### Mistake 7: Confusing server data with UI state
+
+Fetched/cached server data often has different requirements from local UI state such as `isOpen` or `selectedTab`.
+
+## End-to-End Practical: Profile Editor + Live Preview
+
+### Requirements
+
+Build a feature with this structure:
+
+```text
+ProfileFeature
+├── ProfileEditor
+│   ├── Name input
+│   ├── Role input
+│   └── City input
+└── ProfilePreview
+    ├── Name
+    ├── Role
+    └── City
+```
+
+### Parent
+
+```jsx
+import { useState } from "react";
+
+function ProfileFeature() {
+  const [profile, setProfile] = useState({
+    name: "",
+    role: "",
+    city: "",
+  });
+
+  const updateField = (field, value) => {
+    setProfile((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  return (
+    <main>
+      <ProfileEditor profile={profile} onFieldChange={updateField} />
+      <ProfilePreview profile={profile} />
+    </main>
+  );
+}
+```
+
+### Editor
+
+```jsx
+function ProfileEditor({ profile, onFieldChange }) {
+  return (
+    <form>
+      <input
+        value={profile.name}
+        onChange={(event) => onFieldChange("name", event.target.value)}
+        placeholder="Name"
+      />
+      <input
+        value={profile.role}
+        onChange={(event) => onFieldChange("role", event.target.value)}
+        placeholder="Role"
+      />
+      <input
+        value={profile.city}
+        onChange={(event) => onFieldChange("city", event.target.value)}
+        placeholder="City"
+      />
+    </form>
+  );
+}
+```
+
+### Preview
+
+```jsx
+function ProfilePreview({ profile }) {
+  return (
+    <article>
+      <h2>{profile.name || "Your name"}</h2>
+      <p>{profile.role || "Your role"}</p>
+      <p>{profile.city || "Your city"}</p>
+    </article>
+  );
+}
+```
+
+### Acceptance criteria
+
+- [ ] Parent owns the shared profile state.
+- [ ] Editor receives values through props.
+- [ ] Editor communicates changes through a callback.
+- [ ] Preview receives the same authoritative profile.
+- [ ] No duplicate profile state exists in the children.
+- [ ] Object updates are immutable.
+- [ ] No derived preview state is stored unnecessarily.
+
+## Hands-on Challenges
+
+### Challenge 1: Temperature Converter
+
+Implement Celsius and Fahrenheit inputs that stay synchronized through a common parent.
+
+### Challenge 2: Search + Results
+
+Build a search box and result list. Keep only `query` in state; derive filtered results.
+
+### Challenge 3: Shopping Cart
+
+Create:
+
+```text
+CartPage
+├── ProductList
+└── CartSummary
+```
+
+The parent owns cart items. Product rows request additions and quantity changes through callbacks. `CartSummary` derives subtotal from the cart.
+
+### Challenge 4: Profile Editor
+
+Implement the full profile editor above and add a Reset button.
+
+### Challenge 5: State Placement Review
+
+For each value below, decide whether it should be local, lifted, provided through Context, or derived:
+
+- Modal open state used by one component
+- Search query shared by search input and results
+- Filtered result list
+- Authenticated user needed across many pages
+- Shopping-cart items used by header and checkout
+
+Explain your decision before coding.
+
+## Debugging Exercise
+
+This implementation contains duplicated state:
+
+```jsx
+function SearchBox() {
+  const [query, setQuery] = useState("");
+  // ...
+}
+
+function Results() {
+  const [query, setQuery] = useState("");
+  // ...
+}
+```
+
+### Your task
+
+1. Identify why synchronization can fail.
+2. Move `query` to their nearest common owner.
+3. Pass `query` to both components.
+4. Pass an `onQueryChange` callback to `SearchBox`.
+5. Keep filtered results derived rather than stored.
 
 ## Assessment Quiz
 
-### Quiz Questions
+### Q1. What does lifting state up mean?
 
-1. When should state be lifted?
-2. What does single source of truth mean?
-3. True or False: Every state should always be moved to top-level parent.
-4. How does child update lifted state?
-5. What problem does lifting state solve between siblings?
+A. Moving all state into a global store
+B. Moving shared state to the nearest common ancestor
+C. Moving state into every child
+D. Removing state
 
-### Quiz Answers
+**Answer:** B
 
-1. When multiple components need same state
-2. One authoritative state location
-3. False
-4. Via callback props from parent
-5. Prevents inconsistent UI values
+### Q2. Why avoid duplicate shared state?
 
-## Task
+A. It always makes the application slower
+B. It can create multiple sources of truth that become inconsistent
+C. React does not allow two states
+D. Props stop working
 
-- Build one shared-state parent with 2 children
-- Pass value and callbacks via props
-- Complete mini exercise
+**Answer:** B
+
+### Q3. Should every state variable be lifted to `App`?
+
+A. Yes
+B. No
+
+**Answer:** B
+
+### Q4. What is derived state?
+
+A. Data calculated from existing state/props
+B. State that must always be global
+C. State stored in the DOM
+D. State that cannot change
+
+**Answer:** A
+
+### Q5. When can Context be useful?
+
+A. Whenever one component has state
+B. When values need to be consumed broadly within a subtree and prop passing becomes cumbersome
+C. Only for forms
+D. Only for API calls
+
+**Answer:** B
 
 ## Self Check
 
-- You can identify when state should be lifted
-- You can implement sibling synchronization
-- You can answer at least 4 out of 5 quiz questions correctly
+Before moving to Day 20, you should be able to:
+
+- Explain the nearest common owner pattern.
+- Identify duplicated state that should be shared.
+- Decide which state should remain local.
+- Distinguish source state from derived values.
+- Build a controlled child component.
+- Synchronize sibling components through their parent.
+- Explain when prop drilling is actually a concern.
+- Explain why Context is not automatically the answer.
+- Explain how lifting state can affect rendering scope.
 
 ## Interview Questions and Answers
 
-### Beginner
+### 1. What is lifting state up?
 
-**Question:** What is lifting state up?
+Lifting state up means moving state from child components to their nearest common ancestor so multiple components can share one authoritative value.
 
-**Answer:** Moving shared state to the nearest common parent.
+### 2. Why is a single source of truth important?
 
-**Question:** Why pass callbacks to children?
+It prevents different components from maintaining conflicting copies of the same logical data and makes updates easier to reason about.
 
-**Answer:** So children can request parent state updates.
+### 3. How do siblings communicate in React?
 
-### Middle
+Usually, shared state is placed in their common parent. The parent passes values down and callbacks down so a sibling can request changes indirectly through the parent.
 
-**Question:** How do you avoid over-lifting state?
+### 4. Should all state live in a common parent?
 
-**Answer:** Lift only state that is shared; keep local UI state local.
+No. Only state that needs to be shared should be lifted. Local interaction state should remain close to the component that owns it.
 
-**Question:** What is a common symptom of missing state lifting?
+### 5. What is the difference between state and derived data?
 
-**Answer:** Sibling components show out-of-sync values.
+State is stored information that changes over time. Derived data is calculated from existing state or props. Storing both can create synchronization problems when the derived value can be calculated reliably.
 
-### Advanced
+### 6. What is a controlled component?
 
-**Question:** When does context become better than prop-drilling?
+A controlled component receives its important value from its parent and reports changes through a callback. The parent owns the authoritative value.
 
-**Answer:** When many nested components need same shared state.
+### 7. When does prop drilling become a problem?
 
-**Question:** How does lifting state affect testability?
+When data has to pass through many intermediate components that do not use it, making component APIs noisy and difficult to maintain. A few levels of explicit props are often perfectly reasonable.
 
-**Answer:** Centralized logic becomes easier to test and reason about.
+### 8. Is Context always better than lifting state?
+
+No. Context solves a different sharing problem. For closely related siblings, lifting state to their common parent is often simpler and more explicit.
+
+### 9. Can lifting state hurt performance?
+
+It can increase the rendering scope of updates because the state owner updates and its descendants may render again. Correct state ownership should come first; optimize only when measurement shows a real problem.
+
+### 10. Why should derived values usually not be stored as state?
+
+Because maintaining both the source and derived value creates two values that must remain synchronized. Calculating the derived value from the source avoids that duplication.
+
+## Design Exercise: Choose the State Owner
+
+For each scenario, identify the best owner:
+
+### Scenario A
+A tooltip's open/closed state is used by one button component.
+
+**Suggested answer:** Keep it local.
+
+### Scenario B
+A search box and result list need the same query.
+
+**Suggested answer:** Lift `query` to their nearest common owner.
+
+### Scenario C
+A filtered result array can be calculated from `items` and `query`.
+
+**Suggested answer:** Derive it instead of storing a second state variable.
+
+### Scenario D
+Many unrelated components across a large subtree need the current theme.
+
+**Suggested answer:** Context is a reasonable candidate.
+
+### Scenario E
+The application needs cached server data with loading, error, refetch, and cache behavior.
+
+**Suggested answer:** Consider a dedicated data-fetching/cache approach rather than treating it as ordinary local UI state.
 
 ## Day 19 Outcome
 
-- You can design parent-managed shared state
-- You can keep sibling components synchronized
-- You are ready for robust parent-child communication patterns in Day 20
+You can now reason about **state ownership**, not just write `useState`.
+
+You should understand this hierarchy:
+
+```text
+Local state
+    ↓
+Lift to common parent when shared
+    ↓
+Use composition to simplify APIs when appropriate
+    ↓
+Use Context for appropriate subtree-wide values
+    ↓
+Use dedicated state/data solutions when application complexity requires them
+```
+
+The key principle is:
+
+> **Keep state as close as possible to where it is used, but no closer than necessary for the components that must coordinate around it.**
+
+Day 20 builds directly on this model with deeper parent-child communication and component API design.
