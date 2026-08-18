@@ -3,286 +3,398 @@ title: Mini Project Weather App
 slug: day-028-mini-project-weather-app
 dayLabel: Day 28
 level: Intermediate
-estimatedMinutes: 50
+estimatedMinutes: 120
 order: 28
 track: react
 ---
-# Day 28 [Beginner to Intermediate]: Mini Project Weather App
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 28 Outcome](#day-28-outcome)
+# Day 28 [Intermediate]: Mini Project — Weather App
 
 ## Goal
 
-Build a weather search app with API integration and proper request states.
+Build a realistic weather-search application that combines controlled forms, API requests, request-state modeling, cancellation, validation, accessibility, and derived presentation.
 
 ## Prerequisites
 
-- Day 27 completed
-- Comfortable with form input and API calls
+- Days 25–27
+- `useState`, `useEffect`, async/await
+- Fetch or Axios
+- Loading/error/empty/success states
 
-## Explanation
+## Architecture
 
-This mini project combines multiple React skills: controlled input, event handling, async API requests, and state-based rendering. You will create a weather app where user enters a city and sees temperature and weather details.
+```text
+WeatherApp
+├── SearchForm
+├── StatusMessage
+├── WeatherCard
+└── RecentSearches
+```
 
-## Topic by Topic
-
-### Topic 1: Project State Design
-
-Theory:
-Define separate state for query, weather data, loading, and error.
-
-Code Example:
+State ownership:
 
 ```jsx
 const [city, setCity] = useState("");
 const [weather, setWeather] = useState(null);
-const [loading, setLoading] = useState(false);
-const [error, setError] = useState("");
+const [status, setStatus] = useState("idle");
+const [error, setError] = useState(null);
+const [recentSearches, setRecentSearches] = useState([]);
 ```
 
-**Explanation:** Keeping request and result values separate makes app flow easy to debug and maintain.
+Do not store display strings or temperature conversions that can be derived from the API response.
 
-**Key Points:**
+## API Key Security
 
-- One state for each responsibility.
-- Do not mix unrelated values.
-- Clear state design reduces bugs.
+For a browser-only tutorial, an environment variable keeps configuration out of the committed source code, but **does not make a browser API key secret**. Anything shipped to the browser can be inspected by users.
 
-### Topic 2: Build Search Form
+For sensitive credentials, call your own backend and keep the secret server-side.
 
-Theory:
-Use controlled input and submit handler.
+## Search Flow
 
-Practical:
-Search on button click or Enter key.
-
-**Explanation:** Controlled input ensures current text is always in React state, ready for validation and request.
-
-**Key Points:**
-
-- Bind input `value` and `onChange`.
-- Validate input before API call.
-- Support keyboard-friendly submit.
-
-### Topic 3: API Request Flow
-
-Theory:
-Validate input, call API, parse result, handle failures.
-
-**Explanation:** The safest flow is validate -> set loading -> fetch -> parse -> success/error -> stop loading.
-
-**Key Points:**
-
-- Use `try/catch/finally` pattern.
-- Clear old error before new request.
-- Show friendly failure messages.
-
-### Topic 4: Render State-based UI
-
-Theory:
-Show loading/error/success placeholders.
-
-**Explanation:** Conditional rendering avoids showing stale weather data during new requests.
-
-**Key Points:**
-
-- Handle loading first.
-- Handle error next.
-- Render card only when data is valid.
-
-### Topic 5: Simple Result Card
-
-Theory:
-Display city, temperature, and condition clearly.
-
-**Explanation:** A compact weather card gives the most important information at a glance.
-
-**Key Points:**
-
-- Prioritize key fields first.
-- Keep labels user-friendly.
-- Add extra metrics as optional details.
-
-## Key Concepts
-
-- Mini-project composition
-- Controlled form + async request
-- Defensive error handling
-- Clear user feedback states
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Type City] --> B[Submit]
-		B --> C[Fetch Weather]
-		C --> D{Result}
-		D -->|Success| E[Show Weather Card]
-		D -->|Error| F[Show Error]
-		C --> G[Loading Indicator]
+```text
+idle
+ ↓ submit
+validate
+ ↓
+loading
+ ├── success → weather card
+ ├── success + invalid/empty result → empty state
+ └── error → retryable error
 ```
 
-## End-to-End Practical
-
-1. Build input and search button.
-2. Validate city name.
-3. Fetch weather data.
-4. Handle loading/error states.
-5. Render weather card with key details.
-
-## Hands-on Coding
-
-### Example 1: Weather App Core
+## Controlled Search Form
 
 ```jsx
-import { useState } from "react";
-
-export default function App() {
-  const [city, setCity] = useState("");
-  const [weather, setWeather] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const searchWeather = async () => {
-    const value = city.trim();
-    if (!value) return;
-
-    try {
-      setLoading(true);
-      setError("");
-      setWeather(null);
-
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(value)}&units=metric&appid=YOUR_API_KEY`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Unable to fetch weather");
-      }
-
-      setWeather(data);
-    } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+function SearchForm({ city, onChange, onSubmit, disabled }) {
   return (
-    <div>
-      <h2>Weather App</h2>
+    <form onSubmit={onSubmit}>
+      <label htmlFor="city">City</label>
       <input
+        id="city"
         value={city}
-        onChange={(e) => setCity(e.target.value)}
-        placeholder="Enter city"
+        onChange={(event) => onChange(event.target.value)}
+        placeholder="e.g. London"
+        autoComplete="address-level2"
       />
-      <button onClick={searchWeather}>Search</button>
-
-      {loading && <p>Loading weather...</p>}
-      {error && <p>Error: {error}</p>}
-
-      {weather && (
-        <div>
-          <h3>{weather.name}</h3>
-          <p>Temp: {Math.round(weather.main.temp)} C</p>
-          <p>Condition: {weather.weather[0].description}</p>
-        </div>
-      )}
-    </div>
+      <button type="submit" disabled={disabled}>
+        {disabled ? "Searching..." : "Search"}
+      </button>
+    </form>
   );
 }
 ```
 
-## Mini Exercise
+Using submit rather than only a click handler automatically supports Enter-key submission.
 
-Scenario:
-Enhance weather app with humidity and wind speed display and Add Recent Searches list.
+## API Function
 
-Expected output:
+Keep transport code separate from rendering:
 
-- Result card includes humidity and wind
-- Last 5 searched city names are displayed
-- Clicking a recent city triggers search again
+```jsx
+async function getWeather(city, signal) {
+  const params = new URLSearchParams({
+    q: city,
+    units: "metric",
+    appid: import.meta.env.VITE_WEATHER_API_KEY,
+  });
 
-## Assessment Quiz
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?${params}`,
+    { signal }
+  );
 
-### Quiz Questions
+  const body = await response.json();
 
-1. Why do we encode city name in URL?
-2. Why clear previous error before new request?
-3. Which state holds fetched result object?
-4. What should happen when city input is empty?
-5. Why is loading state important here?
+  if (!response.ok) {
+    throw new Error(body.message || "Weather request failed");
+  }
 
-### Quiz Answers
+  return body;
+}
+```
 
-1. To safely include spaces/special characters
-2. To avoid showing old error during new request
-3. Weather state (for example `weather`)
-4. Prevent request and ask user for valid input
-5. To show request progress and avoid confusion
+`URLSearchParams` handles query-string encoding safely and clearly.
 
-## Task
+## Request Race Conditions
 
-- Build full weather search app
-- Handle invalid city errors gracefully
-- Add one UI enhancement from mini exercise
+If the user searches `London` and immediately searches `Paris`, the London response could arrive after Paris. Without protection, stale London data could overwrite the newer Paris result.
 
-## Self Check
+Use `AbortController`:
 
-- You can build API-based mini project end to end
-- You can manage request states confidently
-- You can design practical user flows in React
+```jsx
+const controller = new AbortController();
 
-## Interview Questions and Answers
+try {
+  const result = await getWeather(city, controller.signal);
+} catch (error) {
+  if (error.name !== "AbortError") {
+    // show real failure
+  }
+}
+```
 
-### Beginner
+In a component, store the active controller in a ref or use an effect cleanup when the request is effect-driven. For submit-driven requests, a ref is a practical approach.
 
-**Question:** How do users trigger weather fetch?
+## Complete Core Implementation
 
-**Answer:** By entering city and clicking Search (or submit).
+```jsx
+import { useRef, useState } from "react";
 
-**Question:** What state stores API response?
+async function getWeather(city, signal) {
+  const params = new URLSearchParams({
+    q: city,
+    units: "metric",
+    appid: import.meta.env.VITE_WEATHER_API_KEY,
+  });
 
-**Answer:** A dedicated object state like `weather`.
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?${params}`,
+    { signal }
+  );
+  const body = await response.json();
 
-### Middle
+  if (!response.ok) {
+    throw new Error(body.message || "Unable to find that city");
+  }
 
-**Question:** Why reset previous result before new request?
+  return body;
+}
 
-**Answer:** To avoid showing stale data while new request is loading.
+export default function App() {
+  const [city, setCity] = useState("");
+  const [weather, setWeather] = useState(null);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState(null);
+  const [recentSearches, setRecentSearches] = useState([]);
+  const controllerRef = useRef(null);
 
-**Question:** How do you handle not-found city errors?
+  async function searchWeather(event, requestedCity = city) {
+    event?.preventDefault();
 
-**Answer:** Check response status and show readable error message.
+    const value = requestedCity.trim();
+    if (!value) {
+      setError("Enter a city name.");
+      setStatus("error");
+      return;
+    }
 
-### Advanced
+    controllerRef.current?.abort();
+    const controller = new AbortController();
+    controllerRef.current = controller;
 
-**Question:** How can you optimize repeated city searches?
+    setStatus("loading");
+    setError(null);
 
-**Answer:** Add caching strategy (manual or query library cache).
+    try {
+      const result = await getWeather(value, controller.signal);
+      setWeather(result);
+      setStatus("success");
 
-**Question:** Why should API key be in environment variables?
+      setRecentSearches((current) => [
+        value,
+        ...current.filter(
+          (item) => item.toLowerCase() !== value.toLowerCase()
+        ),
+      ].slice(0, 5));
+    } catch (error) {
+      if (error.name === "AbortError") return;
 
-**Answer:** To avoid hardcoding secrets in source files.
+      setWeather(null);
+      setError(error instanceof Error ? error.message : "Request failed");
+      setStatus("error");
+    }
+  }
+
+  return (
+    <main>
+      <h1>Weather App</h1>
+
+      <form onSubmit={searchWeather}>
+        <label htmlFor="city">City</label>
+        <input
+          id="city"
+          value={city}
+          onChange={(event) => setCity(event.target.value)}
+        />
+        <button type="submit" disabled={status === "loading"}>
+          {status === "loading" ? "Searching..." : "Search"}
+        </button>
+      </form>
+
+      {status === "idle" && <p>Search for a city to see its weather.</p>}
+      {status === "loading" && (
+        <p role="status" aria-live="polite">Loading weather...</p>
+      )}
+      {status === "error" && (
+        <section role="alert">
+          <p>{error}</p>
+          <button type="button" onClick={() => searchWeather(undefined, city)}>
+            Retry
+          </button>
+        </section>
+      )}
+      {status === "success" && weather && (
+        <article aria-label={`Weather for ${weather.name}`}>
+          <h2>{weather.name}</h2>
+          <p>{Math.round(weather.main.temp)}°C</p>
+          <p>{weather.weather[0].description}</p>
+          <p>Humidity: {weather.main.humidity}%</p>
+          <p>Wind: {weather.wind.speed} m/s</p>
+        </article>
+      )}
+
+      {recentSearches.length > 0 && (
+        <section>
+          <h2>Recent searches</h2>
+          <ul>
+            {recentSearches.map((item) => (
+              <li key={item}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCity(item);
+                    searchWeather(undefined, item);
+                  }}
+                >
+                  {item}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </main>
+  );
+}
+```
+
+## Important Implementation Note
+
+The `Retry` action above reuses the current input. In a production app, preserve the last successful request separately if the user is allowed to edit the input after a failure.
+
+Also, avoid calling `setCity` and immediately expecting `city` to contain the new value. React state updates are scheduled; pass the selected value directly to the request as shown.
+
+## Weather Data Presentation
+
+Prefer derived values:
+
+```jsx
+const temperature = Math.round(weather.main.temp);
+const condition = weather.weather[0]?.description ?? "Unknown";
+```
+
+Do not duplicate these as state unless they represent independently editable or externally controlled information.
+
+## Accessibility
+
+- label the search input
+- support Enter
+- expose loading with `role="status"`
+- expose errors with `role="alert"`
+- use meaningful button text
+- don't communicate weather state through color alone
+
+## Testing Checklist
+
+### Input
+
+- [ ] Empty city does not send a request
+- [ ] Spaces are trimmed
+- [ ] Enter submits
+
+### Success
+
+- [ ] City name renders
+- [ ] Temperature renders in the selected unit
+- [ ] Condition renders
+- [ ] Additional metrics render safely
+
+### Error
+
+- [ ] Invalid city produces an actionable message
+- [ ] Retry works
+- [ ] Previous error is cleared when a new request starts
+
+### Race conditions
+
+- [ ] Rapid searches do not allow stale results to overwrite newer results
+- [ ] Aborted requests do not show an error message
+
+### Recent searches
+
+- [ ] Maximum five are shown
+- [ ] Duplicate cities are collapsed
+- [ ] Clicking one searches it
+
+## Common Mistakes
+
+1. Hardcoding an API key in source.
+2. Forgetting `response.ok` because `fetch` resolves on HTTP 404/500.
+3. Showing old weather during a new search without deciding whether that is intended.
+4. Ignoring race conditions.
+5. Using a click-only search instead of a form.
+6. Storing derived temperature/condition as separate state.
+7. Using array indexes as recent-search keys when identity can be represented by the city value.
+
+## Extensions
+
+### Level 1
+
+- Celsius/Fahrenheit toggle
+- Weather icon
+- Min/max temperature
+
+### Level 2
+
+- Geolocation
+- Recent-search persistence
+- Debounced autocomplete
+- Query-library caching
+
+### Level 3
+
+- Backend proxy
+- Server-side API-key protection
+- Request deduplication
+- Offline fallback
+- Tests for request races
+
+## Assessment
+
+1. Why use `URLSearchParams`?
+2. Why doesn't `fetch` throw for HTTP 404 by default?
+3. Why is a browser API key not actually secret?
+4. Why does AbortController matter for rapid searches?
+5. Why is `status` often cleaner than four booleans?
+6. Why should recent searches be capped?
+7. Why should state not duplicate derived weather fields?
+8. How would you cache repeated city requests?
+
+## Interview Questions
+
+**How do you prevent stale search results?** Abort the previous request or associate each response with a request identity and ignore stale responses.
+
+**Why check `response.ok`?** Fetch resolves for many HTTP error responses; application code must decide what counts as success.
+
+**Should the API key be stored in `.env`?** Environment variables keep configuration out of committed source, but client-exposed variables are not secrets. Sensitive credentials require a server-side boundary.
+
+**Would you use useEffect for this search?** A submit-driven search is naturally an event-driven action. An effect is appropriate if the request is a synchronization with changing external state, such as a route/query parameter.
+
+## Final Acceptance Criteria
+
+- [ ] Controlled form
+- [ ] Validation
+- [ ] Idle/loading/success/error states
+- [ ] HTTP error handling
+- [ ] Abort/race protection
+- [ ] Accessible status UI
+- [ ] Recent searches
+- [ ] Stable keys
+- [ ] No duplicated derived state
+- [ ] No committed secret
+- [ ] Clear API boundary
 
 ## Day 28 Outcome
 
-- You built a practical weather mini project
-- You combined form handling and API state management
-- You are ready to use refs for direct DOM cases
+You can build an end-to-end API application while making deliberate decisions about state ownership, request lifecycle, cancellation, accessibility, security boundaries, and user experience.
+
+Day 29 moves from API state into `useRef` and imperative values.
