@@ -3,368 +3,326 @@ title: useCallback
 slug: day-032-usecallback
 dayLabel: Day 32
 level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 32
 track: react
 ---
----
-title: useCallback
-slug: day-032-usecallback
-dayLabel: Day 32
-level: Intermediate
-estimatedMinutes: 30
-order: 32
-track: react
----
-# Day 32 [Intermediate]: useCallback
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 32 Outcome](#day-32-outcome)
+# Day 32 [Intermediate]: `useCallback`
 
 ## Goal
 
-Use useCallback to keep function references stable and reduce unnecessary child re-renders.
+Understand **function identity**, when callback references cause child renders, how `useCallback` works with `React.memo`, and why blindly wrapping every handler is usually unnecessary.
 
 ## Prerequisites
 
-- Day 31 completed
-- Basic understanding of React.memo and props
+- Day 31: `useMemo`
+- props and state
+- parent/child rendering
+- `React.memo`
+- functional state updates
 
-## Explanation
+## 1. Function Identity
 
-When parent renders, inline functions get recreated. useCallback memoizes function references so memoized children can skip unnecessary re-renders.
-
-## Topic by Topic
-
-### Topic 1: Function Identity
-
-Theory:
-Functions are objects; new render usually creates new function references.
-
-Practical:
-Compare callback reference changes across renders.
-
-Code Example:
+Functions are objects. Creating a function during render normally creates a new reference.
 
 ```jsx
-const onClick = () => setCount((c) => c + 1);
+function Parent() {
+  const handleSave = () => console.log("save");
+  return <Child onSave={handleSave} />;
+}
 ```
 
-**Explanation:** This topic explains Function Identity in a practical way so you can apply it confidently in real React projects.
+On another render, `handleSave` normally has a different reference.
 
-**Key Points:**
+```text
+previous render: handleSave → function A
+next render:     handleSave → function B
+A !== B
+```
 
-- Understand the core idea of Function Identity.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+That matters when a child compares props by reference.
 
-### Topic 2: useCallback Basics
-
-Theory:
-useCallback memoizes function reference based on dependencies.
-
-Practical:
-Wrap event callback with dependency array.
-
-Code Example:
+## 2. What `useCallback` Does
 
 ```jsx
-const onIncrement = useCallback(() => setCount((c) => c + 1), []);
+const handleSave = useCallback(() => {
+  save(id);
+}, [id]);
 ```
 
-**Explanation:** This topic explains useCallback Basics in a practical way so you can apply it confidently in real React projects.
+It returns a memoized function reference that React can reuse while dependencies remain equal.
 
-**Key Points:**
+It does **not**:
 
-- Understand the core idea of useCallback Basics.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+- make the function execute automatically
+- make the function itself faster
+- prevent the parent from rendering
+- make every child memoized
 
-### Topic 3: React.memo + useCallback
-
-Theory:
-Stable callbacks matter most when passed to memoized children.
-
-Practical:
-Prevent child re-render when unrelated parent state changes.
-
-Code Example:
+## 3. The Important Combination: `React.memo` + `useCallback`
 
 ```jsx
-const Child = React.memo(({ onAction }) => (
-  <button onClick={onAction}>Run</button>
-));
+const SaveButton = React.memo(function SaveButton({ onSave }) {
+  console.log("SaveButton render");
+  return <button onClick={onSave}>Save</button>;
+});
 ```
 
-**Explanation:** This topic explains React.memo + useCallback in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of React.memo + useCallback.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 4: Dependency Safety
-
-Theory:
-Incorrect dependencies can cause stale closures.
-
-Practical:
-Include state references or use functional updates.
-
-Code Example:
+Without a stable callback, a parent render can give `SaveButton` a new function prop and defeat shallow prop comparison.
 
 ```jsx
-const add = useCallback(() => setItems((prev) => [...prev, "new"]), []);
+const onSave = useCallback(() => save(), []);
+<SaveButton onSave={onSave} />
 ```
 
-**Explanation:** This topic explains Dependency Safety in a practical way so you can apply it confidently in real React projects.
+Now an unrelated parent state update can potentially let the memoized child skip rendering.
 
-**Key Points:**
+## 4. `useCallback` Does Not Work Alone
 
-- Understand the core idea of Dependency Safety.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 5: Avoid Overusing useCallback
-
-Theory:
-Not every function needs memoization.
-
-Practical:
-Skip useCallback for local handlers not passed to memoized children.
-
-Code Example:
+This does not automatically solve a rendering problem:
 
 ```jsx
-const handleOpen = () => setOpen(true);
+const onSave = useCallback(() => save(), []);
+<NormalChild onSave={onSave} />
 ```
 
-**Explanation:** This topic explains Avoid Overusing useCallback in a practical way so you can apply it confidently in real React projects.
+If `NormalChild` is not memoized and its parent renders, it can still render.
 
-**Key Points:**
+Think:
 
-- Understand the core idea of Avoid Overusing useCallback.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+```text
+useCallback → stable function reference
+React.memo  → opportunity to skip child render
+Both        → useful optimization boundary
+```
 
-### Topic 6: Callback API Design for Teams
+## 5. Dependencies and Closures
 
-Theory:
-Clear callback names and payload contracts reduce misuse when many developers consume shared components.
-
-Practical:
-Prefer descriptive signatures like `onPageChange(nextPage)` over generic handlers.
-
-Code Example:
+This is wrong when `userId` can change:
 
 ```jsx
-const onPageChange = useCallback((nextPage) => setPage(nextPage), []);
+const handleSave = useCallback(() => save(userId), []);
 ```
 
-**Explanation:** This topic explains Callback API Design for Teams in a practical way so you can apply it confidently in real React projects.
+It can capture an old `userId`.
 
-**Key Points:**
-
-- Understand the core idea of Callback API Design for Teams.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-## Key Concepts
-
-- Stable function references
-- Parent-child render optimization
-- React.memo interaction
-- Dependency-safe callbacks
-- Practical memoization boundaries
-- Stable callback contracts
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Parent Render] --> B[Callback Reference]
-		B --> C{Stable?}
-		C -->|Yes| D[Child Can Skip Render]
-		C -->|No| E[Child Re-renders]
-```
-
-## End-to-End Practical
-
-1. Build parent with counter and theme states.
-2. Pass callback to memoized child.
-3. Observe re-render count without useCallback.
-4. Apply useCallback.
-5. Verify child re-render reduction.
-
-## Hands-on Coding
-
-### Example 1: Case - Memoized Action Button
-
-Scenario:
-An analytics dashboard has a heavy child card that should not re-render on theme toggles.
+Correct:
 
 ```jsx
-import React, { useCallback, useState } from "react";
+const handleSave = useCallback(() => save(userId), [userId]);
+```
 
-const HeavyCard = React.memo(function HeavyCard({ onRefresh }) {
-  console.log("HeavyCard rendered");
-  return <button onClick={onRefresh}>Refresh Data</button>;
+Or, if the callback only updates state from previous state, a functional update can remove a dependency:
+
+```jsx
+const addItem = useCallback((item) => {
+  setItems((current) => [...current, item]);
+}, []);
+```
+
+## 6. Dependency Safety Beats Empty Arrays
+
+Do not use `[]` simply to force stability. The dependency list describes what the callback reads from its render scope.
+
+Missing dependencies can create stale closures.
+
+## 7. `useCallback` and Custom Hooks
+
+A custom hook can expose stable actions when that is part of its API contract.
+
+```jsx
+function useCounter() {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => {
+    setCount((current) => current + 1);
+  }, []);
+
+  return { count, increment };
+}
+```
+
+Do this only when stable identity is useful to consumers. A custom hook does not need to memoize every returned function by default.
+
+## 8. `useCallback` vs `useMemo`
+
+```jsx
+const total = useMemo(() => calculateTotal(items), [items]);
+
+const save = useCallback(() => saveItems(items), [items]);
+```
+
+Equivalent mental model:
+
+```jsx
+const save = useMemo(() => () => saveItems(items), [items]);
+```
+
+`useCallback` is the readable API specifically for memoizing function references.
+
+## 9. When Not to Use It
+
+Prefer a normal function when:
+
+- the child is not memoized
+- the callback is not passed to a memoized child
+- there is no measured performance issue
+- the dependency complexity makes the code harder to understand
+
+Premature memoization can increase cognitive overhead without meaningful benefit.
+
+## 10. Complete Example
+
+```jsx
+import { memo, useCallback, useState } from "react";
+
+const ActionPanel = memo(function ActionPanel({ onAdd }) {
+  console.log("ActionPanel rendered");
+  return (
+    <button type="button" onClick={() => onAdd("React")}>Add</button>
+  );
 });
 
 function App() {
+  const [items, setItems] = useState([]);
   const [theme, setTheme] = useState("light");
-  const [count, setCount] = useState(0);
 
-  const onRefresh = useCallback(() => {
-    setCount((c) => c + 1);
+  const addItem = useCallback((value) => {
+    setItems((current) => [...current, value]);
   }, []);
 
   return (
-    <div>
-      <button
-        onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-      >
-        Toggle Theme
+    <main>
+      <button type="button" onClick={() => setTheme((t) => t === "light" ? "dark" : "light")}>
+        Theme: {theme}
       </button>
-      <p>Theme: {theme}</p>
-      <p>Refresh Count: {count}</p>
-      <HeavyCard onRefresh={onRefresh} />
-    </div>
+      <p>Items: {items.length}</p>
+      <ActionPanel onAdd={addItem} />
+    </main>
   );
 }
 ```
 
-### Example 2: Case - Task List Add Callback
+Changing `theme` does not change `addItem`'s reference, so the memoized child has an opportunity to skip its render.
 
-Scenario:
-A task composer passes addTask callback into memoized input toolbar.
+## 11. Callback API Design
 
-```jsx
-import { useCallback, useState } from "react";
-
-function App() {
-  const [tasks, setTasks] = useState([]);
-
-  const addTask = useCallback((text) => {
-    setTasks((prev) => [...prev, { id: Date.now(), text }]);
-  }, []);
-
-  return <TaskToolbar onAdd={addTask} taskCount={tasks.length} />;
-}
-```
-
-### Example 3: Case - Filter Toggle Callback
-
-Scenario:
-A report view passes toggle callback to filter panel component.
+Prefer explicit contracts:
 
 ```jsx
-import { useCallback, useState } from "react";
-
-function ReportPage() {
-  const [onlyOpen, setOnlyOpen] = useState(false);
-
-  const onToggleOpen = useCallback(() => {
-    setOnlyOpen((v) => !v);
-  }, []);
-
-  return <FilterPanel onlyOpen={onlyOpen} onToggleOpen={onToggleOpen} />;
-}
+<DataTable
+  onPageChange={handlePageChange}
+  onSortChange={handleSortChange}
+  onRowSelect={handleRowSelect}
+/>
 ```
 
-## Mini Exercise
+rather than one generic callback with an ambiguous payload.
 
-Scenario:
-You are building a product admin screen with memoized ProductTable child.
+A stable reference is useful, but a **clear API is more important than memoization**.
 
-Pass callbacks for refresh, sort, and clear filters using useCallback so ProductTable re-renders only when required.
+## 12. Common Mistakes
 
-Expected output:
+### Mistake 1: `useCallback` everywhere
 
-- Child render count decreases
-- Callback references stay stable
-- No stale values inside callbacks
+Memoizing ten handlers does not automatically make an application fast.
 
-## Assessment Quiz
+### Mistake 2: Missing dependencies
 
-### Quiz Questions
+Can produce stale closures.
 
-1. What does useCallback memoize?
-2. When does useCallback give most benefit?
-3. True or False: useCallback replaces useEffect.
-4. Why combine useCallback with React.memo?
-5. What risk comes from missing callback dependencies?
+### Mistake 3: Assuming stable callback means stable child
 
-### Quiz Answers
+Other props can still change.
 
-1. Function reference
-2. When passing callbacks to memoized children
-3. False
-4. Prevent unnecessary child renders from new function refs
-5. Stale closure bugs
+### Mistake 4: Mutating state inside callback
 
-## Task
+```jsx
+items.push(item);
+setItems(items);
+```
 
-- Build parent-child callback flow
-- Use React.memo child + useCallback parent handler
-- Complete mini exercise
+Use a functional immutable update instead.
+
+### Mistake 5: Using callback for side effects during render
+
+A callback is an event/imperative action. It is not a replacement for `useEffect`.
+
+## 13. Debugging Render Optimization
+
+Add temporary render markers:
+
+```jsx
+console.count("ActionPanel render");
+```
+
+Then change one parent state variable at a time.
+
+Use React DevTools Profiler to identify whether the child render is actually expensive and whether memoization changes the result.
+
+## Hands-on Labs
+
+### Lab 1 — Reference Test
+Log a callback before and after an unrelated parent state update. Compare behavior with and without `useCallback`.
+
+### Lab 2 — Memoized Child
+Wrap the child with `memo`, then verify whether theme changes still render it.
+
+### Lab 3 — Stale Closure
+Intentionally remove a dependency and demonstrate the incorrect value. Restore the dependency or redesign with a functional update.
+
+### Lab 4 — Remove Optimization
+Take a working `useCallback` example and remove it. Decide whether the resulting difference is important enough to justify the complexity.
+
+## Assessment
+
+1. What does `useCallback` memoize?
+2. Does it stop parent renders?
+3. Why is `React.memo` often relevant?
+4. What is a stale closure?
+5. How can functional updates reduce dependencies?
+6. Why can overusing `useCallback` be harmful?
+7. When should a custom hook return memoized callbacks?
+8. How would you verify the optimization?
+
+## Interview Questions
+
+**Q: Why does a memoized child care about callback identity?**  
+Because `React.memo` compares props and a newly created function is a different reference.
+
+**Q: Is `useCallback` useful if the child is not memoized?**  
+Usually it provides little render-skipping value for that child. There may be other API-specific reasons, but do not assume it is needed.
+
+**Q: What is the safest way to update state from a memoized callback?**  
+Use a functional state update when the next value depends on previous state.
+
+**Q: Can `useCallback` make a slow function fast?**  
+No. It memoizes the function reference; it does not optimize the function's algorithm.
+
+**Q: How do `useMemo`, `useCallback`, and `React.memo` differ?**  
+`useMemo` caches a calculated value, `useCallback` caches a function reference, and `React.memo` can skip a component render when its props are considered unchanged.
+
+## Final Project
+
+Build a **Memoized Admin Dashboard**:
+
+- parent theme state
+- memoized table
+- memoized row actions
+- stable callbacks
+- 1,000+ rows
+- Profiler comparison
+- a written explanation of which memoization was justified
 
 ## Self Check
 
-- You can stabilize callback references correctly
-- You can optimize re-render behavior thoughtfully
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** What is useCallback used for?
-
-**Answer:** Memoizing function references between renders.
-
-**Question:** Does useCallback execute function immediately?
-
-**Answer:** No, it returns a memoized function.
-
-### Middle
-
-**Question:** Why can inline callbacks cause extra child renders?
-
-**Answer:** New function references are created every render.
-
-**Question:** What is a safe pattern to avoid stale state in callbacks?
-
-**Answer:** Use functional state updates or correct dependencies.
-
-### Advanced
-
-**Question:** How do you decide between useMemo and useCallback?
-
-**Answer:** useMemo memoizes values, useCallback memoizes function references.
-
-**Question:** Why should optimization be evidence-driven?
-
-**Answer:** Premature memoization adds complexity without guaranteed gain.
+- [ ] I understand function reference identity.
+- [ ] I can explain why `React.memo` and `useCallback` often work together.
+- [ ] I can write correct dependency arrays.
+- [ ] I understand stale closures.
+- [ ] I know when not to use `useCallback`.
+- [ ] I can measure before claiming a performance improvement.
 
 ## Day 32 Outcome
 
-- You can apply useCallback in real parent-child optimization scenarios
-- You can avoid stale callbacks while improving performance
-- You are ready to extract reusable logic with custom hooks in Day 33
-
+You can now reason about callback identity and memoized child rendering. Day 33 moves from individual optimizations to **reusable stateful logic with custom hooks**.
