@@ -3,393 +3,197 @@ title: Managing Multiple States
 slug: day-009-managing-multiple-states
 dayLabel: Day 9
 level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 9
 track: react
 ---
-# Day 9 [Intermediate]: Managing Multiple States
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 9 Outcome](#day-9-outcome)
+# Day 9: Managing Multiple States
 
 ## Goal
 
-Manage multiple independent and related state values in the same component.
+Learn how to design several state values without redundant data, stale updates, or confusing state boundaries.
 
 ## Prerequisites
 
-- Day 8 completed
-- useState updates clear
+Days 1–8, especially `useState`, props, events, and controlled inputs.
 
-## Explanation
+## 1. Multiple `useState` Values
 
-Real forms and dashboards usually require several state variables. Good state design keeps logic clear.
-
-## Topic by Topic
-
-### Topic 1: Independent State Variables
-
-Theory:
-Use separate state variables for unrelated data.
-
-Practical:
-Create name and email states separately.
-
-Code Example:
-
-Code Example:
+Use separate state when values have independent meaning or update independently.
 
 ```jsx
 const [name, setName] = useState("");
 const [email, setEmail] = useState("");
+const [isOpen, setIsOpen] = useState(false);
 ```
 
-**Explanation:** Use separate `useState` calls for unrelated data. Each state is independent - changing `name` doesn't affect `email`. This keeps each state focused.
+The existence of multiple state variables is not a problem. **Good state modeling** is the goal.
 
-**Key Points:**
+## 2. Controlled Inputs
 
-- Multiple useState calls for unrelated data
-- Each state is independent
-- No connection between separate states
-- Simpler to understand and manage
-
-### Topic 2: Form Inputs and State
-
-Theory:
-Controlled inputs sync UI value with state.
-
-Practical:
-Bind input value and onChange handler.
-
-Code Example:
-
-Code Example:
+A controlled input gets its displayed value from React state and reports changes through an event.
 
 ```jsx
-<input value={name} onChange={(e) => setName(e.target.value)} />
+<input
+  value={name}
+  onChange={(event) => setName(event.target.value)}
+/>
 ```
 
-**Explanation:** This is a **controlled input** - React controls the input value via state. When the user types, `onChange` updates state, which updates the input. This makes React the "source of truth".
+Flow:
 
-**Key Points:**
-
-- Controlled inputs sync state with UI
-- `value={state}` displays current state
-- `onChange` handler updates state
-- React is always the "source of truth"
-
-### Topic 3: Derived Display
-
-Theory:
-Display values using current state snapshot.
-
-Practical:
-Show live preview under form fields.
-
-Code Example:
-
-Code Example:
-
-```jsx
-<p>Name: {name}</p>
-<p>Email: {email}</p>
+```text
+User input → event → setter → new render → updated input
 ```
 
-**Explanation:** Displaying state directly updates instantly. As the user types into inputs, the state updates, and the preview refreshes automatically. This gives immediate feedback.
+## 3. State vs Derived Data
 
-**Key Points:**
-
-- Display state anywhere in JSX
-- Updates automatically on state changes
-- No manual re-render needed
-- Provides live feedback to users
-
-### Topic 4: Reset Pattern
-
-Theory:
-Resetting multiple states is common in forms.
-
-Practical:
-Add clear button to reset all values.
-
-Code Example:
-
-```jsx
-// Reset all states to initial values in one action
-<button
-  onClick={() => {
-    setName("");
-    {
-      /* Clear name */
-    }
-    setEmail("");
-    {
-      /* Clear email */
-    }
-    setCity("");
-    {
-      /* Clear city */
-    }
-  }}
->
-  Clear
-</button>
-```
-
-**Explanation:** Resetting multiple states together is common in forms. A single function calls multiple setters. This clears the form completely.
-
-**Key Points:**
-
-- Reset related fields in one user action.
-- Multiple setters can run in the same handler.
-- Keep reset logic easy to find and reuse.
-
-### Topic 5: Planning State Boundaries
-
-Theory:
-Keep state minimal and meaningful.
-
-Practical:
-Avoid storing values that can be derived.
-
-Code Example:
-
-Code Example:
+Do not store a value that can be calculated from existing state unless there is a deliberate reason.
 
 ```jsx
 const [firstName, setFirstName] = useState("");
 const [lastName, setLastName] = useState("");
 
-const fullName = `${firstName} ${lastName}`;
+const fullName = `${firstName} ${lastName}`.trim();
 ```
 
-**Explanation:** If a value can be calculated from other state, don't store it separately. Derived values reduce state complexity and eliminate sync issues (you never have stale data).
+Avoid creating another `fullName` state by default. Two sources of truth can become inconsistent.
 
-**Key Points:**
+## 4. Functional Updates
 
-- Don't duplicate data in state
-- Compute derived values on the fly
-- Prevents inconsistency and bugs
-- Keeps state minimal and focused
-
-### Topic 6: Split State vs Group State
-
-Theory:
-Use separate state for unrelated values, but group values that are always updated together.
-
-Practical:
-Keep UI toggles separate, and keep profile fields in one object when they belong to one form.
-
-Code Example:
+When the next state depends on the previous state, use the functional form.
 
 ```jsx
-const [isOpen, setIsOpen] = useState(false); // unrelated UI state
+setCount((current) => current + 1);
+setCount((current) => current + 1);
+```
+
+This is especially important when several updates are queued in the same event.
+
+## 5. Resetting Several Values
+
+Keep initial values explicit and make reset behavior predictable.
+
+```jsx
+const initialForm = { name: "", email: "", city: "" };
+const [form, setForm] = useState(initialForm);
+
+function resetForm() {
+  setForm(initialForm);
+}
+```
+
+Object-state updates are covered deeply on Day 10.
+
+## 6. Separate State vs Grouped State
+
+Both approaches are valid.
+
+```jsx
+const [firstName, setFirstName] = useState("");
+const [lastName, setLastName] = useState("");
+```
+
+or:
+
+```jsx
 const [profile, setProfile] = useState({ firstName: "", lastName: "" });
 ```
 
-**Explanation:** Separate unrelated state values, but group values that naturally belong together. This balance keeps state design practical and readable.
+Choose based on relationships and update patterns—not on a blanket rule.
 
-**Key Points:**
+## 7. Avoid Impossible State Combinations
 
-- Split unrelated UI state.
-- Group tightly related form or entity data.
-- Let the update pattern guide the choice.
+Instead of several booleans that can contradict one another:
 
-## Key Concepts
-
-- Multiple useState hooks
-- Controlled inputs
-- Reset workflow
-- Derived values
-- State design decisions
-- Split vs grouped state strategy
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-    A[Component] --> B[Name State]
-    A --> C[Email State]
-    A --> D[Phone State]
-    B --> E[Live Preview]
-    C --> E
-    D --> E
+```jsx
+const [status, setStatus] = useState("idle");
 ```
 
-## End-to-End Practical
+Possible values can be `idle`, `loading`, `success`, and `error`. A single status can make mutually exclusive UI states easier to reason about.
 
-1. Create three state values.
-2. Connect each to one input.
-3. Display live preview.
-4. Add reset action.
+## 8. State Ownership
 
-## Hands-on Coding
+Ask **which component should own the source of truth?** Keep state close to where it is used. If sibling components need the same data, the state may need to move to their common parent. This prepares you for lifting state up.
 
-### Example 1: Case - Registration Form Inputs
-
-Scenario:
-An event signup screen collects name, email, and city in separate state values.
+## Real-World Example
 
 ```jsx
 import { useState } from "react";
 
-function App() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
+const initialForm = { name: "", email: "", city: "" };
+
+export default function RegistrationForm() {
+  const [form, setForm] = useState(initialForm);
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  }
 
   return (
-    <div>
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        placeholder="City"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
-      <p>
-        {name} | {email} | {city}
-      </p>
-    </div>
+    <form onSubmit={(event) => event.preventDefault()}>
+      <input name="name" value={form.name} onChange={handleChange} />
+      <input name="email" value={form.email} onChange={handleChange} />
+      <input name="city" value={form.city} onChange={handleChange} />
+      <p>{`${form.name} — ${form.city}`}</p>
+      <button type="button" onClick={() => setForm(initialForm)}>
+        Reset
+      </button>
+    </form>
   );
 }
 ```
 
-### Example 2: Case - Clear Form Button
+## Common Mistakes
 
-Scenario:
-The same registration screen needs a reset button that clears all fields at once.
+- Storing derived values unnecessarily.
+- Using `setCount(count + 1)` when the next value depends on previous state in repeated updates.
+- Creating many booleans for mutually exclusive states.
+- Putting all state into one giant object without a reason.
+- Putting shared state in a child when multiple siblings need it.
+- Treating a normal constant as state when changing it does not need to update the UI.
 
-```jsx
-<button
-  onClick={() => {
-    setName("");
-    setEmail("");
-    setCity("");
-  }}
->
-  Reset Form
-</button>
-```
+## Hands-on Lab
 
-### Example 3: Case - Live Profile Preview
+Build a **Student Registration Panel** with name, email, city, course, open/closed UI state, submit status, live preview, and reset.
 
-Scenario:
-A profile setup page shows a preview card while the user types into multiple inputs.
+Acceptance criteria:
 
-```jsx
-function ProfilePreview({ name, email, city }) {
-  return (
-    <div
-      style={{ border: "1px solid #ddd", padding: "12px", marginTop: "12px" }}
-    >
-      <h3>{name || "Your Name"}</h3>
-      <p>{email || "Your Email"}</p>
-      <p>{city || "Your City"}</p>
-    </div>
-  );
-}
-```
+- Three or more controlled inputs.
+- One independent boolean state.
+- One derived value.
+- Functional update where previous state is required.
+- No redundant state.
+- Reset restores the initial UI.
 
-## Mini Exercise
+## Assessment
 
-Scenario:
-You are building a registration widget with live preview.
+1. When should state be split?
+2. What makes an input controlled?
+3. Why avoid redundant state?
+4. When should functional updates be used?
+5. Why can one `status` value be better than several booleans?
+6. When should state move to a parent?
 
-Build a registration form with states: firstName, lastName, email, phone, and show a profile preview card.
+**Answers:** independent meaning; React-driven `value`; to avoid multiple sources of truth; when next state depends on previous state; it prevents contradictory combinations; when multiple components need the same source of truth.
 
-Expected output:
+## Interview Questions
 
-- Four controlled inputs connected to state
-- Live preview updates instantly
-- Reset button clears all fields
+**Can a component use multiple `useState` hooks?** Yes.
 
-## Assessment Quiz
+**Should every form use one object?** No. Both separate and grouped state are valid.
 
-### Quiz Questions
+**What is derived data?** A value calculated from existing props/state.
 
-1. Why use separate state variables?
-2. What is a controlled input?
-3. True or False: You should store derived fullName separately in state by default.
-4. How do you reset multiple states?
-5. Which is easier to maintain: meaningful state names or generic names?
+**Why avoid redundant state?** It can become inconsistent and needs synchronization.
 
-### Quiz Answers
-
-1. Clearer responsibility and easier updates
-2. Input controlled by React state value
-3. False
-4. Call each setter with initial value
-5. Meaningful names
-
-## Task
-
-- Build form with at least 3 state values
-- Add live preview and reset button
-- Complete mini exercise
+**Why use functional updates?** They calculate from the latest queued state when the next value depends on previous state.
 
 ## Self Check
 
-- You can manage multiple state values correctly
-- You can build controlled forms confidently
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** Can one component use multiple states?
-
-**Answer:** Yes.
-
-**Question:** Why connect input value to state?
-
-**Answer:** To keep React as source of truth.
-
-### Middle
-
-**Question:** What is a controlled component?
-
-**Answer:** Form element whose value is driven by React state.
-
-**Question:** How to reset complex forms?
-
-**Answer:** Reset each state or reset one state object to initial values.
-
-### Advanced
-
-**Question:** How do you decide whether to split or combine states?
-
-**Answer:** Split unrelated state; combine tightly related fields when updates are coordinated.
-
-**Question:** What anti-pattern exists with redundant state?
-
-**Answer:** Storing derivable values increases inconsistency risk.
+Explain why each state value exists in your lab. If you cannot explain a state variable's ownership or why it cannot simply be derived, redesign it.
 
 ## Day 9 Outcome
 
-- You can build multi-state forms
-- You can design cleaner state boundaries
-- You are ready for object state handling in Day 10
+You can model multiple state values, controlled inputs, derived values, reset behavior, state ownership, and safe previous-state updates.
