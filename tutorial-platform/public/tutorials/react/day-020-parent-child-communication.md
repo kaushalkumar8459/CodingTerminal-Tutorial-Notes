@@ -2,278 +2,211 @@
 title: Parent-Child Communication
 slug: day-020-parent-child-communication
 dayLabel: Day 20
-level: Beginner
-estimatedMinutes: 30
+level: Intermediate
+estimatedMinutes: 60
 order: 20
 track: react
 ---
-# Day 20 [Beginner to Intermediate]: Parent-Child Communication
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 20 Outcome](#day-20-outcome)
+# Day 20: Parent-Child Communication
 
 ## Goal
 
-Master parent-child communication where parents send data via props and children send actions upward via callbacks.
+Master React's parent-child communication model: parent-to-child props, child-to-parent callbacks, payload design, controlled components, event boundaries, and component API contracts. Learn how to keep state ownership clear without creating tightly coupled components.
 
 ## Prerequisites
 
-- Day 19 completed
-- Good understanding of props and state
+- Days 1–19 completed
+- Comfortable with props, state, events, lists, and lifting state up
 
-## Explanation
+## Core Mental Model
 
-React data flow is primarily top-down. Children communicate upward by calling functions provided by parent components.
+React communication is primarily top-down:
 
-## Topic by Topic
-
-### Topic 1: Parent to Child via Props
-
-Theory:
-Parent passes values to child for display or behavior.
-
-Practical:
-Send task title to TaskItem.
-
-Code Example:
-
-```jsx
-<TaskItem title={task.title} />
+```text
+Parent state
+    │
+    │ props / values
+    ▼
+Child
+    │
+    │ callback / intent
+    ▼
+Parent state update
 ```
 
-**Explanation:** Parent sends data to child using props, and child uses that data for display.
+A child does not directly mutate a parent's state. The parent exposes a function or callback contract, and the child invokes it when an action occurs.
 
-**Key Points:**
-
-- Props are the main parent-to-child channel.
-- Parent controls what data is passed.
-- Child stays reusable with clear inputs.
-
-### Topic 2: Child to Parent via Callback
-
-Theory:
-Parent passes function, child calls it on action.
-
-Practical:
-TaskItem calls onDelete(id).
-
-Code Example:
+## 1. Parent to Child: Props
 
 ```jsx
-<TaskItem onDelete={handleDelete} />
-```
-
-**Explanation:** Parent passes a function prop. Child calls that function to notify parent about an action.
-
-**Key Points:**
-
-- Callback enables upward communication.
-- Parent owns state update logic.
-- Child only triggers intent.
-
-### Topic 3: Parameterized Child Actions
-
-Theory:
-Children can pass payload like id, status, or value.
-
-Practical:
-Send task id from child button click.
-
-Code Example:
-
-```jsx
-<button onClick={() => onDelete(task.id)}>Delete</button>
-```
-
-**Explanation:** Child sends item-specific data (`task.id`) when the user clicks delete.
-
-**Key Points:**
-
-- Arrow function passes custom payload.
-- Parent can target exact item.
-- Useful for list actions.
-
-### Topic 4: Event + Data Payload Pattern
-
-Theory:
-You may pass both event context and business payload.
-
-Practical:
-Send selected role from child selector.
-
-Code Example:
-
-```jsx
-onRoleChange(user.id, e.target.value);
-```
-
-**Explanation:** Callback sends both business id and selected value, so parent has complete context.
-
-**Key Points:**
-
-- Payload can include multiple values.
-- Parent logic becomes more precise.
-- Keep payload structure predictable.
-
-### Topic 5: Avoiding Prop Drilling Pitfalls
-
-Theory:
-Deep callback chains can become hard to maintain.
-
-Practical:
-Refactor shared handlers in nearest common parent.
-
-Code Example:
-
-```jsx
-<TaskSection tasks={tasks} onDeleteTask={handleDeleteTask} />
-```
-
-**Explanation:** Keep handlers near the shared state owner and pass only what lower components need.
-
-**Key Points:**
-
-- Avoid passing unrelated props deeply.
-- Group related communication in nearby parent.
-- Refactor when prop chains become too long.
-
-### Topic 6: Callback Contract Design
-
-Theory:
-Stable callback names and payload shapes make child components easier to reuse and test.
-
-Practical:
-Use clear APIs like `onStatusChange(taskId, nextStatus)` instead of ambiguous handlers.
-
-Code Example:
-
-```jsx
-<TaskItem onStatusChange={(id, status) => updateTask(id, status)} />
-```
-
-**Explanation:** Clear callback names and parameter order make component APIs easy to understand and reuse.
-
-**Key Points:**
-
-- Use meaningful callback names.
-- Keep payload shape consistent.
-- Better contracts reduce integration bugs.
-
-## Key Concepts
-
-- Top-down props flow
-- Upward callbacks
-- Payload-based actions
-- Parent-owned state updates
-- Scalable communication patterns
-- Clear callback contracts
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Parent State] -->|props| B[Child Component]
-		B -->|callback payload| A
-		A --> C[Updated UI]
-```
-
-## End-to-End Practical
-
-1. Store tasks in parent state.
-2. Render TaskItem child for each task.
-3. Pass onComplete and onDelete callbacks.
-4. Trigger callbacks from child buttons.
-5. Update parent list and re-render.
-
-## Hands-on Coding
-
-### Example 1: Case - Task Complete/Delete Actions
-
-Scenario:
-A todo app needs each task row to notify parent when complete or delete is clicked.
-
-```jsx
-import { useState } from "react";
-
-function TaskItem({ task, onComplete, onDelete }) {
+function UserCard({ name, role }) {
   return (
-    <div>
-      <span>
-        {task.title} - {task.done ? "Done" : "Pending"}
-      </span>
-      <button onClick={() => onComplete(task.id)}>Complete</button>
-      <button onClick={() => onDelete(task.id)}>Delete</button>
-    </div>
+    <article>
+      <h2>{name}</h2>
+      <p>{role}</p>
+    </article>
   );
 }
 
 function App() {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Read docs", done: false },
-    { id: 2, title: "Build app", done: false },
-  ]);
-
-  const completeTask = (id) => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, done: true } : t)),
-    );
-  };
-
-  const deleteTask = (id) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
-  };
-
-  return tasks.map((task) => (
-    <TaskItem
-      key={task.id}
-      task={task}
-      onComplete={completeTask}
-      onDelete={deleteTask}
-    />
-  ));
+  return <UserCard name="Asha" role="Frontend Developer" />;
 }
 ```
 
-### Example 2: Case - Product Card Add-to-Cart Callback
+Props define the child's input API.
 
-Scenario:
-An ecommerce product card sends selected product id back to parent cart manager.
+## 2. Child to Parent: Callback Props
+
+The parent owns the state:
 
 ```jsx
-function ProductCard({ product, onAddToCart }) {
+function App() {
+  const [message, setMessage] = useState("");
+
+  const handleSelect = (value) => {
+    setMessage(`Selected: ${value}`);
+  };
+
+  return <Selector onSelect={handleSelect} />;
+}
+```
+
+The child invokes the callback:
+
+```jsx
+function Selector({ onSelect }) {
   return (
-    <div>
-      <p>{product.name}</p>
-      <button onClick={() => onAddToCart(product.id)}>Add to Cart</button>
-    </div>
+    <button type="button" onClick={() => onSelect("React")}>
+      Select React
+    </button>
   );
 }
 ```
 
-### Example 3: Case - Child Filter Controls Parent Table
+The child is communicating **intent**; the parent decides what state change should happen.
 
-Scenario:
-A filter panel child sends selected department to parent table view.
+## 3. Never Call the Callback During Render
+
+Incorrect:
 
 ```jsx
-function FilterPanel({ onFilterChange }) {
+<button onClick={onSelect("React")}>Select</button>
+```
+
+This executes immediately while rendering.
+
+Correct:
+
+```jsx
+<button onClick={() => onSelect("React")}>Select</button>
+```
+
+The function is invoked later by the event.
+
+## 4. Passing Payloads
+
+List actions usually need an identifier:
+
+```jsx
+<button type="button" onClick={() => onDelete(task.id)}>
+  Delete
+</button>
+```
+
+The parent can then update the authoritative collection:
+
+```jsx
+const handleDelete = (id) => {
+  setTasks((current) => current.filter((task) => task.id !== id));
+};
+```
+
+## 5. Designing Callback Contracts
+
+Prefer meaningful APIs:
+
+```jsx
+<TaskItem
+  task={task}
+  onDelete={handleDelete}
+  onStatusChange={handleStatusChange}
+/>
+```
+
+over vague contracts:
+
+```jsx
+<TaskItem onChange={doSomething} />
+```
+
+Good callback names communicate intent.
+
+Examples:
+
+- `onDelete(taskId)`
+- `onSelect(productId)`
+- `onStatusChange(taskId, nextStatus)`
+- `onQuantityChange(productId, quantity)`
+
+## 6. Payload Shape
+
+For simple actions, positional arguments can be clear:
+
+```jsx
+onStatusChange(task.id, "done");
+```
+
+For complex domain actions, an object can make the contract easier to extend:
+
+```jsx
+onStatusChange({
+  taskId: task.id,
+  nextStatus: "done",
+});
+```
+
+Choose one convention and keep it consistent within the component API.
+
+## 7. Controlled Components
+
+A parent-controlled input exposes a value and change callback:
+
+```jsx
+function SearchInput({ value, onChange }) {
   return (
-    <select onChange={(e) => onFilterChange(e.target.value)}>
-      <option value="all">All</option>
+    <input
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+    />
+  );
+}
+```
+
+The parent:
+
+```jsx
+function App() {
+  const [query, setQuery] = useState("");
+
+  return <SearchInput value={query} onChange={setQuery} />;
+}
+```
+
+This is a reusable communication contract.
+
+## 8. Event + Business Data
+
+Sometimes the child needs to translate a browser event into a domain action:
+
+```jsx
+function DepartmentSelect({ employeeId, onDepartmentChange }) {
+  return (
+    <select
+      value="Engineering"
+      onChange={(event) =>
+        onDepartmentChange(employeeId, event.target.value)
+      }
+    >
       <option value="HR">HR</option>
       <option value="Engineering">Engineering</option>
     </select>
@@ -281,83 +214,281 @@ function FilterPanel({ onFilterChange }) {
 }
 ```
 
-## Mini Exercise
+The parent receives business data rather than needing to know about the child's DOM event implementation.
 
-Scenario:
-You are building a classroom assignment board.
+## 9. Parent Should Own Business State
 
-Create AssignmentItem child components where each child can mark assignment complete and request removal through parent callbacks.
+A child should not be responsible for deleting an item from the parent's array simply because it renders the delete button.
 
-Expected output:
+```jsx
+function TaskItem({ task, onDelete }) {
+  return (
+    <button type="button" onClick={() => onDelete(task.id)}>
+      Delete {task.title}
+    </button>
+  );
+}
+```
 
-- Parent owns assignment list state
-- Child triggers complete/delete actions upward
-- Parent updates list correctly
+This makes `TaskItem` reusable in different lists because it communicates an action rather than owning the collection.
+
+## 10. Full Task Example
+
+```jsx
+import { useState } from "react";
+
+function TaskItem({ task, onComplete, onDelete }) {
+  return (
+    <li>
+      <span>
+        {task.title} — {task.done ? "Done" : "Pending"}
+      </span>
+      <button
+        type="button"
+        onClick={() => onComplete(task.id)}
+        disabled={task.done}
+      >
+        Complete
+      </button>
+      <button type="button" onClick={() => onDelete(task.id)}>
+        Delete
+      </button>
+    </li>
+  );
+}
+
+export default function App() {
+  const [tasks, setTasks] = useState([
+    { id: 1, title: "Read docs", done: false },
+    { id: 2, title: "Build app", done: false },
+  ]);
+
+  const completeTask = (id) => {
+    setTasks((current) =>
+      current.map((task) =>
+        task.id === id ? { ...task, done: true } : task,
+      ),
+    );
+  };
+
+  const deleteTask = (id) => {
+    setTasks((current) => current.filter((task) => task.id !== id));
+  };
+
+  return (
+    <main>
+      <h1>Tasks</h1>
+      <ul>
+        {tasks.map((task) => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            onComplete={completeTask}
+            onDelete={deleteTask}
+          />
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+## 11. Sibling Communication
+
+Children should normally not communicate by directly finding each other. If two siblings need to coordinate, place their shared state in the parent:
+
+```text
+          Parent
+        /         \
+   InputChild   PreviewChild
+       │             ▲
+       └─ callback ──┘
+```
+
+This connects directly to Day 19's lifting-state-up pattern.
+
+## 12. Prop Drilling
+
+Passing a prop through one or two layers is normal. It becomes a design concern when intermediate components receive and forward many props they do not use:
+
+```text
+App
+ ↓
+Layout
+ ↓
+Panel
+ ↓
+Section
+ ↓
+Button
+```
+
+Possible solutions:
+
+- move the consumer closer to the owner
+- use composition
+- use Context for broadly shared values
+- use a dedicated state solution when the application actually needs it
+
+Do not treat prop drilling as automatically bad.
+
+## 13. Composition Can Reduce Communication Complexity
+
+Instead of passing many layout-specific props through intermediate components, sometimes pass the content itself:
+
+```jsx
+function Panel({ header, children }) {
+  return (
+    <section>
+      <header>{header}</header>
+      <div>{children}</div>
+    </section>
+  );
+}
+```
+
+This is often cleaner than creating a long chain of configuration props.
+
+## 14. Ref vs Callback Communication
+
+Do not use refs as a replacement for normal parent-child data flow. Props and callbacks are the default communication model. Refs are appropriate for imperative operations such as focusing an input or interacting with a DOM node.
+
+This distinction becomes important later when learning `useRef` and imperative APIs.
+
+## 15. Accessibility and Communication
+
+Use semantic controls when emitting actions:
+
+```jsx
+<button type="button" onClick={onDelete}>
+  Delete
+</button>
+```
+
+Avoid making a non-interactive `<div>` behave like a button unless there is a strong reason. Communication design includes accessible interaction design.
+
+## Common Mistakes
+
+### Calling a callback immediately
+
+Use a function wrapper when arguments are required.
+
+### Passing raw setters everywhere
+
+`onSelectProduct` often communicates intent more clearly than exposing `setSelectedProduct` to deeply nested children.
+
+### Child owns parent collection logic
+
+Keep collection ownership in the component responsible for the collection.
+
+### Callback API is ambiguous
+
+Prefer names and payloads that describe the business action.
+
+### Overusing Context
+
+First determine whether normal props, composition, or better state placement solve the problem.
+
+### Using refs for normal data flow
+
+Use props and callbacks for declarative communication.
+
+## End-to-End Mini Project: Task Manager
+
+Requirements:
+
+- Parent owns task array.
+- Child displays one task.
+- Child can request complete/delete.
+- Parent performs immutable updates.
+- List uses stable IDs as keys.
+- Add-task form uses a callback contract.
+- Empty state is displayed when no tasks remain.
+
+### Acceptance Criteria
+
+- [ ] Parent owns business state.
+- [ ] Child receives data through props.
+- [ ] Child emits actions through callbacks.
+- [ ] Callback names describe intent.
+- [ ] Payloads contain enough information for the parent.
+- [ ] No direct child mutation of parent state.
+- [ ] Stable list keys are used.
+- [ ] Buttons are semantic and accessible.
 
 ## Assessment Quiz
 
-### Quiz Questions
+1. How does a parent pass data to a child?
+2. How does a child request a parent update?
+3. Why should a callback not be invoked during render?
+4. What is a callback payload?
+5. Why use `onDelete(id)` rather than passing an entire mutable list to a row?
+6. When does prop drilling become a meaningful concern?
+7. When should a ref be used instead of a callback?
 
-1. How does a child send data to parent in React?
-2. Why should parent own shared list state?
-3. True or False: child can directly edit parent state variable.
-4. What is callback payload?
-5. When does prop drilling become a concern?
+**Answers:**
 
-### Quiz Answers
+1. Through props.
+2. By invoking a callback prop.
+3. It executes during rendering instead of in response to the intended event.
+4. Data supplied when the child invokes the callback.
+5. The parent owns the collection and the child only needs the identity/action information.
+6. When many intermediate layers forward props and the API becomes difficult to maintain.
+7. For imperative operations such as DOM focus, not ordinary data flow.
 
-1. By calling callback prop passed from parent
-2. Centralized updates and predictable flow
-3. False
-4. Data sent by child when invoking parent callback
-5. When callbacks/props pass through many nested layers
+## Interview Questions
 
-## Task
+**How does child-to-parent communication work in React?**
 
-- Build parent list + child item communication
-- Implement at least two child-to-parent actions
-- Complete mini exercise
+The parent passes a callback prop to the child. The child invokes it with an optional payload, and the parent decides how to update its state.
+
+**Why is React described as one-way data flow?**
+
+Authoritative data normally flows from parent to child through props. A child can request changes through callbacks, but it does not directly mutate the parent's state.
+
+**Why should callbacks represent intent?**
+
+An intent-oriented API keeps the child decoupled from the parent's implementation. `onDelete(id)` is more reusable than a child knowing how a parent's array is stored.
+
+**When is a callback payload object preferable?**
+
+When an action has several related values or may evolve over time. A named object can make the contract self-documenting.
+
+**How can you reduce parent-child coupling?**
+
+Keep clear prop contracts, use composition, keep state near the appropriate owner, and introduce Context or state management only when justified.
+
+**Should children receive setters directly?**
+
+They can, and simple examples often do. In larger components, a semantic callback such as `onStatusChange` can better express the child's allowed action and hide the parent's state implementation.
+
+## Final Challenge
+
+Build an ecommerce product grid where:
+
+- Parent owns cart state.
+- `ProductCard` receives product data.
+- `ProductCard` calls `onAddToCart(productId)`.
+- Cart summary receives derived totals.
+- Quantity controls send `onQuantityChange(productId, quantity)`.
+- No child directly mutates the cart.
+- Components remain reusable.
 
 ## Self Check
 
-- You can implement upward communication confidently
-- You can design clear callback APIs between components
-- You can answer at least 4 out of 5 quiz questions correctly
+You should be able to explain:
 
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** How does parent pass data to child?
-
-**Answer:** Through props.
-
-**Question:** How does child trigger parent logic?
-
-**Answer:** By invoking callback prop.
-
-### Middle
-
-**Question:** Why is callback naming important?
-
-**Answer:** Clear names like onDelete or onComplete improve readability.
-
-**Question:** What common bug happens in child callbacks?
-
-**Answer:** Calling callback immediately instead of passing function reference.
-
-### Advanced
-
-**Question:** How do you reduce callback prop complexity in deep trees?
-
-**Answer:** Use context, custom hooks, or state management patterns.
-
-**Question:** What are signs of over-coupled parent-child communication?
-
-**Answer:** Too many tightly coupled props and hard-to-reuse child components.
+- parent → child props
+- child → parent callbacks
+- callback invocation timing
+- payload design
+- controlled components
+- sibling coordination
+- prop drilling
+- composition
+- callbacks vs refs
+- semantic component APIs
 
 ## Day 20 Outcome
 
-- You can implement bidirectional interaction patterns correctly
-- You can manage parent-owned state with child callbacks
-- You are ready for integrated mini project communication in Day 21
+You can now design clear, reusable parent-child communication contracts instead of treating callbacks as simple plumbing. Day 21 will combine these patterns in an integrated Todo project.
