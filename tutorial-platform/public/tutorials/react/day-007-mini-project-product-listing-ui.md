@@ -3,414 +3,294 @@ title: Mini Project - Product Listing UI
 slug: day-007-mini-project-product-listing-ui
 dayLabel: Day 7
 level: Intermediate
-estimatedMinutes: 45
+estimatedMinutes: 90
 order: 7
 track: react
 ---
-# Day 7 [Intermediate]: Mini Project - Product Listing UI
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 7 Outcome](#day-7-outcome)
+# Day 7: Mini Project — Product Listing UI
 
 ## Goal
-
-Combine components, props, and list rendering to build a complete product listing page.
+Build a complete data-driven product listing by combining components, props, arrays, `.map()`, stable keys, conditional rendering, callbacks, and basic component architecture.
 
 ## Prerequisites
+- Days 4–6 completed
+- JSX, components, props, arrays, `.map()`
+- Basic event handling
 
-- Day 3 to Day 6 completed
-- JSX, components, props, and map usage clear
+## Project Requirements
+Build a page with:
+- Product data
+- Reusable `ProductCard`
+- Product list/grid
+- Stock status
+- Rating
+- Category
+- Add-to-cart callback
+- Empty-list state
+- Stable keys
 
-## Explanation
+## 1. Plan the Component Tree
 
-This is the first integrated mini project where you apply multiple fundamentals in one screen.
+```text
+App
+├── ProductPage
+│   ├── PageHeader
+│   └── ProductList
+│       └── ProductCard × N
+└── CartSummary
+```
 
-## Topic by Topic
+The goal is not to maximize component count. Each component should have a useful responsibility.
 
-### Topic 1: Plan Screen Sections
-
-Theory:
-Planning avoids random coding and improves component boundaries.
-
-Practical:
-Define sections: title, filter area, product list.
-
-Code Example:
-
-Code Example:
+## 2. Product Data
 
 ```jsx
-function AppLayout() {
+const products = [
+  {
+    id: 1,
+    name: "Mechanical Keyboard",
+    price: 4500,
+    category: "Accessories",
+    rating: 4.6,
+    stock: 12,
+  },
+  {
+    id: 2,
+    name: "Wireless Headphones",
+    price: 3500,
+    category: "Audio",
+    rating: 4.4,
+    stock: 0,
+  },
+  {
+    id: 3,
+    name: "USB-C Hub",
+    price: 1800,
+    category: "Accessories",
+    rating: 4.2,
+    stock: 8,
+  },
+];
+```
+
+Keep IDs stable. The ID is data identity; it should not be generated during rendering.
+
+## 3. ProductCard
+
+```jsx
+function ProductCard({ product, onAddToCart }) {
+  const { name, price, category, rating, stock } = product;
+
+  return (
+    <article className="product-card">
+      <p>{category}</p>
+      <h2>{name}</h2>
+      <p>Rating: {rating}/5</p>
+      <strong>₹{price}</strong>
+      <p>{stock > 0 ? `${stock} available` : "Out of stock"}</p>
+      <button
+        disabled={stock === 0}
+        onClick={() => onAddToCart(product)}
+      >
+        Add to Cart
+      </button>
+    </article>
+  );
+}
+```
+
+The card receives data and a callback. It does not own the product collection.
+
+## 4. Rendering the Collection
+
+```jsx
+function ProductList({ products, onAddToCart }) {
+  if (products.length === 0) {
+    return <p>No products found.</p>;
+  }
+
+  return (
+    <section>
+      {products.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          onAddToCart={onAddToCart}
+        />
+      ))}
+    </section>
+  );
+}
+```
+
+### Why `key={product.id}`?
+Keys provide stable identity among siblings. They are for React's reconciliation and are not automatically available as `props.key` inside `ProductCard`.
+
+## 5. Parent-Owned Cart Interaction
+
+```jsx
+function ProductPage() {
+  function handleAddToCart(product) {
+    console.log("Add:", product.id);
+  }
+
+  return (
+    <ProductList
+      products={products}
+      onAddToCart={handleAddToCart}
+    />
+  );
+}
+```
+
+The child reports the action; the owner decides what happens next. Day 8 will introduce state so the cart can actually change.
+
+## 6. Complete App
+
+```jsx
+import { products } from "./data/products";
+import ProductList from "./components/ProductList";
+
+export default function App() {
+  function handleAddToCart(product) {
+    console.log(`Added ${product.name}`);
+  }
+
   return (
     <main>
       <h1>Product Listing</h1>
-      <section></section>
+      <ProductList
+        products={products}
+        onAddToCart={handleAddToCart}
+      />
     </main>
   );
 }
 ```
 
-**Explanation:** Before building, plan the structure. Identify main sections (title, filters, product list). This helps you design components with clear boundaries.
-
-**Key Points:**
-
-- Plan UI structure before coding
-- Identify main sections and their responsibilities
-- Clear boundaries make components reusable
-- Structure mirrors data flow
-
-### Topic 2: Product Data Structure
-
-Theory:
-Array-based data enables scalable rendering.
-
-Practical:
-Create products array with id, name, price, category.
-
-Code Example:
-
-Code Example:
+## 7. Conditional UI
+Stock is a good example:
 
 ```jsx
-const products = [
-  { id: 1, name: "Phone", price: 22000, category: "Electronics" },
-  { id: 2, name: "Headphones", price: 3500, category: "Audio" },
-];
+{stock > 0 ? "In Stock" : "Out of Stock"}
 ```
 
-**Explanation:** Storing data in an array (not scattered across multiple variables) makes it easy to render lists. Each product is an object with properties. This structure scales well as you add more products.
-
-**Key Points:**
-
-- Use arrays for collections, not separate variables
-- Each item is an object with related properties
-- Easy to add, remove, or filter items
-- Scales better as app grows
-
-### Topic 3: Reusable ProductCard
-
-Theory:
-Card component should be presentation-focused.
-
-Practical:
-Build ProductCard using props.
-
-Code Example:
-
-Code Example:
+Disable actions that cannot be completed:
 
 ```jsx
-function ProductCard({ name, price, category }) {
-  return (
-    <div>
-      <h3>{name}</h3>
-      <p>{category}</p>
-      <strong>${price}</strong>
-    </div>
-  );
-}
+<button disabled={stock === 0}>Add to Cart</button>
 ```
 
-**Explanation:** `ProductCard` is a presentation component - it only displays data passed as props. It doesn't manage data or fetch from APIs. This separation makes it reusable and testable.
+Do not merely hide unavailable information when the user needs to understand why an action cannot be performed.
 
-**Key Points:**
-
-- Presentation components only display props
-- Don't fetch data or manage state
-- Easier to test and reuse
-- Single responsibility makes components predictable
-
-### Topic 4: Render List with map
-
-Theory:
-Map converts each object into one ProductCard.
-
-Practical:
-Render all products using key.
-
-Code Example:
-
-Code Example:
+## 8. Formatting and Derived UI
+Keep display formatting separate from raw data where practical:
 
 ```jsx
-{
-  products.map((p) => (
-    <ProductCard
-      key={p.id}
-      name={p.name}
-      price={p.price}
-      category={p.category}
-    />
-  ));
-}
+const formattedPrice = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+}).format(price);
 ```
 
-**Explanation:** `.map()` loops through each product and creates a `ProductCard` for it. Each card receives different props from the array. The `key={p.id}` helps React track changes efficiently.
+Avoid storing values such as `isOutOfStock` when they can be derived from `stock`.
 
-**Key Points:**
+## 9. Architecture
+Recommended small-project structure:
 
-- `.map()` transforms array items into JSX elements
-- Each instance gets unique props from the array
-- `key` prop helps React track which items changed
-- Efficient rendering of large lists
-
-### Topic 5: UI Polish and Readability
-
-Theory:
-Spacing and grouping improve usability.
-
-Practical:
-Add basic card spacing and clean typography.
-
-Code Example:
-
-Code Example:
-
-```jsx
-<div style={{ maxWidth: "720px", margin: "0 auto", padding: "20px" }}></div>
+```text
+src/
+├── components/
+│   ├── ProductCard.jsx
+│   └── ProductList.jsx
+├── data/
+│   └── products.js
+└── App.jsx
 ```
 
-**Explanation:** Basic styling (spacing, width limits, centering) makes the UI more usable. `maxWidth` limits how wide the content gets on large screens. `margin: "0 auto"` centers it. `padding` adds breathing room.
-
-**Key Points:**
-
-- `maxWidth` prevents content from becoming too wide
-- `margin: "0 auto"` centers content horizontally
-- `padding` adds internal spacing
-- Simple styling dramatically improves UX
-
-### Topic 6: Component Responsibilities in Small Projects
-
-Theory:
-Even a mini project becomes easier to extend if data, layout, and display responsibilities are separated early.
-
-Practical:
-Keep the array and list rendering in parent component, and keep `ProductCard` focused on display only.
-
-Code Example:
-
-Code Example:
-
-```jsx
-function ProductList({ products }) {
-  return products.map((product) => (
-    <ProductCard key={product.id} name={product.name} price={product.price} />
-  ));
-}
-
-function ProductCard({ name, price }) {
-  return (
-    <div>
-      {name} - ${price}
-    </div>
-  );
-}
-```
-
-**Explanation:** This separation makes both components reusable: `ProductList` can work with any product data, and `ProductCard` doesn't care if data comes from an array or API. This is easier to test and maintain.
-
-**Key Points:**
-
-- Parent owns data, child owns display
-- Components don't depend on data source
-- Easier to test each piece independently
-- Reuse in different contexts without changes
-
-## Key Concepts
-
-- Integrated mini project
-- Data-driven rendering
-- Reusable card composition
-- map rendering with key
-- Basic UI polish
-- Parent owns data, child owns display
-- Small-project structure thinking
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-    A[Product Data Array] --> B[map]
-    B --> C[ProductCard]
-    C --> D[Rendered Product Grid]
-```
+This is a learning architecture, not a rule that every React application must follow.
 
 ## End-to-End Practical
+1. Create the data array.
+2. Extract `ProductCard`.
+3. Extract `ProductList`.
+4. Pass the collection through props.
+5. Map with stable IDs.
+6. Add stock condition.
+7. Add callback prop.
+8. Add empty-state rendering.
+9. Add basic responsive styling.
+10. Test at least five products and an empty array.
 
-1. Create product data array.
-2. Build ProductCard component.
-3. Render list with map.
-4. Add title and layout styles.
-5. Verify all cards show correct values.
+## Hands-on Challenges
+### Challenge 1
+Add `brand` and `discountPercent`.
 
-## Hands-on Coding
+### Challenge 2
+Show the original price with a calculated discounted price.
 
-### Example 1: Case - Electronics Showcase Data
+### Challenge 3
+Add a `category` label.
 
-Scenario:
-An electronics catalog needs a small shared product dataset for phones, headphones, and accessories.
+### Challenge 4
+Make an out-of-stock product non-clickable.
 
-```jsx
-const products = [
-  { id: 1, name: "Phone", price: 22000 },
-  { id: 2, name: "Headphones", price: 3500 },
-  { id: 3, name: "Power Bank", price: 1800 },
-];
+### Challenge 5
+Replace the static array with data returned by a local function that simulates an API. Keep `ProductCard` unchanged.
 
-function ProductCard({ name, price }) {
-  return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        padding: "12px",
-        marginBottom: "10px",
-      }}
-    >
-      <h3>{name}</h3>
-      <p>Price: ${price}</p>
-    </div>
-  );
-}
-```
+### Challenge 6
+Create a `CartSummary` that receives the selected product IDs through props. Do not introduce state until Day 8.
 
-### Example 2: Case - Catalog Page Layout
-
-Scenario:
-The product list page needs a centered layout, heading, and mapped product cards.
-
-```jsx
-function App() {
-  return (
-    <div style={{ maxWidth: "700px", margin: "0 auto", padding: "20px" }}>
-      <h1>Product Listing</h1>
-      {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          name={product.name}
-          price={product.price}
-        />
-      ))}
-    </div>
-  );
-}
-```
-
-### Example 3: Case - Add Stock Badge
-
-Scenario:
-A store manager wants the card to show whether each product is in stock or out of stock.
-
-```jsx
-function ProductCard({ name, price, stock }) {
-  return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        padding: "12px",
-        marginBottom: "10px",
-      }}
-    >
-      <h3>{name}</h3>
-      <p>Price: ${price}</p>
-      <strong>{stock > 0 ? "In Stock" : "Out of Stock"}</strong>
-    </div>
-  );
-}
-```
-
-## Mini Exercise
-
-Scenario:
-You are building a lightweight ecommerce catalog section.
-
-Add rating and stock fields to each product and show In Stock or Out of Stock badge in ProductCard.
-
-Expected output:
-
-- Product card shows name, price, rating, and stock
-- Badge color or text changes based on stock state
-- List still renders from array using map
+## Common Mistakes
+- Using array index as key when product identity can change.
+- Generating random keys during render.
+- Passing the entire application state into every card.
+- Fetching data inside every `ProductCard`.
+- Storing derived `isOutOfStock` state unnecessarily.
+- Calling `onAddToCart(product)` during render instead of passing a callback.
+- Forgetting an empty-state UI.
 
 ## Assessment Quiz
+1. Why use `.map()`?
+2. Why should product IDs be stable?
+3. What is the role of `ProductCard`?
+4. Why pass `onAddToCart` down?
+5. Why shouldn't every card fetch products?
+6. What happens when the products array is empty?
+7. Why can derived values be calculated during render?
+8. Why is the key not available as a normal prop?
 
-### Quiz Questions
+## Interview Questions
+**Q: Why use a stable key?** A: It gives sibling elements stable identity across renders so React can correctly reconcile changes.
 
-1. Why is map used in product listing?
-2. Why does each card need a key?
-3. Which component should hold data array?
-4. True or False: ProductCard should fetch API directly in this beginner mini project.
-5. What is one benefit of reusable ProductCard?
-6. Why keep `ProductCard` presentation-focused in this project?
+**Q: Why not use random keys?** A: They change identity on every render and can cause unnecessary remounting.
 
-### Quiz Answers
+**Q: Why keep ProductCard presentation-focused?** A: It makes the card reusable and independent of the collection's data source.
 
-1. To render UI from each array item
-2. For stable identity during updates
-3. Parent/App component
-4. False
-5. Consistent UI and less duplication
-6. It keeps the component simple and easier to reuse with different product data.
+**Q: How would you integrate an API later?** A: Replace the data source while preserving the `ProductList`/`ProductCard` contract where possible.
 
-## Task
+**Q: Should `ProductCard` own cart state?** A: Usually no when the cart is shared application data. The appropriate owner should manage it and pass actions/data down.
 
-- Build product listing with at least 5 products
-- Use reusable ProductCard
-- Complete mini exercise
+## Acceptance Criteria
+- [ ] 5+ products render from an array.
+- [ ] ProductCard is reusable.
+- [ ] ProductList owns collection rendering.
+- [ ] Stable `id` keys are used.
+- [ ] Props include an object and callback.
+- [ ] Stock changes button availability.
+- [ ] Empty state is implemented.
+- [ ] No unnecessary derived state exists.
+- [ ] No manual DOM manipulation is used.
 
 ## Self Check
-
-- You can combine components and props in one app
-- You can render dynamic lists with map
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** Why is this called a mini project?
-
-**Answer:** It combines multiple basic concepts into one working UI.
-
-**Question:** What does ProductCard do?
-
-**Answer:** It displays one product using props.
-
-### Middle
-
-**Question:** Why keep data in parent component?
-
-**Answer:** Parent controls state and passes data down predictably.
-
-**Question:** Why use map over manual repeated JSX?
-
-**Answer:** map is scalable and avoids duplication.
-
-### Advanced
-
-**Question:** How does component separation help future API integration?
-
-**Answer:** Data and presentation stay decoupled, easing replacement of static array with API response.
-
-**Question:** What risks exist with unstable keys?
-
-**Answer:** UI glitches and incorrect re-render behavior.
+Explain, without notes:
+- component boundaries
+- object props
+- callback props
+- `.map()` rendering
+- stable keys
+- conditional rendering
+- why data ownership matters
 
 ## Day 7 Outcome
-
-- You completed your first integrated React mini project
-- You can confidently build data-driven card lists
-- You are ready for state management in Day 8
+You have built a realistic data-driven UI and are ready to add changing application state in Day 8.
