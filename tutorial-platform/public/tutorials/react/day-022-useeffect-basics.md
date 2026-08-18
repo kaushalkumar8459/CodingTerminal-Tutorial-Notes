@@ -2,127 +2,122 @@
 title: useEffect Basics
 slug: day-022-useeffect-basics
 dayLabel: Day 22
-level: Beginner
-estimatedMinutes: 35
+level: Beginner to Intermediate
+estimatedMinutes: 120
 order: 22
 track: react
 ---
-# Day 22 [Beginner to Intermediate]: useEffect Basics
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 22 Outcome](#day-22-outcome)
+# Day 22 [Beginner → Intermediate]: `useEffect` Basics
 
 ## Goal
 
-Understand what side effects are and how to use `useEffect` for lifecycle-like behavior.
+Understand **when an effect is appropriate, when it runs, what it synchronizes, and why effects are not a general-purpose place for derived state or event logic**.
+
+This lesson introduces the mental model needed for the next days: dependency arrays, cleanup, and API calls.
 
 ## Prerequisites
 
-- Day 21 completed
-- Basic understanding of React state and rendering
+- Days 1–21
+- Components, props, state, events
+- Rendering and derived data
+- Basic JavaScript functions and promises
 
-## Explanation
+## The Core Mental Model
 
-React components should be pure during rendering. Work like API calls, timers, subscriptions, and localStorage updates are side effects. `useEffect` lets you run such logic after the UI renders.
+A React component has two broad kinds of work:
 
-## Topic by Topic
+1. **Calculate the UI from props/state.** This belongs in render and should be pure.
+2. **Synchronize React with something outside React.** This is where an effect can be appropriate.
 
-### Topic 1: What is a Side Effect?
+Examples of external systems:
 
-Theory:
-Any work outside returning JSX is considered a side effect.
+- browser document title
+- timers
+- DOM APIs
+- event listeners
+- subscriptions
+- network connections
+- browser storage
 
-Practical:
-Log a message after first render.
+A useful question is:
 
-Code Example:
+> "What external system am I synchronizing with?"
 
-```jsx
-useEffect(() => {
-  console.log("Component rendered");
-}, []);
-```
+If there is no external system, first ask whether you can solve the problem during render or in an event handler instead.
 
-**Explanation:** This runs after the first render. Logging, requests, timers, and subscriptions are all common side effects.
-
-**Key Points:**
-
-- Side effects run after UI paint.
-- Do not run side effects in render body.
-- `useEffect` is the standard place for this work.
-
-### Topic 2: Basic Syntax of useEffect
-
-Theory:
-`useEffect` takes a callback and dependency array.
-
-Practical:
-Run effect on every render.
-
-Code Example:
+## What Is an Effect?
 
 ```jsx
+import { useEffect } from "react";
+
 useEffect(() => {
-  document.title = "My App";
+  document.title = "Dashboard";
 });
 ```
 
-**Explanation:** No dependency array means the effect runs after every render.
+The callback runs after React commits the render. React then runs cleanup, when present, before a later eligible effect run and when the component is removed.
 
-**Key Points:**
+Do not think of `useEffect` as simply "componentDidMount for function components." The dependency model is about **synchronization with reactive values**, not lifecycle-name translation.
 
-- `useEffect(callback, deps)` is core format.
-- Missing deps means every render run.
-- Use carefully to avoid unnecessary repeats.
+## Effect Lifecycle
 
-### Topic 3: Run Once on Mount
+Conceptually:
 
-Theory:
-An empty dependency array runs effect once after initial render.
+```text
+Render
+  ↓
+React commits DOM changes
+  ↓
+Effect setup runs
+  ↓
+External system is synchronized
+  ↓
+Props/state change and another render commits
+  ↓
+Previous cleanup runs
+  ↓
+New effect setup runs
+```
 
-Practical:
-Read data from localStorage once.
+The exact browser scheduling details can differ between effect types and rendering conditions, so avoid promising that every effect is synchronously after paint. For normal `useEffect`, think "after commit, generally after the browser has had an opportunity to paint."
 
-Code Example:
+## Topic 1 — A Simple External Synchronization
+
+```jsx
+function PageTitle({ title }) {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  return <h1>{title}</h1>;
+}
+```
+
+`title` is reactive input. When it changes, React synchronizes the browser's document title again.
+
+## Topic 2 — Empty Dependency Array
 
 ```jsx
 useEffect(() => {
-  const saved = localStorage.getItem("theme");
-  console.log(saved);
+  console.log("Initial effect");
 }, []);
 ```
 
-**Explanation:** Empty dependency array means this effect runs only once after initial mount.
+An empty dependency array means the effect does not re-run because of later changes to reactive values used by the component. In production, development Strict Mode can intentionally perform an extra setup/cleanup cycle to expose unsafe side effects. Therefore, do not teach `[]` as an absolute guarantee that setup executes exactly once in every environment.
 
-**Key Points:**
+Use it only when the synchronization really has no reactive dependencies.
 
-- Good for one-time startup logic.
-- Useful for initial data read from storage.
-- Avoid frequent operations in mount effect.
+## Topic 3 — No Dependency Array
 
-### Topic 4: Effect with State Updates
+```jsx
+useEffect(() => {
+  console.log("Runs after every committed render");
+});
+```
 
-Theory:
-Effect can respond to state changes and trigger work.
+This is valid, but it is often too broad. If the effect updates state, it can create a render/effect loop.
 
-Practical:
-Update page title when count changes.
-
-Code Example:
+## Topic 4 — Dependency-Based Synchronization
 
 ```jsx
 useEffect(() => {
@@ -130,62 +125,110 @@ useEffect(() => {
 }, [count]);
 ```
 
-**Explanation:** Whenever `count` changes, effect runs and updates the browser tab title.
+The effect synchronizes whenever `count` changes relative to the previous committed render.
 
-**Key Points:**
+Do not manually "guess" dependencies simply to make an effect run less often. The dependency list should represent the reactive values used by the effect, with deliberate restructuring when you need to remove a dependency.
 
-- Add state values you use inside effect.
-- Keep dependency list accurate.
-- This pattern connects state to outside systems.
+## Topic 5 — Effects vs Event Handlers
 
-### Topic 5: Keep Effects Focused
+A user action should normally stay in the event handler:
 
-Theory:
-One effect should do one clear job.
-
-Practical:
-Use one effect for title, another for localStorage.
-
-**Explanation:** Small effects are easier to debug than one large mixed effect doing many tasks.
-
-**Key Points:**
-
-- Separate unrelated side effects.
-- Keep dependencies minimal per effect.
-- Better readability and maintainability.
-
-## Key Concepts
-
-- Side effects run after render
-- Dependency array controls re-run behavior
-- Empty array means run once on mount
-- Effect logic should be focused and readable
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Render] --> B[useEffect Runs]
-		B --> C[API Call]
-		B --> D[DOM Update]
-		B --> E[Storage Sync]
+```jsx
+function handleBuy() {
+  sendPurchase();
+}
 ```
 
-## End-to-End Practical
+Do not convert it into:
 
-1. Create a counter component.
-2. Add button to update state.
-3. Use effect to update document title from state.
-4. Add second effect for localStorage sync.
+```jsx
+useEffect(() => {
+  if (shouldBuy) sendPurchase();
+}, [shouldBuy]);
+```
 
-## Hands-on Coding
+unless synchronization with an external system genuinely requires that design. Event handlers represent **events**; effects represent **synchronization after rendering**.
 
-### Example 1: Counter with Title Update
+## Topic 6 — Effects vs Derived State
+
+Avoid:
+
+```jsx
+const [fullName, setFullName] = useState("");
+
+useEffect(() => {
+  setFullName(`${firstName} ${lastName}`);
+}, [firstName, lastName]);
+```
+
+Prefer:
+
+```jsx
+const fullName = `${firstName} ${lastName}`;
+```
+
+The second version has no unnecessary render cycle and no synchronization problem because `fullName` is derived from current inputs.
+
+## Topic 7 — Multiple Effects
+
+Separate unrelated synchronization concerns:
+
+```jsx
+useEffect(() => {
+  document.title = title;
+}, [title]);
+
+useEffect(() => {
+  localStorage.setItem("theme", theme);
+}, [theme]);
+```
+
+This makes dependencies and cleanup easier to reason about.
+
+## Topic 8 — State Updates Inside Effects
+
+State updates are allowed, but they deserve scrutiny:
+
+```jsx
+useEffect(() => {
+  setReady(true);
+}, []);
+```
+
+Ask whether `ready` is actually derived or whether the effect is synchronizing with something external. If the state only exists to mirror another state value, the effect is probably unnecessary.
+
+## Topic 9 — Strict Mode
+
+During development, React Strict Mode may run an extra setup → cleanup → setup cycle for effects. This helps expose code that is not correctly reversible.
+
+Good effect code should tolerate this:
+
+```text
+setup
+cleanup
+setup
+```
+
+without creating duplicate listeners, timers, subscriptions, or requests that cannot be reconciled.
+
+## Topic 10 — Browser Storage Example
+
+```jsx
+useEffect(() => {
+  localStorage.setItem("theme", theme);
+}, [theme]);
+```
+
+This is a reasonable effect because `localStorage` is outside React.
+
+However, reading initial state from storage is often better done with a lazy state initializer than with an effect that first renders an incorrect value and then fixes it.
+
+## Topic 11 — A Focused Effect Example
 
 ```jsx
 import { useEffect, useState } from "react";
 
-export default function App() {
+export default function Counter() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -193,96 +236,153 @@ export default function App() {
   }, [count]);
 
   return (
-    <div>
-      <h2>Count: {count}</h2>
-      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
-    </div>
+    <button type="button" onClick={() => setCount((c) => c + 1)}>
+      Count: {count}
+    </button>
   );
 }
 ```
 
-### Example 2: Persist Value to localStorage
+### What happens?
+
+1. Initial render calculates the button.
+2. React commits the UI.
+3. Effect synchronizes `document.title`.
+4. Clicking updates state.
+5. React renders and commits again.
+6. The effect runs because `count` changed.
+
+## End-to-End Practical — Theme Synchronization
+
+Build a theme toggle that:
+
+- stores the selected theme in React state
+- updates a DOM attribute
+- persists the selection in `localStorage`
+- separates DOM synchronization from storage synchronization
 
 ```jsx
 useEffect(() => {
-  localStorage.setItem("count", String(count));
-}, [count]);
+  document.documentElement.dataset.theme = theme;
+}, [theme]);
+
+useEffect(() => {
+  localStorage.setItem("theme", theme);
+}, [theme]);
 ```
 
-## Mini Exercise
+This is intentionally two effects because there are two external systems.
 
-Scenario:
-Build a text input that saves typed name in localStorage and restores it when page loads.
+## Common Mistakes
 
-Expected output:
+### 1. Using an effect for derived values
 
-- Name value stays after refresh
-- Storage updates on each change
+Calculate derived values during render.
 
-## Assessment Quiz
+### 2. Calling an API directly in render
 
-### Quiz Questions
+Render must stay pure; network synchronization belongs in an event or effect depending on the interaction.
 
-1. When does `useEffect` run?
-2. What does empty dependency array mean?
-3. What happens if dependency array is omitted?
-4. Give two examples of side effects.
-5. Why keep effect logic focused?
+### 3. Using `[]` blindly
 
-### Quiz Answers
+An empty dependency array is not a magic "run once" switch that makes stale values safe.
 
-1. After render
-2. Run once after initial mount
-3. Runs after every render
-4. API call, timer, localStorage, DOM updates
-5. Better readability and easier debugging
+### 4. Ignoring Strict Mode
 
-## Task
+If development produces duplicate setup behavior, investigate whether cleanup is correct instead of simply disabling Strict Mode.
 
-- Create one component using `useEffect`
-- Demonstrate run-once and dependency-based effect
-- Complete mini exercise
+### 5. One giant effect
 
-## Self Check
+Split independent synchronization processes so each effect has a clear purpose.
 
-- You know what a side effect is
-- You can control when effect runs
-- You can connect state changes with outside actions
+### 6. State-update loops
 
-## Interview Questions and Answers
+An effect that updates a dependency it watches can repeatedly render. Understand the state transition before adding the update.
 
-### Beginner
+## Debugging Lab
 
-**Question:** Why do we need `useEffect`?
+For each example, decide whether an effect is needed:
 
-**Answer:** To run side effects after rendering.
+```jsx
+const fullName = `${firstName} ${lastName}`;
+```
 
-**Question:** Does `useEffect` run before JSX render?
+```jsx
+useEffect(() => {
+  document.title = title;
+}, [title]);
+```
 
-**Answer:** No, it runs after render.
+```jsx
+useEffect(() => {
+  setFiltered(items.filter(matches));
+}, [items, matches]);
+```
 
-### Middle
+```jsx
+function handleSubmit() {
+  saveForm();
+}
+```
 
-**Question:** What is difference between no dependencies and empty dependencies?
+Expected reasoning: derived values and event actions usually do not need effects; external synchronization does.
 
-**Answer:** No dependencies runs after every render; empty dependencies runs once on mount.
+## Exercises
 
-**Question:** Can we use multiple effects in one component?
+### Level 1
+- Sync document title with a counter.
+- Persist a theme preference.
 
-**Answer:** Yes, and it is often cleaner to separate responsibilities.
+### Level 2
+- Synchronize a `<div>` attribute with state.
+- Split one large effect into independent effects.
 
-### Advanced
+### Level 3
+- Build a chat-room connection abstraction and explain what setup and cleanup should do.
+- Explain why Strict Mode exposes missing cleanup.
+- Refactor a component that uses effects for derived state.
 
-**Question:** Why can an effect cause loops?
+## Assessment
 
-**Answer:** If effect updates state that triggers itself repeatedly without proper dependency control.
+1. What problem does `useEffect` solve?
+2. What does "external system" mean?
+3. Why should render remain pure?
+4. When is an event handler preferable to an effect?
+5. When is derived data preferable to state + effect?
+6. What does `[count]` communicate?
+7. Why can an empty dependency array still require careful reasoning?
+8. Why can Strict Mode expose bugs in effects?
+9. Why split unrelated effects?
+10. What makes an effect setup/cleanup pair safe?
 
-**Question:** What is the safe pattern for state-dependent side effects?
+## Interview Questions
 
-**Answer:** Keep only required dependencies and avoid unnecessary state updates in the effect.
+**Is `useEffect` a lifecycle hook?**  
+It can express lifecycle-like behavior, but the better mental model is synchronization with external systems based on reactive dependencies.
+
+**When should you avoid `useEffect`?**  
+Avoid it for pure calculations, derived state, and direct event responses that can be handled during render or in an event handler.
+
+**What does an empty dependency array mean?**  
+The effect does not re-run because of later reactive changes. Development Strict Mode may still perform an additional setup/cleanup cycle.
+
+**Why can effects loop?**  
+An effect can update state, causing a render, causing the effect to run again, especially when the updated state is itself a dependency.
+
+**Why should effects be focused?**  
+Each effect then represents a clear synchronization process with a clear dependency and cleanup story.
+
+## Final Checklist
+
+- [ ] Can explain side effects
+- [ ] Can identify an external system
+- [ ] Can distinguish render/event/effect work
+- [ ] Can use dependencies intentionally
+- [ ] Understand cleanup conceptually
+- [ ] Understand Strict Mode behavior
+- [ ] Avoid derived-state effects
+- [ ] Can split unrelated effects
 
 ## Day 22 Outcome
 
-- You understand the purpose of `useEffect`
-- You can use mount-only and dependency-based effects
-- You are ready to learn dependency arrays in depth
+You now understand the **purpose and mental model of `useEffect`**, not just its syntax. Day 23 will focus on dependency arrays and stale closures in greater depth.
