@@ -1,43 +1,112 @@
 ---
-title: Dependency Array
+title: Dependency Arrays, Closures & Effect Correctness
 slug: day-023-dependency-array
 dayLabel: Day 23
 level: Intermediate
-estimatedMinutes: 120
+estimatedMinutes: 150
 order: 23
 track: react
 ---
 # Day 23 [Intermediate]: Dependency Arrays, Closures & Effect Correctness
 
+## Index
+
+- [Goal](#goal)
+- [Prerequisites](#prerequisites)
+- [Core Mental Model](#core-mental-model)
+- [Visual Concept Map](#visual-concept-map)
+- [Topic by Topic](#topic-by-topic)
+- [Dependency Decision Framework](#dependency-decision-framework)
+- [End-to-End Practical](#end-to-end-practical)
+- [Hands-on Labs](#hands-on-labs)
+- [Common Mistakes](#common-mistakes)
+- [Debugging Exercises](#debugging-exercises)
+- [Assessment](#assessment)
+- [Assessment Answers](#assessment-answers)
+- [Interview Questions and Answers](#interview-questions-and-answers)
+- [Final Verification Checklist](#final-verification-checklist)
+- [Day 23 Outcome](#day-23-outcome)
+
 ## Goal
 
 Understand exactly how `useEffect` dependencies control synchronization, why stale closures happen, why object/function dependencies matter, and how to fix dependency problems without hiding them.
 
+By the end of this lesson, you should be able to answer a more useful question than “How do I use a dependency array?”:
+
+> **What reactive values does this synchronization read, and what should cause that synchronization to be repeated?**
+
 ## Prerequisites
 
-- Day 22 `useEffect` basics
+- Day 22 — `useEffect` basics
 - JavaScript closures
 - State and props
+- Functional state updates
+- Basic object/reference identity
 
-## Core Rule
+## Core Mental Model
 
-A dependency array is **not a performance hint that you can freely edit**. It describes the reactive values used by the effect so React knows when synchronization must be repeated.
+A dependency array is **not a performance hint that you can freely edit**. It describes the reactive values used by an effect so React can determine when the synchronization needs to be repeated.
 
 Conceptually:
 
 ```text
 Render N
-  ↓
-Capture effect callback + reactive values
-  ↓
-Compare dependencies with previous committed render
-  ↓
-If dependencies changed → cleanup old effect → run new setup
+   ↓
+Effect callback captures values from render N
+   ↓
+React commits
+   ↓
+Compare dependency values with previous committed render
+   ↓
+Changed? ── No ──> keep existing synchronization
+   │
+  Yes
+   ↓
+Previous cleanup
+   ↓
+New setup
 ```
 
-React compares dependency values using `Object.is` semantics. Objects, arrays, and functions are compared by reference identity rather than deep contents.
+React compares dependency values using `Object.is` semantics. Objects, arrays, and functions therefore depend on reference identity rather than deep equality.
 
-## Pattern 1 — No Array
+### The Three Questions
+
+Whenever you see an effect, ask:
+
+1. **What external system am I synchronizing with?**
+2. **Which reactive values does the synchronization read?**
+3. **What should happen when those values change?**
+
+If there is no external system, first ask whether the logic belongs in render or an event handler instead.
+
+## Visual Concept Map
+
+```text
+                 useEffect
+                     │
+          ┌──────────┴──────────┐
+          ↓                     ↓
+   External system         No external system
+          │                     │
+          ↓                     ↓
+   Identify reactive      Prefer render or
+      dependencies         event handler
+          │
+          ↓
+     Dependency array
+          │
+    ┌─────┴─────┐
+    ↓           ↓
+ changed      unchanged
+    ↓           ↓
+ cleanup      no new setup
+    ↓
+ new setup
+```
+
+## Topic by Topic
+
+### 1. No Dependency Array
 
 ```jsx
 useEffect(() => {
@@ -45,9 +114,9 @@ useEffect(() => {
 });
 ```
 
-Valid, but broad. It should be intentional.
+Valid, but broad. Use it only when synchronization after every committed render is actually intended.
 
-## Pattern 2 — Empty Array
+### 2. Empty Dependency Array
 
 ```jsx
 useEffect(() => {
@@ -55,11 +124,13 @@ useEffect(() => {
 }, []);
 ```
 
-This effect does not re-run because of later reactive changes. However, values captured by the callback are still captured from the render that created it. Do not use `[]` to silence dependency concerns.
+This effect does not re-run because of later reactive changes. However, values captured by the callback still come from the render that created it.
 
-Development Strict Mode can perform an extra setup/cleanup cycle, so setup must be reversible.
+Do **not** use `[]` merely to silence dependency concerns.
 
-## Pattern 3 — Specific Dependencies
+Development Strict Mode can perform an extra setup → cleanup → setup cycle, so setup must be reversible.
+
+### 3. Specific Dependencies
 
 ```jsx
 useEffect(() => {
@@ -67,47 +138,66 @@ useEffect(() => {
 }, [query]);
 ```
 
-When `query` changes according to dependency comparison, the effect synchronizes again.
+When `query` changes according to dependency comparison, React re-synchronizes the effect.
 
-## Object.is and Reference Identity
+### 4. Dependency Comparison Uses `Object.is`
 
-These are not equivalent from React's dependency perspective:
+```jsx
+Object.is(1, 1); // true
+Object.is("a", "a"); // true
+Object.is({}, {}); // false
+Object.is([], []); // false
+```
+
+Therefore:
 
 ```jsx
 const options = { roomId };
+
+useEffect(() => {
+  connect(options);
+}, [options]);
 ```
 
-Every render creates a new object reference.
+`options` has a new reference on every render, so the effect can reconnect on every render.
 
-```jsx
-const options = useMemo(() => ({ roomId }), [roomId]);
-```
+### 5. Better Object Dependency Design
 
-This can stabilize identity, but `useMemo` should not be added merely to make a badly designed effect quiet. Often the better solution is to construct the object inside the effect:
+Sometimes the simplest fix is to construct the object inside the effect:
 
 ```jsx
 useEffect(() => {
   const options = { roomId };
+
   connect(options);
+
   return () => disconnect(options);
 }, [roomId]);
 ```
 
-## Functions as Dependencies
+Now the dependency is the primitive reactive value that actually determines the synchronization.
 
-Functions defined during render receive a new identity on each render:
+`useMemo` can stabilize an object identity when that identity itself matters, but it should not be used as a bandage for a poorly designed effect.
+
+### 6. Functions as Dependencies
+
+Functions declared during render normally receive a new identity on each render:
 
 ```jsx
 const createOptions = () => ({ roomId });
 ```
 
-If an effect depends on it, the effect may re-run more often than expected.
+If an effect depends on `createOptions`, the effect can re-run whenever the function identity changes.
 
-Before adding `useCallback`, ask whether the function can simply move inside the effect or whether the effect itself can be removed.
+Before adding `useCallback`, ask:
 
-## Stale Closures
+- Can the function move inside the effect?
+- Can the effect depend on its primitive inputs instead?
+- Can the effect be removed entirely?
 
-Consider:
+Use memoization when it solves a real identity or performance requirement.
+
+### 7. Stale Closures
 
 ```jsx
 useEffect(() => {
@@ -115,7 +205,7 @@ useEffect(() => {
 }, []);
 ```
 
-The callback captures the value from the render that created it. If `query` changes later, this effect does not re-synchronize because `query` is absent from dependencies.
+The callback captures `query` from the render that created it. If `query` changes later, this effect does not re-synchronize because `query` is absent from the dependency list.
 
 Prefer:
 
@@ -125,11 +215,9 @@ useEffect(() => {
 }, [query]);
 ```
 
-A stale closure is not a React mystery; it is a JavaScript closure combined with a synchronization boundary that did not re-run.
+A stale closure is ordinary JavaScript closure behavior combined with a synchronization boundary that did not re-run.
 
-## Functional Updates Can Remove a Dependency
-
-Sometimes an effect only needs to update state based on its previous value:
+### 8. Functional Updates Can Remove a Dependency
 
 ```jsx
 useEffect(() => {
@@ -141,13 +229,11 @@ useEffect(() => {
 }, []);
 ```
 
-The updater function receives the latest state, so the interval does not need to close over `count` merely to increment it.
+The callback does not read `count`; React supplies the latest value to the updater. Therefore `count` does not need to be a dependency of this effect.
 
-This is a legitimate way to remove a state dependency because the state value is no longer read by the effect callback.
+This is a legitimate dependency reduction because the code no longer reads that reactive value.
 
-## Infinite Loop Analysis
-
-Bad:
+### 9. Infinite Effect Loops
 
 ```jsx
 useEffect(() => {
@@ -167,21 +253,23 @@ count changes
 → ...
 ```
 
-The fix is not automatically "remove count from the dependency array." First determine why the effect needs to update state and whether the effect is appropriate at all.
+Do not “fix” this by blindly removing `count`. First decide whether the effect should exist at all.
 
-## Effect Dependencies and Props
+### 10. Props as Dependencies
 
 ```jsx
 function User({ userId }) {
   useEffect(() => {
     loadUser(userId);
   }, [userId]);
+
+  return <p>User: {userId}</p>;
 }
 ```
 
-If the synchronization depends on a prop, that prop is part of the effect's reactive input.
+If synchronization reads a reactive prop, that prop is part of the effect's reactive input.
 
-## Multiple Dependencies
+### 11. Multiple Dependencies
 
 ```jsx
 useEffect(() => {
@@ -189,36 +277,71 @@ useEffect(() => {
 }, [category, sort]);
 ```
 
-The effect runs when either dependency changes.
+The effect can re-synchronize when either `category` or `sort` changes.
 
-## Dependency Array Is Not "Run When This Happens"
+### 12. Dependency Array Is Not an Event Filter
 
 Avoid thinking:
 
-> `[query]` means run when query changes.
+> `[query]` means “run when query changes.”
 
-More precisely:
+A more precise model is:
 
-> The effect synchronizes after renders where the dependency value differs from the previous committed dependency value.
+> The effect synchronizes after a committed render when the dependency values differ from the previous committed dependency values.
 
-That distinction becomes important with initial setup, cleanup, Strict Mode, and concurrent rendering behavior.
+This matters for initial setup, cleanup, Strict Mode, and modern React rendering behavior.
 
-## The Exhaustive-Deps Linter
+### 13. Exhaustive-Deps Linting
 
-The hooks lint rule is valuable because it identifies values read by an effect that are not represented in its dependencies.
+The Hooks lint rule helps identify reactive values read by an effect that are not represented in the dependency list.
 
-Do not treat lint warnings as noise. Usually:
+When a warning appears:
 
-1. read the warning
-2. understand the value being captured
-3. restructure the effect if necessary
-4. include the dependency when it is genuinely reactive
+1. Read it.
+2. Identify the captured value.
+3. Decide whether the value is genuinely reactive.
+4. Restructure the effect if appropriate.
+5. Include the dependency when the effect reads it.
 
-Disabling the rule should be an intentional, documented exception rather than the default fix.
+Do not disable the rule mechanically.
 
-## Dependency Problems: A Decision Framework
+### 14. Dependency Completeness vs Dependency Optimization
 
-When an effect has too many dependencies, ask:
+These are different goals.
+
+**Completeness:** the effect accurately declares values it reads and depends on.
+
+**Optimization:** the effect avoids unnecessary re-synchronization.
+
+Solve correctness first. Then reduce unnecessary dependencies by restructuring code—not by lying in the dependency array.
+
+## Dependency Decision Framework
+
+When an effect has too many dependencies, use this sequence:
+
+```text
+Too many dependencies?
+        ↓
+Does an external system exist?
+   ┌────┴────┐
+  No        Yes
+  ↓           ↓
+Remove     What values are read?
+ effect         ↓
+             Can logic move
+             inside effect?
+                 ↓
+             Can derived data
+             stay in render?
+                 ↓
+             Can functional update
+             avoid reading state?
+                 ↓
+             Are object/function
+             identities intentional?
+```
+
+### Questions to ask
 
 1. Is the effect doing more than one job?
 2. Can some logic move into an event handler?
@@ -228,9 +351,9 @@ When an effect has too many dependencies, ask:
 6. Is an external system actually being synchronized?
 7. Do I truly need this effect?
 
-This is better than trying to manipulate the dependency array until the behavior looks correct.
+## End-to-End Practical
 
-## End-to-End Practical — Search Synchronization
+### Search Synchronization
 
 ```jsx
 function Search({ query, category }) {
@@ -239,7 +362,6 @@ function Search({ query, category }) {
     document.title = `Search: ${query || "All"}`;
 
     return () => {
-      // Cleanup would cancel or invalidate a request if one existed.
       console.log("cleanup", params.toString());
     };
   }, [query, category]);
@@ -248,9 +370,21 @@ function Search({ query, category }) {
 }
 ```
 
-The effect has two reactive inputs and therefore re-synchronizes when either changes.
+This example intentionally has two reactive inputs. When either changes, the previous synchronization is cleaned up and the new synchronization is established.
 
-## Hands-on Lab — Stale Search Logger
+> In a real data-fetching implementation, cleanup should cancel or invalidate the request rather than merely log a message. API cancellation is covered later in the series.
+
+### Acceptance Criteria
+
+- [ ] The learner can identify the external system.
+- [ ] Both reactive inputs are declared.
+- [ ] Cleanup corresponds to setup.
+- [ ] No derived state is introduced.
+- [ ] The learner can explain why each dependency exists.
+
+## Hands-on Labs
+
+### Lab 1 — Stale Search Logger
 
 Start with:
 
@@ -264,7 +398,7 @@ useEffect(() => {
 }, []);
 ```
 
-Ask:
+Answer:
 
 - What value does the timeout capture?
 - Why does typing not create a new timer?
@@ -282,33 +416,105 @@ useEffect(() => {
 }, [query]);
 ```
 
-This creates a new timer for the current query and cleans up the previous timer when query changes.
+### Lab 2 — Interval Without Stale State
+
+Build a timer that increments once per second using a functional updater.
+
+Acceptance:
+
+- [ ] `setInterval` is created in setup.
+- [ ] `clearInterval` is returned from cleanup.
+- [ ] Functional update is used.
+- [ ] `count` is not unnecessarily captured by the interval.
+
+### Lab 3 — Object Dependency Bug
+
+Given:
+
+```jsx
+function Room({ roomId }) {
+  const options = { roomId };
+
+  useEffect(() => {
+    connect(options);
+    return () => disconnect(options);
+  }, [options]);
+}
+```
+
+Refactor it so the dependency represents the actual reactive input.
+
+Expected direction:
+
+```jsx
+useEffect(() => {
+  const options = { roomId };
+  connect(options);
+  return () => disconnect(options);
+}, [roomId]);
+```
+
+### Lab 4 — Function Dependency
+
+Create an example where a render-created helper causes unnecessary effect execution. Refactor it by moving the helper into the effect or by removing the effect if no external system is involved.
+
+### Lab 5 — Derived State Smell
+
+Given:
+
+```jsx
+const [total, setTotal] = useState(0);
+
+useEffect(() => {
+  setTotal(items.reduce((sum, item) => sum + item.price, 0));
+}, [items]);
+```
+
+Refactor to render-time derivation:
+
+```jsx
+const total = items.reduce((sum, item) => sum + item.price, 0);
+```
+
+Explain why the effect was unnecessary.
 
 ## Common Mistakes
 
 ### 1. Empty array everywhere
 
-This often creates stale closures.
+Often creates stale closures.
 
 ### 2. Removing dependencies to stop a loop
 
-That can hide the bug rather than fix it.
+This can hide the real design problem.
 
-### 3. Deep-comparing everything manually
+### 3. Treating dependencies as arbitrary event filters
 
-Usually rethink the effect and its inputs before introducing deep comparison.
+They describe synchronization inputs.
 
-### 4. Memoizing everything
+### 4. Deep-comparing everything manually
 
-`useMemo`/`useCallback` have costs and should solve a real identity/performance problem.
+Rethink the effect and its inputs before introducing deep comparison.
 
-### 5. Treating dependency arrays as event filters
+### 5. Memoizing everything
 
-They describe synchronization dependencies, not arbitrary business-event triggers.
+`useMemo` and `useCallback` have costs and should solve a real identity/performance problem.
+
+### 6. Ignoring object/function identity
+
+Fresh references can cause legitimate dependency changes.
+
+### 7. Ignoring cleanup
+
+A new setup without proper cleanup can accumulate subscriptions, timers, or connections.
+
+### 8. Suppressing dependency warnings
+
+A missing dependency can create stale values and incorrect synchronization.
 
 ## Debugging Exercises
 
-### Exercise A
+### Exercise A — Stale Prop
 
 ```jsx
 useEffect(() => {
@@ -316,20 +522,25 @@ useEffect(() => {
 }, []);
 ```
 
-What happens if `user` changes?
+**Question:** What happens if `user` changes?
 
-### Exercise B
+**Answer:** The effect does not re-run because `user` is not represented in its dependencies. The callback can keep the value captured from its original render.
+
+### Exercise B — Object Identity
 
 ```jsx
 const options = { roomId };
+
 useEffect(() => {
   connect(options);
 }, [options]);
 ```
 
-Why can this reconnect on every render?
+**Question:** Why can this reconnect on every render?
 
-### Exercise C
+**Answer:** A new object reference is created on every render, so `Object.is(previousOptions, options)` is false.
+
+### Exercise C — Derived State
 
 ```jsx
 useEffect(() => {
@@ -337,7 +548,21 @@ useEffect(() => {
 }, [items]);
 ```
 
-Is `total` truly external synchronization, or should it be derived?
+**Question:** Is `total` external synchronization?
+
+**Answer:** No. It is derived data and should normally be calculated during render.
+
+### Exercise D — Event Boundary
+
+```jsx
+useEffect(() => {
+  if (submitted) saveForm();
+}, [submitted]);
+```
+
+**Question:** What should you consider first?
+
+**Answer:** If `saveForm` exists only because of a submit action, put it directly in the submit event handler rather than creating an intermediate `submitted` state solely to trigger an effect.
 
 ## Assessment
 
@@ -351,36 +576,103 @@ Is `total` truly external synchronization, or should it be derived?
 8. When should you move logic into the effect itself?
 9. When should you remove an effect entirely?
 10. What role does exhaustive-deps linting play?
+11. What is the difference between dependency correctness and optimization?
+12. Why can an object created during render cause an effect to re-run?
 
-## Interview Questions
+## Assessment Answers
 
-**Why does `[{}]` behave differently from `[someStableObject]`?**  
-The object literal creates a new reference on every render, while a stable object reference may remain equal by `Object.is`.
+1. React compares each dependency using `Object.is` semantics.
+2. Primitive values are compared by value semantics; objects, arrays, and functions are compared by reference identity.
+3. A closure uses values captured from a particular render, and the effect does not re-run when those values change because the synchronization dependencies are incomplete.
+4. A render-created function normally has a new identity on each render, so a dependency on it can change repeatedly.
+5. A functional updater receives the latest state, so the effect need not read that state value from its closure.
+6. Removing a dependency can hide a stale-value bug or produce incorrect synchronization.
+7. It can perform setup → cleanup → setup in development to expose missing or unsafe cleanup assumptions.
+8. When the helper is only needed for that synchronization and moving it inside the effect reduces unnecessary reactive dependencies.
+9. When there is no external system and the work is actually derived data or event-driven logic.
+10. It helps detect reactive values read by an effect that are not represented in the dependency list.
+11. Correctness means declaring the real reactive inputs; optimization means reducing unnecessary re-synchronization after correctness is established.
+12. Each render creates a new reference, and dependency comparison sees the reference as changed.
 
-**How do stale closures happen?**  
-An effect callback captures values from a particular render and does not re-run when those values change because its dependencies are incomplete.
+## Interview Questions and Answers
 
-**Should you use `useCallback` to fix every function dependency?**  
-No. First consider moving the function inside the effect or redesigning/removing the effect.
+### Beginner
 
-**Why can an effect with `[count]` and `setCount` loop?**  
-The effect changes a value that causes the effect to run again.
+**What is a dependency array?**  
+It tells React which reactive values the effect depends on so React can determine when to re-synchronize it.
 
-**What is the correct way to fix missing dependencies?**  
-Understand why the value is read, then restructure or include the dependency. Do not simply suppress the rule.
+**What does `[]` mean?**  
+The effect declares no later reactive dependencies. Development Strict Mode can still perform an extra setup/cleanup cycle.
 
-## Final Checklist
+### Intermediate
 
-- [ ] Understand no-array behavior
-- [ ] Understand empty-array behavior
-- [ ] Understand dependency comparison
-- [ ] Understand stale closures
-- [ ] Understand object/function identity
-- [ ] Can diagnose effect loops
-- [ ] Can use functional updates appropriately
-- [ ] Can reason about lint warnings
-- [ ] Can distinguish synchronization from derived state
+**Why can `[{}]` cause repeated execution?**  
+The object literal creates a new reference each render, so dependency comparison sees a change.
+
+**What is a stale closure?**  
+An effect callback captures values from a particular render and continues using those captured values because the effect did not re-run when the relevant values changed.
+
+**Should `useCallback` fix every function dependency?**  
+No. First ask whether the function can move inside the effect or whether the effect is unnecessary.
+
+### Advanced
+
+**Why is the dependency array not a performance hint?**  
+Changing it changes the synchronization contract. Omitting a required dependency can make the effect incorrect, not merely slower.
+
+**How would you diagnose an effect that runs too often?**  
+Identify the external system, inspect every dependency, check object/function identity, determine whether the effect has multiple responsibilities, and consider whether the effect can be removed or restructured.
+
+**How would you fix an effect with too many dependencies?**  
+Do not delete dependencies blindly. Move helpers inside the effect, derive pure values during render, move event-specific work into event handlers, use functional updates where appropriate, and split unrelated synchronization processes.
+
+**Why does functional state update legitimately reduce dependencies?**  
+Because the updater receives the current state value, so the effect no longer reads that state from its closure.
+
+**How do modern rendering behavior and Strict Mode affect reasoning?**  
+Effects should be treated as reversible synchronization work. Setup must not depend on an assumption that it can only happen once in development.
+
+## Final Verification Checklist
+
+### Structure
+
+- [ ] Index is complete.
+- [ ] Goal is explicit.
+- [ ] Prerequisites are stated.
+- [ ] Outcome connects to Day 24.
+
+### Conceptual depth
+
+- [ ] No-array behavior explained.
+- [ ] Empty-array behavior explained.
+- [ ] Specific dependencies explained.
+- [ ] `Object.is` comparison explained.
+- [ ] Reference identity explained.
+- [ ] Stale closures explained.
+- [ ] Functional updater dependency reduction explained.
+- [ ] Infinite-loop reasoning explained.
+- [ ] Exhaustive-deps reasoning explained.
+- [ ] Correctness vs optimization distinguished.
+
+### Practical depth
+
+- [ ] Object dependency lab.
+- [ ] Function dependency lab.
+- [ ] Stale closure lab.
+- [ ] Timer lab.
+- [ ] Derived-state refactoring lab.
+- [ ] Debugging exercises.
+- [ ] Acceptance criteria.
+
+### Interview readiness
+
+- [ ] Beginner questions.
+- [ ] Intermediate questions.
+- [ ] Advanced questions.
+- [ ] Scenario-based reasoning.
 
 ## Day 23 Outcome
 
-You can now reason about dependency arrays instead of memorizing patterns. Day 24 will apply that reasoning to cleanup and cancellation.
+You can now reason about dependency arrays instead of memorizing patterns. You understand stale closures, reference identity, functional updates, dependency completeness, effect loops, and the difference between fixing correctness and optimizing execution.
+
+**Next:** Day 24 — cleanup functions, cancellation, subscriptions, timers, and effect lifecycle in practical scenarios.
