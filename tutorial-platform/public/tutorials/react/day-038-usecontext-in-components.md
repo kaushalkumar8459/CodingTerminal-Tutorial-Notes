@@ -3,348 +3,366 @@ title: useContext in Components
 slug: day-038-usecontext-in-components
 dayLabel: Day 38
 level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 38
 track: react
 ---
----
-title: useContext in Components
-slug: day-038-usecontext-in-components
-dayLabel: Day 38
-level: Intermediate
-estimatedMinutes: 30
-order: 38
-track: react
----
-# Day 38 [Intermediate]: useContext in Components
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 38 Outcome](#day-38-outcome)
+# Day 38 [Intermediate]: `useContext` in Components
 
 ## Goal
 
-Consume context cleanly with useContext in multiple components and avoid common mistakes.
+Learn how to consume context values and actions safely, build domain-specific consumer hooks, understand nearest-provider lookup, and reason about re-render behavior.
 
-## Prerequisites
-
-- Day 37 completed
-- Provider setup done
-
-## Explanation
-
-useContext reads provider values directly in function components. It simplifies access to shared app state.
-
-## Topic by Topic
-
-### Topic 1: Basic useContext Usage
-
-Theory:
-Pass context object to useContext hook.
-
-Practical:
-Read user from AuthContext.
-
-Code Example:
+## 1. Basic Consumption
 
 ```jsx
-const { user } = useContext(AuthContext);
+const theme = useContext(ThemeContext);
 ```
 
-**Explanation:** This topic explains Basic useContext Usage in a practical way so you can apply it confidently in real React projects.
+`useContext` reads the value supplied by the **nearest matching provider above the component**.
 
-**Key Points:**
+```text
+ThemeProvider A
+   ↓
+Layout
+   ↓
+ThemeProvider B
+   ↓
+Button ← reads B
+```
 
-- Understand the core idea of Basic useContext Usage.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+A consumer does not search the entire application. It follows the component tree and uses the closest provider for that context.
 
-### Topic 2: Multiple Consumers
-
-Theory:
-Many components can consume same context value.
-
-Practical:
-Consume language in Header and Footer.
-
-Code Example:
+## 2. Context Is Read During Render
 
 ```jsx
-const { language } = useContext(SettingsContext);
-```
-
-**Explanation:** This topic explains Multiple Consumers in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Multiple Consumers.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 3: Consuming Actions
-
-Theory:
-Consumers can call action functions provided by context.
-
-Practical:
-Trigger logout from navbar button.
-
-Code Example:
-
-```jsx
-const { logout } = useContext(AuthContext);
-```
-
-**Explanation:** This topic explains Consuming Actions in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Consuming Actions.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 4: Custom Consumer Hook Pattern
-
-Theory:
-Wrap useContext in custom hook for cleaner imports and guard checks.
-
-Practical:
-Create useAuth hook.
-
-Code Example:
-
-```jsx
-function useAuth() {
-  return useContext(AuthContext);
-}
-```
-
-**Explanation:** This topic explains Custom Consumer Hook Pattern in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Custom Consumer Hook Pattern.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 5: Missing Provider Safety
-
-Theory:
-Consuming context outside provider can cause undefined behavior.
-
-Practical:
-Throw helpful error in custom hook.
-
-Code Example:
-
-```jsx
-if (!context) throw new Error("useAuth must be used within AuthProvider");
-```
-
-**Explanation:** This topic explains Missing Provider Safety in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Missing Provider Safety.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 6: Selector-Oriented Consumption Mindset
-
-Theory:
-Consumers should read only the context fields they need to keep component responsibilities focused.
-
-Practical:
-Destructure minimal values (`userName` not entire object) where possible.
-
-Code Example:
-
-```jsx
-const { user } = useAuth();
-```
-
-**Explanation:** This topic explains Selector-Oriented Consumption Mindset in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Selector-Oriented Consumption Mindset.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-## Key Concepts
-
-- useContext consumption
-- Shared values and actions
-- Multi-component context access
-- Custom consumer hooks
-- Provider boundary safety
-- Focused context consumption
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-		A[Provider Value] --> B[useContext in Header]
-		A --> C[useContext in Sidebar]
-		A --> D[useContext in Footer]
-		B --> E[Consistent Shared State]
-		C --> E
-		D --> E
-```
-
-## End-to-End Practical
-
-1. Consume context in one component.
-2. Consume same context in two more components.
-3. Use context action from button click.
-4. Build custom hook wrapper.
-5. Add guard for missing provider.
-
-## Hands-on Coding
-
-### Example 1: Case - Header User Greeting
-
-Scenario:
-An employee portal header should show logged-in user name from AuthContext.
-
-```jsx
-import { useContext } from "react";
-import { AuthContext } from "./AuthContext";
-
 function Header() {
-  const { user } = useContext(AuthContext);
-  return <h3>Welcome {user ? user.name : "Guest"}</h3>;
+  const { user } = useAuth();
+  return <h1>Hello {user.name}</h1>;
 }
 ```
 
-### Example 2: Case - Navbar Logout Action
+The component reads context as part of rendering. If the relevant context value changes, React updates consumers so the UI can reflect the new value.
 
-Scenario:
-A top navbar should allow logout from any route.
+Do not use an effect just to copy context into local state:
 
 ```jsx
-import { useContext } from "react";
-import { AuthContext } from "./AuthContext";
+// Usually unnecessary
+const user = useAuth();
+const [localUser, setLocalUser] = useState(user);
+```
 
-function Navbar() {
-  const { user, logout } = useContext(AuthContext);
-  return user ? (
-    <button onClick={logout}>Logout</button>
-  ) : (
-    <span>Please login</span>
+If the value is simply context data, read it directly.
+
+## 3. Consume State and Actions
+
+A context often exposes both:
+
+```jsx
+const { user, logout } = useAuth();
+```
+
+Then a button can express domain intent:
+
+```jsx
+<button type="button" onClick={logout}>
+  Logout
+</button>
+```
+
+The component does not need to know how logout changes the provider's internal state.
+
+## 4. Build a Custom Consumer Hook
+
+Instead of repeating:
+
+```jsx
+const value = useContext(AuthContext);
+```
+
+create:
+
+```jsx
+export function useAuth() {
+  const value = useContext(AuthContext);
+
+  if (value === null) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+
+  return value;
+}
+```
+
+Now consumers have a domain-level API:
+
+```jsx
+const { user, logout } = useAuth();
+```
+
+Benefits:
+
+- consistent imports
+- centralized provider guard
+- better refactoring
+- easier testing
+- smaller component code
+
+## 5. Missing Provider Behavior
+
+If no provider exists, React returns the context's default value.
+
+For:
+
+```jsx
+const AuthContext = createContext(null);
+```
+
+that means:
+
+```jsx
+useContext(AuthContext) // null
+```
+
+A guarded hook turns a confusing runtime failure into a clear configuration error.
+
+## 6. Multiple Consumers
+
+Many components can read the same context:
+
+```jsx
+function Header() {
+  const { language } = useSettings();
+  return <span>{language}</span>;
+}
+
+function Footer() {
+  const { language } = useSettings();
+  return <small>{language}</small>;
+}
+```
+
+This is one of Context's major strengths: the intermediate component does not have to become a data pipe.
+
+## 7. Context Is Not a Selector API
+
+This is an important advanced point.
+
+Suppose a provider value is:
+
+```jsx
+{
+  user,
+  theme,
+  cart
+}
+```
+
+A component may read only `theme`:
+
+```jsx
+const { theme } = useAppContext();
+```
+
+But simply destructuring `theme` does not automatically make Context selective. If the provider value changes, consumers of that context can still be updated.
+
+For highly dynamic state, consider:
+
+- splitting contexts
+- moving unrelated state to separate providers
+- a state library with selector-based subscriptions
+
+## 8. Nested Providers
+
+Nested providers are useful when a subtree needs a different value:
+
+```jsx
+<ThemeContext.Provider value="light">
+  <MainApp />
+
+  <ThemeContext.Provider value="dark">
+    <Preview />
+  </ThemeContext.Provider>
+</ThemeContext.Provider>
+```
+
+`Preview` sees `dark`; other descendants of the outer provider see `light` unless they have another nearer provider.
+
+This is useful for scoped configuration, previews, embedded widgets, and tests.
+
+## 9. Context and Event Handlers
+
+Context actions are commonly called from events:
+
+```jsx
+function LogoutButton() {
+  const { logout } = useAuth();
+
+  return (
+    <button type="button" onClick={logout}>
+      Logout
+    </button>
   );
 }
 ```
 
-### Example 3: Case - Safe useAuth Custom Hook
-
-Scenario:
-A team wants one standard safe pattern for all auth context consumption.
+Avoid calling an action while rendering:
 
 ```jsx
-import { useContext } from "react";
-import { AuthContext } from "./AuthContext";
+// Wrong: causes updates during render
+logout();
+```
+
+Call actions in an event handler or an intentionally designed effect when synchronization with an external system is required.
+
+## 10. Complete Example
+
+```jsx
+// AuthContext.jsx
+import { createContext, useContext } from "react";
+
+export const AuthContext = createContext(null);
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
+  const value = useContext(AuthContext);
+
+  if (value === null) {
     throw new Error("useAuth must be used within AuthProvider");
   }
-  return context;
+
+  return value;
 }
 ```
 
-## Mini Exercise
+Consumer:
 
-Scenario:
-You are building a training platform with UserContext.
+```jsx
+function Navbar() {
+  const { user, logout } = useAuth();
 
-Consume user data in Header, ProfileCard, and CoursePage. Add logout action in one of these components.
+  return (
+    <nav>
+      <span>{user ? user.name : "Guest"}</span>
+      {user && (
+        <button type="button" onClick={logout}>
+          Logout
+        </button>
+      )}
+    </nav>
+  );
+}
+```
 
-Expected output:
+## 11. Testing Context Consumers
 
-- Same context consumed across multiple components
-- Action function works from any consumer
-- No prop drilling for user data
+A consumer should normally be tested with the provider it expects:
 
-## Assessment Quiz
+```jsx
+render(
+  <AuthProvider>
+    <Navbar />
+  </AuthProvider>
+);
+```
 
-### Quiz Questions
+For isolated tests, a small test provider can supply deterministic values:
 
-1. What does useContext return?
-2. Why build a custom hook like useAuth?
-3. True or False: useContext can only be used in class components.
-4. What happens if consumer is outside provider?
-5. How can context actions be triggered in child components?
+```jsx
+const testValue = {
+  user: { name: "Test User" },
+  logout: vi.fn(),
+};
+```
 
-### Quiz Answers
+The key principle is to test the **consumer behavior**, not React's internal Context implementation.
 
-1. Current context value from nearest provider
-2. Cleaner usage and provider-guard error handling
-3. False
-4. It gets default/undefined and may break expected behavior
-5. By calling functions provided in context value
+## 12. Common Mistakes
 
-## Task
+### Wrong context object
 
-- Consume one context in at least 3 components
-- Trigger one context action from a consumer
-- Complete mini exercise
+Two independently created contexts do not share values.
 
-## Self Check
+### Consumer outside provider
 
-- You can use context consumption patterns safely
-- You can build cleaner custom context hooks
-- You can answer at least 4 out of 5 quiz questions correctly
+Use the custom hook guard to identify this immediately.
 
-## Interview Questions and Answers
+### Copying context into state
 
-### Beginner
+Usually creates two sources of truth.
 
-**Question:** Which hook consumes context in function components?
+### Giant context
 
-**Answer:** useContext.
+One context containing every application concern becomes difficult to reason about and can widen update impact.
 
-**Question:** Why use context instead of passing props deeply?
+### Treating Context as authentication security
 
-**Answer:** It removes repetitive pass-through prop chains.
+Context can control UI state. It cannot enforce server authorization.
 
-### Middle
+## Hands-on Lab
 
-**Question:** How do you consume both state and actions from context?
+Create `UserContext` with:
 
-**Answer:** Destructure both from useContext return value.
+```text
+user
+login(name)
+logout()
+```
 
-**Question:** Why add guard checks in custom consumer hooks?
+Use `useUser()` in:
 
-**Answer:** To fail fast when provider wrapping is missing.
+- Header
+- ProfileCard
+- CoursePage
 
-### Advanced
+Then add a `LogoutButton` that uses the action from context.
 
-**Question:** How can you reduce unnecessary re-renders in context consumers?
+### Acceptance Criteria
 
-**Answer:** Split contexts and stabilize provider values.
+- [ ] Consumers use a custom hook
+- [ ] Missing provider produces a useful error
+- [ ] At least three distant components consume the context
+- [ ] One consumer invokes a context action
+- [ ] No context value is copied unnecessarily into local state
+- [ ] Tests render consumers with the required provider
 
-**Question:** When is useContext not enough for large complex state?
+## Debugging Scenarios
 
-**Answer:** When updates are frequent and selective subscriptions are needed.
+**The hook returns null:** verify provider placement and context import.
+
+**A component still receives an old value:** inspect nested providers and confirm which provider is nearest.
+
+**Many unrelated components update:** inspect context value design and split domains if necessary.
+
+**A consumer works in production but fails in a unit test:** the test probably forgot to render the required provider.
+
+## Assessment
+
+1. What does `useContext` read?
+2. Which provider wins when providers are nested?
+3. Is destructuring a context value a selector mechanism?
+4. Why use a custom consumer hook?
+5. Why is copying context into state usually unnecessary?
+6. How do you test a context consumer?
+7. Can Context enforce backend authorization?
+8. When should a large context be split?
+
+## Interview Questions
+
+**What does `useContext` return?**  
+The value from the nearest matching provider, or the context default when no provider exists.
+
+**Can a component consume multiple contexts?**  
+Yes. It can call `useContext` or domain hooks for multiple contexts.
+
+**Why create `useAuth` instead of exporting the context everywhere?**  
+It gives consumers a stable domain API and centralizes missing-provider validation.
+
+**Does destructuring one property prevent context re-renders?**  
+No. Destructuring does not provide fine-grained context subscriptions.
+
+**How do you optimize context consumers?**  
+Split contexts by update domain, stabilize provider values where useful, narrow provider scope, or use a state solution with selective subscriptions for high-frequency state.
 
 ## Day 38 Outcome
 
-- You can consume context values and actions confidently
-- You can implement safe and scalable useContext patterns
-- You are ready for real global theme context on Day 39
-
+You can now consume Context safely, build guarded consumer hooks, reason about nested providers, avoid duplicated state, and recognize the limits of Context's subscription model. Day 39 applies these patterns to a production-style theme system.
