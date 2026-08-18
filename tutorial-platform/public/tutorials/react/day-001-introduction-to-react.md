@@ -1,12 +1,12 @@
 ---
-title: Introduction to React 1
+title: Introduction to React
 slug: day-001-introduction-to-react
 dayLabel: Day 1
 level: Beginner
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 1
 track: react
-youtubeVideos: [{"title":"Create Application in MFA","url":"https://www.youtube.com/watch?v=4tLBRy25xOQ&list=PLHX7ZNz5nHXnPLODZc_UsTmZ5z9xi49rP"}]
+youtubeVideos: [{"title":"Introduction to React","url":"https://www.youtube.com/watch?v=4tLBRy25xOQ&list=PLHX7ZNz5nHXnPLODZc_UsTmZ5z9xi49rP"}]
 ---
 
 # Day 1 [Beginner]: Introduction to React
@@ -15,12 +15,14 @@ youtubeVideos: [{"title":"Create Application in MFA","url":"https://www.youtube.
 
 - [Goal](#goal)
 - [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
+- [Why React](#why-react)
+- [React Mental Model](#react-mental-model)
 - [Topic by Topic](#topic-by-topic)
 - [Key Concepts](#key-concepts)
 - [Visual Concept Map](#visual-concept-map)
 - [End-to-End Practical](#end-to-end-practical)
 - [Hands-on Coding](#hands-on-coding)
+- [Common Mistakes](#common-mistakes)
 - [Mini Exercise](#mini-exercise)
 - [Assessment Quiz](#assessment-quiz)
 - [Task](#task)
@@ -30,47 +32,62 @@ youtubeVideos: [{"title":"Create Application in MFA","url":"https://www.youtube.
 
 ## Goal
 
-Understand what React is, why developers use it, and how it helps build modern user interfaces in a practical way.
+By the end of this lesson, you should be able to explain what React is, why it is used, how components and JSX work, how props and state differ, what declarative UI and one-way data flow mean, and how a React render leads to a browser update.
 
 ## Prerequisites
 
-- Basic computer usage (files, folders, terminal)
-- Basic JavaScript understanding (variables, functions)
-- Node.js installed (recommended: LTS version)
-- VS Code installed
+- Basic JavaScript: variables, functions, arrays, objects, arrow functions, and `.map()`
+- Basic HTML and CSS
+- Basic computer usage: files, folders, terminal
+- Node.js LTS installed
+- VS Code or another code editor
 
-Verification commands:
+Verify your environment:
 
 ```bash
 node -v
 npm -v
 ```
 
-## Explanation
+> React itself does not require VS Code or a particular editor. These tools are recommended for the course workflow.
 
-React is a JavaScript library used to build user interfaces. It helps you split a UI into small reusable pieces called components. Instead of writing one large page at once, you build small parts and combine them.
+## Why React
 
-React was created at Facebook, now called Meta, to solve the problem of building fast, interactive screens that change often. One reason React became popular is that it updates the browser efficiently by comparing UI changes before touching the real DOM.
+Modern applications contain many independent pieces of UI: navigation, forms, tables, cards, dialogs, notifications, and data-driven views. React provides a component model that lets developers describe these pieces as reusable JavaScript functions and compose them into screens.
 
-React is useful because it:
+React is a **JavaScript library for building user interfaces**. It is not the complete application platform by itself. Applications commonly add other tools for routing, data fetching, testing, forms, and other concerns.
 
-- Keeps UI code organized
-- Makes reusing code easier
-- Updates the screen efficiently when data changes
-- Works well for apps that grow over time
-- Gives teams flexibility because React is a UI library, not a full opinionated framework
+React was originally created at Facebook and open-sourced in 2013. It became popular because its component model and declarative approach made complex, frequently changing interfaces easier to reason about and maintain.
+
+## React Mental Model
+
+Keep this mental model throughout the course:
+
+```text
+Data changes
+    ↓
+React renders the component again
+    ↓
+React creates a new element tree
+    ↓
+React reconciles the new tree with the previous tree
+    ↓
+React commits the necessary DOM changes
+    ↓
+Browser displays the updated UI
+```
+
+The important idea is **not** that React blindly rewrites the entire page. React determines what work is required and commits the resulting DOM changes. The reconciliation process is an implementation detail that helps React manage UI updates efficiently.
 
 ## Topic by Topic
 
 ### Topic 1: What is React?
 
-Theory:
-React is a JavaScript library focused on building user interfaces. It helps developers create screen elements as reusable building blocks.
+**Theory**
 
-Practical:
-Open any React project and identify UI blocks like header, sidebar, card, and button. Think of each block as a component.
+React is a JavaScript library for building user interfaces. A React application is composed of components that describe what should appear on the screen.
 
-Code Example:
+**Example**
 
 ```jsx
 function App() {
@@ -80,85 +97,67 @@ function App() {
 export default App;
 ```
 
-**Explanation:** This is the simplest React component. `function App()` is a JavaScript function that returns JSX (HTML-like syntax). React will render this `<h1>` in the browser. The `export default` statement makes the component importable in other files.
+**Explanation**
 
-**Key Points:**
+`App` is a function component. Calling the component as part of React's rendering process produces a React element tree. JSX provides a readable syntax for describing that UI. `export default` allows another module to import `App`.
 
-- React components are functions that return JSX
-- JSX looks like HTML but runs inside JavaScript
-- `export default` makes components available to other files
+**Key points**
 
-### Topic 2: Who developed React and why
+- React is primarily focused on the UI layer.
+- Components are the main building blocks.
+- JSX is a syntax used to describe UI.
+- A component does not have to contain state; many components are purely presentational.
 
-Theory:
-React was first developed by Facebook, now Meta. It was created to make complex, changing user interfaces easier to build and maintain.
+---
 
-Practical:
-Think about apps like social feeds, dashboards, chat screens, and ecommerce pages. These screens update often, so manually changing the DOM becomes hard to manage.
+### Topic 2: Who developed React and why?
 
-Code Example:
+**Theory**
 
-```jsx
-function App() {
-  const creator = "Meta";
-  const reason = "Build fast, interactive UI with reusable components";
+React was created at Facebook and open-sourced in 2013. It was designed to make complex, interactive user interfaces easier to build and maintain.
 
-  return (
-    <section>
-      <h2>React was developed by {creator}</h2>
-      <p>{reason}</p>
-    </section>
-  );
-}
-```
+**Practical thinking**
 
-**Explanation:** React became popular because teams needed a simpler way to manage screens with many small changing parts. Instead of manually updating the page again and again, developers describe the UI and let React handle updates.
+Imagine a social feed containing posts, reactions, comments, notifications, and profile controls. Each part can change independently. A component-based model allows those pieces to be developed and composed separately.
 
-**Key Points:**
+**Key points**
 
-- React was developed at Facebook, now Meta
-- It was created to handle dynamic, frequently changing interfaces
-- Reusable components reduce repeated UI code
+- React originated at Facebook, now Meta.
+- React was open-sourced in 2013.
+- Its component and declarative model are central to its design.
+
+---
 
 ### Topic 3: React vs Angular at a high level
 
-Theory:
-React is mainly a UI library. Angular is a full framework with more built-in rules and tools.
+React and Angular solve overlapping UI problems but provide different levels of built-in structure.
 
-Practical:
-Compare how much setup and decision-making each option gives a team.
+| Area | React | Angular |
+|---|---|---|
+| Core positioning | UI library | Full application framework |
+| UI syntax | JSX | Angular templates |
+| Components | Function components are common | Components with Angular decorators/metadata |
+| Routing | Commonly added through the ecosystem | Built-in Angular Router |
+| Dependency injection | Not a core React pattern | Built into Angular |
+| State/data patterns | Many ecosystem choices | Signals, RxJS, services, and other Angular patterns |
+| Flexibility | High | More opinionated |
+| Learning model | JavaScript + React concepts + ecosystem | Angular framework + TypeScript + Angular APIs |
 
-Code Example:
+Neither is universally better. The appropriate choice depends on the product, team, ecosystem, and architectural requirements.
 
-```text
-React:
-- Mainly solves UI rendering
-- More flexible tooling choices
-- Smaller starting surface for beginners
+---
 
-Angular:
-- Full framework
-- More built-in features out of the box
-- Stronger conventions and structure
-```
+### Topic 4: DOM and React's reconciliation model
 
-**Explanation:** React gives more freedom in how you choose routing, state management, and data fetching tools. Angular gives more built-in structure from the beginning. Neither is universally better. React is often chosen when teams want flexibility and a component-driven UI approach.
+**Theory**
 
-**Key Points:**
+The **DOM (Document Object Model)** is the browser's object representation of an HTML document. JavaScript can interact with it to read and change the page.
 
-- React is a library focused on UI
-- Angular is a full framework with more built-in features
-- React usually gives more flexibility in tooling choices
+React does not simply manipulate the DOM manually for every UI operation. Instead, React renders a description of the UI, compares the new result with the previous result during reconciliation, and commits the required DOM changes.
 
-### Topic 4: DOM and Virtual DOM basics
+You may hear this described as React's **Virtual DOM** approach. Treat the Virtual DOM as an implementation concept rather than a claim that React is automatically faster than every other UI technology.
 
-Theory:
-The DOM is the browser's page structure. React works with a virtual representation first, then updates the real DOM efficiently.
-
-Practical:
-Open browser DevTools and inspect how changing state updates only the needed part of the page.
-
-Code Example:
+**Example**
 
 ```jsx
 import { useState } from "react";
@@ -169,32 +168,41 @@ function App() {
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increase</button>
+      <button onClick={() => setCount((current) => current + 1)}>
+        Increase
+      </button>
     </div>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** When `count` changes, React creates a new virtual UI description, compares it with the previous one, and updates only the changed part in the real DOM. This is one reason React apps feel efficient.
+**What happens when the button is clicked?**
 
-**Key Points:**
+1. The click event runs the state setter.
+2. React schedules an update.
+3. `App` renders again with the new state value.
+4. React reconciles the new element tree with the previous one.
+5. React commits the necessary DOM update.
+6. The browser displays the new count.
 
-- DOM means the real page structure inside the browser
-- React compares UI changes before touching the real DOM
-- Virtual DOM helps React update only what changed
+> Important: a component re-render does not mean that every DOM node is recreated. Rendering and DOM mutation are different steps.
+
+---
 
 ### Topic 5: Why React is used
 
-Theory:
-React is widely used because it is component-based, scalable, and efficient for dynamic UIs.
+React is commonly used for dashboards, ecommerce applications, administration portals, social interfaces, content applications, and many other interactive UIs.
 
-Practical:
-List three common applications where UI changes often, such as dashboards, ecommerce pages, and form-heavy portals.
-
-Code Example:
+**Example: rendering data**
 
 ```jsx
-const appBenefits = ["Reusable", "Maintainable", "Fast updates"];
+const appBenefits = [
+  "Reusable components",
+  "Declarative UI",
+  "Large ecosystem",
+];
 
 function App() {
   return (
@@ -205,62 +213,58 @@ function App() {
     </ul>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** This example shows how to render a list from an array. The `.map()` function loops through each `appBenefits` item and returns a `<li>` element. The `key={item}` helps React track which list items changed. The curly braces `{}` allow JavaScript expressions inside JSX.
+**Explanation**
 
-**Key Points:**
+`.map()` transforms each array item into a JSX element. The `key` gives React a stable identity for each list item.
 
-- Use `.map()` to convert arrays into JSX elements
-- Always provide unique `key` prop for list items
-- Curly braces `{}` embed JavaScript inside JSX
+A key should be **unique among siblings and stable across renders**. Using an array index can be acceptable for a static list, but it can cause incorrect identity behavior when items are inserted, removed, or reordered.
+
+---
 
 ### Topic 6: Component-based structure
 
-Theory:
-Components break large UIs into smaller, manageable units. Each component should do one clear job.
-
-Practical:
-Split a simple page into components: Header, Hero, Features, Footer.
-
-Code Example:
+Components allow a large UI to be divided into smaller units with clear responsibilities.
 
 ```jsx
 function Header() {
-  return <h2>My App Header</h2>;
+  return <header>My App Header</header>;
 }
 
 function Footer() {
-  return <p>My App Footer</p>;
+  return <footer>My App Footer</footer>;
 }
 
 function App() {
   return (
     <div>
       <Header />
+      <main>Application content</main>
       <Footer />
     </div>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** This shows **composition** - combining smaller components into a larger UI. `Header` and `Footer` are reusable building blocks. `App` imports and uses them like custom HTML tags (`<Header />`, `<Footer />`). This pattern makes code easier to maintain because each component has one clear job.
+This is **composition**: smaller components are combined to create a larger UI.
 
-**Key Points:**
+**Key points**
 
-- Break UI into small, single-purpose components
-- Reuse components by combining them together
-- Component names must start with capital letters
+- Components should have clear responsibilities.
+- Components can be reused in different parts of an application.
+- Component names conventionally start with an uppercase letter.
+- Not every component needs its own state.
+
+---
 
 ### Topic 7: JSX
 
-Theory:
-JSX lets you write HTML-like syntax inside JavaScript. It improves readability when creating UI.
-
-Practical:
-Create a title and paragraph with one dynamic value from a variable.
-
-Code Example:
+JSX is a JavaScript syntax extension that lets you write markup-like expressions inside JavaScript. It is transformed by the build tool into JavaScript calls that React can use.
 
 ```jsx
 function App() {
@@ -269,29 +273,27 @@ function App() {
   return (
     <div>
       <h1>{title}</h1>
-      <p>JSX makes component UI easier to read.</p>
+      <p>JSX lets us describe UI close to the JavaScript logic.</p>
     </div>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** JSX mixes HTML and JavaScript seamlessly. Variables are inserted using curly braces `{}`. Here, `{title}` displays the value stored in the `title` variable. This makes templates dynamic without leaving JavaScript.
+**Important JSX rules**
 
-**Key Points:**
+- Return one root element, or use a Fragment (`<>...</>`).
+- Use `{}` for JavaScript expressions.
+- Use `className` instead of HTML's `class` attribute.
+- Close JSX elements properly.
+- JSX is not HTML; it follows JavaScript and React's syntax rules.
 
-- Use curly braces `{}` to embed JavaScript expressions in JSX
-- Variables display their values inside curly braces
-- JSX syntax is cleaner than string concatenation
+---
 
 ### Topic 8: Props
 
-Theory:
-Props are inputs passed from parent component to child component. Props make components reusable.
-
-Practical:
-Create a child component and pass different names from parent.
-
-Code Example:
+Props are read-only inputs supplied to a component by its parent.
 
 ```jsx
 function Welcome({ name }) {
@@ -306,25 +308,45 @@ function App() {
     </div>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** **Props** are how you pass data into components. `Welcome` receives a `name` prop and displays it. By passing different `name` values (`"Asha"` and `"Ravi"`), the same component produces different outputs. This makes components reusable.
+**Mental model**
 
-**Key Points:**
+```text
+Parent
+  │
+  │ props
+  ▼
+Child
+```
 
-- Props are function parameters for components
-- Pass different props to show different content
-- Props make components flexible and reusable
+The child can read its props but should not mutate the props object to change the parent's data. If a child needs to request a change, the parent can pass a callback function as a prop.
+
+**Example**
+
+```jsx
+function Child({ onSelect }) {
+  return <button onClick={() => onSelect("React")}>Select React</button>;
+}
+
+function App() {
+  function handleSelect(value) {
+    console.log(value);
+  }
+
+  return <Child onSelect={handleSelect} />;
+}
+```
+
+This pattern becomes important later when learning state lifting and parent-child communication.
+
+---
 
 ### Topic 9: State
 
-Theory:
-State stores changing data inside a component. When state updates, UI re-renders.
-
-Practical:
-Build a small counter with Increase button.
-
-Code Example:
+State represents data that belongs to a component's current UI state and can change over time.
 
 ```jsx
 import { useState } from "react";
@@ -335,29 +357,36 @@ function App() {
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increase</button>
+      <button onClick={() => setCount((current) => current + 1)}>
+        Increase
+      </button>
     </div>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** **State** stores data that can change inside a component. `useState(0)` creates a state variable `count` starting at 0, and `setCount` is the function to change it. When the button is clicked, `setCount(count + 1)` adds 1 to count, which triggers a re-render and updates the displayed value.
+**What `useState` gives you**
 
-**Key Points:**
+```text
+[count, setCount]
+   │       │
+   │       └── function used to request a state update
+   └────────── current state value
+```
 
-- `useState` creates state variable and setter function
-- State changes trigger component re-renders
-- Use setter function to update state, never mutate directly
+When state changes, React schedules a new render so the UI can reflect the new state.
 
-### Topic 10: Declarative UI
+**Important**
 
-Theory:
-In React, you describe UI for each state, and React handles DOM updates.
+Do not directly mutate state objects or arrays. Use the state setter with a new value instead. Detailed immutable update patterns will be covered later.
 
-Practical:
-Show Login button when user is logged out, and Logout when logged in.
+---
 
-Code Example:
+### Topic 10: Declarative UI and conditional rendering
+
+In an imperative approach, you tell the browser **how** to change the DOM step by step. In a declarative approach, you describe **what the UI should look like for the current state**, and React manages the update process.
 
 ```jsx
 import { useState } from "react";
@@ -368,33 +397,27 @@ function App() {
   return (
     <div>
       <p>Status: {isLoggedIn ? "Logged In" : "Logged Out"}</p>
-      <button onClick={() => setIsLoggedIn(!isLoggedIn)}>
+      <button onClick={() => setIsLoggedIn((current) => !current)}>
         {isLoggedIn ? "Logout" : "Login"}
       </button>
     </div>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** This shows **conditional rendering** - UI changes based on state. The ternary operator `?` checks if `isLoggedIn` is true. If yes, show one thing; if no, show another. The `!` operator toggles the boolean (true ↔ false). This pattern is fundamental for interactive UIs.
+The ternary operator provides **conditional rendering**. Conditional rendering is one practical example of React's declarative programming model.
 
-**Key Points:**
+---
 
-- Use ternary operator `condition ? trueValue : falseValue` for conditional rendering
-- Boolean state (`true`/`false`) works well for toggles
-- UI text and display can change based on state
+### Topic 11: Render cycle and one-way data flow
 
-### Topic 11: Render Cycle and One-way Data Flow
-
-Theory:
-React re-renders UI when props or state change. Data usually flows from parent to child in one direction, which keeps behavior easier to reason about.
-
-Practical:
-Think of a parent component that stores a value and passes it into two children. Both children update when parent state changes.
-
-Code Example:
+React commonly follows a one-way data flow model: data is owned by a component and passed down to children through props.
 
 ```jsx
+import { useState } from "react";
+
 function Message({ text }) {
   return <p>{text}</p>;
 }
@@ -410,216 +433,399 @@ function App() {
     </div>
   );
 }
+
+export default App;
 ```
 
-**Explanation:** This demonstrates **one-way data flow**. The parent (`App`) owns the state and passes it as props to children (`Message`). Both `Message` components show the same value. When the button clicks and updates state, both children re-render with the new value. This makes data flow predictable and easier to debug.
+**Flow**
 
-**Key Points:**
+```text
+App owns state
+    ↓
+App passes text as props
+    ↓
+Message receives text
+    ↓
+User clicks Update
+    ↓
+setText requests a state update
+    ↓
+App renders again
+    ↓
+Children receive the new prop
+```
 
-- Parent stores state, child receives it as props
-- Data flows down from parent to child (one-way)
-- Multiple children can receive the same prop
-- Changes in parent state automatically update all children
+A re-render means React runs the relevant component rendering logic again. It does **not** automatically mean that every DOM node changes.
 
 ## Key Concepts
 
-- Component: A small reusable piece of UI
-- DOM: The real browser page structure
-- Virtual DOM: React's in-memory UI representation used to plan efficient updates
-- JSX: A syntax that lets you write HTML-like code in JavaScript
-- Props: Data passed from one component to another
-- State: Data that can change inside a component
-- Declarative UI: You describe what the UI should look like, and React updates it for you
-- One-way data flow: Parent components pass data down to children
-- Re-render: React runs component logic again when state or props change
+- **React:** JavaScript library for building user interfaces.
+- **Component:** Reusable unit that describes part of a UI.
+- **JSX:** JavaScript syntax extension used to describe UI.
+- **Props:** Read-only inputs passed to a component.
+- **State:** Component data that can change over time.
+- **Render:** React evaluates component logic to produce the current UI description.
+- **Reconciliation:** React determines how the new element tree differs from the previous one.
+- **Commit:** React applies the required changes to the host environment, such as the browser DOM.
+- **Declarative UI:** Describe the desired UI for the current state instead of manually performing DOM operations.
+- **One-way data flow:** Data commonly moves from parent to child through props.
 
 ## Visual Concept Map
 
 ```mermaid
 flowchart TD
-  A[React App] --> B[Components]
+  A[React Application] --> B[Components]
   A --> C[JSX]
   A --> D[Props]
   A --> E[State]
-  A --> J[Virtual DOM]
-
-  B --> F[Reusable UI Blocks]
-  C --> G[HTML-like Syntax in JS]
-  D --> H[Parent to Child Data]
-  E --> I[Dynamic UI Updates]
-  J --> K[Efficient DOM Updates]
+  E --> F[Render]
+  D --> F
+  F --> G[Element Tree]
+  G --> H[Reconciliation]
+  H --> I[Commit]
+  I --> J[Browser DOM]
+  B --> K[Reusable UI]
+  D --> L[Parent to Child Data]
 ```
 
 ## End-to-End Practical
 
-1. Install Node.js so you can run JavaScript tools locally.
-2. Install VS Code as your code editor.
-3. Create a React project using Vite.
-4. Start the development server.
-5. Open the app in the browser and edit a file to see live reload.
-6. Replace the default App component with the Day 1 Hands-on Coding example.
-7. Add one child component that receives a prop from parent state.
-8. Verify that title, props-based cards, and state button all work.
+Build a small React application that demonstrates the Day 1 mental model.
 
-### Example Commands
+### Step 1: Create the application
 
 ```bash
-npm create vite@latest my-react-app
-cd my-react-app
+npm create vite@latest day-1-react -- --template react
+cd day-1-react
 npm install
 npm run dev
 ```
 
-## Hands-on Coding
+### Step 2: Create a reusable component
 
-Use this full Day 1 sample to combine component, JSX, props, and state in one screen.
+Create `src/InfoCard.jsx`:
 
 ```jsx
-import { useState } from "react";
-
 function InfoCard({ title, description }) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "12px",
-        marginTop: "10px",
-      }}
-    >
-      <h3>{title}</h3>
+    <article>
+      <h2>{title}</h2>
       <p>{description}</p>
-    </div>
+    </article>
   );
 }
 
+export default InfoCard;
+```
+
+### Step 3: Use props and state
+
+Replace `src/App.jsx` with:
+
+```jsx
+import { useState } from "react";
+import InfoCard from "./InfoCard";
+
 function App() {
-  const topic = "React Day 1";
-  const learner = "Frontend Developer";
   const [count, setCount] = useState(0);
 
   return (
-    <div
-      style={{ padding: "24px", fontFamily: "sans-serif", maxWidth: "720px" }}
-    >
-      <h1>Welcome to {topic}</h1>
-      <p>Today you are learning as a {learner}.</p>
+    <main>
+      <h1>React Day 1</h1>
+      <p>Learning components, JSX, props, and state.</p>
 
       <InfoCard
-        title="Component"
-        description="A component is a reusable part of the UI."
+        title="Components"
+        description="Reusable building blocks for UI."
       />
       <InfoCard
-        title="JSX"
-        description="JSX lets you write readable UI inside JavaScript."
+        title="Props"
+        description="Read-only inputs passed from parent to child."
+      />
+      <InfoCard
+        title="State"
+        description="Changing data that can cause a new render."
       />
 
-      <div style={{ marginTop: "16px" }}>
-        <p>State Demo Count: {count}</p>
-        <button onClick={() => setCount(count + 1)}>Increase Count</button>
-      </div>
-    </div>
+      <section>
+        <p>Count: {count}</p>
+        <button onClick={() => setCount((current) => current + 1)}>
+          Increase
+        </button>
+      </section>
+    </main>
   );
 }
 
 export default App;
 ```
 
+### Step 4: Verify the behavior
+
+- The page displays three reusable cards.
+- Each card receives different props.
+- Clicking **Increase** changes the state.
+- The displayed count updates.
+- The browser does not require manual DOM manipulation from your component code.
+
+### Step 5: Extend the application
+
+Add a `learnerName` state and pass it to a new `Welcome` component. Then add a button that changes the learner name.
+
+## Hands-on Coding
+
+### Challenge 1: Profile Card
+
+Create a reusable `ProfileCard` component that accepts:
+
+- `name`
+- `role`
+- `experience`
+
+Render at least three profiles from the parent.
+
+### Challenge 2: Counter
+
+Add:
+
+- Increase
+- Decrease
+- Reset
+
+Use functional state updates such as:
+
+```jsx
+setCount((current) => current + 1);
+```
+
+### Challenge 3: Login status
+
+Create a boolean state called `isLoggedIn` and conditionally display Login or Logout.
+
+### Challenge 4: Parent-child communication
+
+Pass an `onSelect` callback from the parent to a child button. When the child is clicked, the parent should update a message.
+
+## Common Mistakes
+
+### Mistake 1: Mutating state directly
+
+Avoid:
+
+```jsx
+count = count + 1;
+```
+
+Use the setter:
+
+```jsx
+setCount((current) => current + 1);
+```
+
+### Mistake 2: Calling a handler while rendering
+
+Avoid:
+
+```jsx
+<button onClick={setCount(count + 1)}>Increase</button>
+```
+
+This calls the setter during rendering.
+
+Use:
+
+```jsx
+<button onClick={() => setCount((current) => current + 1)}>
+  Increase
+</button>
+```
+
+### Mistake 3: Unstable list keys
+
+Avoid generating random keys during every render. Prefer a stable identifier from the data.
+
+### Mistake 4: Thinking every re-render changes the entire DOM
+
+A component can render again while React determines that only a small part of the DOM needs to change.
+
+### Mistake 5: Treating props as writable component state
+
+Props are inputs from the parent. If the component needs independent changing data, use state or another appropriate state pattern.
+
 ## Mini Exercise
 
-Create a small learner profile page using Day 1 concepts.
+1. Create a `Greeting` component that receives `name` as a prop.
+2. Render it three times with different names.
+3. Add a counter using `useState`.
+4. Add a Reset button.
+5. Render a list of three technologies with stable keys.
+6. Add a boolean state and conditionally render a message.
 
-Scenario:
-Build a React screen that shows learner details and a practice counter.
-
-Steps:
-
-1. Create a component named LearnerCard with props: name and role.
-2. Render LearnerCard two times with different values.
-3. Add one local state value count and an Increase button.
-4. Show login status text using a boolean state and toggle button.
-
-Expected output:
-
-- Two learner cards rendered from reusable component.
-- One counter that updates on button click.
-- One Login/Logout toggle using conditional UI.
+**Expected learning:** You should be able to combine JSX, components, props, state, events, lists, and conditional rendering without copying the same UI structure repeatedly.
 
 ## Assessment Quiz
 
-### Quiz Questions
+### Q1. What is React?
 
-1. What is the main purpose of JSX in React?
-2. Which concept is used to pass data from parent to child?
-3. Why does the UI update when state changes?
-4. True or False: Components should be reused whenever possible.
-5. Which is better React style: manual DOM updates or declarative UI?
+A. A database
+B. A JavaScript library for building user interfaces
+C. A CSS preprocessor
+D. A backend runtime
 
-### Quiz Answers
+**Answer:** B
 
-1. JSX makes UI code readable by allowing HTML-like syntax in JavaScript.
-2. Props
-3. React re-renders the component after state updates.
-4. True
-5. Declarative UI
+### Q2. What is a component?
+
+A. A reusable unit of UI logic and presentation
+B. A database table
+C. A CSS selector
+D. A browser extension
+
+**Answer:** A
+
+### Q3. What are props?
+
+A. Read-only inputs passed to a component
+B. Global variables automatically shared everywhere
+C. CSS properties
+D. Database records
+
+**Answer:** A
+
+### Q4. What normally happens after a state update?
+
+A. React schedules a new render
+B. The browser is restarted
+C. The entire HTML file is downloaded again
+D. The component is permanently destroyed
+
+**Answer:** A
+
+### Q5. Why are keys used when rendering lists?
+
+A. To style elements
+B. To give list items stable identity among siblings
+C. To create CSS classes
+D. To store component state
+
+**Answer:** B
+
+### Q6. What is declarative UI?
+
+A. Manually changing every DOM node
+B. Describing what the UI should look like for the current state
+C. Avoiding JavaScript
+D. Writing only CSS
+
+**Answer:** B
+
+### Q7. Where does data commonly flow in React?
+
+A. Child to every component automatically
+B. Parent to child through props
+C. Database directly to DOM
+D. Browser to parent without events
+
+**Answer:** B
 
 ## Task
 
-- Install Node.js and verify it with node -v
-- Install VS Code
-- Create a new React app with Vite
-- Run the app in the browser
-- Replace App with the Hands-on Coding example
-- Change the heading text and verify live reload
-- Add one more InfoCard with your own description
-- Complete the Mini Exercise with LearnerCard, counter, and login toggle
-- Attempt the Assessment Quiz before checking the answers
+Build a **React Profile Dashboard** containing:
+
+- Header component
+- Profile card component
+- Technology list
+- Login/logout status
+- Counter
+- Reset button
+- At least one parent-to-child prop
+- At least one child-to-parent callback
+
+### Acceptance criteria
+
+- [ ] Application runs with Vite.
+- [ ] UI is split into reusable components.
+- [ ] Props are used for reusable data.
+- [ ] State is updated only through setters.
+- [ ] List items use stable keys.
+- [ ] Conditional rendering is used.
+- [ ] Child-to-parent communication is demonstrated through a callback prop.
+- [ ] No manual DOM manipulation is required for the UI behavior.
 
 ## Self Check
 
-- The project starts without errors
-- The browser shows the React app
-- A file edit updates the UI automatically
-- The counter button updates state on click
-- You can explain where component, JSX, props, and state are used
-- You can build one small screen using all Day 1 concepts
-- You can answer at least 4 out of 5 quiz questions correctly
+Before moving to Day 2, you should be able to answer these without looking at the lesson:
+
+- What problem does React solve?
+- What is a component?
+- What is JSX?
+- What is the difference between props and state?
+- Why should state be updated through a setter?
+- What does a key do in a list?
+- What does declarative UI mean?
+- What does one-way data flow mean?
+- What happens at a high level after a state update?
+- Why does a re-render not necessarily mean the entire DOM is replaced?
+
+If any answer is unclear, repeat the relevant section and rebuild the hands-on example.
 
 ## Interview Questions and Answers
 
-### Beginner
+### 1. Is React a framework or a library?
 
-**Question:** What is React?
+React is generally described as a JavaScript library focused on building user interfaces. A production application commonly combines React with additional libraries or framework tooling for routing, data fetching, testing, and other concerns.
 
-**Answer:** React is a JavaScript library for building user interfaces. It helps developers create reusable UI components and update the screen efficiently.
+### 2. What is JSX?
 
-**Question:** What is a component in React?
+JSX is a JavaScript syntax extension that allows developers to write markup-like expressions alongside JavaScript logic. Build tooling transforms JSX into JavaScript that React can use.
 
-**Answer:** A component is a reusable function that returns UI. You can combine many components to build a complete page.
+### 3. What is the difference between props and state?
 
-### Middle
+Props are inputs supplied by a parent and should be treated as read-only by the receiving component. State is data managed by a component or another state mechanism and can change over time.
 
-**Question:** Why do developers prefer React for building frontend apps?
+### 4. What happens when state changes?
 
-**Answer:** Developers prefer React because it encourages reusable components, makes UI code easier to maintain, and handles updates to the screen efficiently when data changes.
+The state setter schedules an update. React renders the relevant component tree again, reconciles the resulting element tree, and commits the necessary UI changes.
 
-**Question:** What is the role of props in reusable components?
+### 5. What is reconciliation?
 
-**Answer:** Props let parent components pass values to child components, which makes one component reusable with different content.
+Reconciliation is the process React uses to compare the newly rendered element tree with the previous one and determine what changes are needed before committing updates.
 
-### Advanced
+### 6. Why are keys important in React lists?
 
-**Question:** What does React mean by a component-based and declarative approach?
+Keys provide stable identity for sibling elements across renders. They help React correctly understand which items were added, removed, or moved.
 
-**Answer:** Component-based means the UI is split into small independent pieces that can be reused. Declarative means you describe the desired UI state, and React takes care of updating the DOM to match that state instead of manually changing elements step by step.
+### 7. What does one-way data flow mean?
 
-**Question:** How does state change trigger UI updates in React?
+Data commonly flows from parent components to child components through props. A child can request a parent update by invoking a callback supplied by the parent.
 
-**Answer:** When you update state with its setter function, React schedules a re-render and computes the next UI output. React then updates only the parts of the DOM that changed.
+### 8. Does every component need state?
+
+No. Many components are pure or presentational components that receive props and return UI without owning changing state.
+
+### 9. Does a React re-render mean the whole DOM is recreated?
+
+No. Rendering and DOM updates are separate concepts. React can render component logic again and then determine which host environment changes are actually necessary.
+
+### 10. Why shouldn't state be mutated directly?
+
+React state should be updated through the state setter or the appropriate state-management API. Direct mutation can make updates unpredictable and prevents React from reliably tracking the intended state transition.
 
 ## Day 1 Outcome
 
-- You know what React is and why it is used
-- You understand the basic terms you will see again in later lessons
-- You can create and run a React project locally
-- You are ready to move to Day 2
+After completing this lesson, you should have a working mental model of React and be able to build a small interactive application using:
+
+```text
+React
+ ├── Components
+ ├── JSX
+ ├── Props
+ ├── State
+ ├── Events
+ ├── Conditional Rendering
+ ├── Lists + Keys
+ ├── Declarative UI
+ └── One-way Data Flow
+```
+
+The next lessons will go deeper into project structure, JSX, components, props, state, and the other concepts introduced here.
