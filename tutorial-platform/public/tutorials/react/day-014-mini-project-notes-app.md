@@ -2,166 +2,204 @@
 title: Mini Project - Notes App
 slug: day-014-mini-project-notes-app
 dayLabel: Day 14
-level: Beginner
-estimatedMinutes: 45
+level: Beginner to Intermediate
+estimatedMinutes: 90
 order: 14
 track: react
 ---
-# Day 14 [Beginner to Intermediate]: Mini Project - Notes App
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 14 Outcome](#day-14-outcome)
+# Day 14 [Beginner → Intermediate]: Mini Project — Notes App
 
 ## Goal
 
-Build a practical notes app using array state, events, forms, and conditional rendering basics.
+Build a small but production-minded Notes App that combines controlled forms, object/array state, immutable updates, props, callbacks, conditional rendering, stable keys, and browser persistence.
+
+This is not just a CRUD exercise. The goal is to practice **state ownership, component boundaries, data modeling, and UI states**.
 
 ## Prerequisites
 
-- Day 13 completed
-- Comfortable with array and object state
+- Days 4–13
+- Components, props, callbacks
+- `useState`, arrays/objects, forms, events
+- Basic conditional and list rendering
 
-## Explanation
+## Feature Specification
 
-This mini project combines core React fundamentals into one real feature: add notes, list notes, and delete notes.
+The app should support:
 
-## Topic by Topic
+1. Create a note
+2. Reject empty notes
+3. Assign a priority
+4. Display notes
+5. Delete a note
+6. Edit a note
+7. Filter by priority
+8. Show an empty state
+9. Persist notes in `localStorage`
+10. Restore notes after refresh
 
-### Topic 1: Notes Data Model
+## Data Model
 
-Theory:
-Each note should have stable id, text, and created time.
-
-Practical:
-Design notes as object array.
-
-Code Example:
-
-```jsx
-{ id: Date.now(), text: "Revise hooks", createdAt: new Date().toLocaleTimeString() }
-```
-
-**Explanation:** Each note is an object with a unique id, text content, and creation time.
-
-**Key Points:**
-
-- Object structure keeps note data organized.
-- `Date.now()` can be used as a quick unique id.
-- Timestamp helps users understand when note was added.
-
-### Topic 2: Add Note Flow
-
-Theory:
-Input value enters state and pushes a new note immutably.
-
-Practical:
-Submit one note from form.
-
-Code Example:
-
-```jsx
-setNotes((prev) => [...prev, newNote]);
-```
-
-**Explanation:** This adds a new note to the existing notes list by creating a new array.
-
-**Key Points:**
-
-- Keep old notes with `...prev`.
-- Append the new note at the end.
-- Immutable updates keep UI predictable.
-
-### Topic 3: Delete Note Flow
-
-Theory:
-Filter by id to remove selected note only.
-
-Practical:
-Attach delete button per note.
-
-Code Example:
-
-```jsx
-setNotes((prev) => prev.filter((note) => note.id !== id));
-```
-
-**Explanation:** This removes only the selected note by id and keeps all other notes.
-
-**Key Points:**
-
-- `filter` is great for remove operations.
-- Use stable id for exact targeting.
-- No direct mutation is needed.
-
-### Topic 4: Empty State Message
-
-Theory:
-Show meaningful UI when no notes exist.
-
-Practical:
-Render "No notes yet" conditionally.
-
-Code Example:
-
-```jsx
+```js
 {
-  notes.length === 0 && <p>No notes yet</p>;
+  id: "note-1",
+  text: "Revise React props",
+  priority: "high",
+  createdAt: 1710000000000
 }
 ```
 
-**Explanation:** When notes list is empty, this shows a friendly message instead of a blank area.
+A stable identifier is required for updates, deletion, and list keys. `Date.now()` is acceptable for a simple learning project, but production systems should use IDs supplied by a backend or a collision-safe ID strategy appropriate to the application.
 
-**Key Points:**
+## Architecture
 
-- Empty states improve user guidance.
-- Use condition checks before list rendering.
-- Keep message short and clear.
-
-### Topic 5: Reusable Note Item
-
-Theory:
-Keep NoteItem component separate for cleaner code.
-
-Practical:
-Pass note data and delete handler as props.
-
-Code Example:
-
-```jsx
-<NoteItem key={note.id} note={note} onDelete={removeNote} />
+```text
+App
+├── NoteForm
+├── FilterBar
+└── NoteList
+    └── NoteItem
 ```
 
-**Explanation:** A reusable `NoteItem` component keeps list code cleaner and easier to maintain.
+**State ownership:** Keep the notes collection in `App` because multiple children need to read or modify it. Pass data down and callbacks up.
 
-**Key Points:**
+## Step 1: Initial State
 
-- Pass data and actions through props.
-- Keep parent focused on list/state logic.
-- Reusable items reduce repeated JSX.
+```jsx
+const initialForm = {
+  text: "",
+  priority: "medium",
+};
 
-### Topic 6: Persist Notes in Local Storage
+const [form, setForm] = useState(initialForm);
+const [notes, setNotes] = useState([]);
+const [filter, setFilter] = useState("all");
+const [editingId, setEditingId] = useState(null);
+```
 
-Theory:
-Persisting notes keeps user data after refresh and improves real-world usability.
+Do not store `filteredNotes` as state. It can be derived from `notes` and `filter`.
 
-Practical:
-Load notes from localStorage on mount and save when notes change.
+## Step 2: Create Notes
 
-Code Example:
+```jsx
+function addNote(event) {
+  event.preventDefault();
+
+  const text = form.text.trim();
+  if (!text) return;
+
+  const note = {
+    id: crypto.randomUUID(),
+    text,
+    priority: form.priority,
+    createdAt: Date.now(),
+  };
+
+  setNotes((current) => [...current, note]);
+  setForm(initialForm);
+}
+```
+
+`crypto.randomUUID()` is preferable to `Date.now()` for this browser-only learning project because it provides a purpose-built unique identifier.
+
+## Step 3: Delete
+
+```jsx
+function deleteNote(id) {
+  setNotes((current) => current.filter((note) => note.id !== id));
+}
+```
+
+## Step 4: Edit
+
+```jsx
+function saveEdit(id, nextText, nextPriority) {
+  const text = nextText.trim();
+  if (!text) return;
+
+  setNotes((current) =>
+    current.map((note) =>
+      note.id === id
+        ? { ...note, text, priority: nextPriority }
+        : note
+    )
+  );
+}
+```
+
+`map` creates a new array and replaces only the matching object.
+
+## Step 5: Derived Filtering
+
+```jsx
+const visibleNotes =
+  filter === "all"
+    ? notes
+    : notes.filter((note) => note.priority === filter);
+```
+
+This is **derived data**. Do not create another state variable for it unless there is a specific architectural reason.
+
+## Step 6: Empty States
+
+There are two useful empty states:
+
+- No notes exist at all → encourage the first note.
+- Notes exist, but the current filter has no matches → explain that the filter produced no results.
+
+```jsx
+if (notes.length === 0) {
+  return <p>No notes yet. Create your first note.</p>;
+}
+
+if (visibleNotes.length === 0) {
+  return <p>No notes match this filter.</p>;
+}
+```
+
+In the real application, these messages should be rendered inside the page layout rather than returning from the entire `App` if headers/controls must remain visible.
+
+## Step 7: Component Composition
+
+### `NoteForm`
+
+Responsible for input fields and submission UI.
+
+### `FilterBar`
+
+Responsible for choosing the visible priority.
+
+### `NoteList`
+
+Responsible for rendering the collection.
+
+### `NoteItem`
+
+Responsible for displaying one note and exposing actions through callbacks.
+
+Example:
+
+```jsx
+function NoteItem({ note, onDelete, onEdit }) {
+  return (
+    <article>
+      <h2>{note.text}</h2>
+      <p>Priority: {note.priority}</p>
+      <button type="button" onClick={() => onEdit(note)}>
+        Edit
+      </button>
+      <button type="button" onClick={() => onDelete(note.id)}>
+        Delete
+      </button>
+    </article>
+  );
+}
+```
+
+The child does not directly modify the parent's notes state.
+
+## Step 8: Persistence
+
+A simple browser-only persistence layer can use `localStorage`.
 
 ```jsx
 useEffect(() => {
@@ -169,203 +207,216 @@ useEffect(() => {
 }, [notes]);
 ```
 
-**Explanation:** Whenever notes change, this saves them in browser storage so they remain after refresh.
-
-**Key Points:**
-
-- `useEffect` runs when dependency changes.
-- `JSON.stringify` stores arrays as strings.
-- Persistence makes mini project more practical.
-
-## Key Concepts
-
-- Mini-project composition
-- Notes CRUD basics
-- Immutable array updates
-- Empty state rendering
-- Component decomposition
-- Local persistence mindset
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-		A[Input Note] --> B[Add Note]
-		B --> C[Notes Array State]
-		C --> D[Render List]
-		D --> E[Delete Note]
-		C --> F[Empty State]
-```
-
-## End-to-End Practical
-
-1. Build controlled note input.
-2. Add note on submit.
-3. Render notes list using map.
-4. Add delete action.
-5. Show empty state when list is empty.
-
-## Hands-on Coding
-
-### Example 1: Case - Daily Study Notes
-
-Scenario:
-A student stores short study notes through a simple app.
+To initialize from storage, use a lazy initializer:
 
 ```jsx
-import { useState } from "react";
+const [notes, setNotes] = useState(() => {
+  try {
+    const saved = localStorage.getItem("notes");
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+});
+```
 
-function App() {
-  const [text, setText] = useState("");
-  const [notes, setNotes] = useState([]);
+`localStorage` is browser storage, not a database. It is suitable for this learning project but not for sensitive or multi-user production data.
 
-  const addNote = (e) => {
-    e.preventDefault();
-    if (!text.trim()) return;
+## End-to-End Starter Implementation
 
-    const newNote = {
-      id: Date.now(),
-      text: text.trim(),
-      createdAt: new Date().toLocaleTimeString(),
-    };
+```jsx
+import { useEffect, useState } from "react";
 
-    setNotes((prev) => [...prev, newNote]);
-    setText("");
-  };
+const initialForm = { text: "", priority: "medium" };
 
-  return (
-    <div>
-      <form onSubmit={addNote}>
-        <input
-          value={text}
-          placeholder="Write note"
-          onChange={(e) => setText(e.target.value)}
-        />
-        <button type="submit">Add</button>
-      </form>
-
-      {notes.map((note) => (
-        <p key={note.id}>{note.text}</p>
-      ))}
-    </div>
-  );
+function readNotes() {
+  try {
+    const saved = localStorage.getItem("notes");
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
 }
-```
 
-### Example 2: Case - Team Meeting Notes With Delete
-
-Scenario:
-A team lead removes obsolete meeting notes from the list.
-
-```jsx
 function NoteItem({ note, onDelete }) {
   return (
-    <div
-      style={{ border: "1px solid #ddd", marginTop: "10px", padding: "10px" }}
-    >
-      <p>{note.text}</p>
-      <small>{note.createdAt}</small>
-      <br />
-      <button onClick={() => onDelete(note.id)}>Delete</button>
-    </div>
+    <article>
+      <h2>{note.text}</h2>
+      <p>Priority: {note.priority}</p>
+      <button type="button" onClick={() => onDelete(note.id)}>
+        Delete
+      </button>
+    </article>
+  );
+}
+
+export default function App() {
+  const [notes, setNotes] = useState(readNotes);
+  const [form, setForm] = useState(initialForm);
+  const [filter, setFilter] = useState("all");
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const text = form.text.trim();
+    if (!text) return;
+
+    setNotes((current) => [
+      ...current,
+      {
+        id: crypto.randomUUID(),
+        text,
+        priority: form.priority,
+        createdAt: Date.now(),
+      },
+    ]);
+    setForm(initialForm);
+  }
+
+  function deleteNote(id) {
+    setNotes((current) => current.filter((note) => note.id !== id));
+  }
+
+  const visibleNotes =
+    filter === "all"
+      ? notes
+      : notes.filter((note) => note.priority === filter);
+
+  return (
+    <main>
+      <h1>Notes</h1>
+
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="note-text">Note</label>
+        <input
+          id="note-text"
+          value={form.text}
+          onChange={(event) =>
+            setForm((current) => ({ ...current, text: event.target.value }))
+          }
+        />
+
+        <label htmlFor="priority">Priority</label>
+        <select
+          id="priority"
+          value={form.priority}
+          onChange={(event) =>
+            setForm((current) => ({
+              ...current,
+              priority: event.target.value,
+            }))
+          }
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <button type="submit">Add Note</button>
+      </form>
+
+      <label htmlFor="filter">Filter</label>
+      <select id="filter" value={filter} onChange={(event) => setFilter(event.target.value)}>
+        <option value="all">All</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+
+      {notes.length === 0 ? (
+        <p>No notes yet. Create your first note.</p>
+      ) : visibleNotes.length === 0 ? (
+        <p>No notes match this filter.</p>
+      ) : (
+        <section>
+          {visibleNotes.map((note) => (
+            <NoteItem key={note.id} note={note} onDelete={deleteNote} />
+          ))}
+        </section>
+      )}
+    </main>
   );
 }
 ```
 
-### Example 3: Case - Empty Notebook State
+## Common Mistakes
 
-Scenario:
-A new user should see friendly empty-state guidance before creating first note.
+- Mutating `notes` with `push`, `splice`, or direct assignment.
+- Using array index as the key when note identity can change.
+- Storing filtered notes as duplicate state.
+- Saving sensitive information in `localStorage`.
+- Using `Date.now()` as a guaranteed globally unique backend ID.
+- Forgetting `type="button"` for non-submit buttons inside forms.
+- Letting a child component directly own data that the parent also needs.
 
-```jsx
-{
-  notes.length === 0 ? (
-    <p>No notes yet. Add your first note.</p>
-  ) : (
-    notes.map((note) => (
-      <NoteItem key={note.id} note={note} onDelete={removeNote} />
-    ))
-  );
-}
-```
+## Extensions
 
-## Mini Exercise
+### Level 1
 
-Scenario:
-You are building a personal idea board.
+- Character count
+- Search by text
+- Sort newest/oldest
 
-Add note priority (High/Medium/Low) and a filter button to show only High notes.
+### Level 2
 
-Expected output:
+- Edit note
+- Pin note
+- Archive note
+- Keyboard-friendly interactions
 
-- Notes store text and priority
-- Filter toggles high-priority view
-- Existing add/delete flows still work
+### Level 3
 
-## Assessment Quiz
+- Debounced search
+- Storage migration/versioning
+- Backend persistence
+- Optimistic updates
+- Error handling for failed saves
 
-### Quiz Questions
+## Assessment
 
-1. Why use unique id in notes list?
-2. What method removes one note from array state?
-3. True or False: Empty state is unnecessary in mini projects.
-4. Which event is used when adding note from form?
-5. Why separate NoteItem component?
+1. Why is `notes` state owned by the parent?
+2. Why is `visibleNotes` derived instead of stored?
+3. Why is `filter` appropriate for deletion?
+4. Why should a note have a stable ID?
+5. Why should `localStorage` not be treated as secure storage?
+6. How would you add editing without mutating an existing note?
 
-### Quiz Answers
+## Interview Questions
 
-1. Stable rendering and action targeting
-2. filter
-3. False
-4. onSubmit
-5. Better readability and reuse
+**How do you update one item in an array state?**  
+Use `map` and return a new object for the matching item.
 
-## Task
+**How do you remove one item?**  
+Use `filter` to create a new array without that item.
 
-- Build notes app with add and delete
-- Display note timestamp
-- Complete mini exercise
+**Why separate `NoteItem` from `App`?**  
+It isolates presentation and creates a clean component API based on data and callbacks.
 
-## Self Check
+**Would you store filtered notes in state?**  
+Usually no. Filtered notes are derived from source notes and the selected filter.
 
-- You can build a complete mini feature
-- You can connect input, state, and list actions
-- You can answer at least 4 out of 5 quiz questions correctly
+**Is localStorage suitable for production data?**  
+It can be suitable for non-sensitive client preferences, but it is not a secure database or reliable multi-user persistence layer.
 
-## Interview Questions and Answers
+## Final Task
 
-### Beginner
+Complete the Notes App with:
 
-**Question:** Which concepts are used in Notes App?
-
-**Answer:** useState, event handling, list rendering, and conditional rendering.
-
-**Question:** Why call it a mini project?
-
-**Answer:** It combines multiple fundamentals in one working feature.
-
-### Middle
-
-**Question:** How do you avoid adding empty notes?
-
-**Answer:** Validate input with trim before adding note.
-
-**Question:** How do you keep list actions maintainable?
-
-**Answer:** Keep handlers clear and split UI into reusable components.
-
-### Advanced
-
-**Question:** How would you extend this app for edit functionality?
-
-**Answer:** Track editing id, prefill input, and update target note with map.
-
-**Question:** How can performance be improved for very large note lists?
-
-**Answer:** Use memoization, pagination, or list virtualization.
+- [ ] Add
+- [ ] Delete
+- [ ] Edit
+- [ ] Priority
+- [ ] Filter
+- [ ] Empty state
+- [ ] Persistence
+- [ ] Reusable components
+- [ ] Stable keys
+- [ ] Immutable updates
+- [ ] Accessible form controls
 
 ## Day 14 Outcome
 
-- You can build and explain a full notes mini project
-- You can manage notes lifecycle with immutable updates
-- You are ready for smarter UI branches in Day 15
+You have combined the fundamentals from the first two weeks into a realistic feature and practiced deciding **where state belongs, what should be derived, how children communicate with parents, and how immutable updates work**. Day 15 will build on this by making UI branches more deliberate.
