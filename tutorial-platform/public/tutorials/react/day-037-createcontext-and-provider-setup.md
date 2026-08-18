@@ -3,359 +3,380 @@ title: createContext and Provider Setup
 slug: day-037-createcontext-and-provider-setup
 dayLabel: Day 37
 level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 37
 track: react
 ---
----
-title: createContext and Provider Setup
-slug: day-037-createcontext-and-provider-setup
-dayLabel: Day 37
-level: Intermediate
-estimatedMinutes: 30
-order: 37
-track: react
----
-# Day 37 [Intermediate]: createContext and Provider Setup
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 37 Outcome](#day-37-outcome)
+# Day 37 [Intermediate]: `createContext` and Provider Setup
 
 ## Goal
 
-Build robust context providers using createContext and Provider with state and actions.
+Build a reusable provider that owns shared state and actions, exposes a small public API, has a deliberate scope, and fails safely when consumed incorrectly.
 
-## Prerequisites
+## 1. Context File Design
 
-- Day 36 completed
-- Context fundamentals understood
+A domain context normally contains three layers:
 
-## Explanation
-
-Provider setup determines how shared state is created, updated, and made available to the app.
-
-## Topic by Topic
-
-### Topic 1: createContext Initialization
-
-Theory:
-Context starts with createContext and optional default value.
-
-Practical:
-Create AuthContext file.
-
-Code Example:
-
-```jsx
-export const AuthContext = createContext(null);
+```text
+AuthContext
+├── context object
+├── provider component
+└── consumer hook
 ```
 
-**Explanation:** This topic explains createContext Initialization in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of createContext Initialization.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 2: Provider Wrapper Component
-
-Theory:
-Provider component owns state and actions.
-
-Practical:
-Wrap app children with AuthProvider.
-
-Code Example:
+Example:
 
 ```jsx
-<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-```
+import { createContext, useContext, useMemo, useState } from "react";
 
-**Explanation:** This topic explains Provider Wrapper Component in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Provider Wrapper Component.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 3: Exposing State and Actions
-
-Theory:
-Provider value should include data and methods.
-
-Practical:
-Expose user, login, logout.
-
-Code Example:
-
-```jsx
-value={{ user, login, logout }}
-```
-
-**Explanation:** This topic explains Exposing State and Actions in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Exposing State and Actions.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 4: Provider Scope and Placement
-
-Theory:
-Place providers as high as needed, not always at top root.
-
-Practical:
-Wrap only authenticated app section.
-
-Code Example:
-
-```jsx
-<AuthProvider>
-  <AppRoutes />
-</AuthProvider>
-```
-
-**Explanation:** This topic explains Provider Scope and Placement in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Provider Scope and Placement.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 5: Value Reference Stability
-
-Theory:
-Use memoization for provider value to reduce needless re-renders.
-
-Practical:
-Memoize value object.
-
-Code Example:
-
-```jsx
-const value = useMemo(() => ({ user, login, logout }), [user]);
-```
-
-**Explanation:** This topic explains Value Reference Stability in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Value Reference Stability.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 6: Split Read and Write Contexts
-
-Theory:
-Separating state context from actions context can reduce consumer re-renders in larger apps.
-
-Practical:
-Expose read-only value in one context and mutation actions in another.
-
-Code Example:
-
-```jsx
-const AuthStateContext = createContext(null);
-```
-
-**Explanation:** This topic explains Split Read and Write Contexts in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Split Read and Write Contexts.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-## Key Concepts
-
-- Provider ownership
-- Shared state + actions API
-- Scope design
-- Value memoization
-- Domain-specific context architecture
-- Read/write context separation
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[createContext] --> B[Provider Component]
-		B --> C[State]
-		B --> D[Actions]
-		C --> E[Provider Value]
-		D --> E
-		E --> F[Children Consumers]
-```
-
-## End-to-End Practical
-
-1. Create context file.
-2. Build provider state and actions.
-3. Compose provider value object.
-4. Wrap app tree with provider.
-5. Validate state access from consumers.
-
-## Hands-on Coding
-
-### Example 1: Case - Auth Provider Setup
-
-Scenario:
-An internal admin app needs shared auth state with login/logout actions.
-
-```jsx
-import { createContext, useMemo, useState } from "react";
-
-export const AuthContext = createContext(null);
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  // state + actions
+}
 
-  const login = (name) => setUser({ name, role: "user" });
-  const logout = () => setUser(null);
-
-  const value = useMemo(() => ({ user, login, logout }), [user]);
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+export function useAuth() {
+  const value = useContext(AuthContext);
+  if (value === null) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return value;
 }
 ```
 
-### Example 2: Case - Product Preferences Provider
+Keeping the public hook close to the provider gives consumers a stable API and hides implementation details.
 
-Scenario:
-An e-commerce app shares currency and locale settings globally.
+## 2. `createContext` Default Value
 
 ```jsx
-import { createContext, useState } from "react";
+const AuthContext = createContext(null);
+```
 
-export const PreferencesContext = createContext(null);
+Use `null` when the provider is required. Then the custom hook can distinguish a missing provider from a valid provider value.
 
-export function PreferencesProvider({ children }) {
-  const [currency, setCurrency] = useState("INR");
-  const [locale, setLocale] = useState("en-IN");
+Avoid misleading fake defaults such as:
+
+```jsx
+createContext({ user: null, login: () => {} });
+```
+
+Such defaults can hide configuration errors because a component appears to work even when the provider is missing.
+
+## 3. Provider Owns State
+
+The provider is responsible for the shared state and actions:
+
+```jsx
+function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+
+  function login(name) {
+    setUser({ id: crypto.randomUUID(), name });
+  }
+
+  function logout() {
+    setUser(null);
+  }
 
   return (
-    <PreferencesContext.Provider
-      value={{ currency, locale, setCurrency, setLocale }}
-    >
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
-    </PreferencesContext.Provider>
+    </AuthContext.Provider>
   );
 }
 ```
 
-### Example 3: Case - Provider Composition at Root
+This creates a clear contract:
 
-Scenario:
-A large app needs auth and theme contexts both available to route components.
+```text
+Provider
+  ├── state
+  └── actions
+       ↓
+consumer API
+```
+
+## 4. Provider Scope
+
+Do not automatically place every provider around the entire application.
+
+Ask:
+
+> Which components actually need this value?
+
+If only checkout pages need a provider, scope it to checkout:
 
 ```jsx
-function Root() {
+<CheckoutProvider>
+  <CheckoutRoutes />
+</CheckoutProvider>
+```
+
+Benefits:
+
+- smaller dependency surface
+- clearer ownership
+- easier testing
+- less accidental coupling
+
+Global providers such as theme or authenticated session may legitimately sit near the application root.
+
+## 5. Provider Composition
+
+Multiple providers can be composed:
+
+```jsx
+function AppProviders({ children }) {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <App />
+        <SettingsProvider>{children}</SettingsProvider>
       </AuthProvider>
     </ThemeProvider>
   );
 }
 ```
 
-## Mini Exercise
+If nesting becomes excessive, a composition component can improve readability. Do not create an abstraction merely to hide three providers; use it when the provider composition is reused or has a meaningful application boundary.
 
-Scenario:
-You are building a course platform.
+## 6. Expose Data and Actions, Not Implementation Details
 
-Create EnrollmentProvider with state: enrolledCourses and actions: enroll(course), unenroll(courseId), clearAll(). Wrap app and verify access.
+Prefer:
 
-Expected output:
+```jsx
+{
+  user,
+  login,
+  logout,
+}
+```
 
-- Provider exposes both state and actions
-- Components can enroll and unenroll from any depth
-- Context updates propagate correctly
+over exposing internal setters everywhere:
 
-## Assessment Quiz
+```jsx
+{
+  user,
+  setUser,
+}
+```
 
-### Quiz Questions
+A domain action communicates intent. `logout()` is more meaningful than `setUser(null)` and lets the provider change its internal implementation later.
 
-1. What is the providerâ€™s role in context architecture?
-2. Why include action functions in provider value?
-3. True or False: provider value should be recreated with random inline objects each render.
-4. Where should provider be placed?
-5. Why memoize provider value in some cases?
+## 7. Provider Value Identity
 
-### Quiz Answers
+This creates a new object every render:
 
-1. Own and supply shared state to descendants
-2. To allow consumer components to update context state
-3. False
-4. At nearest common ancestor of consumers
-5. To reduce unnecessary consumer re-renders
+```jsx
+<AuthContext.Provider value={{ user, login, logout }}>
+```
 
-## Task
+That may cause consumers to receive a changed context value even when the meaningful data did not change.
 
-- Create one domain-specific provider
-- Add state and 2+ actions
-- Complete mini exercise
+A provider can stabilize the value:
 
-## Self Check
+```jsx
+const login = useCallback((name) => {
+  setUser({ id: crypto.randomUUID(), name });
+}, []);
 
-- You can design and implement provider setup cleanly
-- You can decide provider placement based on scope
-- You can answer at least 4 out of 5 quiz questions correctly
+const logout = useCallback(() => {
+  setUser(null);
+}, []);
 
-## Interview Questions and Answers
+const value = useMemo(
+  () => ({ user, login, logout }),
+  [user, login, logout]
+);
+```
 
-### Beginner
+Do not add this mechanically. First make the architecture correct; then optimize measured hot paths.
 
-**Question:** What does createContext do?
+## 8. Split Context by Domain
 
-**Answer:** It creates a context object for shared data flow.
+Avoid one giant object:
 
-**Question:** What does Provider do?
+```jsx
+<AppContext.Provider value={{
+  user,
+  theme,
+  language,
+  cart,
+  notifications,
+  search,
+}}>
+```
 
-**Answer:** It supplies context value to all descendants.
+Prefer focused contexts:
 
-### Middle
+```text
+AuthContext
+ThemeContext
+LocaleContext
+CartContext
+```
 
-**Question:** Why keep provider value API explicit?
+This makes ownership and update boundaries clearer.
 
-**Answer:** Clear contract improves maintainability and consumer usage.
+## 9. Read/Write Context Separation
 
-**Question:** How do you avoid prop drilling with providers?
+For high-frequency or large shared state, separate contexts can sometimes reduce update impact:
 
-**Answer:** Put shared state in provider and consume directly where needed.
+```jsx
+const CartStateContext = createContext(null);
+const CartActionsContext = createContext(null);
+```
 
-### Advanced
+A component that only needs actions can subscribe to the actions context rather than the changing state context.
 
-**Question:** What issues arise from broad provider scope?
+This is an optimization pattern, not a requirement for every application.
 
-**Answer:** Wider re-render impact and harder state ownership boundaries.
+## 10. Complete Provider Example
 
-**Question:** How would you optimize many context providers?
+```jsx
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
-**Answer:** Split by domain and memoize values/actions thoughtfully.
+const AuthContext = createContext(null);
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+
+  const login = useCallback((name) => {
+    setUser({
+      id: crypto.randomUUID(),
+      name,
+      role: "user",
+    });
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+  }, []);
+
+  const value = useMemo(
+    () => ({ user, login, logout }),
+    [user, login, logout]
+  );
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const value = useContext(AuthContext);
+
+  if (value === null) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+
+  return value;
+}
+```
+
+## 11. Common Provider Mistakes
+
+### Mistake 1: Provider below consumer
+
+```jsx
+<Header />
+<AuthProvider>{/* too late */}</AuthProvider>
+```
+
+The header cannot receive the provider value.
+
+### Mistake 2: Duplicate contexts
+
+If `AuthContext` is created in two different modules, they are different context objects even if their names match.
+
+### Mistake 3: Provider owns unrelated state
+
+A theme provider should not become the home for search, cart, notifications, and authentication simply because it is already available.
+
+### Mistake 4: Exposing setters everywhere
+
+Prefer domain actions when the domain has meaningful behavior.
+
+### Mistake 5: Premature memoization
+
+`useMemo` and `useCallback` add complexity. Use them when provider value stability matters, not as a ritual.
+
+## Hands-on Lab: Enrollment Provider
+
+Build:
+
+```text
+enrolledCourses
+isLoading
+error
+
+enroll(course)
+unenroll(courseId)
+clearAll()
+```
+
+Use this structure:
+
+```jsx
+const EnrollmentContext = createContext(null);
+```
+
+### Acceptance Criteria
+
+- [ ] Provider owns the state
+- [ ] Consumers cannot directly mutate state
+- [ ] Actions express domain intent
+- [ ] Provider scope is deliberate
+- [ ] Missing-provider usage fails clearly
+- [ ] At least two consumers use the provider
+- [ ] No giant unrelated context is introduced
+
+## Debugging Scenarios
+
+**Scenario A:** Consumer always receives `null`.  
+Check provider placement and imports.
+
+**Scenario B:** All consumers update whenever an unrelated field changes.  
+Consider splitting contexts by domain.
+
+**Scenario C:** Provider code is 500 lines long.  
+Separate domain logic, reducer/actions, persistence, or server-state concerns rather than making one provider responsible for everything.
+
+## Assessment
+
+1. Why should a provider own shared state?
+2. Why is `createContext(null)` useful for required contexts?
+3. What is provider scope?
+4. Why expose `logout()` instead of `setUser(null)`?
+5. When can memoizing provider value help?
+6. Why split contexts?
+7. When is read/write context separation useful?
+8. Why can fake default functions hide bugs?
+
+## Interview Questions
+
+**What is a Provider?**  
+A component that supplies a context value to descendants.
+
+**Where should a Provider be placed?**  
+At the nearest common ancestor that needs to supply the value, or higher when the value is intentionally application-wide.
+
+**Why use a custom hook around `useContext`?**  
+It creates a clean API and can enforce provider usage.
+
+**Should every provider memoize its value?**  
+No. Memoization is an optimization and should be justified by rendering behavior.
+
+**How would you structure many contexts?**  
+Split them by domain and compose providers at meaningful application boundaries.
 
 ## Day 37 Outcome
 
-- You can build real provider structures with actions
-- You can control context scope and value design
-- You are ready to consume context in components on Day 38
-
+You can now design **provider ownership, scope, domain actions, provider composition, guarded custom hooks, and context performance boundaries**. Day 38 will focus on consuming this API safely.
