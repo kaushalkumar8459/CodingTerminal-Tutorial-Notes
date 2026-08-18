@@ -3,371 +3,358 @@ title: useMemo
 slug: day-031-usememo
 dayLabel: Day 31
 level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 31
 track: react
 ---
----
-title: useMemo
-slug: day-031-usememo
-dayLabel: Day 31
-level: Intermediate
-estimatedMinutes: 30
-order: 31
-track: react
----
-# Day 31 [Intermediate]: useMemo
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 31 Outcome](#day-31-outcome)
+# Day 31 [Intermediate]: `useMemo`
 
 ## Goal
 
-Understand when and how to use useMemo to avoid unnecessary expensive recalculations.
+Understand **what `useMemo` actually guarantees, when it is useful, when it is unnecessary, and how to verify that memoization improves a real performance problem**.
+
+> `useMemo` memoizes a calculation result between renders. It is a performance optimization, not a correctness mechanism.
 
 ## Prerequisites
 
-- Day 30 completed
-- Basic knowledge of re-render behavior
+- Days 1–30 completed
+- React render/re-render model
+- props and state
+- arrays/objects
+- `React.memo`
+- basic browser performance measurement
 
-## Explanation
+## 1. The Problem: Render Does Not Mean DOM Change
 
-useMemo caches computed values between renders. It is useful when calculations are expensive and dependencies do not change often.
-
-## Topic by Topic
-
-### Topic 1: What useMemo Does
-
-Theory:
-useMemo returns a memoized computed value.
-
-Practical:
-Cache filtered list result.
-
-Code Example:
+A component function can run again even when the DOM ultimately changes very little. Any calculation performed during render also runs again unless you deliberately reuse its result.
 
 ```jsx
-const result = useMemo(() => items.filter(fn), [items, fn]);
+function ProductList({ products, query }) {
+  const visible = products.filter((product) =>
+    product.name.toLowerCase().includes(query.toLowerCase())
+  );
+
+  return visible.map((product) => <p key={product.id}>{product.name}</p>);
+}
 ```
 
-**Explanation:** This topic explains What useMemo Does in a practical way so you can apply it confidently in real React projects.
+This is perfectly valid. **Do not add `useMemo` just because filtering happens during render.** First ask whether the calculation is actually expensive.
 
-**Key Points:**
-
-- Understand the core idea of What useMemo Does.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 2: Expensive Computation Use Case
-
-Theory:
-useMemo helps when calculation cost is high.
-
-Practical:
-Memoize sorted analytics list.
-
-Code Example:
+## 2. What `useMemo` Does
 
 ```jsx
-const sorted = useMemo(() => heavySort(data), [data]);
+const value = useMemo(() => calculateValue(a, b), [a, b]);
 ```
 
-**Explanation:** This topic explains Expensive Computation Use Case in a practical way so you can apply it confidently in real React projects.
+Conceptually:
 
-**Key Points:**
+```text
+Render
+  ↓
+Were dependencies changed?
+  ├─ No → reuse previous memoized result
+  └─ Yes → run calculation → store result
+```
 
-- Understand the core idea of Expensive Computation Use Case.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+React may discard memoized values when appropriate. Therefore never rely on `useMemo` for application correctness, persistence, or side effects.
 
-### Topic 3: Dependency Array in useMemo
-
-Theory:
-Memo value recomputes only when dependencies change.
-
-Practical:
-Add search dependency for filtered results.
-
-Code Example:
+## 3. `useMemo` Is for Values, Not Functions
 
 ```jsx
-const filtered = useMemo(() => filter(products, query), [products, query]);
+const total = useMemo(() => calculateTotal(items), [items]);
 ```
 
-**Explanation:** This topic explains Dependency Array in useMemo in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Dependency Array in useMemo.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 4: Avoid Overuse
-
-Theory:
-useMemo itself has overhead; use only where needed.
-
-Practical:
-Do not memoize trivial constant concatenation.
-
-Code Example:
+For a function reference:
 
 ```jsx
-const label = firstName + " " + lastName;
+const handleSave = useCallback(() => save(id), [id]);
 ```
 
-**Explanation:** This topic explains Avoid Overuse in a practical way so you can apply it confidently in real React projects.
+A useful mental model:
 
-**Key Points:**
+```text
+useMemo     → memoized result/value
+useCallback → memoized function reference
+React.memo  → memoized component rendering based on props
+```
 
-- Understand the core idea of Avoid Overuse.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 5: Measuring Benefit
-
-Theory:
-Performance optimization should be measured, not guessed.
-
-Practical:
-Track render time before and after memoization.
-
-Code Example:
+## 4. Dependencies Must Match the Calculation
 
 ```jsx
-console.time("calc");
+const filtered = useMemo(
+  () => products.filter((p) => p.category === category && p.name.includes(query)),
+  [products, category, query]
+);
 ```
 
-**Explanation:** This topic explains Measuring Benefit in a practical way so you can apply it confidently in real React projects.
+Every reactive value used by the calculation should be represented in the dependency list.
 
-**Key Points:**
+A missing dependency can produce stale data. An unstable dependency can make the memo ineffective.
 
-- Understand the core idea of Measuring Benefit.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+## 5. Referential Equality: The Important Advanced Use Case
 
-### Topic 6: Referential Stability for Derived Props
-
-Theory:
-Memoized values help child components skip re-renders when derived arrays/objects are passed as props.
-
-Practical:
-Memoize filtered table rows before passing to memoized data table.
-
-Code Example:
+Memoization can matter even when a calculation is not extremely expensive if its result is passed to a memoized child and the child relies on reference equality.
 
 ```jsx
 const rows = useMemo(() => buildRows(data, filters), [data, filters]);
+
+return <DataTable rows={rows} />;
 ```
 
-**Explanation:** This topic explains Referential Stability for Derived Props in a practical way so you can apply it confidently in real React projects.
+If `DataTable` is wrapped in `React.memo`, keeping the same `rows` reference when inputs have not changed can help it skip a render.
 
-**Key Points:**
+But this is only useful when the child is actually memoized and the prop identity affects its rendering.
 
-- Understand the core idea of Referential Stability for Derived Props.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+## 6. `useMemo` Does Not Stop the Parent From Rendering
 
-## Key Concepts
-
-- Memoized derived values
-- Dependency-driven recomputation
-- Expensive computation optimization
-- Trade-offs of memoization
-- Measured performance tuning
-- Stable derived props
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Render] --> B{Dependencies Changed?}
-		B -->|Yes| C[Recompute Value]
-		B -->|No| D[Use Cached Value]
-		C --> E[Memo Cache]
-		D --> F[Render Output]
-		E --> F
-```
-
-## End-to-End Practical
-
-1. Build product list and search state.
-2. Add expensive filter/sort logic.
-3. Observe re-computation on every render.
-4. Apply useMemo with correct dependencies.
-5. Compare performance behavior.
-
-## Hands-on Coding
-
-### Example 1: Case - Product Search Optimization
-
-Scenario:
-An e-commerce page filters a large product list and should avoid recalculating on unrelated state changes.
+This is a common interview trap.
 
 ```jsx
-import { useMemo, useState } from "react";
+const result = useMemo(() => expensiveCalculation(data), [data]);
+```
 
-function App({ products }) {
-  const [query, setQuery] = useState("");
-  const [theme, setTheme] = useState("light");
+The parent component still renders. `useMemo` only avoids rerunning that calculation when dependencies remain equal.
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((p) =>
-      p.name.toLowerCase().includes(query.toLowerCase()),
-    );
-  }, [products, query]);
+## 7. Do Not Use `useMemo` for Trivial Work
 
-  return (
-    <div>
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search"
-      />
-      <button
-        onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-      >
-        Toggle Theme
-      </button>
-      <p>Theme: {theme}</p>
-      {filteredProducts.map((p) => (
-        <p key={p.id}>{p.name}</p>
-      ))}
-    </div>
+Avoid this:
+
+```jsx
+const fullName = useMemo(() => `${firstName} ${lastName}`, [firstName, lastName]);
+```
+
+Normal calculation is clearer:
+
+```jsx
+const fullName = `${firstName} ${lastName}`;
+```
+
+Memoization has bookkeeping and dependency-management costs. Optimization should have a reason.
+
+## 8. Never Put Side Effects Inside `useMemo`
+
+Wrong:
+
+```jsx
+const value = useMemo(() => {
+  localStorage.setItem("x", "1");
+  return calculate();
+}, []);
+```
+
+Side effects belong in an appropriate effect or event handler. `useMemo` should describe a pure calculation.
+
+## 9. Expensive Computation Example
+
+```jsx
+function Analytics({ records, range }) {
+  const summary = useMemo(() => {
+    return records
+      .filter((record) => record.date >= range.start && record.date <= range.end)
+      .reduce((total, record) => total + record.amount, 0);
+  }, [records, range]);
+
+  return <strong>{summary}</strong>;
+}
+```
+
+Be careful with object dependencies. If `range` is recreated every render, the calculation can still rerun every render.
+
+A better API may receive primitive values:
+
+```jsx
+function Analytics({ records, startDate, endDate }) {
+  const summary = useMemo(
+    () => calculateSummary(records, startDate, endDate),
+    [records, startDate, endDate]
   );
 }
 ```
 
-### Example 2: Case - Payroll Total Calculation
+## 10. Measuring Before Optimizing
 
-Scenario:
-An HR payroll dashboard computes total salary from a large employee array.
+Do not claim performance improvement because the code "looks optimized".
+
+Useful approaches:
+
+- React DevTools Profiler
+- browser Performance panel
+- controlled test data
+- `console.time` / `console.timeEnd` for focused calculations
 
 ```jsx
-import { useMemo } from "react";
+console.time("filter");
+const result = expensiveFilter(products, query);
+console.timeEnd("filter");
+```
 
-function PayrollSummary({ employees }) {
-  const totalSalary = useMemo(() => {
-    return employees.reduce((sum, emp) => sum + emp.salary, 0);
-  }, [employees]);
+Measure representative workloads. A 1 ms calculation does not need a complex optimization strategy.
 
-  return <p>Total Salary: {totalSalary}</p>;
+## 11. Common Mistakes
+
+### Mistake 1: Assuming `useMemo` always improves performance
+
+False. It can add overhead and complexity.
+
+### Mistake 2: Missing dependencies
+
+Can create stale results.
+
+### Mistake 3: Mutating the dependency
+
+```jsx
+products.sort(compare);
+```
+
+This mutates the input. Prefer:
+
+```jsx
+const sorted = useMemo(() => [...products].sort(compare), [products]);
+```
+
+### Mistake 4: Memoizing everything
+
+Memoization should solve a measured or well-understood rendering problem.
+
+### Mistake 5: Confusing value and function memoization
+
+Use `useMemo` for a value and `useCallback` for a function reference.
+
+## 12. Complete Practical: Search + Sort + Expensive Calculation
+
+```jsx
+import { useMemo, useState } from "react";
+
+function ProductExplorer({ products }) {
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const [sort, setSort] = useState("price-asc");
+  const [theme, setTheme] = useState("light");
+
+  const visibleProducts = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    const filtered = products.filter((product) => {
+      const matchesQuery = product.name.toLowerCase().includes(normalizedQuery);
+      const matchesCategory = category === "all" || product.category === category;
+      return matchesQuery && matchesCategory;
+    });
+
+    return [...filtered].sort((a, b) =>
+      sort === "price-asc" ? a.price - b.price : b.price - a.price
+    );
+  }, [products, query, category, sort]);
+
+  return (
+    <section>
+      <input value={query} onChange={(e) => setQuery(e.target.value)} />
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <option value="all">All</option>
+        <option value="mobile">Mobile</option>
+        <option value="laptop">Laptop</option>
+      </select>
+      <select value={sort} onChange={(e) => setSort(e.target.value)}>
+        <option value="price-asc">Price: low to high</option>
+        <option value="price-desc">Price: high to low</option>
+      </select>
+      <button type="button" onClick={() => setTheme((t) => t === "light" ? "dark" : "light")}>
+        Theme: {theme}
+      </button>
+
+      {visibleProducts.map((product) => (
+        <p key={product.id}>{product.name} — {product.price}</p>
+      ))}
+    </section>
+  );
 }
 ```
 
-### Example 3: Case - Heavy Sort on Reports
+Notice that `theme` is unrelated to the calculation. Toggling it causes the component to render, but `visibleProducts` can reuse its previous result.
 
-Scenario:
-A reporting page sorts thousands of records and should only re-sort when records change.
+## 13. Decision Framework
 
-```jsx
-import { useMemo } from "react";
+Before using `useMemo`, ask:
 
-function Reports({ reports }) {
-  const sortedReports = useMemo(() => {
-    return [...reports].sort((a, b) => b.score - a.score);
-  }, [reports]);
+1. Is the calculation expensive enough to matter?
+2. Does the component render often enough for the calculation to matter?
+3. Are the dependencies stable enough for memoization to provide reuse?
+4. Does the memoized value need stable identity for a memoized child?
+5. Have I measured or can I clearly explain the expected benefit?
 
-  return sortedReports.map((r) => <p key={r.id}>{r.title}</p>);
-}
-```
+If the answer is no, prefer the simpler calculation.
 
-## Mini Exercise
+## Hands-on Labs
 
-Scenario:
-You are building a student marks dashboard.
+### Lab 1 — Measure
+Create a deliberately expensive calculation and compare render behavior with and without `useMemo`.
 
-Memoize these derived values:
+### Lab 2 — Dependency Bug
+Remove one dependency and demonstrate the stale result. Restore it and explain why the bug disappears.
 
-- Top 5 scorers
-- Average score
-- Filtered list by class
+### Lab 3 — Referential Stability
+Create a `React.memo` child receiving a derived array. Compare child renders with and without `useMemo`.
 
-Expected output:
+### Lab 4 — Remove Unnecessary Memoization
+Start with a component containing five `useMemo` calls. Measure it and remove the memoization that has no measurable value.
 
-- Values recompute only when relevant dependencies change
-- Unrelated UI changes do not trigger expensive calculations
-- Dashboard stays responsive
+## Assessment
 
-## Assessment Quiz
+1. What does `useMemo` cache?
+2. Does `useMemo` prevent a component from rendering?
+3. Why must dependencies match values used by the calculation?
+4. When can referential stability be useful?
+5. Why should the calculation be pure?
+6. Why can `useMemo` hurt performance?
+7. What is the difference between `useMemo` and `useCallback`?
+8. How would you prove that memoization helped?
 
-### Quiz Questions
+## Interview Questions
 
-1. What does useMemo return?
-2. When should useMemo be used?
-3. True or False: useMemo always improves performance.
-4. What controls re-computation in useMemo?
-5. Why avoid memoizing trivial values?
+**Q: Is `useMemo` a guarantee that React will never recompute the value?**  
+No. It is a performance optimization and React may discard the cached value.
 
-### Quiz Answers
+**Q: Does `useMemo` prevent re-renders?**  
+No. It memoizes a calculation result. `React.memo` is about skipping component renders based on props.
 
-1. Cached computed value
-2. For expensive calculations with stable dependencies
-3. False
-4. Dependency array
-5. Overhead may outweigh benefit
+**Q: Why might `[items]` fail to detect an in-place mutation?**  
+Because the array reference may remain the same even though its contents changed. React dependency comparison uses reference equality for objects/arrays.
 
-## Task
+**Q: When would you choose `useMemo` over simply calculating a value?**  
+When profiling or strong workload analysis shows the calculation is expensive enough to justify memoization, or when stable derived identity is important to a memoized child.
 
-- Add one expensive derived computation
-- Optimize with useMemo
-- Complete mini exercise
+**Q: Can `useMemo` replace state?**  
+No. Derived values should usually be calculated from source state; `useMemo` does not make a value independently mutable state.
+
+## Final Project
+
+Build an **Analytics Dashboard** with:
+
+- 5,000+ records
+- search
+- category/date filters
+- sorting
+- derived totals
+- a memoized result list
+- one `React.memo` child
+- a profiler comparison before/after optimization
+
+Document:
+
+- the bottleneck
+- dependencies
+- why `useMemo` was chosen
+- measured result
+- what happens if `useMemo` is removed
 
 ## Self Check
 
-- You can identify practical memoization opportunities
-- You can write dependency-safe useMemo logic
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** What is useMemo in React?
-
-**Answer:** A hook that memoizes computed values between renders.
-
-**Question:** Does useMemo memoize functions?
-
-**Answer:** It memoizes values; useCallback memoizes function references.
-
-### Middle
-
-**Question:** How do you choose dependencies for useMemo?
-
-**Answer:** Include all values used inside memo callback.
-
-**Question:** What issue happens with wrong dependencies?
-
-**Answer:** Stale values or unnecessary recomputations.
-
-### Advanced
-
-**Question:** Why can over-memoization hurt performance?
-
-**Answer:** Caching and dependency checks add overhead.
-
-**Question:** How do you validate useMemo optimization impact?
-
-**Answer:** Use profiling tools and compare render timings.
+- [ ] I can explain `useMemo` without calling it a general "performance hook".
+- [ ] I know it memoizes a value/calculation result.
+- [ ] I understand dependency/reference equality.
+- [ ] I know when not to use it.
+- [ ] I can distinguish it from `useCallback` and `React.memo`.
+- [ ] I can measure before claiming an optimization.
 
 ## Day 31 Outcome
 
-- You can use useMemo to optimize expensive derived values
-- You can avoid common memoization pitfalls
-- You are ready for callback memoization with useCallback in Day 32
-
+You can now reason about memoization instead of mechanically adding it. Day 32 builds on this by stabilizing **function references** with `useCallback`.
