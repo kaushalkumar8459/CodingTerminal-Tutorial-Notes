@@ -2,393 +2,318 @@
 title: Event Handling
 slug: day-012-event-handling
 dayLabel: Day 12
-level: Beginner
-estimatedMinutes: 30
+level: Intermediate
+estimatedMinutes: 60
 order: 12
 track: react
 ---
-# Day 12 [Beginner to Intermediate]: Event Handling
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 12 Outcome](#day-12-outcome)
+# Day 12: Event Handling
 
 ## Goal
 
-Understand how to handle user actions like clicks, form submit, and input changes in React.
+Understand React events deeply enough to build reliable click, input, form, keyboard, mouse, checkbox, and list interactions.
 
-## Prerequisites
+## Mental Model
 
-- Day 11 completed
-- Basic useState knowledge
-
-## Explanation
-
-Event handling connects UI actions to logic. React uses camelCase event names and function references. React also gives you a normalized event wrapper so event behavior feels more consistent across browsers.
-
-## Topic by Topic
-
-### Topic 1: Click Events
-
-Theory:
-Use onClick to run logic when a button is pressed.
-
-Practical:
-Increase a counter on click.
-
-Code Example:
-
-```jsx
-<button onClick={() => setCount(count + 1)}>Increase</button>
+```text
+Browser interaction
+      ↓
+React event handler
+      ↓
+Application logic
+      ↓
+State update / side effect
+      ↓
+React render
 ```
 
-**Explanation:** When the button is clicked, React runs the function and updates `count` by 1.
+## 1. Event Handler Syntax
 
-**Key Points:**
-
-- `onClick` listens for button clicks.
-- Handler function runs on user action.
-- State update triggers UI refresh.
-
-### Topic 2: Input Change Events
-
-Theory:
-onChange updates state while typing.
-
-Practical:
-Store live text input value.
-
-Code Example:
+React uses camelCase event props and functions.
 
 ```jsx
-<input value={name} onChange={(e) => setName(e.target.value)} />
+<button onClick={handleClick}>Save</button>
 ```
 
-**Explanation:** The input value is controlled by state. Every key press updates state using `e.target.value`.
-
-**Key Points:**
-
-- `onChange` handles typing updates.
-- `value` keeps input linked to state.
-- `e.target.value` gives current text.
-
-### Topic 3: Form Submit Event
-
-Theory:
-Use onSubmit on form and prevent page reload.
-
-Practical:
-Save input when form is submitted.
-
-Code Example:
+Pass a function reference. Do not call it during render:
 
 ```jsx
-const handleSubmit = (e) => {
-  e.preventDefault();
-  console.log("Submitted");
-};
+// Wrong for a click handler
+<button onClick={handleClick()}>Save</button>
+
+// Correct
+<button onClick={handleClick}>Save</button>
 ```
 
-**Explanation:** `e.preventDefault()` stops the browser page reload. Then your submit logic runs safely in React.
+## 2. Inline Handlers
 
-**Key Points:**
+Inline functions are useful when the logic is small.
 
-- Use `onSubmit` on form.
-- Prevent default browser submit behavior.
-- Keep submit logic inside one handler.
+```jsx
+<button onClick={() => setCount((current) => current + 1)}>
+  Increase
+</button>
+```
 
-### Topic 4: Passing Parameters to Handlers
+For complex behavior, extract a named handler for readability and testing.
 
-Theory:
-Wrap handler inside arrow function to pass custom values.
-
-Practical:
-Delete by id from a list.
-
-Code Example:
+## 3. Passing Arguments
 
 ```jsx
 <button onClick={() => removeItem(item.id)}>Delete</button>
 ```
 
-**Explanation:** The arrow function delays execution until click time and sends the item id to the handler.
+The arrow function delays the call until the click occurs.
 
-**Key Points:**
+## 4. Event Object
 
-- Wrap handler to pass custom values.
-- Avoid calling handler directly in JSX.
-- Useful for item-specific actions.
-
-### Topic 5: Event Object Basics
-
-Theory:
-React event object gives details like target, value, checked.
-
-Practical:
-Read checkbox checked value.
-
-Code Example:
+Handlers receive an event object.
 
 ```jsx
-<input type="checkbox" onChange={(e) => setAgree(e.target.checked)} />
-```
-
-**Explanation:** For checkboxes, use `checked` instead of `value`. It returns true or false.
-
-**Key Points:**
-
-- Event object gives element details.
-- `e.target.checked` reads checkbox state.
-- Different inputs may use different event fields.
-
-### Topic 6: Event Propagation Control
-
-Theory:
-Some UI blocks have nested click handlers, so bubbling can trigger unwanted parent actions.
-
-Practical:
-Use stopPropagation in child button when parent card also has onClick.
-
-Code Example:
-
-```jsx
-<button
-  onClick={(e) => {
-    e.stopPropagation();
-    onDelete();
-  }}
->
-  Delete
-</button>
-```
-
-**Explanation:** `stopPropagation()` prevents the click from also triggering parent click handlers.
-
-**Key Points:**
-
-- Child and parent can both have click handlers.
-- Bubbling can trigger both by default.
-- Stop bubbling when child action should stay isolated.
-
-### Topic 7: React Synthetic Event system
-
-Theory:
-React wraps browser events inside a React event object called a Synthetic Event. This gives a more consistent API across browsers.
-
-Practical:
-Read `target.value` or call `preventDefault()` the same way across React handlers.
-
-Code Example:
-
-```jsx
-function handleChange(e) {
-  console.log(e.target.value);
+function handleChange(event) {
+  console.log(event.target.value);
 }
 ```
 
-**Explanation:** In React, the event object you receive is not just the raw browser event. It is React's normalized wrapper. For most everyday work, you use it the same way, but the important idea is that React standardizes event handling behavior.
+For checkboxes:
 
-**Key Points:**
-
-- React event objects are normalized wrappers around browser events
-- Common methods like `preventDefault()` and `stopPropagation()` still work
-- This helps React event handling stay consistent
-
-## Key Concepts
-
-- onClick, onChange, onSubmit
-- preventDefault
-- Function reference vs function call
-- Parameterized handlers
-- Event target usage
-- Event propagation control
-- Synthetic event system
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[User Action] --> B[React Event]
-		B --> C[Handler Function]
-		C --> D[State Update]
-		D --> E[UI Re-render]
+```jsx
+function handleAgree(event) {
+  setAgree(event.target.checked);
+}
 ```
 
-## End-to-End Practical
+Use the property appropriate to the input type.
 
-1. Build one click counter.
-2. Add one controlled input.
-3. Handle form submit.
-4. Add one action button per list item.
-5. Verify UI updates from events.
+## 5. Form Submit
 
-## Hands-on Coding
+Use `onSubmit` on the form rather than putting submission logic only on a button.
 
-### Example 1: Case - Social App Like Button
+```jsx
+function handleSubmit(event) {
+  event.preventDefault();
+  console.log("Submit application");
+}
 
-Scenario:
-A social feed needs a Like button that toggles label and style.
+<form onSubmit={handleSubmit}>
+  <button type="submit">Submit</button>
+</form>
+```
+
+`preventDefault()` prevents the browser's default form navigation so React can control the workflow.
+
+## 6. Common React Events
+
+| Event | Typical use |
+|---|---|
+| `onClick` | Buttons and clickable UI |
+| `onChange` | Controlled form fields |
+| `onSubmit` | Form submission |
+| `onFocus` | Focus behavior |
+| `onBlur` | Leaving a field |
+| `onKeyDown` | Keyboard shortcuts |
+| `onMouseEnter` | Pointer entering an element |
+| `onDoubleClick` | Double-click interaction |
+
+Event support depends on the element and browser semantics; prefer semantic HTML controls.
+
+## 7. Keyboard Events
+
+```jsx
+function handleKeyDown(event) {
+  if (event.key === "Enter") {
+    submitSearch();
+  }
+}
+```
+
+Prefer meaningful keys such as `Enter`, `Escape`, and `ArrowDown` rather than hard-coded key codes.
+
+## 8. Event Propagation
+
+Events can bubble from a child to ancestors.
+
+```jsx
+<div onClick={() => console.log("Card clicked")}>
+  <button
+    onClick={(event) => {
+      event.stopPropagation();
+      console.log("Delete clicked");
+    }}
+  >
+    Delete
+  </button>
+</div>
+```
+
+Use `stopPropagation()` only when the parent interaction should genuinely not receive the event. It should not be used as a general fix for event architecture.
+
+## 9. `preventDefault` vs `stopPropagation`
+
+They solve different problems.
+
+- `preventDefault()` stops the browser's default action.
+- `stopPropagation()` stops the event from continuing through propagation.
+
+They are not interchangeable.
+
+## 10. React Event System
+
+React provides event handling APIs that integrate browser events with React's rendering model. Modern React uses delegated event handling internally, while developers normally interact with the event object through familiar properties and methods.
+
+Do not teach the old claim that every event is a persistent pooled object that must be manually persisted; modern React removed event pooling.
+
+## 11. Event Handlers and State Snapshots
+
+Handlers run with values from the render in which they were created.
+
+```jsx
+function handleClick() {
+  console.log(count);
+  setCount((current) => current + 1);
+  console.log(count); // still the current render's value
+}
+```
+
+This is why state should be understood as a snapshot for a particular render, not as a mutable variable that changes immediately inside the same function.
+
+## Complete Example
 
 ```jsx
 import { useState } from "react";
 
-function LikeButton() {
-  const [liked, setLiked] = useState(false);
-
-  return (
-    <button
-      onClick={() => setLiked(!liked)}
-      style={{ background: liked ? "#c8f7d1" : "#eee" }}
-    >
-      {liked ? "Liked" : "Like"}
-    </button>
-  );
-}
-```
-
-### Example 2: Case - HR Approval Actions
-
-Scenario:
-An HR review panel has Approve and Reject actions for candidates.
-
-```jsx
-import { useState } from "react";
-
-function CandidateAction() {
-  const [status, setStatus] = useState("Pending");
-
-  return (
-    <div>
-      <p>Status: {status}</p>
-      <button onClick={() => setStatus("Approved")}>Approve</button>
-      <button onClick={() => setStatus("Rejected")}>Reject</button>
-    </div>
-  );
-}
-```
-
-### Example 3: Case - Newsletter Form Submit
-
-Scenario:
-A marketing page captures email and confirms submit action.
-
-```jsx
-import { useState } from "react";
-
-function NewsletterForm() {
-  const [email, setEmail] = useState("");
+export default function EventLab() {
+  const [name, setName] = useState("");
+  const [accepted, setAccepted] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setMessage(`Subscribed: ${email}`);
-    setEmail("");
-  };
+  function handleSubmit(event) {
+    event.preventDefault();
+    setMessage(
+      accepted ? `Welcome, ${name}` : "Please accept the terms",
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit}>
       <input
-        value={email}
-        placeholder="Enter email"
-        onChange={(e) => setEmail(e.target.value)}
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setName("");
+        }}
       />
-      <button type="submit">Subscribe</button>
+      <label>
+        <input
+          type="checkbox"
+          checked={accepted}
+          onChange={(event) => setAccepted(event.target.checked)}
+        />
+        Accept terms
+      </label>
+      <button type="submit">Continue</button>
       <p>{message}</p>
     </form>
   );
 }
 ```
 
-## Mini Exercise
+## Real-World Patterns
 
-Scenario:
-You are building a video player control panel.
+### List action
 
-Add Play/Pause toggle button, Volume input slider, and Save Settings submit button.
+```jsx
+<button type="button" onClick={() => removeItem(item.id)}>
+  Delete
+</button>
+```
 
-Expected output:
+### Checkbox
 
-- Button toggles between Play and Pause
-- Slider updates volume value live
-- Submit shows confirmation message
+```jsx
+<input
+  type="checkbox"
+  checked={enabled}
+  onChange={(event) => setEnabled(event.target.checked)}
+/>
+```
 
-## Assessment Quiz
+### Search field
 
-### Quiz Questions
+```jsx
+<input
+  value={query}
+  onChange={(event) => setQuery(event.target.value)}
+  onKeyDown={(event) => {
+    if (event.key === "Enter") search();
+  }}
+/>
+```
 
-1. Why use e.preventDefault in form submit?
-2. Which event is used for text inputs?
-3. True or False: onClick={handle()} is the usual pattern.
-4. How do you pass id to event handler?
-5. What does e.target.value represent?
+## Common Mistakes
 
-### Quiz Answers
+- Calling the handler during render.
+- Forgetting `preventDefault()` for a controlled form workflow.
+- Using `value` instead of `checked` for checkbox state.
+- Calling `stopPropagation()` everywhere instead of fixing component boundaries.
+- Using array indexes or unstable values to identify list actions.
+- Putting too much business logic inside JSX.
+- Assuming state changes immediately inside the current event handler.
 
-1. To stop page reload
-2. onChange
-3. False
-4. Use arrow function wrapper
-5. Current value of input element
+## Hands-on Lab
 
-## Task
+Build a **Candidate Review Panel** with:
 
-- Build one click interaction and one form interaction
-- Use event object in at least one handler
-- Complete mini exercise
+- Approve and Reject actions.
+- Search input.
+- Keyboard Enter shortcut.
+- Checkbox for shortlist.
+- Submit form.
+- Parent card click plus child action demonstrating propagation correctly.
 
-## Self Check
+Acceptance criteria:
 
-- You can attach events correctly
-- You can control form submit behavior
-- You can answer at least 4 out of 5 quiz questions correctly
+- Uses `onClick`, `onChange`, and `onSubmit`.
+- Uses event values correctly.
+- Uses a parameterized handler for candidate ID.
+- Uses `preventDefault` only for the intended default action.
+- Uses `stopPropagation` only where parent/child behavior requires it.
 
-## Interview Questions and Answers
+## Debugging Challenge
 
-### Beginner
+Find the bug:
 
-**Question:** How are events written in React?
+```jsx
+<form onSubmit={handleSubmit}>
+  <button onClick={handleSubmit}>Save</button>
+</form>
+```
 
-**Answer:** Using camelCase props like onClick, onChange, onSubmit.
+Explain why the handler can run through both the button click and form submission path. Rewrite it using a submit button and one `onSubmit` handler.
 
-**Question:** What is event handler?
+## Assessment
 
-**Answer:** A function that runs when an event occurs.
+1. Why use `onSubmit` on a form? **It represents the form submission action.**
+2. How do you pass an ID? **Wrap the handler in a function.**
+3. What does `preventDefault()` do? **Stops the default browser action.**
+4. What does `stopPropagation()` do? **Stops event propagation.**
+5. Which property is used for a checkbox? **`checked`.**
+6. Why can state logs look old after a setter? **The handler sees the current render's state snapshot.**
 
-### Middle
+## Interview Questions
 
-**Question:** Why use arrow function in onClick sometimes?
+**What is an event handler?** A function invoked in response to a user/browser event.
 
-**Answer:** To pass custom parameters to the handler.
+**Why `onClick={handleClick}` instead of `onClick={handleClick()}`?** The first passes a function; the second executes it during rendering.
 
-**Question:** What is the difference between onInput and onChange in React?
+**What is the difference between `preventDefault` and `stopPropagation`?** Default action vs propagation.
 
-**Answer:** React commonly uses onChange for controlled inputs to capture value updates.
+**Why use functional state updates in event handlers?** When the next state depends on previous state.
 
-### Advanced
+**How do keyboard shortcuts work?** Handle keyboard events and inspect semantic keys such as `Enter` or `Escape`.
 
-**Question:** Why should handlers avoid heavy logic inline in JSX?
-
-**Answer:** It hurts readability and can create avoidable re-renders.
-
-**Question:** How can you optimize many event handlers in large lists?
-
-**Answer:** Extract components, memoize when needed, and keep state updates minimal.
+**Should every click be handled with a `div`?** No. Prefer semantic buttons, links, and form controls for accessibility and correct browser behavior.
 
 ## Day 12 Outcome
 
-- You can connect user actions with state updates
-- You can handle button, input, and submit events
-- You are ready for controlled forms in Day 13
+You can implement reliable React event handling for buttons, forms, inputs, checkboxes, keyboard actions, list operations, and propagation scenarios, while understanding state snapshots and browser defaults.
