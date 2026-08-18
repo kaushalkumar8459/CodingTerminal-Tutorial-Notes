@@ -2,401 +2,472 @@
 title: Forms and Controlled Components
 slug: day-013-forms-and-controlled-components
 dayLabel: Day 13
-level: Beginner
-estimatedMinutes: 30
+level: Beginner to Intermediate
+estimatedMinutes: 75
 order: 13
 track: react
 ---
-# Day 13 [Beginner to Intermediate]: Forms and Controlled Components
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 13 Outcome](#day-13-outcome)
+# Day 13 [Beginner → Intermediate]: Forms and Controlled Components
 
 ## Goal
 
-Build reliable React forms using controlled components, validation logic, and clean submit/reset flow.
+Build production-style React forms using controlled inputs, reusable handlers, validation, touched/error state, reset behavior, and accessible submit flow. By the end, you should understand **why** controlled components work, when uncontrolled inputs are useful, and how form state should be designed.
 
 ## Prerequisites
 
-- Day 12 completed
-- Event handling basics
+- Days 8–12: `useState`, object state, events, and immutable updates
+- Basic HTML forms and JavaScript functions
 
-## Explanation
+## Why Forms Matter
 
-In controlled components, form fields are tied to state, making behavior predictable and easy to validate.
+Forms are one of the most common places where React state, events, validation, accessibility, and business rules meet. A good form is not simply a collection of inputs. It has a state model, validation rules, interaction states, submission behavior, error handling, and reset behavior.
+
+## Mental Model
+
+```text
+User types
+   ↓
+onChange event
+   ↓
+React state update
+   ↓
+Component renders with new value
+   ↓
+Validation / derived UI
+   ↓
+User submits
+   ↓
+Validate → submit or show errors
+```
 
 ## Topic by Topic
 
-### Topic 1: Controlled Input
+### 1. Controlled Inputs
 
-Theory:
-Input value comes from state and updates via onChange.
+A controlled input gets its current value from React state and reports changes through an event handler.
 
-Practical:
-Create controlled name input.
+```jsx
+import { useState } from "react";
 
-Code Example:
+function NameField() {
+  const [name, setName] = useState("");
+
+  return (
+    <label>
+      Name
+      <input
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+      />
+    </label>
+  );
+}
+```
+
+The state is the source of truth for the input's value. This makes validation, conditional UI, reset, formatting, and submission predictable.
+
+### 2. Form State: Separate Values or One Object?
+
+Both approaches are valid.
+
+Separate state is convenient for a small form:
 
 ```jsx
 const [name, setName] = useState("");
-<input value={name} onChange={(e) => setName(e.target.value)} />;
+const [email, setEmail] = useState("");
 ```
 
-**Explanation:** This input is controlled because its value comes from React state. Typing updates state, and state updates input.
-
-**Key Points:**
-
-- Controlled input uses `value` + `onChange`.
-- State is the single source of truth.
-- Easy to validate and reset controlled fields.
-
-### Topic 2: Multi-field Form State
-
-Theory:
-Use one state object for related fields.
-
-Practical:
-Track name, email, and phone in one object.
-
-Code Example:
+A single object is useful when fields form one logical record:
 
 ```jsx
-setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+const initialForm = { name: "", email: "", role: "developer" };
+const [form, setForm] = useState(initialForm);
 ```
 
-**Explanation:** This updates only one field in the form object while keeping all other fields unchanged.
+Do not choose an object merely to reduce the number of hooks. Choose the model that makes updates and validation clear.
 
-**Key Points:**
+### 3. Generic Change Handler
 
-- One object can hold many related fields.
-- Spread keeps old values.
-- Computed key updates the correct field.
-
-### Topic 3: Basic Validation
-
-Theory:
-Validate before submit to prevent bad data.
-
-Practical:
-Check empty fields and email format.
-
-Code Example:
+Give each field a `name` that matches its state key:
 
 ```jsx
-if (!form.email.includes("@")) setError("Enter valid email");
-```
-
-**Explanation:** Before submitting, this checks if email looks valid. If not, it sets an error message.
-
-**Key Points:**
-
-- Validate user input before save/submit.
-- Show clear error messages.
-- Start with simple rules, then add more.
-
-### Topic 4: Controlled Select and Textarea
-
-Theory:
-Select and textarea can also be controlled.
-
-Practical:
-Track department and message.
-
-Code Example:
-
-```jsx
-<select name="dept" value={form.dept} onChange={handleChange}></select>
-```
-
-**Explanation:** Select fields are controlled the same way as text inputs, using state for current value.
-
-**Key Points:**
-
-- `select` supports controlled pattern.
-- Use `name` to map field updates.
-- One handler can manage many form fields.
-
-### Topic 5: Controlled vs Uncontrolled
-
-Theory:
-Controlled uses state, uncontrolled reads value from refs.
-
-Practical:
-Capture one field with useRef.
-
-Code Example:
-
-```jsx
-const noteRef = useRef(null);
-const note = noteRef.current.value;
-```
-
-**Explanation:** Uncontrolled input reads value directly from DOM using `ref`, not from React state.
-
-**Key Points:**
-
-- Controlled: value in state.
-- Uncontrolled: value read from ref.
-- Controlled is preferred for most forms.
-
-### Topic 6: Touched and Error State Pattern
-
-Theory:
-Track field-level touched and error states to show validation messages at the right time.
-
-Practical:
-Show error only after a field is visited, not on first render.
-
-Code Example:
-
-```jsx
-const [touched, setTouched] = useState({ email: false });
-const [errors, setErrors] = useState({ email: "" });
-```
-
-**Explanation:** `touched` tracks whether a user has visited a field. `errors` stores messages, so you can show them at the right time.
-
-**Key Points:**
-
-- Avoid showing errors too early.
-- Track interaction separately from field values.
-- Improves form user experience.
-
-## Key Concepts
-
-- Controlled inputs
-- Form state object
-- Generic handlers
-- Validation flow
-- Controlled vs uncontrolled
-- Touched and error state model
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Form Input] --> B[onChange]
-		B --> C[State Update]
-		C --> D[Validation]
-		D --> E[Submit or Error]
-```
-
-## End-to-End Practical
-
-1. Create form object state.
-2. Build generic handleChange.
-3. Add validation rules.
-4. Handle submit with preventDefault.
-5. Show success or error messages.
-
-## Hands-on Coding
-
-### Example 1: Case - Student Registration Form
-
-Scenario:
-An institute registration form collects student details and validates required fields.
-
-```jsx
-import { useState } from "react";
-
-function App() {
-  const [form, setForm] = useState({ name: "", email: "", course: "" });
-  const [error, setError] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.course) {
-      setError("All fields are required");
-      return;
-    }
-    setError("");
-    alert("Registration submitted");
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-        placeholder="Name"
-      />
-      <input
-        name="email"
-        value={form.email}
-        onChange={handleChange}
-        placeholder="Email"
-      />
-      <input
-        name="course"
-        value={form.course}
-        onChange={handleChange}
-        placeholder="Course"
-      />
-      <button type="submit">Submit</button>
-      <p>{error}</p>
-    </form>
-  );
+function handleChange(event) {
+  const { name, value } = event.target;
+  setForm((current) => ({
+    ...current,
+    [name]: value,
+  }));
 }
 ```
 
-### Example 2: Case - Employee Feedback Form
+This uses a computed property name. The spread preserves unrelated fields.
 
-Scenario:
-A company feedback form needs controlled select and textarea fields.
+### 4. Different Input Types
+
+Controlled patterns differ slightly by input type.
+
+**Text, email, select, textarea:** usually use `value`.
+
+**Checkbox:** use `checked`.
 
 ```jsx
-import { useState } from "react";
+<input
+  type="checkbox"
+  name="termsAccepted"
+  checked={form.termsAccepted}
+  onChange={(event) =>
+    setForm((current) => ({
+      ...current,
+      termsAccepted: event.target.checked,
+    }))
+  }
+/>
+```
 
-function FeedbackForm() {
-  const [form, setForm] = useState({ dept: "HR", feedback: "" });
+**Multiple select:** may use an array of selected values.
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+The important rule is: use the DOM property that represents the control's value (`value` or `checked`) rather than treating every input identically.
 
-  return (
-    <div>
-      <select name="dept" value={form.dept} onChange={handleChange}>
-        <option>HR</option>
-        <option>Engineering</option>
-        <option>Sales</option>
-      </select>
-      <textarea
-        name="feedback"
-        value={form.feedback}
-        onChange={handleChange}
-        placeholder="Write feedback"
-      />
-      <p>
-        {form.dept}: {form.feedback}
-      </p>
-    </div>
-  );
+### 5. Form Submission
+
+Use the form's `onSubmit`, not a button click, as the primary submission mechanism.
+
+```jsx
+function handleSubmit(event) {
+  event.preventDefault();
+  // validate and submit
 }
 ```
 
-### Example 3: Case - Uncontrolled Emergency Note
+Using `onSubmit` also supports keyboard submission naturally. Use `type="submit"` for the submit button.
 
-Scenario:
-A quick emergency note input is captured using ref without state binding.
+### 6. Validation
+
+Validation should be explicit and reusable rather than scattered across JSX.
+
+```jsx
+function validate(form) {
+  const errors = {};
+
+  if (!form.name.trim()) errors.name = "Name is required";
+  if (!form.email.trim()) {
+    errors.email = "Email is required";
+  } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+    errors.email = "Enter a valid email";
+  }
+
+  return errors;
+}
+```
+
+Validation is a UX and data-quality concern, **not a security boundary**. The server must validate data again before accepting it.
+
+### 7. Touched, Dirty, and Error State
+
+These concepts are different:
+
+- **Touched:** the user has interacted with or left a field.
+- **Dirty:** the current value differs from its initial value.
+- **Error:** a validation rule currently fails.
+
+A common pattern is to avoid showing an error before the user has interacted with the field.
+
+```jsx
+const [touched, setTouched] = useState({});
+const [errors, setErrors] = useState({});
+```
+
+### 8. Resetting Forms
+
+Reset both the values and interaction state.
+
+```jsx
+function resetForm() {
+  setForm(initialForm);
+  setErrors({});
+  setTouched({});
+}
+```
+
+Keep the initial state in one place so reset behavior cannot drift from the initial form shape.
+
+### 9. Controlled vs Uncontrolled
+
+**Controlled:** React state owns the current value.
+
+**Uncontrolled:** the DOM owns the current value; React reads it through a ref when needed.
 
 ```jsx
 import { useRef } from "react";
 
 function QuickNote() {
-  const noteRef = useRef(null);
+  const inputRef = useRef(null);
 
-  const saveNote = () => {
-    alert(`Saved note: ${noteRef.current.value}`);
-  };
+  function save() {
+    console.log(inputRef.current?.value);
+  }
 
   return (
-    <div>
-      <input ref={noteRef} placeholder="Quick note" />
-      <button onClick={saveNote}>Save Note</button>
-    </div>
+    <>
+      <input ref={inputRef} />
+      <button onClick={save}>Save</button>
+    </>
   );
 }
 ```
 
-## Mini Exercise
+Uncontrolled inputs are useful for simple forms, integrating with non-React code, and some specialized scenarios. Do not claim that controlled inputs are always faster or always better.
 
-Scenario:
-You are building a job application form.
+### 10. Avoiding Controlled/Uncontrolled Warnings
 
-Create controlled fields for fullName, email, role, and portfolioLink. Validate required fields and valid email format. Add reset button.
+A field should not unexpectedly switch between controlled and uncontrolled modes.
 
-Expected output:
+Prefer a stable initial value:
 
-- Every input is controlled
-- Error shown for invalid submit
-- Reset restores initial values
+```jsx
+const [email, setEmail] = useState("");
+```
+
+If data can be missing, normalize it before passing it to the input rather than accidentally changing `value` from a string to `undefined`.
+
+### 11. Accessibility
+
+A production form should include:
+
+- `<label>` associated with each input
+- semantic `<button type="submit">`
+- useful `name` attributes
+- clear error text
+- appropriate `aria-invalid` when validation fails
+- `aria-describedby` when an input is described by an error/help element
+
+Example:
+
+```jsx
+<label htmlFor="email">Email</label>
+<input
+  id="email"
+  name="email"
+  value={form.email}
+  onChange={handleChange}
+  aria-invalid={Boolean(errors.email)}
+  aria-describedby={errors.email ? "email-error" : undefined}
+/>
+{errors.email && <p id="email-error">{errors.email}</p>}
+```
+
+## Complete Practical: Registration Form
+
+```jsx
+import { useState } from "react";
+
+const initialForm = {
+  name: "",
+  email: "",
+  role: "developer",
+  termsAccepted: false,
+};
+
+function validate(form) {
+  const errors = {};
+
+  if (!form.name.trim()) errors.name = "Name is required";
+  if (!form.email.trim()) {
+    errors.email = "Email is required";
+  } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+    errors.email = "Enter a valid email";
+  }
+  if (!form.termsAccepted) errors.termsAccepted = "Accept the terms to continue";
+
+  return errors;
+}
+
+export default function RegistrationForm() {
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleChange(event) {
+    const { name, value, type, checked } = event.target;
+    setForm((current) => ({
+      ...current,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    setSubmitted(false);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const nextErrors = validate(form);
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setSubmitted(true);
+  }
+
+  function handleReset() {
+    setForm(initialForm);
+    setErrors({});
+    setSubmitted(false);
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate>
+      <div>
+        <label htmlFor="name">Name</label>
+        <input id="name" name="name" value={form.name} onChange={handleChange} />
+        {errors.name && <p>{errors.name}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="email">Email</label>
+        <input id="email" name="email" type="email" value={form.email} onChange={handleChange} />
+        {errors.email && <p>{errors.email}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="role">Role</label>
+        <select id="role" name="role" value={form.role} onChange={handleChange}>
+          <option value="developer">Developer</option>
+          <option value="designer">Designer</option>
+          <option value="tester">Tester</option>
+        </select>
+      </div>
+
+      <label>
+        <input
+          type="checkbox"
+          name="termsAccepted"
+          checked={form.termsAccepted}
+          onChange={handleChange}
+        />
+        I accept the terms
+      </label>
+      {errors.termsAccepted && <p>{errors.termsAccepted}</p>}
+
+      <button type="submit">Register</button>
+      <button type="button" onClick={handleReset}>Reset</button>
+
+      {submitted && <p role="status">Registration is valid.</p>}
+    </form>
+  );
+}
+```
+
+## Common Mistakes
+
+### Mistake 1: Using `value` for a checkbox
+
+Use `checked={...}` for a checkbox.
+
+### Mistake 2: Mutating a form object
+
+Avoid `form.email = value`. Use a state setter and create a new object.
+
+### Mistake 3: Submitting through only `onClick`
+
+Use `<form onSubmit={...}>` so keyboard submission works too.
+
+### Mistake 4: Treating client validation as security
+
+Client validation improves UX. Server-side validation and authorization remain mandatory.
+
+### Mistake 5: Showing every error immediately
+
+Use touched/submit state to choose when an error becomes visible.
+
+### Mistake 6: Switching control mode accidentally
+
+Initialize text inputs with `""`, arrays with `[]`, booleans with `false`, and otherwise normalize incoming data.
+
+## Hands-on Challenges
+
+### Challenge 1 — Job Application Form
+
+Create fields for name, email, role, portfolio URL, experience, and agreement checkbox.
+
+Requirements:
+
+- Controlled inputs
+- Generic handler
+- Required validation
+- Email validation
+- Reset
+- Accessible labels
+
+### Challenge 2 — Field-Level Validation
+
+Add touched state so an email error appears after blur or after submit, whichever happens first.
+
+### Challenge 3 — Edit Existing Data
+
+Start with an existing profile object and allow the user to edit it. Add **Save** and **Cancel**. Cancel should restore the last saved values without reloading the page.
 
 ## Assessment Quiz
 
-### Quiz Questions
+1. What makes an input controlled?
+2. Why should checkbox state use `checked` rather than `value`?
+3. Why is `onSubmit` preferable to only a button `onClick` for form submission?
+4. What is the difference between touched and dirty?
+5. Can client-side validation replace server-side validation?
+6. What causes a controlled/uncontrolled warning?
+7. When can an uncontrolled input be appropriate?
+8. Why should form state be updated immutably?
 
-1. What is a controlled component?
-2. Why use one object for related form fields?
-3. True or False: uncontrolled inputs are always better.
-4. Where should validation run typically?
-5. Which hook is commonly used for uncontrolled input?
+**Answers:**
 
-### Quiz Answers
+1. Its current value is driven by React state.
+2. `checked` represents the checkbox's boolean state.
+3. It supports semantic form submission and keyboard submission.
+4. Touched describes interaction; dirty describes whether the value differs from its initial value.
+5. No. Server validation is still required.
+6. A value changes between controlled and uncontrolled, often because it becomes `undefined`/`null` unexpectedly.
+7. Simple forms, DOM-oriented integrations, or specialized cases where state binding is unnecessary.
+8. Immutable updates give React a new state value and make changes predictable.
 
-1. Input controlled by React state
-2. Cleaner updates and grouped data
-3. False
-4. During change or submit handlers
-5. useRef
-
-## Task
-
-- Build one controlled form with at least 4 fields
-- Add validation and reset
-- Complete mini exercise
-
-## Self Check
-
-- You can build controlled forms confidently
-- You can apply validation and submit flow
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
+## Interview Questions
 
 ### Beginner
 
-**Question:** What makes an input controlled?
+**What is a controlled component?**  
+A form control whose current value is driven by React state.
 
-**Answer:** Its value is linked to state and updated with onChange.
+**Why call `preventDefault()`?**  
+To prevent the browser's default form navigation/reload when handling submission in React.
 
-**Question:** Why use preventDefault on form submit?
+### Intermediate
 
-**Answer:** To prevent browser page reload.
+**How do you update one field in an object form state?**  
+Use the previous state and a computed property name: `{ ...current, [name]: value }`.
 
-### Middle
-
-**Question:** How do you update one field in a form object?
-
-**Answer:** Use spread with computed key: [name]: value.
-
-**Question:** When would you choose uncontrolled inputs?
-
-**Answer:** For simple or performance-sensitive one-off fields.
+**How do you validate a large form?**  
+Separate validation rules from rendering, maintain structured errors, and introduce a schema library when complexity justifies it.
 
 ### Advanced
 
-**Question:** How do you scale validation for complex forms?
+**Controlled vs uncontrolled: which is better?**  
+Neither universally. Controlled inputs provide explicit React state control; uncontrolled inputs can be simpler for certain forms and integrations.
 
-**Answer:** Use schema-based validation and structured error states.
+**Why can validation become a state-management problem?**  
+A form may need values, touched state, dirty state, field errors, submission state, server errors, and reset semantics. A deliberate state model prevents these concerns from becoming tangled.
 
-**Question:** Why should form and view state be separated sometimes?
+## Final Task
 
-**Answer:** It keeps business logic cleaner and easier to maintain.
+Build a **Job Application Form** with at least six fields. It must support validation, accessible error messages, reset, submit success state, and field-level interaction feedback.
+
+### Acceptance Criteria
+
+- [ ] All editable fields are controlled unless intentionally justified.
+- [ ] `onSubmit` handles submission.
+- [ ] Checkbox uses `checked`.
+- [ ] State updates are immutable.
+- [ ] Validation is separated from JSX.
+- [ ] Errors are clear and associated with fields.
+- [ ] Reset restores initial state.
+- [ ] Client validation is not described as security.
+- [ ] Form is keyboard usable.
 
 ## Day 13 Outcome
 
-- You can build structured controlled forms
-- You can validate and submit form data safely
-- You are ready for mini project integration in Day 14
+You can now design, implement, validate, reset, and explain React forms rather than simply wiring individual inputs. You are ready to combine these patterns into the Notes App on Day 14.
