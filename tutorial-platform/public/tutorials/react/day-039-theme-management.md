@@ -3,362 +3,352 @@ title: Theme Management
 slug: day-039-theme-management
 dayLabel: Day 39
 level: Intermediate
-estimatedMinutes: 30
-order: 39
-track: react
----
----
-title: Theme Management
-slug: day-039-theme-management
-dayLabel: Day 39
-level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 39
 track: react
 ---
 # Day 39 [Intermediate]: Theme Management
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 39 Outcome](#day-39-outcome)
-
 ## Goal
 
-Build a global theme system with context, CSS variables, and persistence across page reloads.
+Build a theme system that combines Context, CSS custom properties, persistence, system preference, accessibility, and first-paint stability.
 
-## Prerequisites
+## 1. Why Theme Is a Good Context Use Case
 
-- Day 38 completed
-- Context and localStorage basics
+Theme affects many distant components:
 
-## Explanation
+```text
+App
+├── Header
+├── Sidebar
+├── Dashboard
+├── Modal
+└── Footer
+```
 
-Theme management is a classic app-wide state use case. Context provides theme value globally, while CSS variables apply visual changes cleanly.
+Passing `theme` through every level is unnecessary. A focused `ThemeContext` gives components access to the shared preference.
 
-## Topic by Topic
+## 2. Store Semantic Theme State
 
-### Topic 1: Global Theme State
-
-Theory:
-Theme mode (light/dark) should be shared globally.
-
-Practical:
-Store theme in ThemeProvider.
-
-Code Example:
+Prefer a meaningful state model:
 
 ```jsx
 const [theme, setTheme] = useState("light");
 ```
 
-**Explanation:** This topic explains Global Theme State in a practical way so you can apply it confidently in real React projects.
+For a three-mode design:
 
-**Key Points:**
+```text
+light
+ dark
+ system
+```
 
-- Understand the core idea of Global Theme State.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+`system` is a preference mode, not necessarily the final applied theme. The browser's `prefers-color-scheme` determines the effective theme.
 
-### Topic 2: CSS Variables Strategy
+## 3. CSS Variables
 
-Theory:
-Use CSS custom properties for scalable theming.
-
-Practical:
-Define colors in `:root` and `[data-theme="dark"]`.
-
-Code Example:
+Keep visual tokens in CSS:
 
 ```css
---bg: #ffffff;
+:root {
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-surface: #f5f5f5;
+}
+
+[data-theme="dark"] {
+  --color-bg: #111111;
+  --color-text: #f5f5f5;
+  --color-surface: #1d1d1d;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
 ```
 
-**Explanation:** This topic explains CSS Variables Strategy in a practical way so you can apply it confidently in real React projects.
+Components consume semantic tokens instead of knowing whether the application is light or dark.
 
-**Key Points:**
-
-- Understand the core idea of CSS Variables Strategy.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 3: Theme Toggle Action
-
-Theory:
-Expose toggleTheme action from context.
-
-Practical:
-Switch between light and dark modes.
-
-Code Example:
+## 4. Theme Provider
 
 ```jsx
-const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
+const ThemeContext = createContext(null);
+
+function getInitialTheme() {
+  const saved = localStorage.getItem("theme");
+  return saved === "light" || saved === "dark" || saved === "system"
+    ? saved
+    : "system";
+}
+
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState(getInitialTheme);
+
+  const value = useMemo(
+    () => ({ theme, setTheme }),
+    [theme]
+  );
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  const value = useContext(ThemeContext);
+  if (value === null) {
+    throw new Error("useTheme must be used within ThemeProvider");
+  }
+  return value;
+}
 ```
 
-**Explanation:** This topic explains Theme Toggle Action in a practical way so you can apply it confidently in real React projects.
+This stores the user's **preference**. Applying the preference to the document is a separate concern.
 
-**Key Points:**
+## 5. Apply Theme to the Document
 
-- Understand the core idea of Theme Toggle Action.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+```jsx
+useEffect(() => {
+  const root = document.documentElement;
 
-### Topic 4: Persist Theme in localStorage
+  const effectiveTheme =
+    theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : theme;
 
-Theory:
-Persist user preference between sessions.
+  root.dataset.theme = effectiveTheme;
+}, [theme]);
+```
 
-Practical:
-Save theme on updates and hydrate initial value.
+This is a legitimate effect because it synchronizes React state with an external system: the DOM.
 
-Code Example:
+## 6. Support System Theme Changes
+
+If `system` mode is supported, the application should respond when the operating-system preference changes.
+
+```jsx
+useEffect(() => {
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function handleChange() {
+    if (theme === "system") {
+      document.documentElement.dataset.theme = media.matches
+        ? "dark"
+        : "light";
+    }
+  }
+
+  media.addEventListener("change", handleChange);
+  return () => media.removeEventListener("change", handleChange);
+}, [theme]);
+```
+
+Cleanup matters because the listener is attached to an external browser object.
+
+## 7. Avoid Flash of Wrong Theme
+
+If the theme is applied only after React mounts, the browser may briefly paint the default theme.
+
+A robust application can run a tiny inline initialization script before the main bundle, or configure the document during server rendering when using an SSR framework.
+
+Conceptually:
+
+```text
+HTML arrives
+  ↓
+Read saved/system preference
+  ↓
+Set data-theme
+  ↓
+Browser paints correct theme
+  ↓
+React hydrates/mounts
+```
+
+Do not claim that `useEffect` alone guarantees first-paint correctness; it runs after the initial render.
+
+## 8. Persistence Is a User Preference, Not Security Data
+
+`localStorage` is appropriate for theme preference:
 
 ```jsx
 localStorage.setItem("theme", theme);
 ```
 
-**Explanation:** This topic explains Persist Theme in localStorage in a practical way so you can apply it confidently in real React projects.
+But it should not be used as secure storage for credentials, refresh tokens, or secrets.
 
-**Key Points:**
+## 9. Accessibility
 
-- Understand the core idea of Persist Theme in localStorage.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 5: Apply Theme Attribute
-
-Theory:
-Attach current theme to document element for CSS targeting.
-
-Practical:
-Set `data-theme` dynamically.
-
-Code Example:
+Theme switching should remain understandable to assistive technologies:
 
 ```jsx
-document.documentElement.setAttribute("data-theme", theme);
+<button
+  type="button"
+  onClick={() => setTheme("dark")}
+  aria-pressed={theme === "dark"}
+>
+  Dark mode
+</button>
 ```
 
-**Explanation:** This topic explains Apply Theme Attribute in a practical way so you can apply it confidently in real React projects.
+Also consider:
 
-**Key Points:**
+- sufficient color contrast
+- visible focus indicators
+- `color-scheme` where appropriate
+- reduced-motion preferences
+- avoiding color as the only status signal
 
-- Understand the core idea of Apply Theme Attribute.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 6: Prevent Theme Flash on First Paint
-
-Theory:
-If theme is applied after first render, users may briefly see the wrong colors.
-
-Practical:
-Initialize theme value as early as possible and apply root attribute before heavy UI paints.
-
-Code Example:
+## 10. Complete Theme System
 
 ```jsx
-const initialTheme = localStorage.getItem("theme") || "light";
-```
-
-**Explanation:** This topic explains Prevent Theme Flash on First Paint in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Prevent Theme Flash on First Paint.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-## Key Concepts
-
-- Global theme context
-- CSS variable-based theming
-- Theme toggle architecture
-- Preference persistence
-- Root-level theme application
-- First-paint theme stability
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-		A[Theme Context] --> B[Toggle Action]
-		A --> C[Current Theme]
-		C --> D[data-theme Attribute]
-		D --> E[CSS Variables Applied]
-		C --> F[localStorage Persist]
-```
-
-## End-to-End Practical
-
-1. Create ThemeContext provider.
-2. Add toggle action.
-3. Persist theme in localStorage.
-4. Apply theme to root attribute.
-5. Consume theme in header/body components.
-
-## Hands-on Coding
-
-### Example 1: Case - Theme Provider with Persistence
-
-Scenario:
-A productivity app should remember user theme preference after browser refresh.
-
-```jsx
-import { createContext, useEffect, useState } from "react";
-
-export const ThemeContext = createContext(null);
-
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "light",
-  );
-
-  const toggleTheme = () => {
-    setTheme((t) => (t === "light" ? "dark" : "light"));
-  };
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
+function ThemeControls() {
+  const { theme, setTheme } = useTheme();
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <fieldset>
+      <legend>Theme</legend>
+
+      {[
+        ["light", "Light"],
+        ["dark", "Dark"],
+        ["system", "System"],
+      ].map(([value, label]) => (
+        <label key={value}>
+          <input
+            type="radio"
+            name="theme"
+            value={value}
+            checked={theme === value}
+            onChange={(event) => setTheme(event.target.value)}
+          />
+          {label}
+        </label>
+      ))}
+    </fieldset>
   );
 }
 ```
 
-### Example 2: Case - Theme Toggle Button in Navbar
+This is preferable to a visual-only toggle when users need explicit control over three modes.
 
-Scenario:
-A navbar should let users switch themes from any page.
+## 11. Theme Architecture
 
-```jsx
-import { useContext } from "react";
-import { ThemeContext } from "./ThemeContext";
-
-function ThemeToggle() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  return <button onClick={toggleTheme}>Theme: {theme}</button>;
-}
+```text
+ThemeProvider
+   │
+   ├── preference: light | dark | system
+   │
+   ├── persistence
+   │
+   └── document synchronization
+          ↓
+      data-theme
+          ↓
+    CSS semantic tokens
+          ↓
+       Components
 ```
 
-### Example 3: Case - CSS Variables for Light and Dark Modes
+## 12. Common Mistakes
 
-Scenario:
-A design system should adapt colors globally without editing each component style manually.
+### Storing final colors in React state
 
-```css
-:root {
-  --bg: #ffffff;
-  --text: #111111;
-}
+Usually unnecessary. Store the theme mode and let CSS tokens represent visual details.
 
-[data-theme="dark"] {
-  --bg: #111111;
-  --text: #f4f4f4;
-}
+### Using inline styles everywhere
 
-body {
-  background: var(--bg);
-  color: var(--text);
-}
+This makes multi-theme maintenance harder and duplicates styling decisions.
+
+### Ignoring system preference
+
+If `system` is a supported option, subscribe to `matchMedia` changes.
+
+### Applying theme only after mount
+
+This can cause a first-paint flash.
+
+### Forgetting cleanup
+
+Browser media-query listeners should be removed when the effect is cleaned up.
+
+### Persisting invalid values
+
+Validate stored strings before using them.
+
+## Hands-on Project: Coding Challenge Theme System
+
+Implement:
+
+```text
+light
+ dark
+ system
 ```
 
-## Mini Exercise
+Requirements:
 
-Scenario:
-You are building a coding challenge platform.
+- [ ] ThemeContext
+- [ ] `useTheme` custom hook
+- [ ] CSS variables
+- [ ] localStorage persistence
+- [ ] system preference support
+- [ ] accessible controls
+- [ ] root `data-theme`
+- [ ] listener cleanup
+- [ ] invalid-storage fallback
+- [ ] no secret data in storage
 
-Add theme options: light, dark, and sepia. Persist selected theme and apply through CSS variables.
+## Debugging Scenarios
 
-Expected output:
+**Theme resets after refresh:** inspect storage key and initialization.
 
-- Theme choice persists after refresh
-- App styles update globally
-- Toggle/control component works from any route
+**Dark mode works manually but not in system mode:** inspect `matchMedia` and its change listener.
 
-## Assessment Quiz
+**Colors flash during startup:** move initial theme application earlier than React's post-render effects.
 
-### Quiz Questions
+**Theme works but tests fail:** mock `localStorage`, `matchMedia`, and document behavior appropriately.
 
-1. Why is context useful for theming?
-2. What is the benefit of CSS variables for theme management?
-3. True or False: theme state should reset on every page reload.
-4. Where is theme preference usually stored locally?
-5. How do you apply theme globally in DOM?
+## Assessment
 
-### Quiz Answers
+1. Why is theme a good Context use case?
+2. Why should colors usually be CSS variables rather than React state?
+3. What is the difference between a theme preference and effective theme?
+4. Why does `system` mode need `matchMedia`?
+5. Why is `useEffect` appropriate for changing `document.documentElement`?
+6. Why can first-paint theme application require work before React effects?
+7. Why is localStorage suitable for theme but not a secret store?
+8. What cleanup is required for system-theme listeners?
 
-1. Theme is shared across many components
-2. Centralized, scalable styling updates
-3. False
-4. localStorage
-5. Set root `data-theme` attribute
+## Interview Questions
 
-## Task
+**Why use Context for theme?**  
+Many distant components need the same user preference.
 
-- Build global theme provider
-- Add persistent toggle
-- Complete mini exercise
+**How do you avoid a flash of the wrong theme?**  
+Apply the saved/system theme before the initial paint, often with an early inline script or framework-level document logic.
 
-## Self Check
+**Why use CSS variables?**  
+They centralize semantic design tokens and let the entire UI respond to one theme attribute.
 
-- You can implement production-style theme management
-- You can combine context, localStorage, and CSS variables
-- You can answer at least 4 out of 5 quiz questions correctly
+**How would you support system preference?**  
+Use `matchMedia('(prefers-color-scheme: dark)')` and subscribe to changes while the preference is `system`.
 
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** Why use context for theme?
-
-**Answer:** Theme must be available across many components globally.
-
-**Question:** What does theme toggle function do?
-
-**Answer:** Switches current theme mode value.
-
-### Middle
-
-**Question:** Why choose CSS variables over inline style objects for theming?
-
-**Answer:** They are cleaner, global, and easier to scale.
-
-**Question:** How do you persist user-selected theme?
-
-**Answer:** Save in localStorage and hydrate initial state from it.
-
-### Advanced
-
-**Question:** How would you avoid flash of wrong theme on first paint?
-
-**Answer:** Initialize theme early before first render, including root attribute pre-set.
-
-**Question:** How can design tokens improve theming architecture?
-
-**Answer:** They standardize semantic colors and simplify multi-theme evolution.
+**Is localStorage secure?**  
+No. It is client-controlled browser storage and should not be treated as a secure credential store.
 
 ## Day 39 Outcome
 
-- You can build a robust global theme system
-- You can persist and apply themes cleanly
-- You are ready for auth context patterns in Day 40
-
+You can now build a **persistent, accessible, system-aware theme architecture** and understand why theme synchronization is an external-system effect. Day 40 applies Context to authentication and clarifies the boundary between UI auth state and real authorization.
