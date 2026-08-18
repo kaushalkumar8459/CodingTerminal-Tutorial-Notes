@@ -3,55 +3,23 @@ title: Object State Handling
 slug: day-010-object-state-handling
 dayLabel: Day 10
 level: Intermediate
-estimatedMinutes: 30
+estimatedMinutes: 60
 order: 10
 track: react
 ---
-# Day 10 [Intermediate]: Object State Handling
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 10 Outcome](#day-10-outcome)
+# Day 10: Object State Handling
 
 ## Goal
 
-Manage related form data using one object state and update it safely.
+Learn when object state is useful and how to update objects immutably, including nested objects and generic form handlers.
 
 ## Prerequisites
 
-- Day 9 completed
-- Multiple state patterns understood
+Day 9 and `useState`, spread syntax, objects, and controlled inputs.
 
-## Explanation
+## 1. Object State
 
-When values are strongly related, object state keeps them grouped. Updates must preserve existing fields.
-
-## Topic by Topic
-
-### Topic 1: Object State Basics
-
-Theory:
-Object state stores related values in one place.
-
-Practical:
-Initialize profile object.
-
-Code Example:
-
-Code Example:
+Related values can be represented as one state object.
 
 ```jsx
 const [profile, setProfile] = useState({
@@ -61,399 +29,234 @@ const [profile, setProfile] = useState({
 });
 ```
 
-**Explanation:** When values are strongly related (like profile fields), group them in one object. This keeps related data together and makes it easier to pass around.
+Grouping is useful when fields belong to the same domain model or form. It is not mandatory for every group of values.
 
-**Key Points:**
+## 2. Immutable Updates
 
-- Group related fields in one object state
-- Better than scattered individual states
-- Easier to pass to child components
-- Natural representation of forms or entities
-
-### Topic 2: Safe Field Updates
-
-Theory:
-Use spread syntax to keep existing fields.
-
-Practical:
-Update only one property per input event.
-
-Code Example:
-
-Code Example:
+React state should be treated as read-only. Create a new object rather than mutating the existing object.
 
 ```jsx
-setProfile((prev) => ({ ...prev, firstName: "Karan" }));
+setProfile((current) => ({
+  ...current,
+  firstName: "Karan",
+}));
 ```
 
-**Explanation:** Never replace the entire object. Use spread (`...prev`) to copy all existing fields, then override only the one you're changing. This prevents accidentally losing other fields.
+The spread copies existing properties and the later property replaces the selected field.
 
-**Key Points:**
-
-- Always use spread operator for object updates
-- Spread copies existing fields
-- Override only the field being changed
-- Protects against data loss
-
-### Topic 3: Generic Input Handler
-
-Theory:
-One handler can update multiple fields by input name.
-
-Practical:
-Use name and value from event target.
-
-Code Example:
-
-Code Example:
+Avoid:
 
 ```jsx
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setProfile((prev) => ({
-    ...prev,
+profile.firstName = "Karan";
+```
+
+because it mutates the existing state object.
+
+## 3. Generic Form Handler
+
+```jsx
+function handleChange(event) {
+  const { name, value } = event.target;
+  setProfile((current) => ({
+    ...current,
     [name]: value,
   }));
-};
+}
 ```
 
-**Explanation:** One handler function works for all inputs. The `[name]` syntax (computed property) dynamically updates the field that changed. This reduces code duplication.
-
-**Key Points:**
-
-- One handler for multiple input fields
-- `[name]` syntax updates field dynamically
-- Reduces code duplication
-- Input names must match state keys
-
-### Topic 4: Object State in Forms
-
-Theory:
-Useful for profile and editor forms.
-
-Practical:
-Build 3-input profile form.
-
-Code Example:
+The computed property `[name]` updates the property whose key matches the input's `name` attribute.
 
 ```jsx
 <input name="firstName" value={profile.firstName} onChange={handleChange} />
 ```
 
-**Explanation:** Object state works especially well for forms because all related fields can be updated through one shared shape and one shared handler.
+## 4. Why the Spread Matters
 
-**Key Points:**
-
-- Forms often map naturally to object state.
-- One object can hold many related fields.
-- Shared handlers reduce duplication.
-
-### Topic 5: Common Pitfalls
-
-Theory:
-Replacing object without spread removes other fields.
-
-Practical:
-Compare wrong update vs correct update.
-
-Code Example:
+State setters replace the state value; they do not automatically merge object fields for you.
 
 ```jsx
-// WRONG - loses other fields:
-setProfile({ firstName: value });
-{
-  /* Only firstName remains */
-}
-
-// CORRECT - keeps all fields:
-setProfile((prev) => ({ ...prev, firstName: value }));
-{
-  /* All fields preserved */
-}
+setProfile({ firstName: "Asha" });
 ```
 
-**Explanation:** A common mistake is replacing the entire object instead of spreading. Without spread, all other fields are lost. Always use the spread operator when updating nested objects.
+This creates an object containing only `firstName`.
 
-**Key Points:**
-
-- Replacing the whole object can remove other fields.
-- Spread preserves existing data safely.
-- Check object updates carefully during debugging.
-
-### Topic 6: Nested Object Update Pattern
-
-Theory:
-For nested objects, spread each nested level you update to avoid accidental data loss.
-
-Practical:
-Update only city inside profile.address while keeping other fields safe.
-
-Code Example:
-
-Code Example:
+Use:
 
 ```jsx
-setProfile((prev) => ({
-  ...prev,
+setProfile((current) => ({ ...current, firstName: "Asha" }));
+```
+
+when you want to preserve the other fields.
+
+## 5. Nested Object Updates
+
+For nested data, preserve each level you modify.
+
+```jsx
+setProfile((current) => ({
+  ...current,
   address: {
-    ...prev.address,
+    ...current.address,
     city: "Pune",
   },
 }));
 ```
 
-**Explanation:** For nested objects, you must spread at **each** level you modify. First spread the outer object, then spread the nested one before changing a field. This ensures all data is preserved at each level.
+Spreading only the outer object would still replace the entire `address` object if you supplied a new `address` value without preserving its siblings.
 
-**Key Points:**
+## 6. Objects Containing Arrays
 
-- Spread at each nesting level being modified
-- Outer spread preserves sibling fields
-- Inner spread preserves sibling nested fields
-- Critical for deeply nested data structures
+The same immutability principle applies when an object contains an array.
 
-## Key Concepts
-
-- Object state grouping
-- Spread operator updates
-- Generic field handler
-- Immutable state update
-- Data integrity
-- Nested update safety
-
-## Visual Concept Map
-
-```mermaid
-flowchart LR
-    A[Input Change] --> B[handleChange]
-    B --> C[setProfile with spread]
-    C --> D[Updated object state]
-    D --> E[Re-rendered form]
+```jsx
+setProfile((current) => ({
+  ...current,
+  skills: [...current.skills, "React"],
+}));
 ```
 
-## End-to-End Practical
+The outer object and inner array both receive new references.
 
-1. Create profile object state.
-2. Build generic input handler.
-3. Wire 3 to 4 inputs.
-4. Render live profile preview.
-5. Add reset action.
+## 7. Functional Updates
 
-## Hands-on Coding
+Prefer a functional setter when the new object depends on the previous object.
 
-### Example 1: Case - HR Employee Profile Editor
+```jsx
+setProfile((current) => ({
+  ...current,
+  age: Number(current.age) + 1,
+}));
+```
 
-Scenario:
-An HR team needs to update employee profile details in one form and preview the latest values live.
+This makes the dependency on previous state explicit.
+
+## 8. Resetting Object State
+
+Keep an initial object that represents the desired reset state.
+
+```jsx
+const initialProfile = { firstName: "", lastName: "", age: "" };
+const [profile, setProfile] = useState(initialProfile);
+
+function reset() {
+  setProfile(initialProfile);
+}
+```
+
+For mutable nested defaults, create fresh objects when necessary rather than sharing mutable references.
+
+## 9. When Object State Is Not Ideal
+
+Do not group unrelated values merely because an object is convenient. Independent UI state such as `isMenuOpen` may be clearer as a separate state variable.
+
+For very complex transitions with many related rules, `useReducer` can become a better fit; that topic appears later in the curriculum.
+
+## Complete Example
 
 ```jsx
 import { useState } from "react";
 
-function App() {
-  const [profile, setProfile] = useState({
-    firstName: "",
-    lastName: "",
-    age: "",
-  });
+const initialProfile = {
+  firstName: "",
+  lastName: "",
+  city: "",
+  address: { country: "India", city: "" },
+  skills: [],
+};
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfile((prev) => ({ ...prev, [name]: value }));
-  };
+export default function ProfileEditor() {
+  const [profile, setProfile] = useState(initialProfile);
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setProfile((current) => ({ ...current, [name]: value }));
+  }
+
+  function addSkill() {
+    setProfile((current) => ({
+      ...current,
+      skills: [...current.skills, "React"],
+    }));
+  }
+
+  function updateCity(city) {
+    setProfile((current) => ({
+      ...current,
+      address: { ...current.address, city },
+    }));
+  }
 
   return (
-    <div>
-      <input
-        name="firstName"
-        placeholder="First Name"
-        value={profile.firstName}
-        onChange={handleChange}
-      />
-      <input
-        name="lastName"
-        placeholder="Last Name"
-        value={profile.lastName}
-        onChange={handleChange}
-      />
-      <input
-        name="age"
-        placeholder="Age"
-        value={profile.age}
-        onChange={handleChange}
-      />
-      <p>
-        {profile.firstName} {profile.lastName} ({profile.age})
-      </p>
-    </div>
+    <section>
+      <input name="firstName" value={profile.firstName} onChange={handleChange} />
+      <input name="lastName" value={profile.lastName} onChange={handleChange} />
+      <input name="city" value={profile.city} onChange={handleChange} />
+      <button type="button" onClick={addSkill}>Add React</button>
+      <button type="button" onClick={() => updateCity("Pune")}>Set Address City</button>
+      <button type="button" onClick={() => setProfile(initialProfile)}>Reset</button>
+    </section>
   );
 }
 ```
 
-### Example 2: Case - Event Registration Form Reset
+## Common Mistakes
 
-Scenario:
-A conference registration page should allow users to fill related fields and reset everything with one click.
+- Mutating `profile` directly.
+- Replacing an object without preserving sibling fields.
+- Updating a nested object without preserving its sibling properties.
+- Treating object state as automatically merged by React.
+- Using one giant object for unrelated UI state.
+- Storing values that can be derived from the object.
+
+## Hands-on Lab
+
+Build an **Employee Profile Editor** with name, department, salary, location, nested address, and skills.
+
+Requirements:
+
+- Generic input handler.
+- Immutable field updates.
+- Nested address update.
+- Add/remove a skill without mutation.
+- Reset to initial data.
+- Live preview.
+
+## Debugging Challenge
+
+Given:
 
 ```jsx
-import { useState } from "react";
-
-function App() {
-  const initialRegistration = { name: "", email: "", company: "" };
-  const [registration, setRegistration] = useState(initialRegistration);
-
-  return (
-    <div>
-      <input
-        placeholder="Name"
-        value={registration.name}
-        onChange={(e) =>
-          setRegistration((prev) => ({ ...prev, name: e.target.value }))
-        }
-      />
-      <input
-        placeholder="Email"
-        value={registration.email}
-        onChange={(e) =>
-          setRegistration((prev) => ({ ...prev, email: e.target.value }))
-        }
-      />
-      <input
-        placeholder="Company"
-        value={registration.company}
-        onChange={(e) =>
-          setRegistration((prev) => ({ ...prev, company: e.target.value }))
-        }
-      />
-
-      <button onClick={() => setRegistration(initialRegistration)}>
-        Reset
-      </button>
-    </div>
-  );
-}
+setProfile({ firstName: value });
 ```
 
-### Example 3: Case - Bank KYC Update Screen
+Explain why `lastName`, `city`, and other fields disappear and rewrite the update safely.
 
-Scenario:
-A banking portal needs a KYC update form where changing one field should not clear the other fields.
+**Expected fix:**
 
 ```jsx
-import { useState } from "react";
-
-function App() {
-  const [kyc, setKyc] = useState({ pan: "", aadhaar: "", mobile: "" });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setKyc((prev) => ({ ...prev, [name]: value }));
-  };
-
-  return (
-    <div>
-      <input
-        name="pan"
-        placeholder="PAN"
-        value={kyc.pan}
-        onChange={handleChange}
-      />
-      <input
-        name="aadhaar"
-        placeholder="Aadhaar"
-        value={kyc.aadhaar}
-        onChange={handleChange}
-      />
-      <input
-        name="mobile"
-        placeholder="Mobile"
-        value={kyc.mobile}
-        onChange={handleChange}
-      />
-      <p>
-        {kyc.pan} | {kyc.aadhaar} | {kyc.mobile}
-      </p>
-    </div>
-  );
-}
+setProfile((current) => ({ ...current, firstName: value }));
 ```
 
-## Mini Exercise
+## Assessment
 
-Scenario:
-You are creating an HR profile editor where related fields must be updated safely.
+1. Does React merge object state automatically? **No.**
+2. Why spread the previous object? **To preserve existing properties.**
+3. What does `[name]: value` mean? **A computed property key.**
+4. How do you update a nested object safely? **Preserve each updated level with spread.**
+5. Why avoid direct mutation? **It violates the state update model and can produce stale/unpredictable UI.**
 
-Build an employee editor with fields: name, department, salary, location. Add Update Preview and Reset actions.
+## Interview Questions
 
-Expected output:
+**How do you update one property of object state?** Use a functional setter and spread the previous object.
 
-- One object state holds all fields
-- Generic handler updates fields by name
-- Reset returns object to initial values
+**Does `useState` shallow-merge objects?** No. The new state value replaces the previous value.
 
-## Assessment Quiz
+**How do you update nested state?** Create new objects for each level being changed.
 
-### Quiz Questions
+**When might `useReducer` be preferable?** When state transitions become complex or many actions affect related state.
 
-1. Why use spread in object state updates?
-2. What does [name]: value do?
-3. True or False: setProfile({ firstName: "A" }) keeps all other fields automatically.
-4. When is object state better than separate state variables?
-5. What is one advantage of generic handlers?
-
-### Quiz Answers
-
-1. To preserve existing properties
-2. Dynamically updates the field whose name matches input name
-3. False
-4. When fields are strongly related
-5. Less duplicate code
-
-## Task
-
-- Build one object-state form
-- Use generic handleChange
-- Add reset action
-- Complete mini exercise
-
-## Self Check
-
-- You can update object fields safely
-- You can explain immutable updates
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** What is object state?
-
-**Answer:** A state value stored as an object with multiple related properties.
-
-**Question:** Why not update only one property without spread?
-
-**Answer:** Other properties may be lost.
-
-### Middle
-
-**Question:** How does a generic form handler work?
-
-**Answer:** It reads input name and value, then updates the matching state field.
-
-**Question:** What are benefits of grouping related fields in object state?
-
-**Answer:** Better organization and easier form-level operations.
-
-### Advanced
-
-**Question:** What are tradeoffs between object state and multiple useState hooks?
-
-**Answer:** Object state centralizes related data but needs careful immutable updates; separate hooks are explicit but can be verbose.
-
-**Question:** Why are immutable patterns essential in React state?
-
-**Answer:** They keep update detection reliable and prevent unintended side effects.
+**Is object state always better than separate state?** No. Choose according to relationships and update patterns.
 
 ## Day 10 Outcome
 
-- You can manage complex related form fields using object state
-- You can implement safe immutable update patterns
-- You are ready to move to array state and advanced forms
+You can model related state as objects, write immutable updates, build generic form handlers, update nested structures safely, and recognize when object state is becoming too complex.
