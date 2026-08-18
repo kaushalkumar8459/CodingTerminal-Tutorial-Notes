@@ -3,226 +3,192 @@ title: Mini Project - Search and Filter App
 slug: day-035-mini-project-search-and-filter-app
 dayLabel: Day 35
 level: Intermediate
-estimatedMinutes: 45
+estimatedMinutes: 90
 order: 35
 track: react
 ---
----
-title: Mini Project - Search and Filter App
-slug: day-035-mini-project-search-and-filter-app
-dayLabel: Day 35
-level: Intermediate
-estimatedMinutes: 45
-order: 35
-track: react
----
-# Day 35 [Intermediate]: Mini Project - Search and Filter App
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 35 Outcome](#day-35-outcome)
+# Day 35 [Intermediate]: Mini Project — Search and Filter App
 
 ## Goal
 
-Build an end-to-end search and filter app using custom hooks and memoization for scalable performance.
+Build a complete search/filter experience that combines the previous lessons:
+
+- state ownership
+- controlled inputs
+- derived data
+- custom hooks
+- `useMemo`
+- stable callbacks where justified
+- empty states
+- URL synchronization
+- accessibility
+- performance reasoning
+
+The goal is to build a clean application first and optimize only where optimization is justified.
 
 ## Prerequisites
 
-- Day 34 completed
-- useMemo, useCallback, custom hooks basics
+- Days 31–34
+- `useMemo`
+- `useCallback`
+- custom hooks
+- array filtering/sorting
+- URL query parameters
 
-## Explanation
+## 1. Feature Requirements
 
-This mini project combines reusable logic and performance patterns into a practical searchable/filterable product interface.
+The finished app should support:
 
-## Topic by Topic
+1. Search by product name
+2. Filter by category
+3. Filter by minimum price
+4. Sort by price or name
+5. Clear all filters
+6. Show result count
+7. Show a useful no-match state
+8. Keep stable list keys
+9. Optionally synchronize filters to the URL
+10. Keep derived results out of state
 
-### Topic 1: Product Data and State Model
+## 2. Data Model
 
-Theory:
-Define product data and filter/search states clearly.
+```js
+{
+  id: 1,
+  name: "ThinkPad",
+  category: "laptop",
+  price: 1200
+}
+```
 
-Practical:
-Create category, query, and minPrice states.
+The product collection is source data. Search, category, minimum price, and sorting choices are UI state. The visible list is derived.
 
-Code Example:
+## 3. State Design
 
 ```jsx
 const [query, setQuery] = useState("");
 const [category, setCategory] = useState("all");
+const [minPrice, setMinPrice] = useState(0);
+const [sort, setSort] = useState("name-asc");
 ```
 
-**Explanation:** This topic explains Product Data and State Model in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Product Data and State Model.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 2: Reusable Search Hook
-
-Theory:
-Extract query state and clear behavior into custom hook.
-
-Practical:
-Build `useSearch`.
-
-Code Example:
+Do not store:
 
 ```jsx
-const { query, setQuery, clear } = useSearch();
+const [visibleProducts, setVisibleProducts] = useState([]); // unnecessary derived state
 ```
 
-**Explanation:** This topic explains Reusable Search Hook in a practical way so you can apply it confidently in real React projects.
+Instead calculate it from source data and filter state.
 
-**Key Points:**
-
-- Understand the core idea of Reusable Search Hook.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 3: Filtered Result Memoization
-
-Theory:
-Use useMemo for expensive filtering and sorting.
-
-Practical:
-Memoize visible products list.
-
-Code Example:
+## 4. Reusable Search Hook
 
 ```jsx
-const visible = useMemo(
-  () => applyFilters(products),
-  [products, query, category],
-);
-```
+function useSearch(initial = "") {
+  const [query, setQuery] = useState(initial);
+  const clear = () => setQuery("");
 
-**Explanation:** This topic explains Filtered Result Memoization in a practical way so you can apply it confidently in real React projects.
-
-**Key Points:**
-
-- Understand the core idea of Filtered Result Memoization.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 4: Empty and No-match States
-
-Theory:
-No-match result requires dedicated message and reset action.
-
-Practical:
-Show no-results UI with clear filters button.
-
-Code Example:
-
-```jsx
-{
-  visible.length === 0 && <button onClick={clearFilters}>Reset Filters</button>;
+  return { query, setQuery, clear };
 }
 ```
 
-**Explanation:** This topic explains Empty and No-match States in a practical way so you can apply it confidently in real React projects.
+The hook owns search behavior, not product filtering policy.
 
-**Key Points:**
+## 5. Pure Filter Function
 
-- Understand the core idea of Empty and No-match States.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 5: Reusable Filter Panel Component
-
-Theory:
-Keep filter controls modular for maintainability.
-
-Practical:
-Build `FilterPanel` receiving state and callbacks via props.
-
-Code Example:
+Keep complicated filtering logic testable outside the component:
 
 ```jsx
-<FilterPanel category={category} onCategoryChange={setCategory} />
+function filterProducts(products, { query, category, minPrice }) {
+  const normalizedQuery = query.trim().toLowerCase();
+
+  return products.filter((product) => {
+    const matchesQuery = product.name.toLowerCase().includes(normalizedQuery);
+    const matchesCategory = category === "all" || product.category === category;
+    const matchesPrice = product.price >= minPrice;
+
+    return matchesQuery && matchesCategory && matchesPrice;
+  });
+}
 ```
 
-**Explanation:** This topic explains Reusable Filter Panel Component in a practical way so you can apply it confidently in real React projects.
+Pure functions are easier to test and reason about.
 
-**Key Points:**
-
-- Understand the core idea of Reusable Filter Panel Component.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
-
-### Topic 6: URL-Synced Filter State
-
-Theory:
-Syncing search/filter state with URL improves shareability and browser navigation behavior.
-
-Practical:
-Initialize query/category from URL params and update params when filters change.
-
-Code Example:
+## 6. Memoizing Derived Results
 
 ```jsx
-const params = new URLSearchParams(window.location.search);
+const visibleProducts = useMemo(() => {
+  const filtered = filterProducts(products, {
+    query,
+    category,
+    minPrice,
+  });
+
+  return [...filtered].sort((a, b) => {
+    if (sort === "price-asc") return a.price - b.price;
+    if (sort === "price-desc") return b.price - a.price;
+    return a.name.localeCompare(b.name);
+  });
+}, [products, query, category, minPrice, sort]);
 ```
 
-**Explanation:** This topic explains URL-Synced Filter State in a practical way so you can apply it confidently in real React projects.
+`useMemo` is appropriate here only if the calculation is meaningfully expensive or stable result identity is useful. For a tiny list, plain calculation may be simpler.
 
-**Key Points:**
+## 7. Avoid Mutating the Source Array
 
-- Understand the core idea of URL-Synced Filter State.
-- Apply the pattern using clean, readable code.
-- Avoid common mistakes through predictable React flow.
+Never do:
 
-## Key Concepts
-
-- Mini-project architecture
-- Custom hook reuse
-- Memoized filtering
-- Search/filter UX
-- Empty-state recovery
-- URL-shareable filter state
-
-## Visual Concept Map
-
-```mermaid
-flowchart TD
-		A[Raw Products] --> B[Search Hook]
-		A --> C[Filter State]
-		B --> D[useMemo Filter Engine]
-		C --> D
-		D --> E[Visible Products]
-		E --> F[List or Empty State]
+```jsx
+products.sort(compare);
 ```
 
-## End-to-End Practical
+Use:
 
-1. Create product dataset.
-2. Add search and category state.
-3. Extract reusable `useSearch` hook.
-4. Memoize filtered list.
-5. Handle empty/no-match UI and reset actions.
+```jsx
+[...products].sort(compare);
+```
 
-## Hands-on Coding
+Sorting in place can mutate props or source data and create difficult bugs.
 
-### Example 1: Case - Product Search + Category Filter
+## 8. Filter Panel
 
-Scenario:
-A shopping portal lets users search by name and filter by category.
+Keep controls separate from result rendering:
+
+```jsx
+function FilterPanel({ category, minPrice, sort, onCategoryChange, onMinPriceChange, onSortChange, onClear }) {
+  return (
+    <section aria-label="Product filters">
+      <label htmlFor="category">Category</label>
+      <select id="category" value={category} onChange={(e) => onCategoryChange(e.target.value)}>
+        <option value="all">All</option>
+        <option value="mobile">Mobile</option>
+        <option value="laptop">Laptop</option>
+      </select>
+
+      <label htmlFor="min-price">Minimum price</label>
+      <input
+        id="min-price"
+        type="number"
+        min="0"
+        value={minPrice}
+        onChange={(e) => setMinPrice(Number(e.target.value) || 0)}
+      />
+
+      <label htmlFor="sort">Sort</label>
+      <select id="sort" value={sort} onChange={(e) => onSortChange(e.target.value)}>
+        <option value="name-asc">Name A–Z</option>
+        <option value="price-asc">Price low–high</option>
+        <option value="price-desc">Price high–low</option>
+      </select>
+
+      <button type="button" onClick={onClear}>Clear filters</button>
+    </section>
+  );
+}
+```
+
+When using this component, make sure the `minPrice` input updates the callback rather than accidentally referring to parent state directly. A corrected production implementation is shown below.
+
+## 9. Complete End-to-End Implementation
 
 ```jsx
 import { useMemo, useState } from "react";
@@ -231,159 +197,365 @@ const products = [
   { id: 1, name: "iPhone", category: "mobile", price: 800 },
   { id: 2, name: "Galaxy", category: "mobile", price: 700 },
   { id: 3, name: "ThinkPad", category: "laptop", price: 1200 },
+  { id: 4, name: "MacBook", category: "laptop", price: 1800 },
 ];
-
-function App() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
-
-  const visible = useMemo(() => {
-    return products.filter((p) => {
-      const matchQuery = p.name.toLowerCase().includes(query.toLowerCase());
-      const matchCategory = category === "all" || p.category === category;
-      return matchQuery && matchCategory;
-    });
-  }, [query, category]);
-
-  return (
-    <div>
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search product"
-      />
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="all">All</option>
-        <option value="mobile">Mobile</option>
-        <option value="laptop">Laptop</option>
-      </select>
-
-      {visible.map((p) => (
-        <p key={p.id}>{p.name}</p>
-      ))}
-    </div>
-  );
-}
-```
-
-### Example 2: Case - Reusable useSearch Hook
-
-Scenario:
-Multiple pages require same search input and clear behavior.
-
-```jsx
-import { useState } from "react";
 
 function useSearch(initial = "") {
   const [query, setQuery] = useState(initial);
   const clear = () => setQuery("");
   return { query, setQuery, clear };
 }
-```
 
-### Example 3: Case - No Match Recovery UI
+function applyFilters(items, filters) {
+  const normalizedQuery = filters.query.trim().toLowerCase();
 
-Scenario:
-When filters return no products, user needs quick reset action.
+  const filtered = items.filter((item) => {
+    const matchesQuery = item.name.toLowerCase().includes(normalizedQuery);
+    const matchesCategory =
+      filters.category === "all" || item.category === filters.category;
+    const matchesPrice = item.price >= filters.minPrice;
 
-```jsx
-{
-  visible.length === 0 ? (
-    <div>
-      <p>No products match current filters.</p>
-      <button
-        onClick={() => {
-          setQuery("");
-          setCategory("all");
-        }}
+    return matchesQuery && matchesCategory && matchesPrice;
+  });
+
+  return [...filtered].sort((a, b) => {
+    switch (filters.sort) {
+      case "price-asc":
+        return a.price - b.price;
+      case "price-desc":
+        return b.price - a.price;
+      default:
+        return a.name.localeCompare(b.name);
+    }
+  });
+}
+
+function FilterPanel({ filters, onChange, onClear }) {
+  return (
+    <section aria-label="Product filters">
+      <label htmlFor="category">Category</label>
+      <select
+        id="category"
+        value={filters.category}
+        onChange={(e) => onChange("category", e.target.value)}
       >
-        Reset Filters
-      </button>
-    </div>
-  ) : (
-    visible.map((p) => <p key={p.id}>{p.name}</p>)
+        <option value="all">All</option>
+        <option value="mobile">Mobile</option>
+        <option value="laptop">Laptop</option>
+      </select>
+
+      <label htmlFor="min-price">Minimum price</label>
+      <input
+        id="min-price"
+        type="number"
+        min="0"
+        value={filters.minPrice}
+        onChange={(e) => onChange("minPrice", Number(e.target.value) || 0)}
+      />
+
+      <label htmlFor="sort">Sort</label>
+      <select
+        id="sort"
+        value={filters.sort}
+        onChange={(e) => onChange("sort", e.target.value)}
+      >
+        <option value="name-asc">Name A–Z</option>
+        <option value="price-asc">Price low–high</option>
+        <option value="price-desc">Price high–low</option>
+      </select>
+
+      <button type="button" onClick={onClear}>Clear filters</button>
+    </section>
   );
 }
+
+function App() {
+  const { query, setQuery, clear } = useSearch();
+  const [category, setCategory] = useState("all");
+  const [minPrice, setMinPrice] = useState(0);
+  const [sort, setSort] = useState("name-asc");
+
+  const filters = { query, category, minPrice, sort };
+
+  const visibleProducts = useMemo(
+    () => applyFilters(products, filters),
+    [query, category, minPrice, sort]
+  );
+
+  function updateFilter(name, value) {
+    if (name === "category") setCategory(value);
+    if (name === "minPrice") setMinPrice(value);
+    if (name === "sort") setSort(value);
+  }
+
+  function clearFilters() {
+    clear();
+    setCategory("all");
+    setMinPrice(0);
+    setSort("name-asc");
+  }
+
+  return (
+    <main>
+      <h1>Product Explorer</h1>
+
+      <label htmlFor="search">Search products</label>
+      <input
+        id="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search by name"
+      />
+
+      <FilterPanel
+        filters={{ category, minPrice, sort }}
+        onChange={updateFilter}
+        onClear={clearFilters}
+      />
+
+      <p aria-live="polite">
+        {visibleProducts.length} result{visibleProducts.length === 1 ? "" : "s"}
+      </p>
+
+      {visibleProducts.length === 0 ? (
+        <section aria-live="polite">
+          <p>No products match your current filters.</p>
+          <button type="button" onClick={clearFilters}>Reset filters</button>
+        </section>
+      ) : (
+        <ul>
+          {visibleProducts.map((product) => (
+            <li key={product.id}>
+              {product.name} — {product.category} — ${product.price}
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+  );
+}
+
+export default App;
 ```
 
-## Mini Exercise
+## 10. URL-Synchronized Filters
 
-Scenario:
-You are building a course finder app.
+URL state is useful when filters should be shareable and browser navigation should preserve them.
 
-Implement search by title, filter by level (Beginner/Intermediate/Advanced), and sort by duration.
+```jsx
+const params = new URLSearchParams(window.location.search);
+const initialQuery = params.get("q") ?? "";
+const initialCategory = params.get("category") ?? "all";
+```
 
-Expected output:
+When updating the URL, use `history.replaceState` or a router's search-param API as appropriate. Avoid directly changing the URL on every keystroke unless the UX calls for it; debouncing URL updates can reduce history/UI churn.
 
-- Search and filters work together
-- Derived list is memoized
-- Empty-state offers clear reset action
+A robust URL design might be:
 
-## Assessment Quiz
+```text
+/products?q=laptop&category=laptop&sort=price-asc
+```
 
-### Quiz Questions
+## 11. Client-Side vs Server-Side Filtering
 
-1. Why memoize filtered list in search apps?
-2. What should happen when no results match?
-3. True or False: custom hooks can simplify repeated search logic.
-4. Which states are typically needed for search + filter UI?
-5. Why keep filter panel as separate component?
+This project assumes the full dataset is already available.
 
-### Quiz Answers
+For a large production catalog:
 
-1. To avoid expensive recalculation on unrelated renders
-2. Show no-result message and recovery action
-3. True
-4. Query, category/filter, sort, and data source
-5. Better modularity and maintainability
+```text
+Client-side
+small/medium dataset
+      ↓
+filter in memory
 
-## Task
+Server-side
+large dataset
+      ↓
+query parameters → API → pagination
+```
 
-- Build complete search and filter mini project
-- Use at least one custom hook and one memoization optimization
-- Complete mini exercise
+Do not download 500,000 products merely to filter them in the browser.
+
+## 12. Search UX
+
+Consider:
+
+- clear button
+- keyboard access
+- visible result count
+- no-match recovery
+- preserving filter choices
+- debounce when filtering triggers API requests
+- not debouncing simple local filtering unless there is a measured reason
+
+## 13. Performance Strategy
+
+Start with:
+
+1. correct state model
+2. pure filtering function
+3. stable keys
+4. simple rendering
+
+Then measure.
+
+Use `useMemo` if the derived calculation is actually expensive or its stable reference benefits a memoized child.
+
+Do not claim `useMemo` is necessary just because the list has many items. Profile the real workload.
+
+## 14. Common Mistakes
+
+### Mistake 1: Storing visible products in state
+
+Creates synchronization problems.
+
+### Mistake 2: Mutating products with `sort`
+
+Can mutate props/source data.
+
+### Mistake 3: Using array index as key
+
+Use stable product IDs.
+
+### Mistake 4: No empty state
+
+A blank screen is ambiguous.
+
+### Mistake 5: Making the filter hook know about products
+
+Keep generic search behavior separate from domain-specific filtering.
+
+### Mistake 6: Memoizing everything
+
+Optimization must have a reason.
+
+### Mistake 7: Debouncing local filtering by default
+
+Debounce is more valuable when an action is expensive or network-bound. Simple local filtering may be better synchronously.
+
+## Testing Checklist
+
+### Search
+
+- exact match
+- partial match
+- different casing
+- whitespace
+- clear
+
+### Category
+
+- each category
+- all categories
+- search + category combination
+
+### Price
+
+- zero
+- boundary price
+- no matching price
+
+### Sort
+
+- name ascending
+- price ascending
+- price descending
+
+### Empty state
+
+- no products initially
+- no results after filtering
+- reset returns to results
+
+### Accessibility
+
+- every control has a label
+- buttons are keyboard accessible
+- result count uses an appropriate live region
+- focus behavior remains understandable
+
+## Hands-on Labs
+
+### Lab 1
+Add a brand filter.
+
+### Lab 2
+Add rating sorting.
+
+### Lab 3
+Add a URL-synchronized filter state.
+
+### Lab 4
+Generate 10,000 products and measure filtering before deciding whether `useMemo` helps.
+
+### Lab 5
+Convert the client-side implementation to server-side query parameters with pagination.
+
+## Assessment
+
+1. Why is the visible list derived data?
+2. Why should sorting use a copied array?
+3. What is the benefit of a pure `applyFilters` function?
+4. When is `useMemo` justified here?
+5. When should filtering move to the server?
+6. Why are stable IDs important?
+7. Why should a no-match state offer recovery?
+8. What makes URL filters useful?
+
+## Interview Questions
+
+**Q: Would you store filtered products in state?**  
+Usually no. They can be derived from products and filter state.
+
+**Q: How would you scale this to millions of records?**  
+Move filtering, sorting, and pagination to the server and send filter state as query parameters.
+
+**Q: Why use a pure filter function?**  
+It separates business logic from rendering and makes the behavior easy to test.
+
+**Q: Why can `useMemo` be unnecessary for a search list?**  
+If the dataset is small and calculation is cheap, memoization overhead and complexity may exceed the benefit.
+
+**Q: Where would you add debounce?**  
+Usually when search input drives network requests or another expensive operation. For cheap local filtering, immediate updates are often preferable.
+
+**Q: How would you preserve filters when sharing a URL?**  
+Serialize the relevant filter state into URL search parameters and initialize state from those parameters.
+
+## Final Project Requirements
+
+Build a **Course Finder** with:
+
+- title search
+- level filter
+- duration range
+- sorting
+- clear/reset
+- result count
+- empty state
+- stable keys
+- reusable `useSearch`
+- pure filter utility
+- justified `useMemo`
+- optional URL synchronization
+
+### Stretch Goals
+
+- debounced server search
+- pagination
+- loading/error states
+- saved filters
+- analytics for search usage
 
 ## Self Check
 
-- You can combine reusable logic with performance patterns
-- You can deliver robust search/filter user experience
-- You can answer at least 4 out of 5 quiz questions correctly
-
-## Interview Questions and Answers
-
-### Beginner
-
-**Question:** What is the core purpose of search and filter app?
-
-**Answer:** Help users quickly find relevant items from larger data sets.
-
-**Question:** Why store query in state?
-
-**Answer:** To drive reactive filtering as user types.
-
-### Middle
-
-**Question:** How do you combine search and category filters?
-
-**Answer:** Apply both conditions in one filter function.
-
-**Question:** Why use useMemo in filtered lists?
-
-**Answer:** To cache expensive derived results and reduce unnecessary computation.
-
-### Advanced
-
-**Question:** How would you scale this app for server-side filtering?
-
-**Answer:** Sync filter state to query params and fetch paginated filtered data from API.
-
-**Question:** What architecture keeps filter logic maintainable in large apps?
-
-**Answer:** Separate filter state, reusable hooks, and pure selector utilities.
+- [ ] I can separate source state from derived results.
+- [ ] I can compose search and filters without duplicated state.
+- [ ] I can write pure filtering/sorting logic.
+- [ ] I know when client-side filtering stops scaling.
+- [ ] I can justify or reject `useMemo` based on evidence.
+- [ ] I can design an accessible no-results experience.
 
 ## Day 35 Outcome
 
-- You can build a production-style search and filter mini project
-- You can apply custom hooks and memoization together effectively
-- You are ready for Context API introduction in Day 36
-
+You have completed a realistic search/filter feature using the reusable logic and performance concepts from Days 31–34. The next stage can move from local component patterns into **shared application state with Context API**.
