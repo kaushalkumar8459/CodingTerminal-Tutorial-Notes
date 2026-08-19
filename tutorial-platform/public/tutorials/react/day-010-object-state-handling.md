@@ -9,23 +9,6 @@ track: react
 ---
 # Day 10 [Intermediate]: Object State Handling
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 10 Outcome](#day-10-outcome)
-
 ## Goal
 
 Learn when object state is useful and how to update objects immutably, including nested objects, arrays inside objects, generic form handlers, reset patterns, and state-design decisions.
@@ -84,13 +67,6 @@ const [profile, setProfile] = useState({
 
 **Important:** Do not group unrelated UI state just because an object is convenient.
 
-**Key Points:**
-
-- Group related fields when they share a meaningful relationship.
-- One object can represent a form or entity draft.
-- Passing the object to a child can be convenient.
-- Separate state variables can still be clearer for independent UI concerns.
-
 ### Topic 2: Safe Field Updates
 
 **Theory:** Create a new object and preserve existing properties.
@@ -111,12 +87,6 @@ profile.firstName = "Karan";
 ```
 
 Direct mutation changes the existing object instead of describing a new state value. It can lead to stale references and unpredictable UI behavior.
-
-**Key Points:**
-
-- Treat state as immutable from the component's point of view.
-- Preserve fields you are not changing.
-- Prefer a functional updater when the next state depends on the previous state.
 
 ### Topic 3: Generic Input Handler
 
@@ -141,9 +111,9 @@ function handleChange(event) {
 />
 ```
 
-`[name]` means the property key is evaluated dynamically. If `name` is `"firstName"`, the resulting object update is equivalent to setting `firstName`.
+`[name]` means the property key is evaluated dynamically. If `name` is `"firstName"`, the resulting update is equivalent to setting `firstName`.
 
-**Important:** A generic handler must match the state shape. For checkboxes, numbers, selects, and nested paths, the conversion rules may be different.
+**Important:** A generic handler should be used only when the input name maps to an intended state property. For checkboxes, numbers, selects, and nested paths, the conversion rules may be different.
 
 ### Topic 4: Object State in Forms
 
@@ -163,16 +133,25 @@ function ProfileForm() {
   }
 
   return (
-    <form>
-      <input name="firstName" value={profile.firstName} onChange={handleChange} />
-      <input name="lastName" value={profile.lastName} onChange={handleChange} />
-      <input name="city" value={profile.city} onChange={handleChange} />
+    <form onSubmit={(event) => event.preventDefault()}>
+      <label>
+        First name
+        <input name="firstName" value={profile.firstName} onChange={handleChange} />
+      </label>
+      <label>
+        Last name
+        <input name="lastName" value={profile.lastName} onChange={handleChange} />
+      </label>
+      <label>
+        City
+        <input name="city" value={profile.city} onChange={handleChange} />
+      </label>
     </form>
   );
 }
 ```
 
-For a numeric field, remember that HTML input values are normally strings:
+For a numeric field, remember that HTML input values are normally strings. Choose one representation deliberately and convert at the boundary when your domain requires a number:
 
 ```jsx
 <input
@@ -185,7 +164,18 @@ For a numeric field, remember that HTML input values are normally strings:
 />
 ```
 
-Whether to store `"25"` or `25` is a domain decision. Do not accidentally mix types throughout the application.
+For a checkbox, use `checked` rather than `value`:
+
+```jsx
+<input
+  name="isActive"
+  type="checkbox"
+  checked={profile.isActive}
+  onChange={(event) =>
+    setProfile((current) => ({ ...current, isActive: event.target.checked }))
+  }
+/>
+```
 
 ### Topic 5: Common Pitfalls
 
@@ -236,6 +226,8 @@ setProfile((prev) => ({
 ```
 
 That intentionally replaces the `address` object and therefore loses other address properties.
+
+If `address` can legitimately be `null`, initialize or guard that shape explicitly before spreading it.
 
 ### Topic 7: Objects Containing Arrays
 
@@ -297,9 +289,7 @@ function reset() {
 }
 ```
 
-Do not mutate `initialProfile`. If the initial value contains mutable nested data that your code could accidentally mutate outside React's state update flow, create a fresh initial value when needed.
-
-A factory is useful when you want a fresh object graph:
+Do not mutate `initialProfile`. A factory is useful when you want a fresh object graph:
 
 ```jsx
 function createInitialProfile() {
@@ -318,21 +308,23 @@ function reset() {
 }
 ```
 
+The initializer passed to `useState` should be pure; do not put side effects into it.
+
 ### Topic 10: Choosing Object State vs Multiple State Variables
 
 Ask whether the values have a meaningful relationship.
 
 **Object state can be useful when:**
 
-- fields form one domain object or form
-- operations commonly update several related fields
-- the values are passed around together
+- fields form one domain object or form;
+- operations commonly update several related fields; or
+- the values are passed around together.
 
 **Separate state can be clearer when:**
 
-- values are independent UI concerns
-- each value has different update rules
-- grouping would create an unnecessarily large state object
+- values are independent UI concerns;
+- each value has different update rules; or
+- grouping would create an unnecessarily large state object.
 
 There is no rule that every form must use one object or that every value must use its own `useState`.
 
@@ -422,9 +414,7 @@ Build an **Employee Profile Editor**.
 
 ## Hands-on Coding
 
-### Example 1: Case - HR Employee Profile Editor
-
-Scenario: An HR team needs to update employee profile details in one form and preview the latest values live.
+### Example 1: HR Employee Profile Editor
 
 ```jsx
 import { useState } from "react";
@@ -445,24 +435,34 @@ export default function App() {
 
   return (
     <div>
-      <input
-        name="firstName"
-        placeholder="First Name"
-        value={profile.firstName}
-        onChange={handleChange}
-      />
-      <input
-        name="lastName"
-        placeholder="Last Name"
-        value={profile.lastName}
-        onChange={handleChange}
-      />
-      <input
-        name="age"
-        placeholder="Age"
-        value={profile.age}
-        onChange={handleChange}
-      />
+      <label>
+        First Name
+        <input
+          name="firstName"
+          placeholder="First Name"
+          value={profile.firstName}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Last Name
+        <input
+          name="lastName"
+          placeholder="Last Name"
+          value={profile.lastName}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Age
+        <input
+          name="age"
+          type="number"
+          placeholder="Age"
+          value={profile.age}
+          onChange={handleChange}
+        />
+      </label>
       <p>
         {profile.firstName} {profile.lastName} ({profile.age})
       </p>
@@ -471,21 +471,19 @@ export default function App() {
 }
 ```
 
-### Example 2: Case - Event Registration Form Reset
-
-Scenario: A conference registration page should allow users to fill related fields and reset everything with one click.
+### Example 2: Event Registration Form Reset
 
 ```jsx
 import { useState } from "react";
 
-const initialRegistration = {
+const createInitialRegistration = () => ({
   name: "",
   email: "",
   company: "",
-};
+});
 
 export default function App() {
-  const [registration, setRegistration] = useState(initialRegistration);
+  const [registration, setRegistration] = useState(createInitialRegistration);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -493,11 +491,20 @@ export default function App() {
   };
 
   return (
-    <form>
-      <input name="name" value={registration.name} onChange={handleChange} />
-      <input name="email" value={registration.email} onChange={handleChange} />
-      <input name="company" value={registration.company} onChange={handleChange} />
-      <button type="button" onClick={() => setRegistration(initialRegistration)}>
+    <form onSubmit={(event) => event.preventDefault()}>
+      <label>
+        Name
+        <input name="name" value={registration.name} onChange={handleChange} />
+      </label>
+      <label>
+        Email
+        <input name="email" type="email" value={registration.email} onChange={handleChange} />
+      </label>
+      <label>
+        Company
+        <input name="company" value={registration.company} onChange={handleChange} />
+      </label>
+      <button type="button" onClick={() => setRegistration(createInitialRegistration())}>
         Reset
       </button>
     </form>
@@ -505,9 +512,7 @@ export default function App() {
 }
 ```
 
-### Example 3: Case - Bank KYC Update Screen
-
-Scenario: A banking portal needs a KYC update form where changing one field should not clear the other fields.
+### Example 3: Bank KYC Update Screen
 
 ```jsx
 import { useState } from "react";
@@ -526,9 +531,18 @@ export default function App() {
 
   return (
     <div>
-      <input name="pan" value={kyc.pan} onChange={handleChange} />
-      <input name="aadhaar" value={kyc.aadhaar} onChange={handleChange} />
-      <input name="mobile" value={kyc.mobile} onChange={handleChange} />
+      <label>
+        PAN
+        <input name="pan" value={kyc.pan} onChange={handleChange} />
+      </label>
+      <label>
+        Aadhaar
+        <input name="aadhaar" value={kyc.aadhaar} onChange={handleChange} />
+      </label>
+      <label>
+        Mobile
+        <input name="mobile" value={kyc.mobile} onChange={handleChange} />
+      </label>
       <p>
         {kyc.pan} | {kyc.aadhaar} | {kyc.mobile}
       </p>
@@ -581,25 +595,24 @@ function removeSkill(skillToRemove) {
 
 ## Mini Exercise
 
-Scenario: You are creating an HR profile editor where related fields must be updated safely.
+Build an Employee Profile Form with:
 
-Build an employee editor with:
+- first name
+- last name
+- email
+- city
+- nested address
+- skills array
+- reset button
+- live preview
 
-- `name`
-- `department`
-- `salary`
-- `location`
-- nested `address`
-- `skills` array
+Expected output:
 
-Requirements:
-
-- One object state holds related employee data.
-- A generic handler updates simple fields by `name`.
-- Reset returns to initial values.
-- Address city can change without removing country.
+- All fields are controlled.
+- Updating one field does not erase other fields.
+- Nested address updates preserve sibling properties.
 - Skills can be added and removed immutably.
-- A preview is derived from state.
+- Preview is derived from state.
 
 **Extension:** Add a checkbox such as `isActive` and correctly handle `checked` instead of `value`.
 
@@ -615,6 +628,7 @@ Requirements:
 6. How do you update a nested `address.city` without losing `address.country`?
 7. Why is `profile.firstName = "A"` an unsafe React state update?
 8. When might `useReducer` be a better fit than several object-state setters?
+9. Why should a checkbox handler use `checked` rather than `value` for boolean state?
 
 ### Quiz Answers
 
@@ -626,6 +640,7 @@ Requirements:
 6. Spread both the outer object and the existing nested address object before changing `city`.
 7. It mutates the existing state object instead of creating a new state value.
 8. When transitions are numerous, action-driven, or complex enough that centralized transition logic improves clarity.
+9. `checked` represents the checkbox's boolean state; `value` is the control's value attribute and is not the appropriate boolean state source.
 
 ## Task
 
@@ -634,6 +649,7 @@ Requirements:
 - Add a reset action.
 - Add one nested object and update it immutably.
 - Add an array field and update it without mutation.
+- Add a checkbox and handle it with `checked`/`event.target.checked`.
 - Add a live preview using derived values rather than duplicate state.
 - Complete the mini exercise.
 
@@ -651,6 +667,7 @@ You should be able to answer **yes** to all of these:
 - I know when separate state variables may be clearer.
 - I can identify redundant derived state.
 - I can explain when `useReducer` may become a better fit.
+- I can correctly handle a boolean checkbox field.
 
 ## Interview Questions and Answers
 
@@ -712,8 +729,9 @@ By the end of Day 10, you can:
 - update arrays contained in objects without mutation
 - use functional setters when next state depends on previous state
 - reset object state cleanly
+- handle boolean inputs correctly
 - avoid redundant derived state
 - choose between object state and separate state variables based on relationships
-- recognize when state transitions are becoming complex enough to consider `useReducer`
+- recognize when state transitions are complex enough to consider `useReducer`
 
 You are now ready to move from object state into the next state-data pattern in the curriculum.
