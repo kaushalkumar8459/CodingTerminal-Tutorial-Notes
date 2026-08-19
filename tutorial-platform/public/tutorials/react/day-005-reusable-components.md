@@ -282,6 +282,7 @@ Before publishing a reusable component, ask:
 9. Is the abstraction actually reused?
 10. Does the component preserve semantic HTML and accessibility?
 11. Does the API depend on unnecessary implementation details?
+12. Can the component handle its documented inputs without hidden assumptions?
 
 ## Key Concepts
 
@@ -333,6 +334,20 @@ function StatCard({ label, value, trend }) {
       <strong>{value}</strong>
       <span>{trend}</span>
     </article>
+  );
+}
+```
+
+### `UserList`
+
+```jsx
+function UserList({ users }) {
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
   );
 }
 ```
@@ -457,6 +472,7 @@ function App() {
 - Forgetting accessibility semantics while focusing only on visual reuse.
 - Using `onClick={() => ...}` everywhere when a direct callback prop would be clearer.
 - Creating an abstraction before you have a real repeated pattern.
+- Assuming that a component is reusable merely because it is technically possible to render it twice.
 
 ## Mini Exercise
 
@@ -488,6 +504,7 @@ Expected output:
 8. Why can many boolean props be a design smell?
 9. What is the difference between a semantic named prop and `children`?
 10. Why should a component API avoid implementation details?
+11. What is the difference between a component's public API and its internal implementation?
 
 ### Answers
 
@@ -501,6 +518,7 @@ Expected output:
 8. They create many combinations and can indicate too many responsibilities.
 9. A named prop communicates a specific semantic value; `children` communicates nested content.
 10. Consumers should depend on stable behavior, not internal implementation.
+11. The public API is the stable contract consumers use, such as props and callbacks; implementation is the internal code used to fulfill that contract.
 
 ## Task
 
@@ -510,6 +528,7 @@ Expected output:
 - Use at least one callback prop.
 - Complete the `InfoTile` exercise.
 - Explain why each abstraction exists.
+- Run the application and verify there are no console or build errors.
 
 ## Self Check
 
@@ -520,6 +539,7 @@ Expected output:
 - [ ] I can identify over-abstraction.
 - [ ] I can explain why a component should or should not be shared.
 - [ ] I can preserve accessibility while building reusable UI.
+- [ ] I can distinguish a public component API from its internal implementation.
 
 ## Interview Questions and Answers
 
@@ -542,6 +562,9 @@ When the wrapper controls structure/layout while the consumer controls nested co
 **How do callback props work?**  
 The parent passes a function and the child invokes it to report an action or value.
 
+**Why can too many boolean props be a problem?**  
+They can create many possible combinations and make the component's behavior harder to understand. Semantic variants or composition may produce a clearer API.
+
 ### Advanced
 
 **How do you decide component boundaries?**  
@@ -555,6 +578,9 @@ Identify stable variation, keep required props minimal, use semantic names, use 
 
 **When should you not create a reusable component?**  
 When the UI is one-off, the abstraction has no stable contract, or the proposed generic API is more complex than the duplicated code.
+
+**How do you keep reusable components independent of data sources?**  
+Give them a small UI-focused contract and pass the data they need through props. Keep fetching, storage, or server-state concerns outside the reusable presentation component unless the component's responsibility explicitly includes them.
 
 ## Day 5 Outcome
 
