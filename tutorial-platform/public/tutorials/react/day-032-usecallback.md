@@ -23,10 +23,13 @@ track: react
 - [Referential Stability](#referential-stability)
 - [useCallback vs useMemo vs React.memo](#usecallback-vs-usememo-vs-reactmemo)
 - [Custom Hooks](#custom-hooks)
+- [Stable Callback Does Not Mean Stable Everything](#stable-callback-does-not-mean-stable-everything)
 - [Callback Functions Inside Lists](#callback-functions-inside-lists)
 - [When Not to Use useCallback](#when-not-to-use-usecallback)
 - [React Compiler](#react-compiler)
 - [Complete Practical](#complete-practical)
+- [Callback API Design](#callback-api-design)
+- [Debugging Render Optimization](#debugging-render-optimization)
 - [Hands-on Labs](#hands-on-labs)
 - [Debugging Lab](#debugging-lab)
 - [Common Mistakes](#common-mistakes)
@@ -365,7 +368,9 @@ Premature memoization can increase cognitive overhead without meaningful benefit
 
 ## 12. React Compiler
 
-Modern React includes **React Compiler**, a build-time optimization tool that can automatically memoize components, values, and functions. React's current guidance recommends relying on the compiler for memoization in new code when it is enabled, while retaining `useCallback` when precise manual control is actually needed. citeturn0search0turn0search2
+Modern React includes **React Compiler**, a build-time optimization tool that can automatically memoize components, values, and functions. When React Compiler is enabled, prefer simple code and let the compiler handle routine memoization where appropriate. Manual `useCallback` remains useful when you need explicit control or when a library/API contract requires a stable function reference.
+
+Official reference: [React Compiler](https://react.dev/learn/react-compiler/introduction)
 
 Decision model:
 
@@ -617,7 +622,7 @@ If `options` is recreated during render, its reference changes every render.
 No. Hooks must be called at the top level of a component or custom Hook.
 
 **Q: Is `useCallback` required when React Compiler is enabled?**  
-No. The compiler can automatically memoize functions. Manual `useCallback` remains available when precise control is needed. citeturn0search0turn0search2
+No. The compiler can automatically memoize functions. Manual `useCallback` remains available when precise control is needed.
 
 ## Production Checklist
 
