@@ -1,0 +1,66 @@
+# Backend Interview Preparation 60-Day Curriculum
+
+This curriculum is focused on job readiness for backend roles, combining resume preparation, communication, Java backend revision, framework revision, DSA revision strategy, system design practice, SQL review, and mock interview execution.
+
+## Day List
+
+- Day 001 [Beginner]: Understanding Backend Role Expectations and Hiring Signals
+- Day 002 [Beginner]: Resume Review Project Positioning and Skill Mapping
+- Day 003 [Beginner]: LinkedIn GitHub and Portfolio Cleanup
+- Day 004 [Beginner]: Writing Strong Project Descriptions with Impact
+- Day 005 [Beginner]: Core Java Revision 1 OOP Collections Exceptions
+- Day 006 [Beginner]: Core Java Revision 2 Concurrency JVM and Performance Basics
+- Day 007 [Beginner]: Spring Boot Revision 1 REST DI JPA Security Basics
+- Day 008 [Beginner]: Spring Boot Revision 2 Testing Caching Messaging and Deployment
+- Day 009 [Beginner]: SQL Revision 1 Queries Joins Aggregates and Indexes
+- Day 010 [Beginner]: DSA Revision 1 Arrays Strings Hashing and Recursion
+- Day 011 [Intermediate]: DSA Revision 2 Linked List Stack Queue Heap
+- Day 012 [Intermediate]: DSA Revision 3 Trees BST Trie and Graph Basics
+- Day 013 [Intermediate]: DSA Revision 4 Dynamic Programming and Greedy Basics
+- Day 014 [Intermediate]: System Design Revision 1 Scalability Caching DB and Queue Basics
+- Day 015 [Intermediate]: System Design Revision 2 Resilience Consistency and Observability
+- Day 016 [Intermediate]: Behavioral Interview Basics STAR Method and Story Bank
+- Day 017 [Intermediate]: Explaining Projects End to End with Clear Structure
+- Day 018 [Intermediate]: Explaining Tradeoffs and Decision Making in Projects
+- Day 019 [Intermediate]: Debugging Story Incident Story and Learning Story Preparation
+- Day 020 [Intermediate]: HR Round Preparation Motivation Salary and Career Narrative
+- Day 021 [Intermediate]: Mock Round 1 Java Fundamentals
+- Day 022 [Intermediate]: Mock Round 2 Spring Boot and API Design
+- Day 023 [Intermediate]: Mock Round 3 SQL and Database Design
+- Day 024 [Intermediate]: Mock Round 4 DSA Medium Problems Set 1
+- Day 025 [Intermediate]: Mock Round 5 DSA Medium Problems Set 2
+- Day 026 [Intermediate]: Mock Round 6 Low Level Architecture Discussion
+- Day 027 [Intermediate]: Mock Round 7 System Design Basics
+- Day 028 [Intermediate]: Online Assessment Strategy Time Management and Accuracy
+- Day 029 [Intermediate]: Writing Clean Code Under Pressure
+- Day 030 [Intermediate]: Revision and Gap Analysis Week 1 to 4
+- Day 031 [Advanced]: Java Deep Revision Memory Threads GC JIT and Diagnostics
+- Day 032 [Advanced]: Framework Deep Revision Transactions Security and Messaging
+- Day 033 [Advanced]: SQL Deep Revision Transactions Performance and Tuning
+- Day 034 [Advanced]: DSA Hard Patterns Sliding Window Binary Search Graph and DP
+- Day 035 [Advanced]: System Design Deep Revision Multi Region DR and Scale Patterns
+- Day 036 [Advanced]: Machine Coding Round Strategy and Evaluation Criteria
+- Day 037 [Advanced]: API Design Round Validation Errors Pagination and Versioning
+- Day 038 [Advanced]: Production Readiness Discussion Logging Monitoring Deployment
+- Day 039 [Advanced]: Security Round Authentication Authorization and OWASP Basics
+- Day 040 [Advanced]: Cloud and DevOps Round Docker Kubernetes CI CD Basics
+- Day 041 [Advanced]: Mock Round 8 Full Backend Interview Simulation
+- Day 042 [Advanced]: Mock Round 9 DSA plus Coding Communication Simulation
+- Day 043 [Advanced]: Mock Round 10 SQL plus Debugging Simulation
+- Day 044 [Advanced]: Mock Round 11 System Design Mid Level Simulation
+- Day 045 [Advanced]: Mock Round 12 Senior Style Technical Deep Dive
+- Day 046 [Advanced]: Reworking Resume Based on Interview Feedback
+- Day 047 [Advanced]: Reworking Projects Based on Interview Feedback
+- Day 048 [Advanced]: Company Targeting Product Service Startup Enterprise Mapping
+- Day 049 [Advanced]: Tailoring Preparation for Java Backend Job Descriptions
+- Day 050 [Advanced]: Final Problem Solving and Weakness Reduction Sprint
+- Day 051 [Expert]: Mock Round 13 Hiring Manager Conversation
+- Day 052 [Expert]: Mock Round 14 Senior Engineer Bar Raiser Style Round
+- Day 053 [Expert]: Mock Round 15 Architecture Defense and Tradeoff Drill
+- Day 054 [Expert]: Mock Round 16 Incident Response and Production Scenario Round
+- Day 055 [Expert]: Mock Round 17 Full Day Interview Loop Simulation
+- Day 056 [Expert]: Offer Evaluation Compensation and Role Fit Analysis
+- Day 057 [Expert]: Negotiation Basics Notice Period and Joining Strategy
+- Day 058 [Expert]: Final 50 Question Java Backend Revision Sheet
+- Day 059 [Expert]: Final 25 Story Behavioral Revision Sheet
+- Day 060 [Expert]: Final Mock Interview and Job Application Launch Plan

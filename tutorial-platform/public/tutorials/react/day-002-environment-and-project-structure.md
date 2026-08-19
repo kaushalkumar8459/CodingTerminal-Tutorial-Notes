@@ -1,0 +1,640 @@
+---
+title: Environment and Project Structure
+slug: day-002-environment-and-project-structure
+dayLabel: Day 2
+level: Beginner
+estimatedMinutes: 60
+order: 2
+track: react
+youtubeVideos: []
+---
+
+# Day 2 [Beginner]: Environment and Project Structure
+
+## Index
+
+- [Goal](#goal)
+- [Prerequisites](#prerequisites)
+- [Why Project Structure Matters](#why-project-structure-matters)
+- [Vite React Project Anatomy](#vite-react-project-anatomy)
+- [Topic by Topic](#topic-by-topic)
+- [Recommended Structure](#recommended-structure)
+- [Feature-Based Structure](#feature-based-structure)
+- [End-to-End Practical](#end-to-end-practical)
+- [Hands-on Coding](#hands-on-coding)
+- [Common Mistakes](#common-mistakes)
+- [Mini Exercise](#mini-exercise)
+- [Assessment Quiz](#assessment-quiz)
+- [Task](#task)
+- [Self Check](#self-check)
+- [Interview Questions and Answers](#interview-questions-and-answers)
+- [Day 2 Outcome](#day-2-outcome)
+
+## Goal
+
+By the end of this lesson, you should be able to create a React application with Vite, explain the purpose of its important files, choose a sensible folder structure, and organize code by responsibility or feature without creating unnecessary folders.
+
+## Prerequisites
+
+- Day 1 completed
+- Basic JavaScript, HTML, and CSS
+- Node.js LTS installed
+- Terminal and code editor access
+
+Verify the environment:
+
+```bash
+node -v
+npm -v
+```
+
+> The exact Node.js version supported by Vite can change. Use a currently supported LTS release for the course rather than assuming a permanently fixed version.
+
+## Why Project Structure Matters
+
+A project structure is a navigation and ownership system for your code. It is not a React requirement. React does not force you to use `components`, `pages`, `services`, or `hooks` folders.
+
+A good structure should make these questions easy to answer:
+
+- Where does this UI component belong?
+- Which feature owns this code?
+- Where are API clients or data-access functions kept?
+- Which code is shared across features?
+- Where should a new developer add a new screen?
+
+Avoid creating folders simply because a tutorial says every project must have them. Start simple and introduce structure when the application needs it.
+
+## Vite React Project Anatomy
+
+A typical Vite React project contains:
+
+```text
+my-react-app/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── App.jsx
+│   ├── App.css
+│   ├── index.css
+│   └── main.jsx
+├── index.html
+├── package.json
+├── package-lock.json
+├── vite.config.js
+└── node_modules/
+```
+
+### Important files
+
+| File/folder | Purpose |
+|---|---|
+| `src/` | Application source code |
+| `src/main.jsx` | Browser entry point that mounts the React root |
+| `src/App.jsx` | Initial top-level application component |
+| `src/assets/` | Source assets imported by application code |
+| `public/` | Static files served as-is when appropriate |
+| `index.html` | HTML document containing the root element |
+| `package.json` | Project metadata, dependencies, and scripts |
+| `package-lock.json` | npm dependency resolution lockfile |
+| `vite.config.js` | Vite configuration when project-specific configuration is needed |
+| `node_modules/` | Installed dependencies; do not commit it to source control |
+
+## Topic by Topic
+
+### Topic 1: Creating a React Project with Vite
+
+Use Vite to create the course application:
+
+```bash
+npm create vite@latest day-2-react -- --template react
+cd day-2-react
+npm install
+npm run dev
+```
+
+The command creates a React project using Vite's development and build tooling.
+
+Do not confuse Vite with React itself:
+
+```text
+React  → UI library
+Vite   → development/build tooling
+npm    → package manager and script runner
+```
+
+### Topic 2: Understanding `package.json`
+
+A simplified example:
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "...",
+    "react-dom": "..."
+  },
+  "devDependencies": {
+    "vite": "..."
+  }
+}
+```
+
+Important ideas:
+
+- `dependencies` are packages required by the application.
+- `devDependencies` are packages primarily needed during development/building.
+- `scripts` provide convenient commands such as `npm run dev`.
+- Version ranges should be understood before upgrading packages blindly.
+
+### Topic 3: Understanding `main.jsx`
+
+Typical Vite React code is:
+
+```jsx
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
+```
+
+The flow is:
+
+```text
+index.html
+   ↓
+<div id="root"></div>
+   ↓
+main.jsx
+   ↓
+createRoot(...)
+   ↓
+<App />
+```
+
+`StrictMode` is a development-time helper that enables additional checks and can intentionally expose unsafe patterns by invoking certain logic more than once during development. It does not mean production renders are simply duplicated in the same way.
+
+### Topic 4: Understanding `index.html`
+
+Vite's `index.html` is the HTML entry document. It contains the element where React mounts:
+
+```html
+<div id="root"></div>
+```
+
+React does not replace the entire HTML document. `createRoot` receives the root DOM element and React manages the UI inside that root.
+
+### Topic 5: `src` vs `public`
+
+Use `src` for assets that are part of the application module graph and should be processed by the build tool:
+
+```text
+src/assets/logo.svg
+```
+
+Use `public` for files that should be served directly by URL and do not need to be imported through JavaScript.
+
+Example:
+
+```text
+public/favicon.ico
+```
+
+Then reference it with an appropriate root-relative URL.
+
+Do not put every image in `public` simply because it is an image. Choose based on how the asset should be handled.
+
+### Topic 6: Removing Boilerplate Safely
+
+After creating the project, remove demo code only after checking where it is imported.
+
+A minimal `App.jsx` can be:
+
+```jsx
+function App() {
+  return (
+    <main>
+      <h1>React Learning Project</h1>
+      <p>Day 2: Project structure.</p>
+    </main>
+  );
+}
+
+export default App;
+```
+
+If you delete `App.css`, also remove its import. If you delete an asset, remove references to it. Cleanup should leave the project runnable.
+
+## Recommended Structure
+
+For a small-to-medium learning application, a reasonable starting point is:
+
+```text
+src/
+├── components/       # reusable UI shared across areas
+├── pages/            # route/screen-level components
+├── hooks/            # reusable custom hooks
+├── services/         # API/data-access modules
+├── assets/           # source assets
+├── App.jsx
+├── App.css
+├── index.css
+└── main.jsx
+```
+
+This is a **convention**, not a React rule.
+
+### Responsibility examples
+
+```text
+components/Button.jsx       → reusable UI
+pages/ProfilePage.jsx       → screen-level UI
+hooks/useDebounce.js        → reusable hook
+services/userService.js     → user API/data access
+assets/logo.svg             → imported asset
+```
+
+## Feature-Based Structure
+
+As the application grows, feature-based organization can reduce the distance between related code:
+
+```text
+src/
+├── features/
+│   ├── auth/
+│   │   ├── components/
+│   │   │   └── LoginForm.jsx
+│   │   ├── pages/
+│   │   │   └── LoginPage.jsx
+│   │   └── services/
+│   │       └── authService.js
+│   └── products/
+│       ├── components/
+│       │   └── ProductCard.jsx
+│       ├── pages/
+│       │   └── ProductListPage.jsx
+│       └── services/
+│           └── productService.js
+├── shared/
+│   ├── components/
+│   └── hooks/
+├── App.jsx
+└── main.jsx
+```
+
+### When to use it
+
+Use feature-based organization when features have enough files that navigating a global `components`/`services` structure becomes difficult.
+
+Avoid premature abstraction. A component used by only one feature does not need to be moved to `shared` just because its name sounds reusable.
+
+## End-to-End Practical
+
+### Step 1: Create the project
+
+```bash
+npm create vite@latest react-structure-lab -- --template react
+cd react-structure-lab
+npm install
+npm run dev
+```
+
+### Step 2: Create the folders
+
+```text
+src/
+├── features/
+│   └── profile/
+│       ├── components/
+│       ├── pages/
+│       └── services/
+├── shared/
+│   └── components/
+├── App.jsx
+└── main.jsx
+```
+
+### Step 3: Create `ProfileCard.jsx`
+
+```jsx
+function ProfileCard({ name, role }) {
+  return (
+    <article>
+      <h2>{name}</h2>
+      <p>{role}</p>
+    </article>
+  );
+}
+
+export default ProfileCard;
+```
+
+### Step 4: Create `ProfilePage.jsx`
+
+```jsx
+import ProfileCard from "../components/ProfileCard";
+
+function ProfilePage() {
+  return (
+    <section>
+      <h1>Profiles</h1>
+      <ProfileCard name="Asha" role="Frontend Developer" />
+      <ProfileCard name="Ravi" role="React Developer" />
+    </section>
+  );
+}
+
+export default ProfilePage;
+```
+
+### Step 5: Render it from `App.jsx`
+
+```jsx
+import ProfilePage from "./features/profile/pages/ProfilePage";
+
+function App() {
+  return <ProfilePage />;
+}
+
+export default App;
+```
+
+### Step 6: Verify
+
+```bash
+npm run build
+```
+
+Then confirm the development server still works:
+
+```bash
+npm run dev
+```
+
+The important lesson is that **organization must preserve working imports and application behavior**.
+
+## Hands-on Coding
+
+### Exercise 1: Project anatomy
+
+Open the project and explain these files in your own words:
+
+- `index.html`
+- `src/main.jsx`
+- `src/App.jsx`
+- `package.json`
+- `vite.config.js`
+
+### Exercise 2: Shared component
+
+Create:
+
+```text
+src/shared/components/Button.jsx
+```
+
+Implement a reusable button using props such as `children` and `onClick`.
+
+### Exercise 3: Feature ownership
+
+Create a `products` feature with:
+
+- `ProductCard.jsx`
+- `ProductListPage.jsx`
+- `productService.js`
+
+Do not place product-only code in the global shared folder.
+
+### Exercise 4: Build validation
+
+Run:
+
+```bash
+npm run build
+```
+
+Fix all errors before continuing.
+
+## Common Mistakes
+
+### 1. Treating folder names as React requirements
+
+`components`, `pages`, `services`, and `hooks` are conventions. React does not require them.
+
+### 2. Creating a giant `utils` folder
+
+A catch-all folder often becomes difficult to understand. Prefer meaningful ownership and names.
+
+### 3. Putting everything into `shared`
+
+Shared should mean genuinely shared. Feature-specific code should remain in the feature.
+
+### 4. Deleting files without removing imports
+
+Removing `App.css` while leaving `import "./App.css"` creates a build error.
+
+### 5. Committing `node_modules`
+
+`node_modules` is generated from package metadata and normally belongs in `.gitignore`.
+
+### 6. Confusing Vite with React
+
+Vite builds and serves the application during development. React provides the UI library.
+
+### 7. Over-engineering a tiny project
+
+A learning application does not need ten abstraction layers. Structure should evolve with complexity.
+
+## Mini Exercise
+
+Design the structure for a small ecommerce application containing:
+
+- Home
+- Products
+- Product details
+- Cart
+- Login
+
+Before creating folders, decide which code is global/shared and which belongs to a feature.
+
+A possible answer is:
+
+```text
+src/
+├── features/
+│   ├── products/
+│   ├── cart/
+│   └── auth/
+├── shared/
+│   ├── components/
+│   └── hooks/
+├── pages/             # only if the routing architecture benefits from it
+├── App.jsx
+└── main.jsx
+```
+
+## Assessment Quiz
+
+### Q1. Is a `components` folder required by React?
+
+A. Yes
+B. No
+
+**Answer:** B
+
+### Q2. What does `main.jsx` normally do in a Vite React application?
+
+A. Store API responses
+B. Mount the React application into the root DOM element
+C. Define database tables
+D. Configure CSS variables
+
+**Answer:** B
+
+### Q3. What is `package.json` used for?
+
+A. HTML rendering
+B. Project metadata, dependencies, and scripts
+C. Browser storage
+D. JSX compilation only
+
+**Answer:** B
+
+### Q4. When is feature-based structure useful?
+
+A. Only for one-file demos
+B. When related feature code becomes difficult to navigate in global folders
+C. Never
+D. Only for CSS
+
+**Answer:** B
+
+### Q5. Where should truly shared UI normally live?
+
+A. Inside an unrelated feature
+B. In a shared/common area
+C. In `node_modules`
+D. In `index.html`
+
+**Answer:** B
+
+### Q6. What is Vite?
+
+A. A JavaScript UI library
+B. A development/build tool
+C. A database
+D. A React component
+
+**Answer:** B
+
+### Q7. What should happen after moving a file?
+
+A. Imports should be checked and the application/build should be verified
+B. Nothing
+C. Delete package.json
+D. Reinstall the operating system
+
+**Answer:** A
+
+## Task
+
+Build the following structure in your Day 2 project:
+
+```text
+src/
+├── features/
+│   └── profile/
+│       ├── components/ProfileCard.jsx
+│       ├── pages/ProfilePage.jsx
+│       └── services/profileService.js
+├── shared/
+│   └── components/Button.jsx
+├── App.jsx
+└── main.jsx
+```
+
+Then:
+
+- Render `ProfilePage`.
+- Pass profile information through props.
+- Use the shared `Button` component.
+- Run `npm run build` successfully.
+
+### Acceptance criteria
+
+- [ ] Project starts with `npm run dev`.
+- [ ] Production build succeeds.
+- [ ] Feature-specific code stays inside its feature.
+- [ ] Shared component is actually reusable.
+- [ ] Imports resolve correctly.
+- [ ] No unnecessary global folders are introduced.
+
+## Self Check
+
+You should now be able to explain:
+
+- React vs Vite
+- `index.html` vs `main.jsx`
+- `src` vs `public`
+- `package.json`
+- `dependencies` vs `devDependencies`
+- Why project structure is a convention
+- Global responsibility-based structure
+- Feature-based structure
+- Shared vs feature-specific code
+- Why over-engineering structure is harmful
+
+## Interview Questions and Answers
+
+### 1. Is folder structure defined by React?
+
+No. React does not prescribe a folder structure. Teams choose conventions based on project size, architecture, and maintainability.
+
+### 2. What is the purpose of `main.jsx`?
+
+In a typical Vite React browser application, it is the entry module that imports the root component and calls `createRoot` to mount React into the DOM element identified by `root`.
+
+### 3. What is the difference between `src` and `public`?
+
+`src` contains application source code and assets that participate in the build/module graph. `public` is intended for static files that should be served directly without being imported through the module graph.
+
+### 4. What is feature-based architecture?
+
+It organizes related components, pages, services, and other files around a business feature rather than putting every file of the same technical type into a global folder.
+
+### 5. When should code be shared?
+
+When multiple independent features genuinely use the same behavior or UI and the abstraction has a clear common responsibility. Avoid moving code to shared prematurely.
+
+### 6. Why should `App.jsx` not become a giant component?
+
+A giant root component becomes difficult to understand, test, and change. Splitting responsibilities into smaller components and features improves maintainability.
+
+### 7. Why is `node_modules` usually not committed?
+
+It can be regenerated from package metadata and the lockfile, so committing it unnecessarily increases repository size and can cause platform-specific problems.
+
+## Day 2 Outcome
+
+You can now:
+
+- Create a React project with Vite.
+- Explain the purpose of its major files.
+- Understand how `index.html`, `main.jsx`, and `App.jsx` connect.
+- Distinguish React from Vite.
+- Organize a project by responsibility.
+- Introduce feature-based organization when the application needs it.
+- Separate genuinely shared code from feature-owned code.
+- Remove boilerplate without breaking imports.
+- Validate the project with a production build.
+
+Day 3 will build on this foundation by going deeper into **JSX fundamentals**.

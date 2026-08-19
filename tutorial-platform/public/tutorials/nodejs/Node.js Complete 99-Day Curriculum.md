@@ -1,0 +1,106 @@
+﻿# Node.js Complete 100-Day Curriculum
+
+This curriculum is organized from beginner to expert with theory, practical tasks, scenarios, quizzes, and interview preparation.
+
+## Day List
+
+- Day 001 [Beginner]: Introduction to Node.js
+- Day 002 [Beginner]: Setup and Toolchain
+- Day 003 [Beginner]: JavaScript Refresher for Node
+- Day 004 [Beginner]: Modules CommonJS and ESM
+- Day 005 [Beginner]: npm and Package Management
+- Day 006 [Beginner]: File System Basics
+- Day 007 [Beginner]: Path and Process Modules
+- Day 008 [Beginner]: Events and EventEmitter
+- Day 009 [Beginner]: Mini Project CLI Notes
+- Day 010 [Beginner]: Streams Fundamentals
+- Day 011 [Beginner]: Buffers and Binary Data
+- Day 012 [Beginner]: Async Patterns Callbacks Promises Async Await
+- Day 013 [Beginner]: Error Handling Patterns
+- Day 014 [Beginner]: HTTP Module Basics
+- Day 015 [Beginner]: Building REST API Basics
+- Day 016 [Beginner]: Express Fundamentals
+- Day 017 [Beginner]: Express Routing and Middleware
+- Day 018 [Beginner]: Request Validation with Zod or Joi
+- Day 019 [Beginner]: Logging with Pino or Winston
+- Day 020 [Beginner]: Environment Config and dotenv
+- Day 021 [Beginner]: MongoDB Basics
+- Day 022 [Beginner]: Mongoose Models and Schema
+- Day 023 [Beginner]: CRUD with Express and MongoDB
+- Day 024 [Beginner]: PostgreSQL with node-postgres
+- Day 025 [Beginner]: Prisma ORM Basics
+- Day 026 [Beginner]: Authentication with JWT
+- Day 027 [Beginner]: Refresh Tokens and Session Strategy
+- Day 028 [Beginner]: Authorization RBAC and ABAC
+- Day 029 [Beginner]: Password Hashing and Account Security
+- Day 030 [Beginner]: API Security Headers and Rate Limiting
+- Day 031 [Beginner]: Testing with Jest or Vitest
+- Day 032 [Beginner]: Supertest for API Testing
+- Day 033 [Beginner]: Mocking and Test Doubles
+- Day 034 [Beginner]: Integration Testing with Testcontainers
+- Day 035 [Beginner]: End to End Testing Fundamentals
+- Day 036 [Intermediate]: WebSockets with Socket.IO
+- Day 037 [Intermediate]: Real-time Chat Mini Project
+- Day 038 [Intermediate]: Caching with Redis
+- Day 039 [Intermediate]: Background Jobs with BullMQ
+- Day 040 [Intermediate]: Email and Notification Workflows
+- Day 041 [Intermediate]: File Uploads and Storage
+- Day 042 [Intermediate]: Cloud Object Storage Integration
+- Day 043 [Intermediate]: GraphQL Basics with Apollo
+- Day 044 [Intermediate]: GraphQL Resolvers and Schema Design
+- Day 045 [Intermediate]: gRPC and Protobuf Basics
+- Day 046 [Intermediate]: OpenAPI and Swagger Docs
+- Day 047 [Intermediate]: API Versioning and Deprecation
+- Day 048 [Intermediate]: Performance Profiling with clinic.js
+- Day 049 [Intermediate]: Node Event Loop Deep Dive
+- Day 050 [Intermediate]: Worker Threads and Clustering
+- Day 051 [Intermediate]: Scaling Node Apps Horizontally
+- Day 052 [Intermediate]: Dockerizing Node Applications
+- Day 053 [Intermediate]: CI CD for Node.js
+- Day 054 [Intermediate]: Deployment on Cloud Platforms
+- Day 055 [Intermediate]: Observability Logs Metrics Traces
+- Day 056 [Intermediate]: Error Monitoring with Sentry
+- Day 057 [Intermediate]: Feature Flags and Config Rollout
+- Day 058 [Intermediate]: Message Brokers with RabbitMQ and Kafka
+- Day 059 [Intermediate]: Event Driven Architecture
+- Day 060 [Intermediate]: Microservices Fundamentals
+- Day 061 [Intermediate]: Service Discovery and Gateway Patterns
+- Day 062 [Intermediate]: Resilience Patterns Retry and Circuit Breaker
+- Day 063 [Intermediate]: Distributed Transactions and Saga
+- Day 064 [Intermediate]: Domain Driven Design for Node
+- Day 065 [Intermediate]: Clean Architecture in Node
+- Day 066 [Intermediate]: TypeScript with Node Basics
+- Day 067 [Intermediate]: Typed Express APIs
+- Day 068 [Intermediate]: Runtime Validation and Contracts
+- Day 069 [Intermediate]: Monorepo Tooling Nx and Turborepo
+- Day 070 [Intermediate]: Package Design and Internal Libraries
+- Day 071 [Advanced]: Security Hardening Checklist
+- Day 072 [Advanced]: OWASP Top 10 for Node Apps
+- Day 073 [Advanced]: Dependency Auditing and Supply Chain
+- Day 074 [Advanced]: SSR with Next.js API Routes
+- Day 075 [Advanced]: Fullstack with Next.js Server Actions
+- Day 076 [Advanced]: Authentication in NextAuth or Auth.js
+- Day 077 [Advanced]: Real-time Collaboration Architecture
+- Day 078 [Advanced]: Queue-driven Video Processing Case Study
+- Day 079 [Advanced]: Payment Integration Strategy
+- Day 080 [Advanced]: Release Management and SemVer
+- Day 081 [Advanced]: Browser Compatibility for Fullstack Apps
+- Day 082 [Advanced]: Large Scale Module Architecture
+- Day 083 [Advanced]: Micro Frontend and BFF Strategy
+- Day 084 [Advanced]: Edge Runtime and Serverless Functions
+- Day 085 [Advanced]: Cost Optimization and Capacity Planning
+- Day 086 [Advanced]: Incident Response and On-call Playbook
+- Day 087 [Advanced]: Performance Budget Governance
+- Day 088 [Advanced]: Accessibility Workflow for Fullstack UI
+- Day 089 [Advanced]: Design System Integration in Monorepos
+- Day 090 [Advanced]: Data Migration and Backward Compatibility
+- Day 091 [Expert]: Multi-tenant Architecture
+- Day 092 [Expert]: Compliance and Data Privacy
+- Day 093 [Expert]: Platform Engineering for Node Teams
+- Day 094 [Expert]: Tech Lead Decision Framework
+- Day 095 [Expert]: State Strategy Across Client and Server
+- Day 096 [Expert]: Senior Machine Coding Simulation
+- Day 097 [Expert]: System Design Interview Simulation
+- Day 098 [Expert]: Architecture Review and Tradeoff Defense
+- Day 099 [Expert]: Capstone Delivery and Portfolio Readiness
+- Day 100 [Expert]: Career Roadmap and Continuous Improvement
