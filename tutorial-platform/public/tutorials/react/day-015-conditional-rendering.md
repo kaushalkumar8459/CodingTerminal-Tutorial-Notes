@@ -20,6 +20,8 @@ track: react
 - [End-to-End Practical](#end-to-end-practical)
 - [Hands-on Coding](#hands-on-coding)
 - [Mini Exercise](#mini-exercise)
+- [Common Mistakes](#common-mistakes)
+- [Debugging Challenge](#debugging-challenge)
 - [Assessment Quiz](#assessment-quiz)
 - [Task](#task)
 - [Self Check](#self-check)
@@ -54,6 +56,8 @@ User understands current state
 ```
 
 Real applications commonly have idle, loading, error, empty, unauthorized, and success states. Good conditional rendering makes those states explicit instead of hiding business logic inside complicated JSX.
+
+A useful rule is: **choose the simplest JavaScript construct that keeps the branch obvious**. `if` is usually best for substantial branches, a ternary for a small two-way choice, and `&&` for an optional branch with no alternative UI.
 
 ## Topic by Topic
 
@@ -106,6 +110,8 @@ Prefer:
 {count > 0 && <Badge />}
 ```
 
+Do not blindly apply `!!count && ...` when the business rule is specifically `count > 0`; an explicit condition communicates intent better.
+
 ### 4. `null` Means Render Nothing
 
 A component can intentionally return `null` when it should render no UI.
@@ -124,15 +130,28 @@ A UI permission check is not a security boundary; protected operations still req
 A robust data-driven component should distinguish these states.
 
 ```jsx
-function ProductState({ loading, error, products }) {
-  if (loading) return <p aria-live="polite">Loading products…</p>;
-  if (error) return <p role="alert">Unable to load products.</p>;
-  if (products.length === 0) return <p>No products found.</p>;
-  return <ProductList products={products} />;
+function ProductState({ status, products, error }) {
+  if (status === "loading") {
+    return <p aria-live="polite">Loading products…</p>;
+  }
+
+  if (status === "error") {
+    return <p role="alert">{error ?? "Unable to load products."}</p>;
+  }
+
+  if (status === "success" && products.length === 0) {
+    return <p>No products found.</p>;
+  }
+
+  if (status === "success") {
+    return <ProductList products={products} />;
+  }
+
+  return <p>Ready to load products.</p>;
 }
 ```
 
-The exact priority depends on the domain. Do not blindly apply one ordering when the application needs a different state model.
+The exact state model depends on the domain. If `products` is unavailable before a successful load, model that explicitly rather than relying on `products.length` to exist in every state.
 
 ### 6. Authentication vs Authorization
 
@@ -158,6 +177,8 @@ function CheckoutStatus({ status }) {
 }
 ```
 
+For an externally controlled status, consider handling unknown values explicitly rather than silently treating every unknown value as `idle`.
+
 ### 8. Boolean Explosion
 
 This can become difficult to reason about:
@@ -177,7 +198,7 @@ const [status, setStatus] = useState("idle");
 // idle | loading | success | error
 ```
 
-This is a lightweight state-machine mindset.
+This is a lightweight state-machine mindset. It does not mean every UI needs a formal state-machine library.
 
 ### 9. Conditional Attributes and Styles
 
@@ -203,9 +224,24 @@ Extract meaningful states instead of putting every branch inside one large compo
 function Dashboard({ status }) {
   if (status === "loading") return <LoadingState />;
   if (status === "error") return <ErrorState />;
-  return <DashboardContent />;
+  if (status === "success") return <DashboardContent />;
+  return <p>Ready to load dashboard.</p>;
 }
 ```
+
+A separate component is especially useful when a branch has its own responsibility, accessibility behavior, or reuse potential.
+
+### 11. Optional Chaining and Nullish Values
+
+Conditional rendering often deals with data that may not exist yet.
+
+```jsx
+<p>{user?.profile?.displayName ?? "Guest"}</p>
+```
+
+`?.` safely stops property access when an intermediate value is `null` or `undefined`. `??` provides a fallback only for `null` or `undefined`, unlike `||`, which also treats values such as `0` and `""` as absent.
+
+Use the operator that matches the business rule rather than using fallbacks mechanically.
 
 ## Key Concepts
 
@@ -213,10 +249,11 @@ function Dashboard({ status }) {
 |---|---|
 | `if` / guard clause | Large or early-exit branches |
 | Ternary | Simple two-way choice |
-| `&&` | Optional UI branch |
+| `&&` | Optional UI branch with no alternative |
 | `null` | Intentionally render nothing |
 | Explicit status | Mutually exclusive UI states |
 | Separate component | Complex/reusable branch |
+| `?.` / `??` | Optional data and intentional fallbacks |
 
 ## Visual Concept Map
 
@@ -248,7 +285,7 @@ Build a **Course Dashboard** with:
 - accessible status messages
 
 ```jsx
-function Dashboard({ status, role, lessons }) {
+function Dashboard({ status, role, lessons = [] }) {
   if (status === "loading") {
     return <p aria-live="polite">Loading dashboard…</p>;
   }
@@ -257,8 +294,12 @@ function Dashboard({ status, role, lessons }) {
     return <p role="alert">Could not load dashboard.</p>;
   }
 
-  if (lessons.length === 0) {
+  if (status === "success" && lessons.length === 0) {
     return <p>No lessons available.</p>;
+  }
+
+  if (status !== "success") {
+    return <p>Dashboard is ready.</p>;
   }
 
   return (
@@ -272,6 +313,8 @@ function Dashboard({ status, role, lessons }) {
   );
 }
 ```
+
+In a real application, the `status` value should come from state or a data layer rather than being independently inferred from several booleans.
 
 ## Hands-on Coding
 
@@ -289,7 +332,7 @@ Refactor three mutually exclusive booleans into a single status model.
 
 ### Challenge 4 — Accessibility
 
-Use `role="alert"` for errors and `aria-live="polite"` for appropriate status changes.
+Use `role="alert"` for errors and `aria-live="polite"` for appropriate status changes. Avoid adding live regions to every changing value; use them where a status change should be announced.
 
 ## Mini Exercise
 
@@ -301,7 +344,7 @@ function PaymentStatus({ status }) {
 }
 ```
 
-Render a distinct accessible message for each status without using nested ternaries.
+Render a distinct accessible message for each status without using nested ternaries. Also decide how the component should behave for an unexpected status.
 
 ## Common Mistakes
 
@@ -325,6 +368,32 @@ Use a status value when states are mutually exclusive.
 
 Extract branches when they become independently meaningful or reusable.
 
+### Mistake 6 — Accidental fallback with `||`
+
+Do not use `||` when valid values such as `0` or an empty string must be preserved. Use `??` when the fallback is only for `null` or `undefined`.
+
+## Debugging Challenge
+
+This code can render an unexpected `0`:
+
+```jsx
+function CartBadge({ count }) {
+  return <div>{count && <span>{count}</span>}</div>;
+}
+```
+
+### Why?
+
+When `count` is `0`, JavaScript evaluates the expression to `0`, and React can render that value.
+
+### Fix
+
+```jsx
+function CartBadge({ count }) {
+  return <div>{count > 0 && <span>{count}</span>}</div>;
+}
+```
+
 ## Assessment Quiz
 
 1. When is a ternary appropriate?
@@ -334,16 +403,22 @@ Extract branches when they become independently meaningful or reusable.
 5. What is authentication vs authorization?
 6. Why is conditional UI not a security boundary?
 7. When should a branch become a separate component?
+8. What is the difference between `||` and `??` for fallback values?
+9. Why can an explicit status model be safer than several flags?
+10. When should `aria-live` be used carefully?
 
-**Answers:**
+### Answers
 
 1. A concise two-way UI choice.
 2. The expression evaluates to `0`, which React can render.
-3. The component renders no UI.
+3. The component renders no UI for that branch.
 4. Independent booleans can represent contradictory combinations.
 5. Authentication identifies the user; authorization determines allowed actions.
 6. Users can bypass browser UI and call APIs directly.
 7. When it has meaningful complexity, repeated use, or an independent responsibility.
+8. `||` falls back for any falsy value; `??` falls back only for `null` or `undefined`.
+9. A single status can make mutually exclusive states explicit and prevent contradictory combinations.
+10. Use it for meaningful status changes that users should be informed about, not for every changing piece of UI.
 
 ## Task
 
@@ -357,6 +432,8 @@ Build the Course Dashboard described above.
 - [ ] Mutually exclusive states use a clear model.
 - [ ] Role checks are described as UI behavior, not security.
 - [ ] Loading/error states are accessible.
+- [ ] Optional data has intentional fallbacks.
+- [ ] Unexpected status values have a deliberate behavior.
 
 ## Self Check
 
@@ -367,6 +444,8 @@ Build the Course Dashboard described above.
 - [ ] I know UI permission checks are not security.
 - [ ] I can recognize boolean explosion.
 - [ ] I can extract a complex branch into a component.
+- [ ] I know when `??` is preferable to `||`.
+- [ ] I can handle unexpected state values deliberately.
 
 ## Interview Questions and Answers
 
@@ -386,6 +465,9 @@ A falsy numeric `0` is returned by the JavaScript expression and may appear in t
 **Q: Why can multiple booleans be problematic?**  
 They can represent contradictory states. A single status is often clearer when states are mutually exclusive.
 
+**Q: What is the difference between `||` and `??`?**  
+`||` treats every falsy value as absent, while `??` treats only `null` and `undefined` as absent.
+
 ### Advanced
 
 **Q: How would you model API UI state?**  
@@ -397,6 +479,11 @@ The browser is controlled by the user. Protected APIs must independently validat
 **Q: When should conditional UI become separate components?**  
 When a branch has meaningful complexity, an independent responsibility, repeated use, or needs isolated testing.
 
+**Q: Can `&&` replace every conditional?**  
+No. It is best for optional UI where there is no alternate branch. Use `if` or a ternary when the application needs a meaningful alternative.
+
 ## Day 15 Outcome
 
-You can model real UI states with clear, maintainable conditional rendering and can distinguish simple branches from state-machine-like UI. Day 16 applies the same state-driven thinking to dynamic collections.
+You can now model real UI states with clear, maintainable conditional rendering. You can choose between JavaScript control flow, ternaries, logical operators, guard clauses, optional chaining, and nullish coalescing based on the business rule. You also understand explicit status models, accessibility considerations, and why UI authorization is not a security boundary.
+
+You are now ready to apply the same state-driven thinking to dynamic collections on Day 16.
