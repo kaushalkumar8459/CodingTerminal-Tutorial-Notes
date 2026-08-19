@@ -20,6 +20,8 @@ track: react
 - [End-to-End Practical](#end-to-end-practical)
 - [Hands-on Coding](#hands-on-coding)
 - [Mini Exercise](#mini-exercise)
+- [Common Mistakes](#common-mistakes)
+- [Debugging Challenge](#debugging-challenge)
 - [Assessment Quiz](#assessment-quiz)
 - [Task](#task)
 - [Self Check](#self-check)
@@ -28,7 +30,7 @@ track: react
 
 ## Goal
 
-Build production-style React forms using controlled inputs, reusable handlers, validation, touched/error state, reset behavior, accessible submit flow, and a clear state model. Understand when controlled and uncontrolled inputs are appropriate.
+Build production-style React forms using controlled inputs, reusable handlers, validation, touched/error state, reset behavior, accessible submission, and a clear state model. Understand when controlled and uncontrolled inputs are appropriate.
 
 ## Prerequisites
 
@@ -55,6 +57,8 @@ Submit
 Validate → submit or show errors
 ```
 
+A useful mental model is: **input values are state; errors and interaction metadata are UI state; values that can be calculated from those sources should usually be derived.**
+
 ## Topic by Topic
 
 ### 1. Controlled Input
@@ -63,12 +67,14 @@ Validate → submit or show errors
 const [name, setName] = useState("");
 
 <input
+  id="name"
+  name="name"
   value={name}
   onChange={(event) => setName(event.target.value)}
 />
 ```
 
-The value comes from state and changes through the setter.
+The value comes from state and changes through the setter. A label should be associated with the input in a real form.
 
 ### 2. Multi-field Form State
 
@@ -82,13 +88,15 @@ const [email, setEmail] = useState("");
 A single object is useful when fields form one logical record:
 
 ```jsx
-const initialForm = { name: "", email: "", phone: "" };
-const [form, setForm] = useState(initialForm);
+const createInitialForm = () => ({ name: "", email: "", phone: "" });
+const [form, setForm] = useState(createInitialForm);
 ```
 
 Choose the model for clarity, not merely to reduce the number of hooks.
 
 ### 3. Generic Change Handler
+
+For text-like controls whose `name` matches a form property:
 
 ```jsx
 function handleChange(event) {
@@ -98,6 +106,20 @@ function handleChange(event) {
 ```
 
 The computed property name updates the correct field while spread preserves the others.
+
+For a mixed form, handle the control type explicitly:
+
+```jsx
+function handleChange(event) {
+  const { name, value, type, checked } = event.target;
+  setForm((current) => ({
+    ...current,
+    [name]: type === "checkbox" ? checked : value,
+  }));
+}
+```
+
+For more unusual controls—such as file inputs, number coercion, or multi-selects—use dedicated handlers or explicit conversion rather than assuming every control is a string.
 
 ### 4. Input Types
 
@@ -117,7 +139,17 @@ Text, email, select and textarea generally use `value`. Checkboxes use `checked`
 />
 ```
 
-Multiple select controls may use an array of selected values.
+A native `<select multiple>` exposes selected options rather than one simple string, so use an explicit handler when storing an array of values.
+
+For `type="number"`, `event.target.value` is still a string. Either keep the form value as a string until validation/submission or explicitly convert it at the boundary:
+
+```jsx
+const age = Number(event.target.value);
+```
+
+Be deliberate about empty values because `Number("")` is `0`.
+
+File inputs are a special case: their value cannot be controlled like a normal text input. Read the selected `File` objects from `event.target.files` and keep the file input uncontrolled.
 
 ### 5. Form Submission
 
@@ -130,7 +162,7 @@ function handleSubmit(event) {
 }
 ```
 
-This also supports keyboard submission naturally.
+This also supports keyboard submission naturally. Use `<button type="submit">` for the submit action and `type="button"` for non-submit buttons such as Reset when appropriate.
 
 ### 6. Validation
 
@@ -148,27 +180,36 @@ function validate(form) {
 }
 ```
 
-Client validation improves UX and data quality; it is **not a security boundary**. The server must validate again.
+Client validation improves UX and data quality; it is **not a security boundary**. The server must validate, authorize, and safely process submitted data.
 
 ### 7. Touched, Dirty, and Error State
 
-- **Touched:** user interacted with/left a field.
-- **Dirty:** current value differs from the initial value.
+- **Touched:** a field has been interacted with, according to the application's chosen interaction rule.
+- **Dirty:** the current value differs from the initial value.
 - **Error:** a validation rule currently fails.
 
-Keeping these concepts separate gives better control over when messages appear.
+Keeping these concepts separate gives better control over when messages appear. For example, an error may be stored immediately but displayed only after a field is touched or after the first submit attempt.
+
+A dirty field can be derived rather than stored when practical:
+
+```jsx
+const isDirty = form.email !== initialForm.email;
+```
+
+For a larger form, compare the complete form or track dirty fields intentionally rather than creating redundant copies of every value.
 
 ### 8. Reset
 
 ```jsx
 function resetForm() {
-  setForm(initialForm);
+  setForm(createInitialForm());
   setErrors({});
   setTouched({});
+  setSubmitted(false);
 }
 ```
 
-Keep initial values in one place so reset cannot drift from the form shape.
+Keep initial values in one place so reset cannot drift from the form shape. Reset should restore both the values and the relevant interaction/submission state.
 
 ### 9. Controlled vs Uncontrolled
 
@@ -178,13 +219,13 @@ Controlled inputs are driven by React state. Uncontrolled inputs let the DOM own
 const noteRef = useRef(null);
 
 function saveNote() {
-  console.log(noteRef.current?.value);
+  console.log(noteRef.current?.value ?? "");
 }
 
 return <input ref={noteRef} />;
 ```
 
-Uncontrolled inputs can be appropriate for simple forms or integrations with non-React code. Neither model is universally better.
+Uncontrolled inputs can be appropriate for simple forms or integrations with non-React code. File inputs are also naturally handled this way. Neither model is universally better.
 
 ### 10. Avoid Controlled/Uncontrolled Warnings
 
@@ -194,7 +235,7 @@ Initialize values consistently:
 const [email, setEmail] = useState("");
 ```
 
-Do not unexpectedly change an input from a defined `value` to `undefined`/`null`. Normalize optional data before rendering the input.
+Do not unexpectedly change an input from a defined `value` to `undefined`/`null`. Normalize optional data before rendering the input. The same principle applies to boolean controls: initialize a checkbox as a boolean and keep using `checked`.
 
 ### 11. Accessibility
 
@@ -206,6 +247,7 @@ Production forms should provide:
 - clear error text
 - `aria-invalid` for invalid controls
 - `aria-describedby` for associated help/error text
+- an error summary or focus strategy for complex forms when appropriate
 
 ```jsx
 <label htmlFor="email">Email</label>
@@ -220,12 +262,15 @@ Production forms should provide:
 {errors.email && <p id="email-error">{errors.email}</p>}
 ```
 
+Do not use ARIA as a substitute for semantic HTML. Native labels, buttons, inputs, and form structure should come first.
+
 ## Key Concepts
 
 - Controlled inputs
 - Form state object
 - Generic handlers
 - Computed property names
+- Input-specific value handling
 - Validation flow
 - Touched/dirty/error state
 - Controlled vs uncontrolled
@@ -233,6 +278,7 @@ Production forms should provide:
 - Reset semantics
 - Accessibility
 - Server-side validation
+- Submit state
 
 ## Visual Concept Map
 
@@ -241,15 +287,16 @@ Form Input
    ↓
 onChange
    ↓
-State
+Form State
    ↓
-Validation
+Validation + Interaction Metadata
    ↓
-Touched / Errors
+Errors / Derived UI
    ↓
 onSubmit
    ↓
-Success or Error
+Valid → Submit → Success
+Invalid → Show Errors
 ```
 
 ## End-to-End Practical
@@ -259,14 +306,15 @@ Build a **Student Registration / Job Registration Form**.
 Requirements:
 
 1. Create form object state.
-2. Add a generic `handleChange`.
-3. Support text, email, select and checkbox fields.
+2. Add a generic `handleChange` for the appropriate input types.
+3. Support text, email, select, textarea and checkbox fields.
 4. Validate required fields and email.
-5. Show field errors.
+5. Show field errors only when appropriate, such as after touch or submit.
 6. Submit with `onSubmit` and `preventDefault()`.
-7. Provide reset behavior.
+7. Provide reset behavior for values and interaction state.
 8. Make labels and errors accessible.
 9. Show a success state only after valid submission.
+10. Prevent duplicate submissions when an async submit is introduced.
 
 ### Employee Feedback Form
 
@@ -282,12 +330,15 @@ const handleChange = (event) => {
 
 return (
   <>
-    <select name="dept" value={form.dept} onChange={handleChange}>
-      <option>HR</option>
-      <option>Engineering</option>
-      <option>Sales</option>
+    <label htmlFor="dept">Department</label>
+    <select id="dept" name="dept" value={form.dept} onChange={handleChange}>
+      <option value="HR">HR</option>
+      <option value="Engineering">Engineering</option>
+      <option value="Sales">Sales</option>
     </select>
+    <label htmlFor="feedback">Feedback</label>
     <textarea
+      id="feedback"
       name="feedback"
       value={form.feedback}
       onChange={handleChange}
@@ -308,7 +359,8 @@ function saveNote() {
 
 return (
   <>
-    <input ref={noteRef} placeholder="Quick note" />
+    <label htmlFor="note">Quick note</label>
+    <input id="note" ref={noteRef} placeholder="Quick note" />
     <button type="button" onClick={saveNote}>Save Note</button>
   </>
 );
@@ -320,7 +372,7 @@ return (
 
 ```jsx
 const [form, setForm] = useState({ name: "", email: "", course: "" });
-const [error, setError] = useState("");
+const [errors, setErrors] = useState({});
 
 function handleChange(event) {
   const { name, value } = event.target;
@@ -329,25 +381,25 @@ function handleChange(event) {
 
 function handleSubmit(event) {
   event.preventDefault();
-  if (!form.name.trim() || !form.email.trim() || !form.course.trim()) {
-    setError("All fields are required");
-    return;
-  }
-  setError("");
+  const nextErrors = {};
+  if (!form.name.trim()) nextErrors.name = "Name is required";
+  if (!form.email.trim()) nextErrors.email = "Email is required";
+  if (!form.course) nextErrors.course = "Course is required";
+  setErrors(nextErrors);
 }
 ```
 
 ### Example 2 — Registration Form
 
 ```jsx
-const initialForm = {
+const createInitialForm = () => ({
   name: "",
   email: "",
   role: "developer",
   termsAccepted: false,
-};
+});
 
-const [form, setForm] = useState(initialForm);
+const [form, setForm] = useState(createInitialForm);
 const [errors, setErrors] = useState({});
 const [submitted, setSubmitted] = useState(false);
 
@@ -379,6 +431,8 @@ function handleSubmit(event) {
 }
 ```
 
+For a production form, consider marking fields touched after submit or using an explicit `submitAttempted` flag so all relevant errors become visible together.
+
 ## Mini Exercise
 
 Build a job application form with controlled fields for:
@@ -394,8 +448,9 @@ Expected behavior:
 
 - Every input is controlled.
 - Invalid submit shows clear errors.
-- Reset restores initial values.
+- Reset restores initial values and interaction state.
 - Keyboard submission works.
+- Labels are associated with their controls.
 
 ## Common Mistakes
 
@@ -423,6 +478,10 @@ Use touched/submit state to control when errors become visible.
 
 Normalize missing data instead of passing `undefined` unexpectedly.
 
+### Mistake 7 — Treating every input as a string
+
+Checkboxes use `checked`; files and multi-selects need different handling; numeric inputs need deliberate conversion.
+
 ## Debugging Challenge
 
 Why is this problematic?
@@ -432,7 +491,7 @@ form.email = event.target.value;
 setForm(form);
 ```
 
-**Answer:** it mutates the existing state object. Use:
+**Answer:** it mutates the existing state object and reuses the same reference. Use:
 
 ```jsx
 setForm((current) => ({
@@ -451,17 +510,21 @@ setForm((current) => ({
 6. What causes controlled/uncontrolled warnings?
 7. When is uncontrolled input useful?
 8. Why update form state immutably?
+9. Why is a file input commonly handled as uncontrolled?
+10. Why should number input conversion be deliberate?
 
 ### Answers
 
 1. Its current value is driven by React state.
 2. `checked` represents boolean checkbox state.
 3. It provides semantic and keyboard-friendly form submission.
-4. Touched describes interaction; dirty describes difference from initial value.
+4. Touched describes interaction; dirty describes whether the current value differs from the initial value.
 5. No. Server validation remains necessary.
 6. A control changes between controlled and uncontrolled modes, often because its value becomes `undefined`.
 7. Simple forms and integrations where DOM ownership is useful.
 8. It creates a predictable new state value and avoids mutation.
+9. Browsers do not allow a file input's selected file value to be controlled like an ordinary text value; React code reads the selected `File` objects instead.
+10. `event.target.value` is a string, and careless conversion can mishandle empty input—for example, `Number("")` is `0`.
 
 ## Task
 
@@ -470,7 +533,7 @@ Build a **Job Application Form** with at least six fields.
 Requirements:
 
 - controlled inputs
-- generic change handler
+- generic change handler where appropriate
 - validation
 - touched/error feedback
 - accessible labels and errors
@@ -478,6 +541,7 @@ Requirements:
 - submit success state
 - checkbox handling
 - keyboard-friendly submission
+- a deliberate strategy for numeric/select/file fields if included
 
 ## Self Check
 
@@ -485,6 +549,7 @@ Requirements:
 - [ ] I can build a multi-field form.
 - [ ] I can write a generic change handler.
 - [ ] I know why checkboxes use `checked`.
+- [ ] I understand that not every input should be treated as a string.
 - [ ] I can validate before submit.
 - [ ] I understand touched vs dirty.
 - [ ] I can reset values and interaction state.
@@ -508,7 +573,7 @@ To prevent the browser's default navigation/reload when React handles the submis
 Use a functional update with spread and a computed property: `{ ...current, [name]: value }`.
 
 **Q: When would you choose uncontrolled inputs?**  
-For simple cases, DOM-oriented integrations, or scenarios where keeping every keystroke in React state is unnecessary.
+For simple cases, DOM-oriented integrations, file inputs, or scenarios where keeping every keystroke in React state is unnecessary.
 
 **Q: How do touched and dirty differ?**  
 Touched describes interaction; dirty describes whether the current value differs from the initial value.
@@ -529,4 +594,4 @@ Complex forms may need values, touched state, dirty state, errors, submission st
 
 ## Day 13 Outcome
 
-You can now design, implement, validate, reset, and explain React forms. You understand controlled and uncontrolled inputs, reusable handlers, validation, interaction state, accessibility, and production-oriented submission flow. You are ready to integrate these patterns into the Notes App on Day 14.
+You can now design, implement, validate, reset, and explain React forms. You understand controlled and uncontrolled inputs, reusable handlers, input-specific value handling, validation, interaction state, accessibility, and production-oriented submission flow. You are ready to integrate these patterns into the Notes App on Day 14.
