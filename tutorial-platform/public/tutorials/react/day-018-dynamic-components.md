@@ -20,6 +20,8 @@ track: react
 - [End-to-End Practical](#end-to-end-practical)
 - [Hands-on Coding](#hands-on-coding)
 - [Mini Exercise](#mini-exercise)
+- [Common Mistakes](#common-mistakes)
+- [Debugging Challenge](#debugging-challenge)
 - [Assessment Quiz](#assessment-quiz)
 - [Task](#task)
 - [Self Check](#self-check)
@@ -46,7 +48,7 @@ A dynamic component is a component selected at runtime rather than hard-coded as
 ```text
 State / configuration
         ↓
-Approved component selection
+Validate / allowlist selection
         ↓
 Component reference
         ↓
@@ -55,7 +57,7 @@ Component reference
 Current UI
 ```
 
-React components are JavaScript values, so they can be stored in variables, objects, arrays, or maps. Dynamic rendering should be introduced when it makes the component-selection logic clearer—not merely to replace two simple `if` statements.
+React components are JavaScript values, so they can be stored in variables, objects, arrays, or maps. Dynamic rendering should be introduced when it makes component-selection logic clearer—not merely to replace two simple `if` statements.
 
 ## Topic by Topic
 
@@ -172,7 +174,7 @@ return <Widget />;
 
 A deliberate fallback is easier to debug than a blank UI region.
 
-### 7. Dynamic Components with Props
+### 7. Dynamic Props and `key`
 
 The selected component can receive normal props.
 
@@ -181,7 +183,7 @@ const Panel = panelMap[activePanel] ?? MissingPanel;
 return <Panel userId={userId} onClose={onClose} />;
 ```
 
-Remember that `key` is special when rendering a list; it is not passed as an ordinary child prop.
+Remember that `key` is special when rendering a list; it is not passed as an ordinary child prop. If the selected component needs an identifier, pass a separate prop such as `panelId`.
 
 ### 8. Dynamic Tabs
 
@@ -243,7 +245,7 @@ function Editor({ mode }) {
 }
 ```
 
-If state must survive switching views, consider lifting that state to a common parent or another appropriate state owner.
+If state must survive switching views, consider lifting that state to a common parent or another appropriate state owner. If the views should intentionally start fresh, a key can make that identity boundary explicit.
 
 ### 11. Intentional Key-Based Reset
 
@@ -275,6 +277,8 @@ function App() {
 
 `lazy()` addresses code loading. A component does not need to be lazy merely because it is selected dynamically.
 
+For several lazy components, keep the imports in an explicit registry rather than constructing arbitrary import paths from untrusted configuration.
+
 ### 13. Accessibility
 
 Dynamic content should not leave keyboard users guessing what changed.
@@ -288,6 +292,8 @@ Good practices include:
 - use `role="alert"` for urgent errors
 - use full tab semantics only when the interaction is actually a tab interface
 
+For a true tab interface, implement the expected keyboard behavior and relationships rather than adding `role="tab"` without the rest of the pattern.
+
 ## Key Concepts
 
 | Concept | Meaning |
@@ -300,6 +306,7 @@ Good practices include:
 | Routing | URL/navigation concern, not simply component selection |
 | Lazy loading | Defers loading component code |
 | Key reset | Intentional new identity that can reset local state |
+| Allowlist | Restricts runtime configuration to known component references |
 
 ## Visual Concept Map
 
@@ -341,6 +348,7 @@ Requirements:
 5. Provide accessible controls.
 6. Add a loading boundary for an asynchronously loaded widget.
 7. Keep navigation concerns separate from component selection.
+8. Explain whether switching widgets should preserve or reset local state.
 
 ### Example
 
@@ -359,7 +367,7 @@ function Dashboard({ data }) {
 
   return (
     <section>
-      <div>
+      <div aria-label="Dashboard widgets">
         {Object.keys(widgets).map((name) => (
           <button
             key={name}
@@ -376,6 +384,8 @@ function Dashboard({ data }) {
   );
 }
 ```
+
+If a widget is lazy-loaded, place the selected lazy component inside an appropriate `Suspense` boundary. Keep the registry explicit and trusted.
 
 ## Hands-on Coding
 
@@ -414,7 +424,8 @@ Complete this safely:
 
 ```jsx
 function Screen({ name }) {
-  // select and render the correct component
+  const Selected = screens[name] ?? NotFound;
+  return <Selected />;
 }
 ```
 
@@ -454,7 +465,7 @@ Use routing when URL/navigation semantics matter.
 
 ### Mistake 5 — Unsafe server-driven component selection
 
-Use an allowlist of known component identifiers. Never execute arbitrary code from configuration.
+Use an allowlist of known component identifiers. Never execute arbitrary code or construct arbitrary import paths from external configuration.
 
 ### Mistake 6 — Assuming dynamic means lazy
 
@@ -463,6 +474,32 @@ Runtime selection and code splitting are separate concerns.
 ### Mistake 7 — Accidentally losing local state
 
 Changing component identity can remount a component. Decide where state should live before choosing the dynamic boundary.
+
+### Mistake 8 — Adding tab ARIA without tab behavior
+
+If the UI is not a real tab interface, ordinary buttons with an active state are often simpler and more accessible.
+
+## Debugging Challenge
+
+This code is problematic:
+
+```jsx
+const Selected = widgetMap[config.type];
+return <Selected />;
+```
+
+### What can go wrong?
+
+If `config.type` is missing or unsupported, `Selected` can be `undefined`, causing rendering to fail. If the configuration is untrusted, treating arbitrary values as module/component paths can also create a security and maintainability problem.
+
+### Fix
+
+```jsx
+const Selected = widgetMap[config.type] ?? UnsupportedWidget;
+return <Selected />;
+```
+
+Keep `widgetMap` as an explicit allowlist of trusted component references.
 
 ## Assessment Quiz
 
@@ -476,12 +513,14 @@ Changing component identity can remount a component. Decide where state should l
 8. What does `lazy()` solve?
 9. Why might a shared prop contract be preferable?
 10. When should state be lifted above a dynamic component boundary?
+11. Why should tab ARIA not be added without implementing tab behavior?
+12. Where should IDs/keys be handled when dynamically rendering a list of components?
 
 ### Answers
 
 1. A component selected at runtime from state or configuration.
-2. JSX treats lowercase identifiers as intrinsic DOM elements.
-3. When there are multiple known options and centralized selection improves readability and extensibility.
+2. JSX uses capitalization to distinguish user-defined components from intrinsic DOM elements.
+3. When there are multiple known options and a centralized mapping improves readability and extensibility.
 4. It handles missing or unsupported configuration explicitly.
 5. No. Routing adds URL and navigation behavior.
 6. Untrusted strings must not become arbitrary executable modules; use an allowlist.
@@ -489,6 +528,8 @@ Changing component identity can remount a component. Decide where state should l
 8. It defers loading component code until it is needed.
 9. It makes dynamic components interchangeable without a confusing set of unrelated props.
 10. When the state must survive switching between component identities or is conceptually owned by the parent workflow.
+11. Because the WAI-ARIA tab pattern includes required relationships and keyboard interaction; adding only roles can create a misleading or inaccessible interface.
+12. Give each rendered sibling a stable key in the list and pass any needed identifier separately as a normal prop.
 
 ## Task
 
@@ -506,6 +547,7 @@ Build the **Configurable Dashboard** and include at least four dynamic widget ty
 - [ ] Routing is not used for an in-screen component switch.
 - [ ] Local-state behavior when switching components is explained.
 - [ ] Lazy loading is used only where code-splitting provides value.
+- [ ] True tab interfaces implement the required keyboard and semantic behavior.
 
 ## Self Check
 
@@ -519,6 +561,7 @@ Build the **Configurable Dashboard** and include at least four dynamic widget ty
 - [ ] I understand dynamic rendering vs lazy loading.
 - [ ] I can predict when local state will reset.
 - [ ] I can decide when to lift state.
+- [ ] I can explain why accessibility behavior must match the interaction pattern.
 
 ## Interview Questions and Answers
 
