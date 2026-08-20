@@ -237,11 +237,11 @@ useEffect(() => {
       const data = await response.json();
       setUser(data);
     } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
+      if (error?.name === "AbortError") {
         return;
       }
 
-      setError(error);
+      setError(error instanceof Error ? error : new Error("Request failed"));
     }
   }
 
@@ -251,9 +251,9 @@ useEffect(() => {
 }, [userId]);
 ```
 
-`AbortController` lets the browser-side fetch operation be cancelled when that request is no longer relevant.
+`AbortController` signals cancellation to supported browser APIs such as `fetch`. It can stop the client-side operation when that request is no longer relevant.
 
-Important: aborting the client request does **not** guarantee that a server has not already received or processed the request.
+Important: aborting the client request does **not** guarantee that the server has not already received or processed the request. Cancellation is not a server-side rollback.
 
 ### 6. Cancellation vs Ignore Flag
 
@@ -284,11 +284,11 @@ This does **not** cancel the network request. It only invalidates the old result
 
 Comparison:
 
-| Technique | Stops underlying fetch? | Prevents stale UI update? |
+| Technique | Cancels supported client-side work? | Prevents stale UI update? |
 |---|---:|---:|
-| `AbortController` | Usually yes on the client | Yes when obsolete request rejects/does not complete normally |
+| `AbortController` | Yes, when the API supports abort | Usually, but explicit stale-result protection may still be useful |
 | Ignore flag | No | Yes |
-| Both | Yes, when supported | Yes, with an explicit stale-result boundary |
+| Both | Yes, when supported | Yes |
 
 Use cancellation when useful, but understand that **cancellation and correctness are separate concerns**.
 
@@ -346,6 +346,8 @@ The same lifecycle applies to observers:
 
 ```jsx
 useEffect(() => {
+  if (!element) return;
+
   const observer = new ResizeObserver(() => {
     console.log("resized");
   });
@@ -356,7 +358,7 @@ useEffect(() => {
 }, [element]);
 ```
 
-The exact teardown method depends on the external API.
+The exact teardown method depends on the external API. In real code, make sure the referenced element exists before observing it.
 
 ### 10. WebSocket / Connection Cleanup
 
@@ -364,15 +366,22 @@ The exact teardown method depends on the external API.
 useEffect(() => {
   const socket = new WebSocket(url);
 
+  function handleMessage(event) {
+    console.log(event.data);
+  }
+
   socket.addEventListener("message", handleMessage);
 
   return () => {
+    socket.removeEventListener("message", handleMessage);
     socket.close();
   };
 }, [url]);
 ```
 
 If the URL changes, the previous socket belongs to the old synchronization and must be closed.
+
+If `handleMessage` is defined outside the effect and depends on changing values, those values must be represented correctly in the effect's dependencies or the handler must be designed to avoid stale values.
 
 ### 11. Effects That Do Not Need Cleanup
 
@@ -479,7 +488,7 @@ export default function Search({ query }) {
         const data = await response.json();
         setResults(data);
       } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") {
+        if (error?.name === "AbortError") {
           return;
         }
 
@@ -549,6 +558,10 @@ Keep resource ownership local to the effect instance whenever possible.
 
 Clearing a timeout prevents scheduled work from starting. It does not cancel a request that has already started.
 
+### 10. Hiding dependencies to avoid stale closures
+
+Do not remove a dependency merely to silence an effect warning. First decide whether the effect should depend on that value, whether the value belongs in the event handler instead, or whether the effect can be refactored.
+
 ## Debugging Lab
 
 ### Bug 1 — Duplicate interval
@@ -582,6 +595,10 @@ A timeout is cleared when the query changes, but the fetch has already started. 
 ### Bug 5 — Incorrect loading reset
 
 An old request's `finally` sets `loading(false)` after a new request has started. Explain why the controller/instance guard is needed.
+
+### Bug 6 — Stale event handler
+
+An effect registers a handler that reads a changing prop, but the dependency list omits that prop. Explain how the handler can observe an old value and propose a correct dependency/refactor strategy.
 
 ## Hands-on Exercises
 
@@ -655,6 +672,7 @@ Explain:
 10. Why is cleanup not a generic state-reset mechanism?
 11. Why is debounce different from request cancellation?
 12. Why should each effect instance own the resource it creates?
+13. Why should you not simply remove a dependency to make an effect run less often?
 
 ### Answers
 
@@ -670,6 +688,7 @@ Explain:
 10. Cleanup's main responsibility is to reverse external synchronization; generic state resetting can create confusing or unnecessary transitions.
 11. Debounce prevents scheduled work from starting; it cannot cancel work that has already started.
 12. Local ownership makes setup/cleanup pairing deterministic and prevents unrelated component instances from interfering with each other.
+13. Dependencies describe the reactive values used by the synchronization. Removing one without redesigning the effect can create stale closures or incorrect behavior; refactor the synchronization instead.
 
 ## Interview Questions and Answers
 
@@ -727,6 +746,10 @@ That hides the lifecycle problem instead of making setup reversible. The effect 
 
 Separate UI state from server-state concerns, debounce user input when appropriate, cancel obsolete requests where supported, protect against stale results, and consider caching/deduplication rather than putting every concern into one effect.
 
+**Why is removing a dependency usually not the right optimization?**
+
+A dependency is part of the synchronization contract. Removing it can make the effect read stale values. Optimize by changing the effect design, not by hiding a required dependency.
+
 ## Production Checklist
 
 Before shipping an effect that creates ongoing work, verify:
@@ -745,6 +768,8 @@ Before shipping an effect that creates ongoing work, verify:
 - [ ] Cleanup is not being used as a generic state reset.
 - [ ] Effects without ongoing resources do not have meaningless cleanup.
 - [ ] The effect is not doing work that belongs in an event handler or render calculation.
+- [ ] Required reactive dependencies are not removed merely to suppress re-runs.
+- [ ] Event handlers used by subscriptions do not read stale values.
 
 ## Verification Checklist
 
@@ -763,10 +788,11 @@ Before shipping an effect that creates ongoing work, verify:
 - [ ] Know when cleanup is unnecessary.
 - [ ] Can explain resource ownership.
 - [ ] Can debug an effect leak.
+- [ ] Can reason about stale closures in effect callbacks.
 - [ ] Can explain the production trade-offs.
 
 ## Day 24 Outcome
 
-You can now build **reversible effect synchronizations** instead of treating cleanup as an unmount-only trick. You understand timers, subscriptions, event listeners, connections, abortable requests, stale results, debouncing, race conditions, and Strict Mode behavior.
+You can now build **reversible effect synchronizations** instead of treating cleanup as an unmount-only trick. You understand timers, subscriptions, event listeners, connections, abortable requests, stale results, debouncing, race conditions, stale closures, and Strict Mode behavior.
 
 **Next:** Day 25 — API calls with `fetch`, where these lifecycle principles are applied to real loading, error, empty, success, and request-state flows.
