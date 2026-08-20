@@ -21,6 +21,7 @@ track: react
 - [Hands-on Labs](#hands-on-labs)
 - [Common Mistakes](#common-mistakes)
 - [Debugging Exercises](#debugging-exercises)
+- [Dependency Debugging Checklist](#dependency-debugging-checklist)
 - [Assessment](#assessment)
 - [Assessment Answers](#assessment-answers)
 - [Interview Questions and Answers](#interview-questions-and-answers)
@@ -564,6 +565,33 @@ useEffect(() => {
 
 **Answer:** If `saveForm` exists only because of a submit action, put it directly in the submit event handler rather than creating an intermediate `submitted` state solely to trigger an effect.
 
+## Dependency Debugging Checklist
+
+When an effect is running too often, not running when expected, or producing stale values:
+
+1. Write down the external system being synchronized.
+2. List every prop/state/context value read by the effect and its helpers.
+3. Check whether each dependency is primitive or reference-based.
+4. Log dependency identities when debugging object/function changes.
+5. Check whether a helper can move inside the effect.
+6. Check whether an event handler should own the work instead.
+7. Check whether the effect can be removed because the value is derived.
+8. Verify setup and cleanup are symmetrical.
+9. Only after correctness is established, consider memoization or other performance optimizations.
+
+A useful debugging pattern is to compare references explicitly:
+
+```jsx
+const previousOptions = useRef(options);
+
+useEffect(() => {
+  console.log("options changed", previousOptions.current !== options);
+  previousOptions.current = options;
+}, [options]);
+```
+
+This is a debugging technique, not a reason to suppress the dependency or add `useRef` everywhere.
+
 ## Assessment
 
 1. What comparison does React use for dependency values?
@@ -578,6 +606,8 @@ useEffect(() => {
 10. What role does exhaustive-deps linting play?
 11. What is the difference between dependency correctness and optimization?
 12. Why can an object created during render cause an effect to re-run?
+13. Why should an effect that handles a button click usually live in the event handler instead?
+14. What should you inspect before adding `useMemo` or `useCallback` to an effect dependency problem?
 
 ## Assessment Answers
 
@@ -593,6 +623,8 @@ useEffect(() => {
 10. It helps detect reactive values read by an effect that are not represented in the dependency list.
 11. Correctness means declaring the real reactive inputs; optimization means reducing unnecessary re-synchronization after correctness is established.
 12. Each render creates a new reference, and dependency comparison sees the reference as changed.
+13. User actions are event-driven rather than synchronization with an external system; an effect can add an unnecessary render-to-effect chain.
+14. First verify the effect is necessary and inspect whether the object/function can be moved inside the effect or replaced with primitive dependencies.
 
 ## Interview Questions and Answers
 
@@ -661,6 +693,7 @@ Effects should be treated as reversible synchronization work. Setup must not dep
 - [ ] Stale closure lab.
 - [ ] Timer lab.
 - [ ] Derived-state refactoring lab.
+- [ ] Dependency debugging checklist.
 - [ ] Debugging exercises.
 - [ ] Acceptance criteria.
 
