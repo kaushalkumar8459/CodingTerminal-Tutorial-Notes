@@ -3,7 +3,7 @@ title: Loading Error and Empty States
 slug: day-027-loadingerrorempty-states
 dayLabel: Day 27
 level: Intermediate
-estimatedMinutes: 90
+estimatedMinutes: 120
 order: 27
 track: react
 ---
@@ -562,6 +562,40 @@ return (
 
 For production code, avoid stale closures in request functions and consider a reducer or server-state library as request complexity grows.
 
+### Important production correction
+
+The practical above intentionally demonstrates the state model, but a real implementation should avoid relying on `products` or `search` through a stale closure when requests can overlap. Prefer passing request parameters explicitly and use a request ID or cancellation strategy so an older response cannot overwrite a newer one.
+
+```jsx
+const requestIdRef = useRef(0);
+
+async function loadProducts({ searchTerm, preserveData = false }) {
+  const requestId = ++requestIdRef.current;
+
+  try {
+    const response = await apiClient.get("/products", {
+      params: { search: searchTerm },
+    });
+
+    if (requestId !== requestIdRef.current) return;
+
+    const items = Array.isArray(response.data.items)
+      ? response.data.items
+      : [];
+
+    setProducts(items);
+    setStatus("success");
+    setError(null);
+  } catch (error) {
+    if (requestId !== requestIdRef.current) return;
+    setError("We couldn't load products. Please try again.");
+    setStatus(preserveData ? "success" : "error");
+  }
+}
+```
+
+For `fetch`, `AbortController` is often preferable when an older request should actually be cancelled. Cancellation should not be shown as a user-facing error.
+
 ## Debugging Lab
 
 ### Bug 1 — Error remains after retry
@@ -611,6 +645,18 @@ if (status === "success" && data.length === 0) {
 
 **Fix:** use bounded retries/backoff where automatic retry is actually appropriate.
 
+### Bug 7 — Older response overwrites newer results
+
+**Cause:** two requests finish out of order.
+
+**Fix:** cancel obsolete requests or ignore responses that no longer represent the latest request.
+
+### Bug 8 — Cancellation is shown as an error
+
+**Cause:** treating `AbortError` like a network/server failure.
+
+**Fix:** recognize intentional cancellation and keep the UI in the appropriate current state.
+
 ## Hands-on Exercises
 
 ### Level 1 — Four States
@@ -649,6 +695,25 @@ Implement:
 - accessible announcements
 
 Document the allowed transitions.
+
+### Level 6 — Race Conditions
+
+Simulate a slow first request followed by a faster second request. Verify that the older response cannot replace the newer results.
+
+### Level 7 — Test the State Matrix
+
+Test at minimum:
+
+| Scenario | Expected UI |
+|---|---|
+| First request | Skeleton/loading |
+| Success with items | Content |
+| Success with zero items | Empty state |
+| Initial failure | Error + retry |
+| Refresh success | Old data then updated data |
+| Refresh failure | Old data + non-blocking error |
+| Cancelled request | No error message |
+| Rapid searches | Latest request wins |
 
 ## Common Mistakes
 
@@ -692,6 +757,14 @@ Always consider timeout, cancellation, network failure, or server failure paths.
 
 Centralize API behavior where appropriate and keep state transitions understandable.
 
+### 11. Stale responses
+
+Do not allow an older request to overwrite the result of a newer request.
+
+### 12. Treating cancellation as failure
+
+Cancellation is often an intentional control-flow event, not an error the user needs to see.
+
 ## Assessment
 
 1. Why should loading, error, and empty be separate concepts?
@@ -702,93 +775,101 @@ Centralize API behavior where appropriate and keep state transitions understanda
 6. Why should raw backend errors not be displayed directly?
 7. When is automatic retry dangerous?
 8. Why do mutations need special retry consideration?
-9. How can accessibility APIs communicate loading and errors?
-10. What causes an empty state to appear too early?
-11. How can stale request values affect retry?
-12. When might a reducer be better than several `useState` calls?
+9. How can a stale response corrupt the UI?
+10. Why should cancellation normally not be shown as an error?
+11. When should a reducer replace several independent state variables?
+12. Why should derived empty state be based on successful data rather than only `data.length`?
 
 ### Answers
 
-1. They communicate different user situations and require different UI/actions.
-2. Using many independent booleans that can represent contradictory combinations.
-3. The request succeeded; there simply are no relevant records.
-4. Initial loading has no useful data yet; refreshing happens while useful existing data remains available.
-5. It reduces flicker and layout shifts and preserves context.
-6. They may expose implementation details, secrets, or confusing technical information.
-7. It can create excessive traffic or repeat operations that are not safe to repeat.
-8. A mutation may have succeeded even if the client did not receive the response; repeating it can duplicate side effects.
-9. Use semantics such as `role="alert"` and `aria-live` appropriately.
-10. Rendering `data.length === 0` without checking whether the request has successfully completed.
-11. A closure can hold parameters from an older render, causing retry to request stale data.
-12. When transitions involve many related fields and explicit state transitions are easier to reason about.
+1. They communicate different realities: work in progress, failure, and successful zero-result data.
+2. It is the uncontrolled growth of independent booleans that permits contradictory combinations.
+3. Empty means the request succeeded and there is no relevant data.
+4. Initial loading has no usable data; refreshing has existing data that should usually remain visible.
+5. It avoids flicker, preserves context, and makes the interface feel faster.
+6. Backend details may expose sensitive information and are not useful to most users.
+7. Automatic retries can multiply traffic, worsen outages, or duplicate unsafe operations.
+8. A timed-out mutation may have succeeded even though the client did not receive the response.
+9. Concurrent requests can complete out of order, causing an older result to overwrite a newer one.
+10. Cancellation is commonly intentional and should not create a misleading failure message.
+11. Use a reducer or explicit state machine when transitions involve several related values and must remain consistent.
+12. `data.length === 0` can also occur before the first successful request; status supplies the missing context.
 
 ## Interview Questions
 
 ### Beginner
 
-**Why do we need loading and error states?**
+**How would you represent loading, error, and success in React?**  
+Use an explicit status model plus the data and error needed by that status.
 
-They tell the user what the application is currently doing and whether recovery is needed.
-
-**Is an empty list an error?**
-
-No. A successful request can legitimately return zero items.
+**Is an empty API response an error?**  
+No. If the request succeeded and returned zero relevant records, it is an empty state.
 
 ### Intermediate
 
-**How would you model request state?**
+**Why should you preserve data during refresh?**  
+It prevents unnecessary flicker and lets users continue using already-valid information while the new request runs.
 
-Use an explicit status/discriminated state model instead of unrelated booleans.
+**Why is boolean explosion dangerous?**  
+Independent flags can represent impossible combinations and make transitions difficult to reason about.
 
-**How do you preserve old data during refresh?**
-
-Keep the existing data and represent refreshing separately from the initial loading state.
-
-**How should retry work?**
-
-Repeat the current operation with current parameters, clear stale error state, and avoid unsafe automatic retries for non-idempotent mutations.
+**How should a retry work?**  
+It should repeat the current read operation with current parameters, clear stale error state, and handle cancellation/race conditions correctly.
 
 ### Advanced
 
-**How would you model a refresh failure?**
+**How do you prevent stale API responses from overwriting current data?**  
+Cancel obsolete requests or track request identity and ignore responses that are no longer current.
 
-Keep valid previous data visible and expose a non-blocking refresh error/retry affordance rather than replacing useful content with an empty error screen.
+**How do you model refresh failure?**  
+Keep the previous successful data visible and expose a non-blocking refresh error instead of replacing useful content with a full-screen failure.
 
-**Why can an HTTP request succeed but the UI still fail?**
+**When would you use a reducer or server-state library?**  
+When request transitions, caching, synchronization, pagination, retries, or concurrent operations become complex enough that local independent state is difficult to maintain.
 
-The response can have an unexpected shape or the client can fail while transforming/validating data.
+**How would you distinguish transport errors from domain errors?**  
+Normalize the API layer into predictable application errors, then map those errors to user-facing messages and recovery actions.
 
-**How would you prevent impossible request states?**
-
-Use a finite state model/reducer/discriminated union and define allowed transitions.
-
-**Why is perceived performance important here?**
-
-The same network latency can feel much faster when the UI preserves context, shows meaningful progress, and avoids unnecessary layout shifts.
+**How would you test an async state machine?**  
+Test each transition and race scenario independently: initial load, success, empty, initial failure, retry, refresh success/failure, cancellation, and latest-request-wins behavior.
 
 ## Verification Checklist
 
-- [ ] Can explain idle, loading, success, empty, error, and refreshing.
-- [ ] Can model request state without boolean explosion.
-- [ ] Can distinguish initial loading from background refresh.
-- [ ] Can preserve useful data during refresh.
-- [ ] Can design meaningful empty states.
-- [ ] Can create actionable error states.
-- [ ] Can implement retry.
-- [ ] Understand why mutation retries need special care.
-- [ ] Understand idempotency at a high level.
-- [ ] Can prevent stale error messages after successful retry.
-- [ ] Can prevent empty state during initial loading.
-- [ ] Can explain stale closures in retry functions.
-- [ ] Can use `role="alert"` and `aria-live` appropriately.
-- [ ] Can build reusable state components.
-- [ ] Can debug refresh/error/empty-state bugs.
-- [ ] Can explain the request state machine in an interview.
+- [ ] Initial loading is distinct from empty.
+- [ ] Success with zero items renders an empty state.
+- [ ] Initial errors provide a safe recovery action.
+- [ ] Existing data remains visible during refresh where appropriate.
+- [ ] Refresh failure does not unnecessarily discard valid old data.
+- [ ] Previous errors are cleared when a new request begins.
+- [ ] Retry uses current request parameters.
+- [ ] Stale responses cannot overwrite newer results.
+- [ ] Intentional cancellation is not shown as a generic error.
+- [ ] Automatic retries are bounded and safe.
+- [ ] Mutations are not blindly retried.
+- [ ] User-facing messages do not expose backend internals.
+- [ ] Loading and error feedback is accessible.
+- [ ] Empty states explain what happened and what the user can do next.
+- [ ] Generic state components remain presentation-focused.
+- [ ] Derived empty state includes request-status context.
+- [ ] Complex transitions have a documented state model.
+- [ ] Tests cover the main state matrix.
 
 ## Day 27 Outcome
 
-You can now design API-driven React interfaces that communicate request state clearly instead of leaving users with blank screens or ambiguous feedback.
+You can now design asynchronous React screens around explicit user-visible states rather than accidental combinations of flags.
 
-You understand the difference between **loading, success, empty, error, and refresh states**, can implement recovery actions, preserve useful data during refresh, and build accessible, production-oriented asynchronous UI.
+The most important production mental model is:
 
-**Next:** Day 28 — Mini Project: Weather App.
+```text
+Initial request:
+idle → loading → success | empty | error
+
+Existing data:
+success → refreshing → success | refresh-error
+
+Concurrent requests:
+latest request wins
+obsolete request → cancelled or ignored
+```
+
+You are now ready for the next stage: composing API-driven screens with more advanced data-fetching patterns, reusable hooks, and server-state management.
