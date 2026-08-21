@@ -25,6 +25,7 @@ track: react
 - [Stable Object and Array References](#stable-object-and-array-references)
 - [Expensive Calculations](#expensive-calculations)
 - [When Not to Use useMemo](#when-not-to-use-usememo)
+- [React Compiler and Manual Memoization](#react-compiler-and-manual-memoization)
 - [Common Dependency Pitfalls](#common-dependency-pitfalls)
 - [Mutation Pitfalls](#mutation-pitfalls)
 - [Strict Mode and Development Behavior](#strict-mode-and-development-behavior)
@@ -63,7 +64,7 @@ By the end of this day, you can:
 - explain the purpose and limitations of `useMemo`
 - distinguish calculation memoization from render memoization
 - write correct dependency arrays
-- reason about `Object.is`/reference equality
+- reason about dependency/reference equality
 - use memoization for expensive derived values
 - use stable derived references with memoized children when justified
 - identify unstable dependencies that defeat memoization
@@ -71,6 +72,7 @@ By the end of this day, you can:
 - keep calculations pure
 - measure before and after performance
 - explain why `useMemo` should not be added mechanically
+- explain how modern React tooling can reduce the need for manual memoization
 
 ## Core Mental Model
 
@@ -109,7 +111,7 @@ const total = useMemo(
 );
 ```
 
-React can reuse the previous result when `items` is considered unchanged according to dependency comparison.
+React can reuse the previous result when the dependencies are considered unchanged.
 
 Important limitations:
 
@@ -118,6 +120,7 @@ Important limitations:
 - Do not use it to make side effects happen.
 - Do not use it as persistent storage.
 - Do not use it as a replacement for state.
+- Correctness must not depend on the cache surviving indefinitely.
 
 If the application is only correct because a memoized value remains cached, the design is wrong.
 
@@ -137,7 +140,7 @@ function ProductList({ products, query }) {
 }
 ```
 
-This is valid React. The fact that filtering happens during render does **not** automatically mean `useMemo` is required.
+This is valid React. Filtering during render does **not** automatically mean `useMemo` is required.
 
 First determine whether the calculation is expensive enough to matter.
 
@@ -150,7 +153,7 @@ const value = useMemo(
 );
 ```
 
-The calculation should be deterministic for the given dependencies:
+The calculation should be deterministic for the inputs represented by its dependencies:
 
 ```jsx
 const sortedProducts = useMemo(() => {
@@ -274,6 +277,8 @@ const b = { enabled: true };
 console.log(a === b); // false
 ```
 
+React dependency comparisons use `Object.is` semantics. For objects, arrays, and functions, that means reference identity matters.
+
 This matters when a memoized child receives a derived array:
 
 ```jsx
@@ -360,7 +365,30 @@ const fullName = useMemo(
 );
 ```
 
-Memoization has its own bookkeeping and cognitive cost.
+Memoization has bookkeeping, cache-management, and cognitive costs.
+
+## React Compiler and Manual Memoization
+
+Modern React tooling can automatically optimize some component values and functions when the project is configured for the React Compiler. This does **not** mean developers should stop learning `useMemo`.
+
+Use this rule:
+
+```text
+Correctness → comes from normal React code
+Performance → prove the bottleneck
+Optimization → use compiler/manual memoization appropriately
+```
+
+Manual `useMemo` remains useful when:
+
+- you are working in a project without compiler optimization
+- a measured calculation benefits from caching
+- stable reference identity is important to a memoized consumer
+- the project intentionally uses manual memoization
+
+Do not add manual memoization merely because a value is an object or because "performance is important."
+
+If compiler settings or lint rules recommend preserving/removing memoization, follow the project's configured React tooling and verify behavior rather than blindly deleting or adding hooks.
 
 ## Common Dependency Pitfalls
 
@@ -452,6 +480,8 @@ Measure enough iterations to avoid making decisions from a single noisy measurem
 5. Check whether user-visible rendering actually improved.
 6. Remove the memo if the result is insignificant or makes the code harder to understand.
 
+Do not compare only raw console timings. Also inspect component render counts, interaction responsiveness, and the actual user-visible bottleneck.
+
 ## Complete Practical
 
 Build a searchable, sortable product explorer.
@@ -490,11 +520,13 @@ function ProductExplorer({ products }) {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="Search products"
+        aria-label="Search products"
       />
 
       <select
         value={category}
         onChange={(event) => setCategory(event.target.value)}
+        aria-label="Filter by category"
       >
         <option value="all">All</option>
         <option value="mobile">Mobile</option>
@@ -504,6 +536,7 @@ function ProductExplorer({ products }) {
       <select
         value={sort}
         onChange={(event) => setSort(event.target.value)}
+        aria-label="Sort products"
       >
         <option value="price-asc">Price: low to high</option>
         <option value="price-desc">Price: high to low</option>
@@ -520,19 +553,23 @@ function ProductExplorer({ products }) {
         Theme: {theme}
       </button>
 
-      <p>{visibleProducts.length} result(s)</p>
+      <p aria-live="polite">{visibleProducts.length} result(s)</p>
 
-      {visibleProducts.map((product) => (
-        <p key={product.id}>
-          {product.name} — ₹{product.price}
-        </p>
-      ))}
+      {visibleProducts.length === 0 ? (
+        <p>No products match the current filters.</p>
+      ) : (
+        visibleProducts.map((product) => (
+          <p key={product.id}>
+            {product.name} — ₹{product.price}
+          </p>
+        ))
+      )}
     </section>
   );
 }
 ```
 
-Notice that changing `theme` causes the component to render, but it does not change the dependencies of `visibleProducts`, so the previous memoized result can be reused.
+Changing `theme` causes the component to render, but it does not change the dependencies of `visibleProducts`, so the previous memoized result can be reused.
 
 ### Important observation
 
@@ -560,6 +597,10 @@ Create an object dependency inside the component and observe why the memo recalc
 
 Start with several `useMemo` calls. Measure the application and remove memoization that provides no meaningful benefit.
 
+### Lab 6 — Compiler-aware review
+
+Take a component with manual memoization and document which optimization is required for correctness (none), which is for performance, and whether the project's React Compiler configuration changes the need for the manual optimization.
+
 ## Debugging Lab
 
 ### Bug 1 — stale result
@@ -585,7 +626,14 @@ const result = useMemo(() => calculate(items, options), [items, options]);
 
 **Problem:** `options` is a new object on every render.
 
-**Fix:** prefer primitive dependencies when possible.
+**Fix:** prefer primitive dependencies or create the object inside the calculation when practical.
+
+```jsx
+const result = useMemo(
+  () => calculate(items, { activeOnly }),
+  [items, activeOnly]
+);
+```
 
 ### Bug 3 — mutation
 
@@ -595,7 +643,11 @@ const sorted = useMemo(() => items.sort(compare), [items]);
 
 **Problem:** the source array is mutated.
 
-**Fix:** copy before sorting.
+**Fix:**
+
+```jsx
+const sorted = useMemo(() => [...items].sort(compare), [items]);
+```
 
 ### Bug 4 — side effect in memo
 
@@ -605,13 +657,21 @@ useMemo(() => localStorage.setItem("x", "1"), []);
 
 **Problem:** `useMemo` is being used as an effect.
 
-**Fix:** use an appropriate effect/event handler.
+**Fix:** use an appropriate effect or event handler.
 
 ### Bug 5 — memoizing trivial work
 
 A simple string or arithmetic calculation has been wrapped in `useMemo`.
 
 **Fix:** remove it unless measurement provides a concrete reason to keep it.
+
+### Bug 6 — expecting useMemo to stop renders
+
+A parent still renders after adding `useMemo`.
+
+**Problem:** `useMemo` memoizes a value, not the component itself.
+
+**Fix:** identify the actual render bottleneck and, if justified, evaluate component memoization or state placement separately.
 
 ## Common Mistakes
 
@@ -627,6 +687,7 @@ A simple string or arithmetic calculation has been wrapped in `useMemo`.
 10. Using it to hide excessive parent renders or poor state ownership.
 11. Measuring only development console output.
 12. Assuming every optimization is beneficial.
+13. Treating the React Compiler as a reason to ignore profiling and dependency correctness.
 
 ## Assessment
 
@@ -642,6 +703,7 @@ A simple string or arithmetic calculation has been wrapped in `useMemo`.
 10. When can referential stability be useful?
 11. Why might `useMemo` make code worse?
 12. How would you prove that memoization helped?
+13. What is the relationship between `useMemo` and the React Compiler?
 
 ### Answers
 
@@ -650,13 +712,14 @@ A simple string or arithmetic calculation has been wrapped in `useMemo`.
 3. React recalculates the memoized value.
 4. The memo can continue returning a result based on old input.
 5. A newly created object has a new reference even when its contents are equal.
-6. React may evaluate component logic more than once in development and memoization should never be relied on for effects.
+6. React development behavior can invoke calculations more than once, and memoization should never be relied on for effects.
 7. Mutation can preserve the reference and break dependency-based reasoning.
 8. `useMemo` memoizes a value; `useCallback` memoizes a function reference.
 9. `React.memo` can skip a component render based on props; `useMemo` memoizes a calculation result.
 10. When a memoized child or another identity-sensitive consumer can benefit from the stable reference.
-11. It adds dependency bookkeeping, memory/management overhead, and cognitive complexity without guaranteed benefit.
+11. It adds dependency bookkeeping, memory/cache management, and cognitive complexity without guaranteed benefit.
 12. Profile realistic workloads before and after the change and compare user-relevant render/calculation costs.
+13. The React Compiler can automate some memoization optimizations in configured projects, but developers still need correct code, dependency reasoning, and performance validation.
 
 ## Interview Questions
 
@@ -702,6 +765,10 @@ Not automatically. The workload, render frequency, dependency stability, and mea
 
 A memoized calculation can preserve an array/object reference passed to a memoized child, allowing prop identity checks to succeed when the inputs have not changed.
 
+**Does the React Compiler make `useMemo` obsolete?**
+
+Not universally. It can reduce the amount of manual memoization needed in supported/configured applications, but `useMemo` remains important for understanding memoization, reviewing existing code, and cases where explicit memoization is still appropriate.
+
 ## Production Decision Framework
 
 Before committing `useMemo`, answer:
@@ -714,6 +781,7 @@ Before committing `useMemo`, answer:
 | Is stable identity useful downstream? | If no, benefit may be small |
 | Is there measured or strongly justified benefit? | If no, prefer clarity |
 | Is the calculation pure? | Must be yes |
+| Is the project using React Compiler optimization? | Check project configuration before adding redundant manual memoization |
 
 A good optimization has an explanation such as:
 
@@ -733,6 +801,7 @@ A weak explanation is:
 - [ ] Side effects are absent from the calculation.
 - [ ] Referential stability is tested only where it matters.
 - [ ] Performance claims are based on representative measurements.
+- [ ] Manual memoization is reviewed against the project's React Compiler configuration where applicable.
 
 ## Final Acceptance Criteria
 
@@ -747,6 +816,7 @@ A weak explanation is:
 - [ ] Unstable dependency examples.
 - [ ] Expensive-calculation practical.
 - [ ] Explicit guidance on when not to memoize.
+- [ ] React Compiler context.
 - [ ] Performance measurement workflow.
 - [ ] Debugging exercises.
 - [ ] Progressive hands-on labs.
@@ -766,6 +836,7 @@ A weak explanation is:
 - [ ] I know when not to use it.
 - [ ] I can distinguish it from `useCallback` and `React.memo`.
 - [ ] I can measure before claiming an optimization.
+- [ ] I understand that React Compiler configuration can affect whether manual memoization is necessary.
 
 ## Day 31 Outcome
 
