@@ -3,36 +3,11 @@ title: Context API Introduction
 slug: day-036-context-api-introduction
 dayLabel: Day 36
 level: Intermediate
-estimatedMinutes: 120
+estimatedMinutes: 150
 order: 36
 track: react
 ---
 # Day 36 [Intermediate]: Context API Introduction
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Prop Drilling](#prop-drilling)
-- [What Context Solves](#what-context-solves)
-- [Core Context APIs](#core-context-apis)
-- [Default Value vs Provider](#default-value-vs-provider)
-- [Provider Scope and Nearest Provider](#provider-scope-and-nearest-provider)
-- [When Context Is a Good Fit](#when-context-is-a-good-fit)
-- [When Context Is Not the Best Choice](#when-context-is-not-the-best-choice)
-- [Context Is Not a Complete State-Management Solution](#context-is-not-a-complete-state-management-solution)
-- [Context Updates and Re-renders](#context-updates-and-re-renders)
-- [Context Value Identity](#context-value-identity)
-- [Props vs Context vs Composition](#props-vs-context-vs-composition)
-- [End-to-End Settings Example](#end-to-end-settings-example)
-- [Debugging Lab](#debugging-lab)
-- [Hands-on Coding](#hands-on-coding)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Production Checklist](#production-checklist)
-- [Self Check](#self-check)
-- [Day 36 Outcome](#day-36-outcome)
 
 ## Goal
 
@@ -456,7 +431,35 @@ Yes. It receives the context's default value. If the context is required, a cust
 **Why split contexts?**  
 Independent concerns can change at different frequencies. Splitting them can reduce unnecessary coupling and make ownership clearer.
 
-## 17. Production Checklist
+## 17. Modern React Notes
+
+### React 19 provider syntax
+
+React 19 allows the context object itself to be rendered as a provider:
+
+```jsx
+<ThemeContext value={theme}>
+  <App />
+</ThemeContext>
+```
+
+The traditional form remains important for existing React 18/19 codebases:
+
+```jsx
+<ThemeContext.Provider value={theme}>
+  <App />
+</ThemeContext.Provider>
+```
+
+### Context is still tree-scoped
+
+Neither provider syntax changes the fundamental model: a consumer reads the nearest matching provider in the rendered tree.
+
+### Performance rule
+
+Do not introduce `useMemo` simply because a provider contains an object. First establish whether provider re-renders and consumer updates are actually a problem. If optimization is needed, split contexts by concern, narrow provider scope, stabilize values where useful, and profile the result.
+
+## 18. Production Checklist
 
 Before introducing Context into a production feature, verify:
 
@@ -472,6 +475,7 @@ Before introducing Context into a production feature, verify:
 - [ ] Provider value memoization is based on an actual need, not a blanket rule.
 - [ ] Server state is not being used as an ad-hoc Context cache.
 - [ ] Tests cover provider behavior and consumer behavior.
+- [ ] The team understands whether the codebase targets React 18, React 19, or a mixed/legacy environment.
 
 ## Self Check
 
@@ -483,6 +487,7 @@ Before introducing Context into a production feature, verify:
 - [ ] I understand Context's update and identity implications.
 - [ ] I can explain why Context is not a complete state-management or server-state solution.
 - [ ] I can design a small, domain-specific provider.
+- [ ] I can explain both React 18-style and React 19 provider syntax.
 
 ## Day 36 Outcome
 
