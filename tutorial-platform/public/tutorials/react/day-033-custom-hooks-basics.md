@@ -3,7 +3,7 @@ title: Custom Hooks Basics
 slug: day-033-custom-hooks-basics
 dayLabel: Day 33
 level: Intermediate
-estimatedMinutes: 120
+estimatedMinutes: 150
 order: 33
 track: react
 ---
@@ -29,6 +29,8 @@ track: react
 - [13. When Not to Create a Custom Hook](#13-when-not-to-create-a-custom-hook)
 - [14. Testing Custom Hooks](#14-testing-custom-hooks)
 - [15. Accessibility and Consumer Responsibility](#15-accessibility-and-consumer-responsibility)
+- [16. Async Hooks and Cancellation](#16-async-hooks-and-cancellation)
+- [17. Hook Contract and State-Machine Design](#17-hook-contract-and-state-machine-design)
 - [Visual Concept Map](#visual-concept-map)
 - [End-to-End Practical](#end-to-end-practical)
 - [Hands-on Coding](#hands-on-coding)
@@ -65,6 +67,8 @@ By the end of this day you should be able to:
 - Compose hooks safely.
 - Handle effect dependencies and cleanup inside reusable hooks.
 - Identify SSR/browser-environment problems in browser-only hooks.
+- Design explicit async/loading/error contracts.
+- Protect async hooks from stale responses and unmounts.
 - Decide when `useCallback` is useful inside a custom hook.
 - Test a hook through its observable contract.
 - Recognize when a custom hook is unnecessary abstraction.
@@ -207,6 +211,23 @@ Before creating a hook, ask:
 5. What errors/statuses can occur?
 6. What cleanup does it guarantee?
 7. What does it deliberately **not** control?
+8. What are its environment assumptions?
+
+### Avoid over-configured hooks
+
+Prefer a focused API:
+
+```jsx
+useDebouncedValue(query, 300)
+```
+
+over an abstraction that exposes unrelated policy flags:
+
+```jsx
+useSearch({ query, debounce: true, cache: true, analytics: true, ... })
+```
+
+If the second API represents several independent concerns, compose smaller hooks instead.
 
 ## 6. Parameterized Hooks
 
@@ -253,6 +274,10 @@ function useDocumentTitle(title) {
 ```
 
 If a hook accepts a function, object, or array, its identity may change between renders. Do not suppress dependency warnings blindly. First understand whether the dependency should be stable, derived inside the effect, or represented differently in the hook API.
+
+### Dependency design rule
+
+A custom hook should make its reactive inputs explicit. If an effect depends on `query`, `userId`, and `onSuccess`, the hook should not hide those relationships merely to produce a smaller dependency array.
 
 ## 8. Effects and Cleanup Inside Hooks
 
@@ -430,6 +455,7 @@ For an async hook:
 - error state
 - retry/refetch contract
 - cancellation/unmount behavior
+- stale-response protection
 
 For an effect hook:
 
@@ -451,6 +477,90 @@ For example, `useToggle()` can return `value` and `toggle`; the consuming compon
 - a menu state
 
 The component remains responsible for correct semantics, labels, keyboard behavior, focus management, and ARIA attributes when needed.
+
+## 16. Async Hooks and Cancellation
+
+Async hooks need more than `loading` and `data`. They should define what happens when a request is superseded, cancelled, fails, or finishes after the consumer is no longer interested.
+
+A robust conceptual state model is:
+
+```text
+idle → loading → success
+             ↘ error
+
+loading/success/error → loading (refetch)
+```
+
+Cancellation is not necessarily an application error. Keep cancellation semantics distinct from a real network/server failure when the consumer needs to know the difference.
+
+Example:
+
+```jsx
+function useUser(userId) {
+  const [state, setState] = useState({
+    status: 'idle',
+    data: null,
+    error: null,
+  });
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+
+    async function load() {
+      setState({ status: 'loading', data: null, error: null });
+
+      try {
+        const response = await fetch(`/api/users/${userId}`, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (active) {
+          setState({ status: 'success', data, error: null });
+        }
+      } catch (error) {
+        if (error?.name === 'AbortError') return;
+        if (active) {
+          setState({ status: 'error', data: null, error });
+        }
+      }
+    }
+
+    load();
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [userId]);
+
+  return state;
+}
+```
+
+The `active` guard demonstrates the response-ownership idea; `AbortController` reduces unnecessary work. For more complex data fetching, prefer a dedicated server-state/data-fetching abstraction rather than rebuilding caching, retries, deduplication, and invalidation in every custom hook.
+
+## 17. Hook Contract and State-Machine Design
+
+Before implementing an async or effectful hook, document its observable contract.
+
+| State/Action | Expected behavior |
+|---|---|
+| initial render | deterministic initial state |
+| input changes | old work is cleaned/cancelled where appropriate |
+| loading | consumer can show progress |
+| success | data is available and error is cleared |
+| error | error is exposed without hiding useful previous data unless contract says so |
+| cancellation | no stale update is published |
+| unmount | subscriptions/work are cleaned up |
+| retry | new request has clear ownership |
+
+This prevents a common mistake: implementing internal effects first and only later deciding what the hook's API should mean.
 
 ## Visual Concept Map
 
@@ -563,6 +673,12 @@ Build `useOnlineStatus` using a browser event subscription.
 
 **Acceptance:** subscription is registered once per relevant lifecycle and removed during cleanup.
 
+### Lab 6 — Cancellation
+
+Build a search hook that cancels or supersedes an old request when the query changes rapidly.
+
+**Acceptance:** an older response cannot overwrite a newer result, cancellation is not shown as a generic error, and cleanup occurs on unmount.
+
 ## Debugging Lab
 
 ### Bug 1 — Conditional Hook
@@ -618,6 +734,18 @@ A hook returns a simple action and wraps every function in `useCallback` without
 
 **Fix:** remove unnecessary memoization unless stable identity provides a demonstrated benefit.
 
+### Bug 6 — Stale Async Response
+
+Two requests are started for different inputs. The older request resolves last and overwrites the newer result.
+
+**Fix:** cancel/supersede old work and/or track request ownership so only the current request may publish its result.
+
+### Bug 7 — Hook Used for Shared State
+
+Two components call `useCart()` and expect changes in one instance to appear in the other.
+
+**Fix:** move the source of truth to an appropriate shared-state mechanism. A custom hook alone does not create shared state.
+
 ## Mini Exercise
 
 For each scenario, decide whether a custom hook is appropriate:
@@ -627,8 +755,9 @@ For each scenario, decide whether a custom hook is appropriate:
 3. Sharing one counter between sibling components.
 4. Reusing a toggle behavior in ten components.
 5. Calling a pure sorting function.
+6. Encapsulating an abortable request used by several screens.
 
-**Expected:** 1 no, 2 yes, 3 not by itself (lift/share state), 4 yes, 5 no.
+**Expected:** 1 no, 2 yes, 3 not by itself (lift/share state), 4 yes, 5 no, 6 yes when the request behavior and contract are genuinely reusable.
 
 ## Assessment Quiz
 
@@ -642,6 +771,10 @@ For each scenario, decide whether a custom hook is appropriate:
 8. Why is cleanup part of a reusable effect hook's contract?
 9. What SSR problem can `localStorage` introduce?
 10. When is a normal function better than a custom hook?
+11. How should an async hook handle an obsolete request?
+12. Why should cancellation and application errors be distinguishable?
+13. When should a custom hook use `useCallback`?
+14. Why doesn't a custom hook automatically provide shared state?
 
 ### Answers
 
@@ -655,6 +788,10 @@ For each scenario, decide whether a custom hook is appropriate:
 8. Subscriptions/resources must be released to prevent leaks, duplicate listeners, and stale work.
 9. Browser globals may not exist during server rendering; direct access during render can crash or create hydration problems.
 10. When the logic is pure, local, and does not need React state/effects/refs/context.
+11. Cancel it where possible and prevent its result from publishing if it no longer owns the current request.
+12. A cancelled/superseded request is often expected control flow, while a network/server failure may require user-visible error handling.
+13. Only when stable identity has a meaningful consumer or contract; it is not required for every returned action.
+14. Each invocation has its own hook state; shared state requires a shared owner or state mechanism.
 
 ## Interview Questions and Answers
 
@@ -694,6 +831,9 @@ When multiple consumers need one coordinated source of truth rather than indepen
 **Q: What makes a custom hook production-quality?**  
 A clear contract, correct hook dependencies, cleanup, predictable error/status behavior, appropriate environment boundaries, testable behavior, and no unnecessary abstraction.
 
+**Q: How would you design an async hook used by a search screen?**  
+Define explicit idle/loading/success/error states, cancel or supersede obsolete requests, prevent stale results from publishing, expose retry/refetch behavior, and keep UI presentation outside the hook.
+
 ## Production Checklist
 
 Before shipping a custom hook, verify:
@@ -704,7 +844,8 @@ Before shipping a custom hook, verify:
 - [ ] It does not accidentally share state between consumers.
 - [ ] Effects list correct reactive dependencies.
 - [ ] External subscriptions/resources have cleanup.
-- [ ] Async work cannot update an abandoned consumer incorrectly.
+- [ ] Async work cannot publish an obsolete result incorrectly.
+- [ ] Cancellation is distinguished from genuine application/network errors where needed.
 - [ ] Browser-only APIs are safe for the target rendering environment.
 - [ ] Error and loading states are explicit when applicable.
 - [ ] Accessibility decisions remain with the consuming UI where appropriate.
@@ -735,6 +876,7 @@ Use each where reuse is justified. For every hook document:
 7. error behavior
 8. SSR/browser assumptions
 9. testing strategy
+10. async ownership/cancellation rules where applicable
 
 ### Final Acceptance Criteria
 
@@ -744,6 +886,7 @@ Use each where reuse is justified. For every hook document:
 - [ ] Effects have correct dependencies.
 - [ ] Effects clean up subscriptions/resources.
 - [ ] Browser APIs are handled safely.
+- [ ] Async hooks cannot publish stale results.
 - [ ] At least two consumers demonstrate legitimate reuse.
 - [ ] Tests verify behavior through the public API.
 - [ ] No unnecessary `useCallback`/`useMemo`.
@@ -758,11 +901,13 @@ Use each where reuse is justified. For every hook document:
 - [ ] I understand dependency arrays inside hooks.
 - [ ] I can implement cleanup correctly.
 - [ ] I understand browser/SSR boundaries.
+- [ ] I can design a clear async hook contract.
+- [ ] I know how to protect against stale async responses.
 - [ ] I know when not to abstract.
 - [ ] I can test a hook through its public contract.
 
 ## Day 33 Outcome
 
-You can now design custom hooks as focused, reusable behavior modules rather than as generic wrappers around arbitrary code. You understand state ownership, hook rules, effect dependencies, cleanup, browser boundaries, API design, testing, and appropriate abstraction.
+You can now design custom hooks as focused, reusable behavior modules rather than as generic wrappers around arbitrary code. You understand state ownership, hook rules, effect dependencies, cleanup, browser boundaries, API design, async cancellation, testing, and appropriate abstraction.
 
 **Next:** Day 34 — reusable logic patterns, where these fundamentals are applied to more advanced async, debouncing, pagination, composition, and cancellation patterns.
