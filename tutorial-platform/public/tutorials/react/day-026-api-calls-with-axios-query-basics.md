@@ -1,3 +1,12 @@
+---
+title: API Calls with Axios + Query Basics
+slug: day-026-api-calls-with-axios-query-basics
+dayLabel: Day 26
+level: Intermediate
+estimatedMinutes: 180
+order: 26
+track: react
+---
 # Day 26 [Intermediate]: API Calls with Axios + Query Basics
 
 ## Index
@@ -7,14 +16,16 @@
 - [Learning Outcomes](#learning-outcomes)
 - [Core Mental Model](#core-mental-model)
 - [Axios vs Fetch](#axios-vs-fetch)
+- [Installation](#installation)
 - [Topic by Topic](#topic-by-topic)
-- [Query Parameters](#query-parameters)
 - [Axios Configuration](#axios-configuration)
 - [API Service Layer](#api-service-layer)
 - [Error Handling](#error-handling)
+- [Loading, Success, Empty, Error](#loading-success-empty-error)
 - [Cancellation](#cancellation)
 - [Interceptors](#interceptors)
 - [Axios and Server State](#axios-and-server-state)
+- [Query Keys — Basics](#query-keys--basics)
 - [End-to-End Practical](#end-to-end-practical)
 - [Common Mistakes](#common-mistakes)
 - [Debugging Lab](#debugging-lab)
@@ -53,6 +64,7 @@ By the end you can:
 - cancel requests with `AbortController`
 - use interceptors deliberately
 - separate transport code from UI components
+- validate external data at the application boundary
 - explain why Axios does not provide server-state caching by itself
 - explain where TanStack Query fits
 
@@ -71,6 +83,7 @@ Application service
 Axios instance
       |
       +--> base URL
+      +--> timeout
       +--> headers
       +--> interceptors
       |
@@ -79,6 +92,8 @@ HTTP API
       |
       v
 Response / error
+      |
+      +--> validate / normalize
       |
       v
 React UI state or server-state cache
@@ -91,6 +106,7 @@ Keep these concerns separate:
 | Component | UI + user interaction |
 | Service | API/domain operation |
 | Axios | HTTP transport |
+| Validation | Trust boundary for external data |
 | Query library | Cache, synchronization, invalidation |
 | Backend | Authentication/authorization and business rules |
 
@@ -100,7 +116,7 @@ Axios is a promise-based HTTP client. It adds conveniences such as configurable 
 
 `fetch()` is built into modern browsers and is often sufficient. Axios is useful when an application benefits from centralized HTTP configuration and cross-cutting request behavior.
 
-Neither is automatically “better.” Choose based on project requirements.
+Neither is automatically “better.” Choose based on project requirements. A query library can also use `fetch`; it does not require Axios.
 
 ## Installation
 
@@ -123,7 +139,7 @@ const response = await axios.get("https://api.example.com/users");
 console.log(response.data);
 ```
 
-Axios resolves the parsed response data through `response.data` for normal JSON responses.
+Axios exposes parsed response data through `response.data` for normal JSON responses.
 
 ### 2. Query Parameters
 
@@ -139,7 +155,7 @@ const response = await axios.get("/users", {
 });
 ```
 
-Conceptually this becomes a URL such as:
+Conceptually this becomes:
 
 ```text
 /users?page=2&limit=20&search=react
@@ -174,7 +190,7 @@ axios.get("/users", {
 Rule of thumb:
 
 - **Path** identifies a specific resource.
-- **Query** modifies/searches/filters a collection or request.
+- **Query** modifies, searches, sorts, or filters a request.
 
 The backend API contract is the final authority.
 
@@ -187,7 +203,7 @@ await axios.post("/users", {
 });
 ```
 
-Axios serializes a normal JavaScript object to JSON for typical JSON APIs.
+Axios sends a normal JavaScript object as JSON for typical JSON APIs.
 
 ### 5. PUT vs PATCH
 
@@ -196,7 +212,7 @@ await axios.put(`/users/${id}`, completeUser);
 await axios.patch(`/users/${id}`, { name: "Asha" });
 ```
 
-Semantics are defined by the API. Commonly, PUT represents replacement while PATCH represents partial modification, but always follow the server contract.
+Commonly, PUT represents replacement and PATCH represents partial modification, but always follow the server contract.
 
 ### 6. DELETE
 
@@ -230,13 +246,28 @@ Benefits:
 - centralized cross-cutting behavior
 - less repeated configuration
 
-### Environment variables
+### Environment variables are not secrets
 
 ```text
 VITE_API_URL=https://api.example.com
 ```
 
-Frontend environment variables are **not secrets**. Never place private API keys, database passwords, or service credentials in client-side environment variables.
+Anything shipped to a browser can be inspected. Never place private API keys, database passwords, signing secrets, or service credentials in client-side environment variables.
+
+Authentication should follow the application's security architecture. Do not assume an Axios interceptor alone makes token storage secure.
+
+### `withCredentials`
+
+For cookie-based cross-origin authentication, the client and server must be configured together:
+
+```jsx
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
+```
+
+`withCredentials` does not bypass browser security or CORS rules. The server must explicitly allow the expected origin/credentials configuration.
 
 ## API Service Layer
 
@@ -246,8 +277,11 @@ Avoid putting every HTTP detail directly inside components.
 // userService.js
 import { apiClient } from "./apiClient";
 
-export async function getUsers(params) {
-  const response = await apiClient.get("/users", { params });
+export async function getUsers(params, signal) {
+  const response = await apiClient.get("/users", {
+    params,
+    signal,
+  });
   return response.data;
 }
 
@@ -291,6 +325,8 @@ try {
     } else {
       // request configuration/setup error
     }
+  } else {
+    // non-Axios error, such as response validation failure
   }
 }
 ```
@@ -299,19 +335,37 @@ Important categories:
 
 ```text
 HTTP error
-  server responded
+  server responded with an unsuccessful status
 
 Network/transport error
-  no usable response
+  request failed without a usable response
 
 Cancellation
   request intentionally stopped
 
 Application/data error
-  response arrived but data is invalid/unexpected
+  response arrived but data is invalid or unexpected
 ```
 
+Axios rejects non-2xx responses by default. This behavior can be changed with `validateStatus`, so document such custom behavior if you use it.
+
 Don't display raw server error objects to users. Map failures to safe, meaningful UI messages.
+
+### Validate external data
+
+TypeScript types do not validate runtime JSON. For critical boundaries, validate or normalize the response:
+
+```jsx
+function normalizeUsers(payload) {
+  if (!payload || !Array.isArray(payload.items)) {
+    throw new Error("Invalid users response");
+  }
+
+  return payload.items;
+}
+```
+
+Libraries such as Zod can provide stronger runtime schemas, but the important principle is that API data is untrusted external input.
 
 ## Loading, Success, Empty, Error
 
@@ -352,6 +406,8 @@ async function loadUsers() {
 
 `users.length === 0` is a **derived empty state**, not necessarily a separate stored state.
 
+For production UIs, distinguish **initial loading** from **background refresh** when existing data should remain visible while a newer request is in progress.
+
 ## Cancellation
 
 Axios supports the standard `AbortController` signal:
@@ -379,7 +435,9 @@ useEffect(() => {
       });
       setUsers(response.data);
     } catch (error) {
-      if (axios.isCancel(error)) return;
+      if (axios.isAxiosError(error) && error.code === "ERR_CANCELED") {
+        return;
+      }
       // handle real errors
     }
   }
@@ -405,7 +463,7 @@ A completes later
 
 If both requests can remain active, an older response can overwrite newer UI state. Cancellation reduces unnecessary work, but application design should also ensure stale responses cannot incorrectly win when concurrent requests are possible.
 
-For example, use a request identity/version guard when your UI can intentionally have overlapping requests.
+For example, use request identity/version protection when your UI can intentionally have overlapping requests.
 
 ## Interceptors
 
@@ -439,6 +497,14 @@ Be careful with:
 - registering the same interceptor repeatedly during render or component lifecycle
 
 Interceptors should be registered in a stable application-level location, not repeatedly for every render.
+
+If an interceptor must be temporary, retain its ID and eject it during cleanup:
+
+```jsx
+const id = apiClient.interceptors.request.use((config) => config);
+
+apiClient.interceptors.request.eject(id);
+```
 
 ## Axios and Server State
 
@@ -492,7 +558,7 @@ Good concept:
 ["users", page, search]
 ```
 
-Stable, deterministic query keys prevent unrelated requests from sharing the same cache identity.
+Stable, deterministic query keys prevent unrelated requests from sharing the same cache identity. Follow the query library's documented key hashing/serialization rules rather than relying on object reference identity.
 
 ## End-to-End Practical
 
@@ -507,6 +573,7 @@ Build a **User Directory** with:
 - Axios service layer
 - query parameters
 - request cancellation
+- stale-response protection
 
 ### Service
 
@@ -548,7 +615,9 @@ function UserDirectory() {
         setUsers(data.items ?? []);
         setStatus("success");
       } catch (error) {
-        if (axios.isCancel(error)) return;
+        if (axios.isAxiosError(error) && error.code === "ERR_CANCELED") {
+          return;
+        }
         setError("Unable to load users.");
         setStatus("error");
       }
@@ -571,6 +640,8 @@ function UserDirectory() {
 - [ ] Cancellation is not shown as a user-facing error.
 - [ ] Retry can re-run the request.
 - [ ] No secret is stored in frontend environment variables.
+- [ ] API response shape is validated or normalized at the boundary.
+- [ ] Stale responses cannot incorrectly overwrite newer results.
 - [ ] Query-key design is documented if a query library is introduced.
 
 ## Common Mistakes
@@ -611,9 +682,17 @@ For example, `users.length === 0` can usually be calculated rather than synchron
 
 Cancellation helps, but overlapping requests may require request identity/version protection.
 
+### 10. Assuming TypeScript types validate API JSON
+
+Compile-time types do not protect against malformed runtime responses. Validate critical external data.
+
+### 11. Treating all 401 responses as “log out now”
+
+Authentication flows vary. Automatic refresh/logout logic should be designed centrally and must avoid refresh loops.
+
 ## Debugging Lab
 
-### Scenario A
+### Scenario A — Query Serialization
 
 ```jsx
 axios.get(`/users?page=${page}&search=${search}`);
@@ -621,15 +700,13 @@ axios.get(`/users?page=${page}&search=${search}`);
 
 **Question:** What is the safer Axios API?
 
-**Answer:**
-
 ```jsx
 axios.get("/users", {
   params: { page, search }
 });
 ```
 
-### Scenario B
+### Scenario B — Error Classification
 
 ```jsx
 try {
@@ -641,11 +718,9 @@ try {
 
 **Question:** Is every rejection a network error?
 
-**Answer:** No. Inspect cancellation, `error.response`, `error.request`, and configuration errors.
+**Answer:** No. Inspect cancellation, `error.response`, `error.request`, configuration errors, and non-Axios application errors.
 
-### Scenario C
-
-Two searches run:
+### Scenario C — Stale Search Results
 
 ```text
 react → request A
@@ -656,15 +731,29 @@ A finishes later
 
 **Question:** What can go wrong?
 
-**Answer:** A stale response can overwrite the current Angular result. Cancellation/request ownership should be considered.
+**Answer:** A stale response can overwrite the current Angular result. Cancellation and request identity/ownership should be considered.
 
-### Scenario D
+### Scenario D — Interceptor Registration
 
 An interceptor is added inside a component body.
 
 **Question:** Why is this dangerous?
 
-**Answer:** Each render can register another interceptor, causing duplicated behavior and memory leaks.
+**Answer:** Each render can register another interceptor, causing duplicated behavior and difficult-to-debug global side effects.
+
+### Scenario E — Runtime Data
+
+The service assumes:
+
+```jsx
+return response.data.items.map(normalizeUser);
+```
+
+but the server sometimes returns `{ data: [] }`.
+
+**Question:** What layer should detect the mismatch?
+
+**Answer:** Prefer the API boundary/service or validation layer. Components should receive a predictable domain shape.
 
 ## Hands-on Exercises
 
@@ -684,16 +773,21 @@ Create an Axios instance with a configurable base URL and timeout.
 
 Cancel a request when a search effect is replaced or unmounted.
 
-### Level 5 — Production Error Boundary
+### Level 5 — Production Error Mapping
 
-Map HTTP 401, 403, 404, 409, 422, 429, 500, network, and cancellation failures to appropriate UI messages.
+Map HTTP 401, 403, 404, 409, 422, 429, 500, network, and cancellation failures to appropriate UI messages. Do not expose raw server messages without reviewing whether they are safe for end users.
 
-For every exercise, students should document:
+### Level 6 — Server-State Boundary
+
+Implement the same User Directory first with local React state + Axios, then identify which responsibilities would move to TanStack Query and which remain UI state.
+
+For every exercise, document:
 
 - request trigger
 - request state
 - cancellation behavior
 - error behavior
+- data validation behavior
 - ownership of state
 
 ## Assessment
@@ -713,12 +807,15 @@ For every exercise, students should document:
 13. What does a query key represent?
 14. Why should query keys contain variables used by the query?
 15. Why is cancellation not always sufficient for race-condition correctness?
+16. Why can TypeScript types alone be insufficient for API responses?
+17. What is the difference between initial loading and background refresh?
+18. Why should authentication refresh logic be centralized and guarded against loops?
 
 ### Answers
 
 1. It provides a convenient configurable HTTP client.
 2. When the native browser API is sufficient and another dependency is unnecessary.
-3. A path parameter usually identifies a resource; a query parameter modifies/filter/searches a request.
+3. A path parameter usually identifies a resource; a query parameter modifies, filters, searches, or sorts a request.
 4. It handles parameter serialization/encoding more safely and cleanly.
 5. A reusable configured Axios client with defaults and interceptors.
 6. Browser-delivered values can be inspected; they are not secret storage.
@@ -729,8 +826,11 @@ For every exercise, students should document:
 11. It can register duplicate handlers on every render.
 12. No. Axios is a transport client, not a complete server-state cache.
 13. It identifies a query's cached server-data identity.
-14. Otherwise different requests can incorrectly share cache identity.
+14. Otherwise different requests can incorrectly share the same cache identity.
 15. Requests can overlap, and an older response may still resolve; UI ownership must be protected.
+16. TypeScript checks the code you compile, not whether runtime JSON from a server actually matches the expected shape.
+17. Initial loading has no usable previous data; background refresh can keep existing data visible while a newer request is in progress.
+18. Refresh flows can recurse or race if every 401 blindly triggers another refresh. Centralized ownership makes the flow predictable and testable.
 
 ## Interview Questions
 
@@ -782,6 +882,10 @@ When project constraints favor Fetch or another client; Axios is a tool, not an 
 
 Because the cache must distinguish requests that produce different server data.
 
+**How do you handle runtime API-shape changes?**
+
+Validate or normalize external data at the service/application boundary so UI components receive a predictable domain model.
+
 ## Verification Checklist
 
 - [ ] Can install and import Axios.
@@ -790,19 +894,22 @@ Because the cache must distinguish requests that produce different server data.
 - [ ] Can use `params` correctly.
 - [ ] Can create a reusable Axios instance.
 - [ ] Understand frontend environment-variable security.
+- [ ] Understand `withCredentials` and CORS boundaries.
 - [ ] Can build a service layer.
 - [ ] Can model loading/success/empty/error/cancelled states.
 - [ ] Can distinguish HTTP, network, configuration, and cancellation failures.
 - [ ] Can cancel requests with `AbortController`.
 - [ ] Understand stale-response/race-condition risks.
-- [ ] Understand interceptor lifecycle.
+- [ ] Understand interceptor lifecycle and ejection.
 - [ ] Understand Axios vs server-state libraries.
 - [ ] Can design stable query keys.
+- [ ] Understand runtime API response validation.
+- [ ] Can distinguish initial loading from background refresh.
 - [ ] Can build a complete search/pagination example.
 - [ ] Can explain the Axios architecture in an interview.
 
 ## Day 26 Outcome
 
-You can now use Axios as a **clean HTTP transport layer** instead of scattering request details through React components. You understand query parameters, configuration, services, cancellation, errors, interceptors, and the boundary between HTTP transport and server-state management.
+You can now use Axios as a **clean HTTP transport layer** instead of scattering request details through React components. You understand query parameters, configuration, services, cancellation, errors, interceptors, runtime data boundaries, query keys, and the boundary between HTTP transport and server-state management.
 
-**Next:** Day 27 — loading, error, and empty-state UX patterns.
+**Next:** Day 27 — Loading, Error, and Empty-State UX Patterns.

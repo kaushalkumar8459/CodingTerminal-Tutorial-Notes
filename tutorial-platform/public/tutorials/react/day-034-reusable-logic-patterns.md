@@ -3,87 +3,60 @@ title: Reusable Logic Patterns
 slug: day-034-reusable-logic-patterns
 dayLabel: Day 34
 level: Intermediate
-estimatedMinutes: 120
+estimatedMinutes: 150
 order: 34
 track: react
 ---
 # Day 34 [Intermediate]: Reusable Logic Patterns
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [1. What Makes Logic Reusable?](#1-what-makes-logic-reusable)
-- [2. Hook Contracts](#2-hook-contracts)
-- [3. `useFetch` and Async Lifecycle](#3-usefetch-and-async-lifecycle)
-- [4. Refetch and Request Identity](#4-refetch-and-request-identity)
-- [5. Debouncing](#5-debouncing)
-- [6. Pagination](#6-pagination)
-- [7. Cancellation and Race Conditions](#7-cancellation-and-race-conditions)
-- [8. Hook Composition](#8-hook-composition)
-- [9. UI vs Logic Responsibility](#9-ui-vs-logic-responsibility)
-- [10. Avoiding Over-Abstraction](#10-avoiding-over-abstraction)
-- [11. Complete Jobs Explorer](#11-complete-jobs-explorer)
-- [12. Accessibility and UX](#12-accessibility-and-ux)
-- [13. Testing Strategy](#13-testing-strategy)
-- [14. Common Mistakes](#14-common-mistakes)
-- [15. Debugging Lab](#15-debugging-lab)
-- [16. Hands-on Labs](#16-hands-on-labs)
-- [Assessment Quiz](#assessment-quiz)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Production Checklist](#production-checklist)
-- [Final Project](#final-project)
-- [Self Check](#self-check)
-- [Day 34 Outcome](#day-34-outcome)
-
 ## Goal
 
-Build reusable hooks for **async data, debouncing, pagination, cancellation, and interaction state**, while learning how to design small contracts instead of one giant generic hook.
+Build reusable hooks for async data, debouncing, pagination, cancellation, race protection, and interaction state. The focus is not creating a giant generic hook; it is designing small contracts that remain understandable, testable, and composable.
 
 ## Prerequisites
 
 - Day 33 custom hooks
-- `useState`, `useEffect`, `useCallback`
-- `useRef`
+- `useState`, `useEffect`, `useCallback`, `useRef`, `useMemo`
 - Fetch/HTTP basics
 - cleanup and `AbortController`
-- basic accessibility
+- accessibility basics
 
 ## Learning Outcomes
 
 By the end of this lesson you can:
 
-- identify logic that is genuinely reusable
-- design a small custom-hook contract
-- build a cancellation-aware async hook
+- identify genuinely reusable behavior
+- design a small hook contract
+- model async lifecycle states explicitly
 - distinguish HTTP failures, network failures, and cancellation
-- implement debounce correctly with cleanup
+- implement debounce with cleanup
 - build bounded pagination
-- reason about stale responses and request identity
-- compose hooks without coupling unrelated concerns
-- test hook behavior independently
-- recognize when a server-state library is a better choice
+- prevent stale responses with cancellation and request identity
+- compose focused hooks
+- preserve useful existing data during refreshes
+- test async behavior and race conditions
+- recognize when server-state libraries are more appropriate
+- avoid over-abstraction
 
 ## 1. What Makes Logic Reusable?
 
-Reusable logic is behavior that can be expressed without owning a specific screen's markup.
+Reusable logic is behavior that can be expressed without owning a particular screen's markup.
 
 Good candidates:
 
 - debounce timing
 - pagination state
 - keyboard shortcuts
-- online/offline state
+- online/offline subscriptions
 - async request lifecycle
-- subscriptions
 - local-storage synchronization
+- reusable validation or interaction state
 
 Poor candidates:
 
-- a hook that returns a particular page's JSX
+- a hook that returns page-specific JSX
 - a hook with dozens of unrelated flags
-- an abstraction created after seeing only one use case
+- an abstraction created after only one use case
 
 A useful rule:
 
@@ -97,50 +70,50 @@ Repeated behavior + stable responsibility + clear API
 
 A hook should expose a small, predictable API.
 
-For async data, a useful contract is:
-
 ```jsx
 const {
   data,
-  loading,
+  status,
   error,
+  isRefreshing,
   refetch,
 } = useFetch(url);
 ```
 
-The component owns presentation. The hook owns behavior.
-
-For a reusable hook, document:
+Document:
 
 - inputs
 - outputs
 - initial state
+- status semantics
 - error semantics
 - cleanup behavior
 - cancellation behavior
 - dependency expectations
+- whether existing data is retained during refresh
+
+### Prefer explicit status semantics
+
+A boolean-only API can become ambiguous. A useful model is:
+
+```text
+idle → loading → success
+             ↘ error
+success → refreshing → success
+                   ↘ error-with-data
+```
+
+`loading` and `refreshing` should not necessarily mean the same UX state.
 
 ## 3. `useFetch` and Async Lifecycle
 
-A robust fetch hook should consider:
-
-- initial loading
-- success
-- HTTP errors
-- network errors
-- cancellation
-- dependency changes
-- retry/refetch
-- stale responses
-- unmount cleanup
-
-Example teaching implementation:
+A robust fetch hook should consider initial loading, success, HTTP errors, network errors, cancellation, dependency changes, retry/refetch, stale responses, and unmount cleanup.
 
 ```jsx
 function useFetch(url) {
   const [state, setState] = useState({
     data: null,
-    loading: true,
+    status: "loading",
     error: null,
   });
 
@@ -151,7 +124,7 @@ function useFetch(url) {
     async function run() {
       setState((current) => ({
         data: current.data,
-        loading: true,
+        status: current.data == null ? "loading" : "refreshing",
         error: null,
       }));
 
@@ -165,13 +138,18 @@ function useFetch(url) {
         }
 
         const data = await response.json();
+        if (!active) return;
 
-        if (!active) return;
-        setState({ data, loading: false, error: null });
+        setState({ data, status: "success", error: null });
       } catch (error) {
-        if (error.name === "AbortError") return;
+        if (error?.name === "AbortError") return;
         if (!active) return;
-        setState({ data: null, loading: false, error });
+
+        setState((current) => ({
+          data: current.data,
+          status: "error",
+          error,
+        }));
       }
     }
 
@@ -187,24 +165,22 @@ function useFetch(url) {
 }
 ```
 
-### Important distinction
+`fetch()` does not reject merely because the server returns `404` or `500`; check `response.ok`.
 
-`fetch()` does not reject merely because the server returns `404` or `500`. Check `response.ok` yourself.
-
-Cancellation is also not the same as failure:
+Cancellation is normally a lifecycle event, not a user-visible failure:
 
 ```text
 success       → show data
 HTTP failure  → show error
 network error → show error
-abort         → normally show nothing
+abort         → normally ignore
 ```
 
-For production applications, consider a server-state library once caching, deduplication, invalidation, retries, background refetching, and synchronization become substantial requirements.
+For production applications, consider a server-state library when caching, deduplication, invalidation, retries, background refetching, and synchronization become substantial requirements.
 
 ## 4. Refetch and Request Identity
 
-A refetch should create a new request without causing an accidental effect loop.
+A refetch should create a new request without causing an effect loop.
 
 ```jsx
 const [requestVersion, setRequestVersion] = useState(0);
@@ -218,13 +194,7 @@ useEffect(() => {
 }, [url, requestVersion]);
 ```
 
-The returned API should include `refetch`:
-
-```jsx
-return { data, loading, error, refetch };
-```
-
-When several requests can overlap, cancellation is useful, but a **request identity/version guard** can provide an additional correctness boundary:
+When several requests can overlap, cancellation is useful, but request identity is an additional correctness boundary:
 
 ```jsx
 const requestIdRef = useRef(0);
@@ -234,15 +204,20 @@ async function run() {
   const result = await load();
 
   if (requestId !== requestIdRef.current) return;
-  // safe to publish result
+  publish(result);
 }
 ```
 
-Do not assume cancellation is the only possible solution to stale-result problems.
+The important distinction is:
+
+```text
+AbortController → asks old work to stop
+Request identity → refuses stale work if it still completes
+```
+
+Using both can make async behavior more robust.
 
 ## 5. Debouncing
-
-Debouncing waits until input has remained unchanged for a specified period before publishing the new value.
 
 ```jsx
 function useDebounce(value, delay = 400) {
@@ -260,7 +235,7 @@ function useDebounce(value, delay = 400) {
 }
 ```
 
-Timeline:
+Debouncing reduces request frequency; it does not solve stale responses.
 
 ```text
 R → Re → Rea → Reac → React
@@ -271,16 +246,12 @@ R → Re → Rea → Reac → React
 publish "React"
 ```
 
-Debouncing reduces request frequency. It does **not** by itself solve stale responses.
-
-### Debounce vs throttle
-
-- **Debounce:** run after activity pauses.
-- **Throttle:** allow execution at most once per interval.
+**Debounce:** wait for inactivity.  
+**Throttle:** limit execution frequency over time.
 
 ## 6. Pagination
 
-Pagination should own page state, not a specific API endpoint.
+Pagination should own page state, not a particular API endpoint.
 
 ```jsx
 function usePagination({ initialPage = 1, totalPages = Infinity } = {}) {
@@ -299,30 +270,26 @@ function usePagination({ initialPage = 1, totalPages = Infinity } = {}) {
     setPage(Math.min(Math.max(1, nextPage), totalPages));
   };
 
+  useEffect(() => {
+    setPage((current) => Math.min(current, Math.max(1, totalPages)));
+  }, [totalPages]);
+
   return { page, next, prev, goToPage };
 }
 ```
 
-A production implementation should also define what happens when `totalPages` changes and the current page becomes invalid.
-
-```jsx
-useEffect(() => {
-  setPage((current) => Math.min(current, Math.max(1, totalPages)));
-}, [totalPages]);
-```
+For API-driven pagination, a server-provided `hasNextPage` can be more reliable than guessing from a local `totalPages` value.
 
 ## 7. Cancellation and Race Conditions
 
-Consider a search:
+Consider:
 
 ```text
 Request A: "rea"
 Request B: "react"
 ```
 
-If B finishes first and A finishes later, A can overwrite the newer result unless the implementation prevents it.
-
-Cancellation:
+If B finishes first and A finishes later, A must not overwrite B.
 
 ```jsx
 useEffect(() => {
@@ -334,7 +301,7 @@ useEffect(() => {
 }, [url]);
 ```
 
-For stronger correctness, combine cancellation with request identity when the architecture allows overlapping work.
+For stronger protection, combine cancellation with a request/version guard when overlapping work is possible.
 
 ```text
 new input
@@ -346,9 +313,13 @@ cancel old request when possible
 ignore stale result if it still arrives
 ```
 
+### Cancellation is not the same as error handling
+
+Never show a generic "Network error" merely because a request was intentionally aborted.
+
 ## 8. Hook Composition
 
-Prefer small hooks with clear responsibilities:
+Prefer focused hooks:
 
 ```text
 useSearch
@@ -364,13 +335,13 @@ useFetch
 UI
 ```
 
-Composition is often better than:
+This is usually easier to reason about than:
 
 ```text
 useEverythingForJobsPage()
 ```
 
-Each hook should have one primary reason to change.
+Each hook should have one primary responsibility.
 
 ## 9. UI vs Logic Responsibility
 
@@ -385,16 +356,14 @@ function useFetch() {
 Prefer:
 
 ```jsx
-return { data, loading, error, refetch };
+return { data, status, error, refetch };
 ```
 
 The component decides whether to render a spinner, skeleton, retry button, empty state, or inline error.
 
-Reusable logic can still expose accessibility-relevant state, but it should not own page-specific presentation.
-
 ## 10. Avoiding Over-Abstraction
 
-Avoid an abstraction like:
+Avoid a hook like:
 
 ```jsx
 useApi({
@@ -409,7 +378,7 @@ useApi({
 });
 ```
 
-Prefer:
+Prefer focused primitives such as:
 
 ```text
 useDebounce + usePagination + useFetch
@@ -432,7 +401,8 @@ function JobsExplorer() {
     return `/api/jobs?${params.toString()}`;
   }, [debouncedQuery, page]);
 
-  const { data, loading, error, refetch } = useFetch(url);
+  const { data, status, error, refetch } = useFetch(url);
+  const isBusy = status === "loading" || status === "refreshing";
 
   return (
     <main>
@@ -446,19 +416,21 @@ function JobsExplorer() {
       />
       <button type="button" onClick={clear}>Clear</button>
 
-      {loading && <p role="status">Loading jobs…</p>}
-      {error && (
+      {status === "loading" && <p role="status">Loading jobs…</p>}
+      {status === "refreshing" && <p role="status">Updating results…</p>}
+
+      {status === "error" && (
         <div role="alert">
           <p>Unable to load jobs.</p>
           <button type="button" onClick={refetch}>Retry</button>
         </div>
       )}
 
-      {!loading && !error && data?.items?.length === 0 && (
+      {status === "success" && data?.items?.length === 0 && (
         <p>No jobs found.</p>
       )}
 
-      <ul>
+      <ul aria-busy={isBusy}>
         {data?.items?.map((job) => (
           <li key={job.id}>{job.title}</li>
         ))}
@@ -471,7 +443,7 @@ function JobsExplorer() {
       <button
         type="button"
         onClick={next}
-        disabled={!data?.hasNextPage}
+        disabled={!data?.hasNextPage || isBusy}
       >
         Next
       </button>
@@ -480,27 +452,28 @@ function JobsExplorer() {
 }
 ```
 
-The important lesson is not the screen itself. It is the separation of responsibilities.
+The important lesson is the separation of responsibilities, not the page markup.
 
 ## 12. Accessibility and UX
 
-Reusable hooks should enable good UI states rather than hide them.
+Reusable hooks should enable good UI states rather than hide presentation.
 
 The Jobs Explorer should support:
 
-- an associated `<label>`
+- associated labels
 - keyboard interaction
-- a programmatically identifiable loading state
-- an accessible error state
-- disabled pagination controls when appropriate
-- a meaningful empty state
-- retry without losing the user's search
+- identifiable loading status
+- accessible error state
+- disabled pagination at boundaries
+- meaningful empty state
+- retry without losing search input
+- preserving useful existing data during refresh where appropriate
 
-Avoid announcing every intermediate debounce value as if it were a result.
+Avoid announcing every intermediate debounce value as if it were a completed result.
 
 ## 13. Testing Strategy
 
-Test each hook's public behavior independently.
+Test each hook's observable contract.
 
 ### `useDebounce`
 
@@ -529,10 +502,11 @@ Test each hook's public behavior independently.
 - dependency change
 - refetch
 - stale-result protection
+- existing-data behavior during refresh
 
 Use fake timers for debounce tests and controlled promises/mocks for race-condition tests.
 
-Then test the composed Jobs Explorer as a user-facing feature.
+Then test the composed feature as a user-facing flow.
 
 ## 14. Common Mistakes
 
@@ -540,14 +514,15 @@ Then test the composed Jobs Explorer as a user-facing feature.
 2. Treating cancellation as a visible error.
 3. Debouncing without clearing the previous timer.
 4. Assuming debounce solves request races.
-5. Allowing page 0 or an invalid page.
+5. Allowing invalid pagination.
 6. Returning JSX from a reusable data hook.
-7. Creating a hook with too many unrelated responsibilities.
-8. Refetching by changing dependencies in an unintended loop.
-9. Clearing useful existing data every time a request starts without considering UX.
-10. Trusting a stale response merely because the request completed successfully.
-11. Recreating an abstraction before there are multiple real consumers.
-12. Rebuilding mature server-state behavior when a dedicated library is more appropriate.
+7. Creating a hook with unrelated responsibilities.
+8. Refetching through an unintended dependency loop.
+9. Clearing useful existing data on every request without considering UX.
+10. Trusting a stale response because it completed successfully.
+11. Recreating an abstraction before there are multiple consumers.
+12. Rebuilding mature server-state behavior unnecessarily.
+13. Using memoization to compensate for an unclear API contract.
 
 ## 15. Debugging Lab
 
@@ -567,7 +542,7 @@ A timer is recreated but the previous timer is not cleaned up.
 
 `next()` continues after the final page.
 
-**Task:** clamp against `totalPages` or server-provided `hasNextPage`.
+**Task:** clamp against `totalPages` or use server-provided `hasNextPage`.
 
 ### Bug 4 — retry loop
 
@@ -581,11 +556,17 @@ An `AbortError` reaches the UI.
 
 **Task:** treat intentional cancellation separately.
 
+### Bug 6 — refresh destroys useful data
+
+The UI replaces existing results with a blank loading screen on every refresh.
+
+**Task:** model `refreshing` separately and decide whether old data should remain visible.
+
 ## 16. Hands-on Labs
 
 ### Lab 1 — Build `useDebounce`
 
-Implement the hook with timer cleanup and tests.
+Implement timer cleanup and tests.
 
 ### Lab 2 — Build `usePagination`
 
@@ -605,7 +586,7 @@ Build a debounced, paginated search screen using independent hooks.
 
 ### Lab 6 — Production hardening
 
-Add accessibility, tests, retry behavior, empty states, and a server-state-library decision note.
+Add accessibility, tests, retry behavior, empty states, refresh-with-data behavior, and a server-state-library decision note.
 
 ## Assessment Quiz
 
@@ -619,12 +600,14 @@ Add accessibility, tests, retry behavior, empty states, and a server-state-libra
 8. When is a hook too generic?
 9. Why should reusable hooks avoid page-specific JSX?
 10. When should server-state management move to a dedicated library?
+11. Why distinguish initial loading from refreshing?
+12. What does preserving old data during refresh improve?
 
 ### Answers
 
 1. It delays publication until input stops changing for the configured interval.
 2. Requests already started can still finish out of order.
-3. Fetch resolves normally for many HTTP error statuses.
+3. `fetch` resolves normally for many HTTP error statuses.
 4. Usually ignore it as an intentional lifecycle event.
 5. It keeps pagination reusable and independent of an API contract.
 6. It means combining focused hooks to build higher-level behavior.
@@ -632,8 +615,12 @@ Add accessibility, tests, retry behavior, empty states, and a server-state-libra
 8. When it accumulates unrelated options and responsibilities.
 9. Presentation belongs to the consuming component.
 10. When caching, invalidation, deduplication, retries, background synchronization, or query lifecycle become substantial.
+11. They represent different UX states: first load may have no data, while refresh can keep existing data visible.
+12. It avoids unnecessary UI flicker and preserves useful context while newer data is loading.
 
 ## Interview Questions and Answers
+
+### Beginner
 
 **Q: Why use `AbortController` in a fetch hook?**  
 To cancel obsolete work and clean up requests when dependencies change or a component unmounts.
@@ -641,14 +628,21 @@ To cancel obsolete work and clean up requests when dependencies change or a comp
 **Q: Is debounce the same as throttle?**  
 No. Debounce waits for a pause; throttle limits how frequently work can execute.
 
+### Intermediate
+
 **Q: Why shouldn't `useFetch` render a spinner?**  
-Because reusable logic should expose behavior/state while the consumer owns presentation.
+Reusable logic should expose behavior/state while the consumer owns presentation.
 
 **Q: What happens if two requests race?**  
-An older response can overwrite newer state unless requests are cancelled or responses are coordinated.
+An older response can overwrite newer state unless requests are cancelled or responses are coordinated by request identity.
 
 **Q: Why check `response.ok`?**  
 Because `fetch` does not reject simply because the server returned a `4xx` or `5xx` response.
+
+### Advanced
+
+**Q: Why use both cancellation and request identity?**  
+Cancellation reduces wasted work, while request identity protects correctness if cancellation is late, unsupported, or a result has already escaped the transport boundary.
 
 **Q: When would you use TanStack Query instead of building `useFetch`?**  
 When the application needs mature server-state capabilities such as caching, invalidation, deduplication, retries, background refetching, and query lifecycle management.
@@ -656,20 +650,24 @@ When the application needs mature server-state capabilities such as caching, inv
 **Q: What is the biggest custom-hook design mistake?**  
 Hiding too many unrelated concerns behind a single API that becomes difficult to understand and test.
 
+**Q: Why distinguish `loading` and `refreshing`?**  
+Because the UI often needs different behavior when there is no data versus when useful existing data can remain visible during a refresh.
+
 ## Production Checklist
 
 - [ ] Hook API is small and documented.
 - [ ] Inputs and outputs are explicit.
+- [ ] Status semantics are unambiguous.
 - [ ] Effect dependencies are correct.
 - [ ] Timers/listeners/requests are cleaned up.
 - [ ] Cancellation is distinguished from failure.
 - [ ] Stale responses cannot corrupt current state.
 - [ ] HTTP status handling is explicit.
-- [ ] Existing data retention/loading UX is intentional.
+- [ ] Existing-data retention during refresh is intentional.
 - [ ] Pagination boundaries are safe.
 - [ ] Accessibility is owned by the UI layer.
 - [ ] Hooks are independently testable.
-- [ ] No unnecessary `useCallback`/`useMemo` was added merely for appearance.
+- [ ] No unnecessary `useCallback`/`useMemo` was added.
 - [ ] Abstraction is justified by real reuse.
 - [ ] A dedicated server-state library has been considered for complex requirements.
 
@@ -680,13 +678,14 @@ Build a **Jobs Explorer** with:
 - debounced search
 - pagination
 - loading/error/empty states
+- refresh-with-data behavior
 - cancellation
 - stale-result protection
 - retry
 - reusable `useSearch`, `useDebounce`, `usePagination`, and `useFetch`
 - accessible controls
 - hook-level tests
-- a short architecture note explaining why the hooks remain separate
+- an architecture note explaining why the hooks remain separate
 
 ### Acceptance Criteria
 
@@ -695,10 +694,11 @@ Build a **Jobs Explorer** with:
 - Older results cannot overwrite newer results.
 - Pagination never produces an invalid page.
 - Retry does not create an effect loop.
-- Loading, error, empty, and success states are distinguishable.
+- Loading, refreshing, error, empty, and success states are distinguishable.
+- Existing useful data is preserved during refresh when appropriate.
 - Keyboard and screen-reader basics are supported.
 - Each hook has one clear responsibility.
-- Tests cover both normal and failure paths.
+- Tests cover normal, failure, cancellation, and race paths.
 
 ## Self Check
 
@@ -708,12 +708,13 @@ Build a **Jobs Explorer** with:
 - [ ] I understand debounce vs cancellation vs race protection.
 - [ ] I can build bounded pagination.
 - [ ] I can compose small hooks.
+- [ ] I can distinguish initial loading from refreshing.
 - [ ] I can test asynchronous hook behavior.
 - [ ] I know when not to create a generic hook.
 - [ ] I can explain when a server-state library becomes appropriate.
 
 ## Day 34 Outcome
 
-You can now build reusable async and interaction primitives with clear contracts, cleanup, cancellation, race protection, testing, and accessibility-aware composition.
+You can now build reusable async and interaction primitives with clear contracts, cleanup, cancellation, race protection, refresh-aware UX, testing, accessibility-aware composition, and a practical understanding of when not to abstract.
 
-Day 35 applies these patterns in a complete **Search and Filter application**.
+**Next:** Day 35 — Search and Filter application, applying these reusable patterns in a complete feature.

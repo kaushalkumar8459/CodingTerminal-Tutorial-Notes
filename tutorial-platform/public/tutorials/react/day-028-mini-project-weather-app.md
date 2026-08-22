@@ -42,7 +42,7 @@ track: react
 
 Build a realistic weather-search application that combines controlled forms, API requests, request-state modeling, cancellation, validation, accessibility, derived presentation, and a deliberate API-key security boundary.
 
-This is a **project day**: the goal is not only to make the screen work, but to make the implementation explainable, testable, and maintainable.
+This is a project day: the goal is not only to make the screen work, but to make the implementation explainable, testable, and maintainable.
 
 ## Prerequisites
 
@@ -63,11 +63,11 @@ By the end, you can:
 - use query parameters safely
 - handle HTTP, network, and cancellation failures
 - prevent stale responses from winning
-- distinguish initial loading from refreshing
+- distinguish initial loading from background refresh
 - keep derived weather values out of unnecessary state
 - make the form keyboard-accessible
 - explain why a client-side API key is not a secret
-- test the important happy-path and failure-path scenarios
+- test happy-path, failure-path, cancellation, and race scenarios
 
 ## Project Requirements
 
@@ -76,16 +76,17 @@ Build a Weather App with:
 1. City search.
 2. Enter-key submission.
 3. Input validation.
-4. Loading state.
-5. Success state.
-6. Empty/not-found state.
-7. Error state with retry.
-8. Request cancellation.
-9. Stale-response protection.
-10. Recent searches.
-11. Accessible status/error messaging.
-12. Responsive presentation.
-13. No committed secrets.
+4. Initial loading state.
+5. Background refresh state.
+6. Success state.
+7. Empty/not-found state.
+8. Error state with retry.
+9. Request cancellation.
+10. Stale-response protection.
+11. Recent searches.
+12. Accessible status/error messaging.
+13. Responsive presentation.
+14. No committed secrets.
 
 ## Architecture
 
@@ -99,8 +100,6 @@ WeatherApp
         ↓
      Weather API
 ```
-
-A practical responsibility split:
 
 | Layer | Responsibility |
 |---|---|
@@ -119,14 +118,11 @@ const [status, setStatus] = useState("idle");
 const [error, setError] = useState(null);
 const [recentSearches, setRecentSearches] = useState([]);
 const controllerRef = useRef(null);
+const requestIdRef = useRef(0);
+const lastSubmittedCityRef = useRef("");
 ```
 
-Do not store values that can be derived from `weather`, such as:
-
-- rounded temperature
-- condition text
-- humidity labels
-- display strings
+Store source-of-truth state. Derive values such as rounded temperature, condition text, humidity labels, and display strings from `weather` during render.
 
 A useful rule is:
 
@@ -136,17 +132,17 @@ A useful rule is:
 
 For a browser-only tutorial, an environment variable keeps configuration out of committed source, but **does not make a browser API key secret**. Anything delivered to the browser can be inspected by users.
 
-For sensitive credentials, use a backend/proxy that keeps the secret server-side:
+For sensitive credentials, use a backend/proxy:
 
 ```text
 Browser
    ↓
 Your backend
-   ↓  secret credential
+   ↓ secret credential
 Weather provider
 ```
 
-Also check the provider's terms and key restrictions. If a browser key is unavoidable, restrict it by origin/quota where the provider supports it.
+Also follow the provider's terms and restrict browser keys by origin/quota where supported.
 
 ## Search Flow
 
@@ -159,8 +155,10 @@ loading
  ├── success + data → weather card
  ├── success + no usable result → empty state
  ├── HTTP/network error → error + retry
- └── cancellation → no user-facing error
+ └── cancellation → keep the current UI; no error
 ```
+
+When refreshing existing data, do not automatically erase useful weather information. Model refresh separately from the initial empty loading screen when the product requires it.
 
 ## Controlled Search Form
 
@@ -186,7 +184,7 @@ function SearchForm({ city, onChange, onSubmit, disabled }) {
 }
 ```
 
-Using `onSubmit` instead of only a click handler supports Enter-key submission and keeps form semantics correct.
+Using `onSubmit` supports Enter-key submission and preserves form semantics.
 
 ## API Layer
 
@@ -213,33 +211,34 @@ export async function getWeather(city, signal) {
   }
 
   if (!response.ok) {
-    throw new Error(body?.message || "Weather request failed");
+    const message = body?.message || `Weather request failed (${response.status})`;
+    throw new Error(message);
   }
 
   return body;
 }
 ```
 
-`URLSearchParams` handles query-string encoding and keeps the request construction readable.
-
-Do not put UI state updates inside `weatherService`. The service should communicate request results; the component decides how the UI represents them.
+`URLSearchParams` handles query-string encoding. Do not put React state updates inside the service.
 
 ## Request Lifecycle
 
-For a submit-driven request, `useRef` is appropriate for holding the currently active controller because the controller is an imperative resource and changing it should not itself cause a render.
+For a submit-driven request, `useRef` is appropriate for the active `AbortController` because it is an imperative resource and changing it should not trigger a render.
 
 ```jsx
 controllerRef.current?.abort();
 const controller = new AbortController();
 controllerRef.current = controller;
+const requestId = ++requestIdRef.current;
 ```
 
-Then:
+For a first request:
 
 ```jsx
 setStatus("loading");
-setError(null);
 ```
+
+For a refresh while data already exists, the UI can preserve the existing weather and expose a separate `refreshing` indicator.
 
 On success:
 
@@ -251,7 +250,6 @@ setStatus("success");
 On a real failure:
 
 ```jsx
-setWeather(null);
 setError(message);
 setStatus("error");
 ```
@@ -260,37 +258,21 @@ On cancellation, do not replace the UI with an error message.
 
 ## Race Conditions and Cancellation
 
-If the user searches `London` and immediately searches `Paris`:
+If the user searches `London` and immediately searches `Paris`, cancellation should stop the obsolete request where possible. Cancellation alone is not a correctness guarantee because an already-completed request cannot be retroactively cancelled.
 
-```text
-London request A starts
-        ↓
-Paris request B starts
-        ↓
-A is aborted
-        ↓
-B succeeds
-        ↓
-show Paris
-```
-
-Cancellation is valuable, but robust applications should also consider request ownership. A request that has already completed before `abort()` is called cannot be retroactively cancelled.
-
-For more complex concurrent workflows, use a request ID/version guard:
+Use request ownership when necessary:
 
 ```jsx
-const requestIdRef = useRef(0);
+const requestId = ++requestIdRef.current;
+const result = await getWeather(value, controller.signal);
 
-async function search() {
-  const requestId = ++requestIdRef.current;
-  const result = await getWeather(...);
-
-  if (requestId !== requestIdRef.current) return;
-  setWeather(result);
-}
+if (requestId !== requestIdRef.current) return;
+setWeather(result);
 ```
 
-Use this pattern when overlapping requests are intentionally possible and the latest request must own the UI.
+The rule is:
+
+> Only the request that currently owns the UI may commit its result.
 
 ## Complete Reference Implementation
 
@@ -305,6 +287,7 @@ export default function App() {
   const [error, setError] = useState(null);
   const [recentSearches, setRecentSearches] = useState([]);
   const controllerRef = useRef(null);
+  const requestIdRef = useRef(0);
   const lastSubmittedCityRef = useRef("");
 
   async function searchWeather(event, requestedCity = city) {
@@ -320,36 +303,48 @@ export default function App() {
     controllerRef.current?.abort();
     const controller = new AbortController();
     controllerRef.current = controller;
+    const requestId = ++requestIdRef.current;
     lastSubmittedCityRef.current = value;
 
-    setStatus("loading");
+    const hasExistingWeather = weather !== null;
+    setStatus(hasExistingWeather ? "refreshing" : "loading");
     setError(null);
 
     try {
       const result = await getWeather(value, controller.signal);
 
-      if (controller.signal.aborted) return;
+      if (controller.signal.aborted || requestId !== requestIdRef.current) return;
+
+      if (!result || !result.main || !Array.isArray(result.weather)) {
+        setWeather(null);
+        setStatus("empty");
+        return;
+      }
 
       setWeather(result);
       setStatus("success");
       setRecentSearches((current) => [
         value,
-        ...current.filter(
-          (item) => item.toLowerCase() !== value.toLowerCase()
-        ),
+        ...current.filter((item) => item.toLowerCase() !== value.toLowerCase()),
       ].slice(0, 5));
-    } catch (error) {
-      if (error?.name === "AbortError") return;
+    } catch (requestError) {
+      if (requestError?.name === "AbortError") return;
+      if (requestId !== requestIdRef.current) return;
 
-      setWeather(null);
-      setError(error instanceof Error ? error.message : "Request failed");
+      setError(requestError instanceof Error ? requestError.message : "Request failed");
       setStatus("error");
     }
   }
 
   useEffect(() => {
-    return () => controllerRef.current?.abort();
+    return () => {
+      controllerRef.current?.abort();
+      requestIdRef.current += 1;
+    };
   }, []);
+
+  const temperature = weather ? Math.round(weather.main.temp) : null;
+  const condition = weather?.weather?.[0]?.description ?? "Unknown condition";
 
   return (
     <main>
@@ -363,17 +358,17 @@ export default function App() {
           onChange={(event) => setCity(event.target.value)}
           autoComplete="address-level2"
         />
-        <button type="submit" disabled={status === "loading"}>
-          {status === "loading" ? "Searching..." : "Search"}
+        <button type="submit" disabled={status === "loading" || status === "refreshing"}>
+          {status === "refreshing" || status === "loading" ? "Searching..." : "Search"}
         </button>
       </form>
 
-      {status === "idle" && (
-        <p>Search for a city to see its weather.</p>
-      )}
+      {status === "idle" && <p>Search for a city to see its weather.</p>}
 
-      {status === "loading" && (
-        <p role="status" aria-live="polite">Loading weather...</p>
+      {(status === "loading" || status === "refreshing") && (
+        <p role="status" aria-live="polite">
+          {status === "refreshing" ? "Updating weather..." : "Loading weather..."}
+        </p>
       )}
 
       {status === "error" && (
@@ -388,18 +383,18 @@ export default function App() {
         </section>
       )}
 
-      {status === "success" && weather && (
-        <article aria-label={`Weather for ${weather.name}`}>
-          <h2>{weather.name}</h2>
-          <p>{Math.round(weather.main.temp)}°C</p>
-          <p>{weather.weather?.[0]?.description ?? "Unknown condition"}</p>
-          <p>Humidity: {weather.main.humidity}%</p>
-          <p>Wind: {weather.wind.speed} m/s</p>
-        </article>
+      {status === "empty" && (
+        <p role="status">No usable weather data was returned for this search.</p>
       )}
 
-      {status === "success" && !weather && (
-        <p>No weather data was returned for this search.</p>
+      {weather && (status === "success" || status === "refreshing") && (
+        <article aria-label={`Weather for ${weather.name}`}>
+          <h2>{weather.name}</h2>
+          <p>{temperature}°C</p>
+          <p>{condition}</p>
+          <p>Humidity: {weather.main.humidity}%</p>
+          <p>Wind: {weather.wind?.speed ?? "Unknown"} m/s</p>
+        </article>
       )}
 
       {recentSearches.length > 0 && (
@@ -407,7 +402,7 @@ export default function App() {
           <h2 id="recent-searches-heading">Recent searches</h2>
           <ul>
             {recentSearches.map((item) => (
-              <li key={item}>
+              <li key={item.toLowerCase()}>
                 <button
                   type="button"
                   onClick={() => {
@@ -431,26 +426,30 @@ export default function App() {
 
 ### 1. Retry should use the last submitted value
 
-The user may edit the input after a failed request. Retrying the current input can accidentally search a different city. Store the last submitted value separately when retry semantics matter.
+The user may edit the input after a failed request. Retry the request that actually failed, not whatever happens to be in the input now.
 
 ### 2. State updates are scheduled
 
-Do not rely on this pattern:
+Do not rely on this:
 
 ```jsx
 setCity("Paris");
-searchWeather(undefined, city); // city may still be the old value
+searchWeather(undefined, city);
 ```
 
-Pass `"Paris"` directly or trigger work from a state synchronization boundary.
+Pass `"Paris"` directly when that is the intended request value.
 
 ### 3. Cleanup on unmount
 
-The component owns the active request. Abort it when the component unmounts so the request does not remain unnecessarily active.
+Abort the active request and invalidate its request identity when the component unmounts.
 
 ### 4. Validate response shape
 
-A successful HTTP response does not guarantee the exact JSON shape your UI expects. Production code should validate external data at a trust boundary when the risk warrants it.
+A successful HTTP response does not guarantee that the JSON has the fields your UI expects. Validate external data at the trust boundary when the application warrants it.
+
+### 5. Refreshing is different from initial loading
+
+Initial loading has no data to preserve. Refreshing can keep the current weather visible while showing progress. Do not automatically clear useful data just because a new request started.
 
 ## Weather Data Presentation
 
@@ -461,37 +460,7 @@ const temperature = Math.round(weather.main.temp);
 const condition = weather.weather?.[0]?.description ?? "Unknown";
 ```
 
-Do not duplicate these as state unless they represent independently editable or externally controlled information.
-
-## UX States
-
-### Initial
-
-Show a clear instruction:
-
-```text
-Search for a city to see its weather.
-```
-
-### Loading
-
-Disable duplicate submission and expose progress:
-
-```jsx
-<p role="status" aria-live="polite">Loading weather...</p>
-```
-
-### Success
-
-Show useful information without forcing the user to decode raw API JSON.
-
-### Not found / empty
-
-Treat “city not found” or a valid response with no usable weather data as an actionable empty/not-found state, not as a mysterious blank screen.
-
-### Error
-
-Provide a safe message and a retry action.
+Do not duplicate these as independent state.
 
 ## Accessibility
 
@@ -500,9 +469,21 @@ Provide a safe message and a retry action.
 - support keyboard submission
 - use `role="status"` for non-critical progress
 - use `role="alert"` for important errors
-- make retry and recent-search controls keyboard accessible
+- keep retry and recent-search controls keyboard accessible
 - do not communicate information through color alone
 - keep focus behavior predictable
+- provide meaningful names for interactive controls
+
+## UX State Matrix
+
+| State | Data | Progress | Error | Recommended UI |
+|---|---|---|---|---|
+| `idle` | none | no | no | Search instruction |
+| `loading` | none | yes | no | Initial loader |
+| `refreshing` | existing | yes | no | Keep data + refresh indicator |
+| `success` | valid | no | no | Weather card |
+| `empty` | unusable/none | no | no | No-data message |
+| `error` | existing or none | no | yes | Safe error + retry |
 
 ## Testing Checklist
 
@@ -511,7 +492,7 @@ Provide a safe message and a retry action.
 - [ ] Empty input does not send a request.
 - [ ] Leading/trailing spaces are removed.
 - [ ] Enter submits.
-- [ ] Search button is disabled while loading.
+- [ ] Duplicate submission is prevented while the request is active.
 
 ### Success
 
@@ -524,14 +505,21 @@ Provide a safe message and a retry action.
 
 - [ ] Invalid city produces an actionable message.
 - [ ] Retry uses the last submitted city.
-- [ ] Previous error is cleared when a new request starts.
+- [ ] A new request clears the previous error.
+- [ ] Cancellation does not become an error.
 
-### Cancellation/races
+### Cancellation and races
 
 - [ ] Previous request is aborted when a newer search starts.
-- [ ] Aborted requests do not show an error.
-- [ ] Stale responses cannot overwrite a newer request when concurrency is possible.
-- [ ] Request is aborted on unmount.
+- [ ] Stale responses cannot overwrite newer results.
+- [ ] Request identity is checked before committing async results.
+- [ ] Request is invalidated and aborted on unmount.
+
+### Refreshing
+
+- [ ] Existing weather is not unnecessarily erased during refresh.
+- [ ] Refresh progress is visible.
+- [ ] A refresh failure has an intentional product behavior.
 
 ### Recent searches
 
@@ -546,13 +534,14 @@ Provide a safe message and a retry action.
 2. Assuming `.env` makes a browser key secret.
 3. Forgetting `response.ok` because `fetch` resolves on HTTP 404/500.
 4. Treating cancellation as a user-facing error.
-5. Ignoring race conditions.
+5. Relying only on cancellation for race correctness.
 6. Using a click-only search instead of a form.
 7. Storing derived temperature/condition as separate state.
-8. Using array indexes as keys when a stable city identity is available.
+8. Using array indexes as keys.
 9. Retrying the edited input instead of the last submitted request.
-10. Forgetting cleanup when the component owns an active request.
-11. Trusting arbitrary external JSON without considering response-shape validation.
+10. Clearing useful weather data for every refresh.
+11. Forgetting cleanup when the component owns an active request.
+12. Trusting arbitrary external JSON without considering response-shape validation.
 
 ## Extensions
 
@@ -582,7 +571,7 @@ Provide a safe message and a retry action.
 
 ### Bug 1 — stale input on retry
 
-The input is changed after a failed request and Retry searches the new input.
+The input changes after a failed request and Retry searches the new input.
 
 **Fix:** retain the last submitted value separately.
 
@@ -590,13 +579,13 @@ The input is changed after a failed request and Retry searches the new input.
 
 London and Paris requests overlap, and London renders after Paris.
 
-**Fix:** abort the old request and, for intentionally concurrent workflows, guard updates with request identity.
+**Fix:** abort obsolete work and guard the result with request identity.
 
-### Bug 3 — blank screen during loading
+### Bug 3 — blank screen during refresh
 
 The UI removes all weather information while refreshing.
 
-**Fix:** decide whether the product wants initial loading and refresh loading to behave differently; preserve useful existing data during background refresh where appropriate.
+**Fix:** distinguish initial loading from refreshing and preserve existing data when appropriate.
 
 ### Bug 4 — error shown after cancellation
 
@@ -608,11 +597,17 @@ The catch block treats `AbortError` as a real failure.
 
 **Fix:** explain the browser security boundary and move sensitive credentials behind a backend.
 
+### Bug 6 — stale request commits after unmount
+
+An async request resolves after the component has been removed.
+
+**Fix:** abort during cleanup and invalidate request identity so obsolete work cannot commit.
+
 ## Hands-on Exercises
 
 ### Level 1 — Core Weather Search
 
-Implement city search with loading, success, empty/not-found, and error states.
+Implement city search with idle, loading, success, empty/not-found, and error states.
 
 ### Level 2 — Recent Searches
 
@@ -624,11 +619,11 @@ Abort the previous request when a new search starts and abort on unmount.
 
 ### Level 4 — Race Protection
 
-Write a test or simulation where two requests resolve in reverse order and prove stale data cannot win.
+Write a test where two requests resolve in reverse order and prove stale data cannot win.
 
 ### Level 5 — Production Upgrade
 
-Add schema validation, retry rules for safe failures, cached searches, and a backend proxy for sensitive credentials.
+Add schema validation, safe retry rules, cached searches, a backend proxy, and a refresh UI that preserves existing data.
 
 For every exercise document:
 
@@ -636,6 +631,7 @@ For every exercise document:
 - request trigger
 - request lifecycle
 - cancellation behavior
+- race ownership
 - error behavior
 - accessibility behavior
 - security boundary
@@ -646,14 +642,16 @@ For every exercise document:
 2. Why doesn't `fetch` throw for HTTP 404 by default?
 3. Why is a browser API key not actually secret?
 4. Why does `AbortController` matter for rapid searches?
-5. Why is `status` often cleaner than several booleans?
+5. Why is an explicit status model often cleaner than several booleans?
 6. Why should recent searches be capped?
 7. Why should derived weather values not become duplicate state?
 8. How can stale responses be prevented?
 9. Why should Retry use the last submitted value?
 10. Why should the active request be aborted on unmount?
 11. When would you use a request-ID guard in addition to cancellation?
-12. Why is response-shape validation useful at an external API boundary?
+12. Why distinguish initial loading from refreshing?
+13. Why is response-shape validation useful at an external API boundary?
+14. Why should mutation retry rules be different from read-only weather GET requests?
 
 ### Answers
 
@@ -667,8 +665,10 @@ For every exercise document:
 8. Abort obsolete requests and/or associate responses with request identity.
 9. The user may edit the input after the failure.
 10. The component owns the request resource and should release it when unmounted.
-11. When requests can intentionally overlap or cancellation cannot guarantee that an older result cannot resolve.
-12. External APIs are outside your type/runtime trust boundary; malformed data should not blindly crash presentation code.
+11. When requests can overlap or cancellation cannot guarantee that an older result cannot resolve.
+12. Initial loading has no existing data; refreshing can preserve useful data while showing progress.
+13. External APIs are outside your runtime trust boundary; malformed data should not blindly crash presentation code.
+14. GET requests are normally safe to repeat, while mutations can create duplicate side effects unless the API provides idempotency guarantees.
 
 ## Interview Questions
 
@@ -700,7 +700,7 @@ The resulting value is delivered to the browser and can be inspected.
 
 **Would you use `useEffect` for this search?**
 
-A submit-driven search is naturally an event-driven action. An effect is more appropriate when the request synchronizes with changing external state, such as a route/query parameter.
+A submit-driven search is naturally event-driven. An effect is more appropriate when the request synchronizes with changing external state, such as a route/query parameter.
 
 **When is cancellation insufficient?**
 
@@ -714,14 +714,18 @@ The controller is an imperative resource; changing it should not itself trigger 
 
 Use a backend/proxy that keeps the secret server-side; browser keys should be treated as public and restricted where possible.
 
+**How would you model initial loading and refresh loading?**
+
+Use an explicit state model that can represent progress while retaining existing data, rather than treating every request as a blank initial screen.
+
 ## Final Acceptance Criteria
 
 - [ ] Complete controlled search form.
 - [ ] Input validation.
-- [ ] Idle/loading/success/empty/error states.
+- [ ] Idle/loading/refreshing/success/empty/error states.
 - [ ] Safe HTTP and network error handling.
-- [ ] Abort/race protection.
-- [ ] Abort on unmount.
+- [ ] Abort and request-identity protection.
+- [ ] Abort and invalidate requests on unmount.
 - [ ] Accessible status and error UI.
 - [ ] Recent searches with stable identity.
 - [ ] No duplicated derived state.
@@ -734,5 +738,7 @@ Use a backend/proxy that keeps the secret server-side; browser keys should be tr
 ## Day 28 Outcome
 
 You can now build an end-to-end React API project while making deliberate decisions about state ownership, request lifecycle, cancellation, race conditions, accessibility, security boundaries, and user experience.
+
+You should be able to explain the difference between **initial loading, refreshing, empty, error, and success**, and why cancellation and request identity solve related but different problems.
 
 **Next:** Day 29 — `useRef`, mutable values, DOM references, and imperative escape hatches.

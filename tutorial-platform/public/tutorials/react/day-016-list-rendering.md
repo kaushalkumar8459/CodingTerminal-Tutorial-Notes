@@ -20,11 +20,11 @@ track: react
 - [End-to-End Practical](#end-to-end-practical)
 - [Hands-on Coding](#hands-on-coding)
 - [Mini Exercise](#mini-exercise)
+- [Common Mistakes](#common-mistakes)
 - [Assessment Quiz](#assessment-quiz)
 - [Task](#task)
 - [Self Check](#self-check)
 - [Interview Questions and Answers](#interview-questions-and-answers)
-- [Common Mistakes](#common-mistakes)
 - [Day 16 Outcome](#day-16-outcome)
 
 ## Goal
@@ -107,7 +107,7 @@ const names = users.map((user) => user.name);
 ))}
 ```
 
-The list component owns iteration. The item component can own the presentation and item-level interactions.
+The list component owns iteration. The item component can own presentation and item-level interactions.
 
 ### 4. Keys: First Principles
 
@@ -118,6 +118,7 @@ Good keys are:
 - unique among siblings
 - stable across renders
 - tied to the item's logical identity
+- available from the data rather than generated during rendering
 
 ```jsx
 {users.map((user) => (
@@ -132,6 +133,8 @@ A key is not automatically available as a normal child prop:
 ```
 
 If the child needs the ID, pass it explicitly.
+
+**Important:** keys are about React identity, not about making data unique. A key must be unique among the relevant siblings, but it should also represent the correct logical item. If your backend contains duplicate or missing IDs, fix the data model or create a stable domain-specific identifier; do not generate a random key on every render.
 
 ### 5. Key Scope
 
@@ -157,7 +160,7 @@ A member ID only needs to be unique within that team's member list.
 A blank screen is usually poor UX.
 
 ```jsx
-function ProductList({ products }) {
+function ProductList({ products = [] }) {
   if (products.length === 0) return <p>No products found.</p>;
 
   return (
@@ -170,7 +173,7 @@ function ProductList({ products }) {
 }
 ```
 
-For data-driven screens, distinguish empty, loading, and error states.
+For data-driven screens, distinguish empty, loading, and error states. An empty collection is not necessarily an API failure.
 
 ### 7. Filtering Before Mapping
 
@@ -212,7 +215,7 @@ const sortedUsers = users.toSorted((a, b) =>
 );
 ```
 
-The important rule is that the source state must remain unchanged.
+The important rule is that the source state must remain unchanged. If runtime/browser support is uncertain, use the spread-and-`sort()` form or verify your target environment before using `toSorted()`.
 
 ### 9. Search + Filter + Sort
 
@@ -237,7 +240,7 @@ const completedTasks = tasks.filter((task) => task.completed);
 
 instead of maintaining another state value for `completedTasks` that can become stale.
 
-Store the **source of truth**. Derive views from it.
+Store the **source of truth**. Derive views from it. If derivation becomes genuinely expensive, optimize the calculation after measuring rather than duplicating state merely for convenience.
 
 ### 11. Nested Lists
 
@@ -259,7 +262,7 @@ Each nested collection has its own key boundary.
 Guard clauses make collection states readable:
 
 ```jsx
-function SearchResults({ query, results }) {
+function SearchResults({ query, results = [] }) {
   if (!query.trim()) return <p>Enter a search term.</p>;
   if (results.length === 0) return <p>No results found.</p>;
 
@@ -275,13 +278,15 @@ function SearchResults({ query, results }) {
 
 ### 13. Index Keys: The Nuanced Rule
 
-Avoid index keys when list identity can change through insertion, deletion, or reordering:
+Avoid index keys when list identity can change through insertion, deletion, filtering, or reordering:
 
 ```jsx
 items.map((item, index) => <Row key={index} item={item} />)
 ```
 
 For a truly static collection whose order and membership never change, an index key can be acceptable. The goal is stable identity that matches the data semantics, not an absolute rule of never using indexes.
+
+A useful test is: **if the item moves to another position, should its local component state and DOM identity move with the item?** If yes, use a stable item ID instead of the index.
 
 ### 14. Random Keys Are Worse
 
@@ -291,7 +296,7 @@ Do not do this:
 items.map((item) => <Row key={Math.random()} item={item} />)
 ```
 
-A new key on every render makes React treat items as new identities, which can destroy local component state and cause unnecessary remounting.
+A new key on every render makes React treat items as new identities, which can destroy local component state, remount effects, lose focus, and cause unnecessary work.
 
 ### 15. Reusable List Components
 
@@ -311,13 +316,13 @@ function ProductList({ products, onSelect }) {
 }
 ```
 
-Keep collection responsibilities in the list component and one-item responsibilities in the item component.
+Keep collection responsibilities in the list component and one-item responsibilities in the item component. Keep the key at the list boundary even when the item UI is extracted.
 
 ### 16. Large Lists and Performance
 
 For very large collections, rendering thousands of DOM nodes can become expensive. First use correct data flow and stable keys. If the dataset is genuinely large, consider pagination, incremental loading, or virtualization.
 
-Do not add memoization or virtualization automatically; measure the real bottleneck first.
+Do not add memoization or virtualization automatically; measure the real bottleneck first. Stable keys improve correctness and identity handling, but **keys do not by themselves make a large list fast**.
 
 ## Key Concepts
 
@@ -334,6 +339,7 @@ Do not add memoization or virtualization automatically; measure the real bottlen
 | `toSorted()` | Non-mutating sort where supported |
 | Derived data | Calculate from source state |
 | Empty state | Explicitly communicate no items |
+| Key scope | Unique among the current siblings, not globally |
 
 ## Visual Concept Map
 
@@ -373,27 +379,9 @@ Build an Employee Directory with:
 
 ```jsx
 const employees = [
-  {
-    id: 1,
-    name: "Asha",
-    role: "Recruiter",
-    active: true,
-    skills: ["Hiring", "Communication"],
-  },
-  {
-    id: 2,
-    name: "Ravi",
-    role: "Designer",
-    active: false,
-    skills: ["Figma", "UX"],
-  },
-  {
-    id: 3,
-    name: "Nina",
-    role: "Developer",
-    active: true,
-    skills: ["React", "TypeScript"],
-  },
+  { id: 1, name: "Asha", role: "Recruiter", active: true, skills: ["Hiring", "Communication"] },
+  { id: 2, name: "Ravi", role: "Designer", active: false, skills: ["Figma", "UX"] },
+  { id: 3, name: "Nina", role: "Developer", active: true, skills: ["React", "TypeScript"] },
 ];
 
 function EmployeeCard({ employee }) {
@@ -411,10 +399,8 @@ function EmployeeCard({ employee }) {
   );
 }
 
-function EmployeeList({ employees }) {
-  if (employees.length === 0) {
-    return <p>No employees found.</p>;
-  }
+function EmployeeList({ employees = [] }) {
+  if (employees.length === 0) return <p>No employees found.</p>;
 
   return (
     <section>
@@ -425,6 +411,8 @@ function EmployeeList({ employees }) {
   );
 }
 ```
+
+If skills can repeat, use a stable skill ID instead of `key={skill}`. A displayed label is only a good key when it is stable and unique within that sibling list.
 
 ## Hands-on Coding
 
@@ -452,6 +440,10 @@ Display different messages for:
 
 Create a list with an editable input per item. Reorder the list and observe the difference between stable domain keys and index keys.
 
+### Challenge 6 — Derived Data
+
+Build a filtered/sorted list from one source array and search state. Verify that changing the source data automatically changes the derived result without a second `visibleItems` state variable.
+
 ## Mini Exercise
 
 Given:
@@ -470,7 +462,7 @@ Render:
 3. task titles alphabetically
 4. a useful empty message
 
-Do not mutate `tasks`.
+Do not mutate `tasks` and use `task.id` as the key.
 
 ## Common Mistakes
 
@@ -500,11 +492,19 @@ Distinguish loading, error, empty, filtered-empty, and success when the UI needs
 
 ### Mistake 7 — Key on the wrong element
 
-The key belongs at the element returned by the `map()` call.
+The key belongs at the element returned by the `map()` call, not inside the child component after the boundary has already been created.
 
 ### Mistake 8 — Using index keys without understanding identity
 
 Index keys can attach component state to the wrong item after reorder/insert/delete.
+
+### Mistake 9 — Duplicate or unstable IDs
+
+A database ID should be unique and stable within the relevant collection. If IDs are missing or duplicated, fix the identity source rather than generating a random key during render.
+
+### Mistake 10 — Confusing key correctness with performance
+
+A good key helps React preserve identity; it does not replace pagination, virtualization, or measured performance work for huge lists.
 
 ## Assessment Quiz
 
@@ -519,6 +519,8 @@ Index keys can attach component state to the wrong item after reorder/insert/del
 9. How are keys scoped in nested lists?
 10. Why should random keys be avoided?
 11. When should virtualization be considered?
+12. What should you do if backend IDs are missing or duplicated?
+13. Do stable keys by themselves solve large-list performance problems?
 
 ### Answers
 
@@ -533,6 +535,8 @@ Index keys can attach component state to the wrong item after reorder/insert/del
 9. Each sibling collection has its own key scope.
 10. A random key changes identity on every render and can force remounts.
 11. When very large collections make DOM rendering a measured performance bottleneck.
+12. Fix or establish a stable domain-specific identity; do not generate a new random key on each render.
+13. No. Keys address identity/correctness. Large-list performance may still require pagination, incremental loading, or virtualization.
 
 ## Task
 
@@ -550,6 +554,7 @@ Build the **Employee Directory** end-to-end.
 - [ ] Empty and no-results states are distinct.
 - [ ] Item UI is separated into a reusable component.
 - [ ] Nested skills are rendered with their own appropriate keys.
+- [ ] Duplicate/missing item IDs are handled by fixing the data identity strategy.
 - [ ] Large-list optimization is considered only when justified by measurement.
 
 ## Self Check
@@ -564,6 +569,7 @@ Build the **Employee Directory** end-to-end.
 - [ ] I can build empty and filtered-empty states.
 - [ ] I can render nested lists with correct key scopes.
 - [ ] I know when virtualization may be useful.
+- [ ] I can explain that keys are about identity, not global uniqueness or performance.
 
 ## Interview Questions and Answers
 
@@ -581,10 +587,13 @@ It returns a transformed array, making it natural to convert data items into Rea
 It changes on every render, so React cannot preserve stable identity and may remount components.
 
 **Q: Why can index keys be problematic?**  
-After insertion, deletion, or reordering, the same index can refer to a different logical item, potentially associating child state with the wrong item.
+After insertion, deletion, filtering, or reordering, the same index can refer to a different logical item, potentially associating child state with the wrong item.
 
 **Q: Should filtered data be stored in state?**  
 Usually no. If source data and filter criteria are already state, the visible list is derived.
+
+**Q: Is a key available through `props.key`?**  
+No. `key` is a special React property. Pass an ID explicitly if the child needs it.
 
 ### Advanced
 
@@ -592,7 +601,7 @@ Usually no. If source data and filter criteria are already state, the visible li
 Keys need to be unique only among the siblings of the collection being reconciled. Nested collections have independent sibling scopes.
 
 **Q: Why does mutating an array with `sort()` violate React state practices?**  
-It changes the existing state object rather than producing a new value, which can break assumptions around immutable updates and make state changes harder to reason about.
+It changes the existing state value rather than producing a new value, which breaks immutable-update expectations and makes state changes harder to reason about.
 
 **Q: What happens when a key changes?**  
 React treats the element as a different identity. The old component can unmount and a new component can mount, so local state and effects are not preserved as if it were the same item.
@@ -600,6 +609,11 @@ React treats the element as a different identity. The old component can unmount 
 **Q: When should you use virtualization?**  
 When a very large list creates a measured rendering/DOM performance problem. It should be a targeted optimization rather than a default requirement.
 
+**Q: What makes a key semantically good, not merely unique?**  
+It should identify the same logical item even when its position changes. A position-based or render-generated value can be unique but still represent the wrong identity.
+
 ## Day 16 Outcome
 
-You can now build data-driven React lists with correct identity, immutable transformations, reusable item components, derived views, and realistic collection states. Day 17 will go deeper into **keys, identity, and reconciliation**, including how changing a key can cause a component to remount.
+You can now build data-driven React lists with correct identity, immutable transformations, reusable item components, derived views, and realistic collection states. You understand `map()` versus `forEach()`, stable keys, key scope, index-key limitations, random-key problems, non-mutating sorting, and large-list performance trade-offs.
+
+Day 17 will go deeper into **keys, identity, and reconciliation**, including how changing a key can cause a component to remount and reset its local state.

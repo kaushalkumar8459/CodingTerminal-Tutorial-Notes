@@ -21,6 +21,7 @@ track: react
 - [Hands-on Coding](#hands-on-coding)
 - [Mini Exercise](#mini-exercise)
 - [Common Mistakes](#common-mistakes)
+- [Debugging Challenge](#debugging-challenge)
 - [Assessment Quiz](#assessment-quiz)
 - [Task](#task)
 - [Self Check](#self-check)
@@ -120,20 +121,25 @@ Prefer semantic callbacks when useful:
 <ProductEditor product={product} onPriceChange={handlePriceChange} />
 ```
 
+Semantic callbacks describe what the child wants to happen without exposing unnecessary parent implementation details. Passing a setter directly is sometimes fine, but it should be a deliberate component contract rather than a default rule.
+
 ### 5. Controlled Components
 
 ```jsx
 function SearchBox({ value, onChange }) {
   return (
-    <input
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-    />
+    <label>
+      Search
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
   );
 }
 ```
 
-The parent owns the important value; the child reports changes.
+The parent owns the important value; the child reports changes. Controlled inputs should also have an intentional initial value so they do not unexpectedly switch between uncontrolled and controlled modes.
 
 ### 6. Derived State
 
@@ -145,7 +151,7 @@ const count = items.length;
 const visibleItems = items.filter((item) => item.active);
 ```
 
-Keeping derived values derived prevents synchronization bugs.
+Keeping derived values derived prevents synchronization bugs. If a calculation is expensive, consider memoization after measuring rather than storing the result as a second source of truth.
 
 ### 7. Lift Only What Is Shared
 
@@ -212,6 +218,8 @@ function Calculator() {
 }
 ```
 
+Keep the empty-input case explicit. Also avoid using truthiness for numeric input because `0` is a valid temperature.
+
 ### 11. Shared Search + Derived Results
 
 ```jsx
@@ -270,7 +278,7 @@ Do not introduce Context merely because two components share one value.
 
 Lifting state can cause the owner's relevant subtree to render when shared state changes. That is not inherently bad. Make ownership correct first, then profile before optimizing.
 
-Possible techniques include state locality, component boundaries, reducing unnecessary work, and targeted memoization when measurement justifies it.
+Possible techniques include state locality, component boundaries, reducing unnecessary work, and targeted memoization when measurement justifies it. Memoization should not be used as a substitute for a correct state ownership model.
 
 ## Key Concepts
 
@@ -328,21 +336,27 @@ function ProfileFeature() {
     setProfile((current) => ({ ...current, [field]: value }));
   };
 
+  const resetProfile = () => {
+    setProfile({ name: "", role: "", city: "" });
+  };
+
   return (
     <main>
       <ProfileEditor profile={profile} onFieldChange={updateField} />
       <ProfilePreview profile={profile} />
+      <button type="button" onClick={resetProfile}>Reset</button>
     </main>
   );
 }
 
 function ProfileEditor({ profile, onFieldChange }) {
   return (
-    <form>
+    <form onSubmit={(event) => event.preventDefault()}>
       {["name", "role", "city"].map((field) => (
         <label key={field}>
           {field}
           <input
+            name={field}
             value={profile[field]}
             onChange={(event) => onFieldChange(field, event.target.value)}
           />
@@ -354,7 +368,7 @@ function ProfileEditor({ profile, onFieldChange }) {
 
 function ProfilePreview({ profile }) {
   return (
-    <article>
+    <article aria-live="polite">
       <h2>{profile.name || "Your name"}</h2>
       <p>{profile.role || "Your role"}</p>
       <p>{profile.city || "Your city"}</p>
@@ -371,13 +385,16 @@ function ProfilePreview({ profile }) {
 - [ ] Updates are immutable.
 - [ ] No duplicated profile state in children.
 - [ ] Local-only UI state remains local.
+- [ ] Reset is owned by the same state owner.
+- [ ] Form controls have labels and stable initial values.
 
 ## Hands-on Coding
 
 1. **Search + Results:** lift `query` and derive filtered results.
-2. **Temperature Converter:** synchronize Celsius/Fahrenheit with one canonical model.
+2. **Temperature Converter:** synchronize Celsius/Fahrenheit with one canonical model and preserve valid zero values.
 3. **Cart Summary:** derive total/count rather than storing duplicate totals.
 4. **Prop Drilling Refactor:** compare explicit props, composition, and Context and justify the choice.
+5. **Shared Form Reset:** add a reset action at the common owner without duplicating form state in children.
 
 ## Mini Exercise
 
@@ -390,6 +407,7 @@ Then classify:
 - input focus state → usually local
 - selected product ID shared by siblings → lift
 - product count derived from a list → calculate
+- form reset action for shared form data → common owner
 
 ## Common Mistakes
 
@@ -401,6 +419,53 @@ Then classify:
 - Using child-to-child communication hacks.
 - Treating server/cache data exactly like local UI state.
 - Optimizing before measuring.
+- Using truthiness checks for valid numeric values such as `0`.
+- Accidentally changing a controlled input into an uncontrolled input by allowing its value to become `undefined`.
+
+## Debugging Challenge
+
+This design creates two sources of truth:
+
+```jsx
+function ProfileFeature({ initialProfile }) {
+  const [profile, setProfile] = useState(initialProfile);
+
+  return (
+    <>
+      <Editor initialProfile={profile} />
+      <Preview profile={profile} />
+    </>
+  );
+}
+
+function Editor({ initialProfile }) {
+  const [profile, setProfile] = useState(initialProfile);
+  // local copy can diverge from the parent's profile
+}
+```
+
+### What is wrong?
+
+The parent owns `profile`, but the editor creates another independent copy. Updates can become unsynchronized.
+
+### Fix
+
+Make the editor controlled:
+
+```jsx
+function Editor({ profile, onChange }) {
+  return (
+    <input
+      value={profile.name}
+      onChange={(event) =>
+        onChange({ ...profile, name: event.target.value })
+      }
+    />
+  );
+}
+```
+
+The parent remains the source of truth.
 
 ## Assessment Quiz
 
@@ -414,6 +479,8 @@ Then classify:
 8. Why can lifting state affect rendering?
 9. How is server/cache data different from UI state?
 10. Why are semantic callbacks useful?
+11. Why should valid numeric values such as `0` not be handled through truthiness checks?
+12. What is the danger of copying props into local state without a synchronization plan?
 
 ### Answers
 
@@ -427,6 +494,8 @@ Then classify:
 8. Updating the owner can cause its relevant subtree to render again.
 9. Server data is remote and often needs fetching, caching, synchronization, and invalidation; UI state is usually local interaction state.
 10. They express intent and component boundaries instead of exposing parent implementation details.
+11. `0` is a valid value but is falsy, so truthiness can incorrectly treat it as missing.
+12. The local copy can diverge from the source of truth and create synchronization bugs.
 
 ## Task
 
@@ -441,6 +510,8 @@ Build a **Shared Profile Workspace** with editor, live preview, reset, and valid
 - [ ] Reset works.
 - [ ] At least one local-only UI state remains local.
 - [ ] No duplicated source of truth.
+- [ ] Numeric values are handled without truthiness bugs.
+- [ ] Form controls remain consistently controlled.
 
 ## Self Check
 
@@ -453,6 +524,8 @@ Build a **Shared Profile Workspace** with editor, live preview, reset, and valid
 - [ ] I know when Context may be justified.
 - [ ] I can distinguish server data from local UI state.
 - [ ] I understand rendering implications of lifting state.
+- [ ] I can identify accidental duplicated state.
+- [ ] I can handle valid falsy values deliberately.
 
 ## Interview Questions and Answers
 
@@ -489,8 +562,14 @@ Profile first, then consider state locality, component boundaries, reducing unne
 **How is server state different from UI state?**  
 Server state is remote and subject to fetching, caching, synchronization, and invalidation; UI state is usually local interaction state.
 
+**Why can copying props into local state be problematic?**  
+The local copy does not automatically stay synchronized with the prop. If a component truly needs a local draft, it should have an explicit synchronization or reset model; otherwise, prefer controlled state owned by the appropriate parent.
+
+**How do you decide whether to lift state or use Context?**  
+Start with the nearest common owner. Use Context when the shared dependency crosses many layers or is broadly consumed and explicit props become a real maintenance burden.
+
 ## Day 19 Outcome
 
-You can now decide where shared state belongs, synchronize siblings through a common owner, build controlled components, derive values safely, and evaluate Context or external state solutions based on actual scope and complexity.
+You can now decide where shared state belongs, synchronize siblings through a common owner, build controlled components, derive values safely, avoid duplicated state, handle controlled-input edge cases, and evaluate Context or external state solutions based on actual scope and complexity.
 
 **Next:** Day 20 applies these principles in a larger mini-project.

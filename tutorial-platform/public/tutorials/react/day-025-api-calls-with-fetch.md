@@ -72,6 +72,8 @@ By the end of Day 25, you should be able to:
 10. Build GET and POST requests.
 11. Explain when work belongs in an effect versus an event handler.
 12. Identify when manual fetching has become complex enough for a server-state solution.
+13. Distinguish transport success from application-level response validation.
+14. Design request ownership so only the current request can commit UI state.
 
 # API Request Mental Model
 
@@ -91,6 +93,8 @@ loading
 validate status
       ↓
 parse body
+      ↓
+validate application shape
       ↓
 ┌──────────┬──────────┐
 │ success  │ failure  │
@@ -163,8 +167,8 @@ Think in layers:
 ```text
 network/transport failure → fetch may reject
 HTTP 404/500              → fetch normally resolves
-invalid JSON               → response.json() may reject
-application validation     → your code may reject/handle
+invalid JSON              → response.json() may reject
+application validation    → your code may reject/handle
 ```
 
 ## 3. Request State
@@ -889,6 +893,135 @@ Before shipping a fetch-driven screen, ask:
 - [ ] Understand why derived filtering does not need an effect.
 - [ ] Can explain when a server-state library becomes valuable.
 - [ ] Can complete the User Directory project without copying the reference blindly.
+
+## Additional Review Lab — Production Hardening
+
+### 1. Treat request identity as first-class state
+
+When multiple requests can overlap, assign a request ID or otherwise establish ownership so an older request cannot finalize the newer request's UI state.
+
+```jsx
+const requestIdRef = useRef(0);
+
+async function loadUsers() {
+  const requestId = ++requestIdRef.current;
+
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const result = await response.json();
+
+    if (requestId !== requestIdRef.current) return;
+    setUsers(result);
+  } catch (error) {
+    if (requestId !== requestIdRef.current) return;
+    // handle current request only
+  }
+}
+```
+
+Use this pattern when the request lifecycle can outlive a simple effect cleanup boundary or when several request sources can overlap.
+
+### 2. Abort handling must be explicit
+
+```jsx
+try {
+  const response = await fetch(url, { signal: controller.signal });
+  // ...
+} catch (error) {
+  if (error instanceof DOMException && error.name === "AbortError") {
+    return;
+  }
+
+  // Handle a real failure.
+}
+```
+
+Do not show a generic network error for an intentionally cancelled request.
+
+### 3. Do not use `useMemo` automatically
+
+Filtering a small array is usually simple derived work:
+
+```jsx
+const visibleUsers = users.filter((user) =>
+  user.name.toLowerCase().includes(query.trim().toLowerCase())
+);
+```
+
+`useMemo` is an optimization, not a correctness requirement. Measure or reason about the cost before introducing it.
+
+### 4. Distinguish initial loading from refresh
+
+For a production screen, replacing visible data with a full loading screen on every refetch can create a poor experience. Consider separate states such as:
+
+```text
+initial loading → no data yet
+refreshing       → existing data remains visible
+error            → current data may still be usable
+```
+
+This becomes especially important for filters, pagination, polling, and background refresh.
+
+### 5. Validate application data before rendering assumptions
+
+HTTP success does not guarantee a valid payload. A production application can validate the response before storing it:
+
+```jsx
+function isUser(value) {
+  return (
+    value &&
+    typeof value.id === "number" &&
+    typeof value.name === "string"
+  );
+}
+
+function parseUsers(value) {
+  if (!Array.isArray(value) || !value.every(isUser)) {
+    throw new Error("Invalid users response");
+  }
+
+  return value;
+}
+```
+
+For larger applications, a dedicated runtime schema library can make this validation more systematic.
+
+### 6. Add a timeout when the product requires a bounded wait
+
+`AbortController` can also be combined with a timeout:
+
+```jsx
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 10_000);
+
+try {
+  const response = await fetch(url, {
+    signal: controller.signal,
+  });
+  // ...
+} finally {
+  clearTimeout(timeoutId);
+}
+```
+
+A timeout is a product decision: choose a duration appropriate for the request rather than treating every slow request as a failure immediately.
+
+### 7. POST is not automatically idempotent
+
+A retry policy that is reasonable for a GET may be dangerous for a POST that creates a record. If duplicate creation is possible, the API may need an idempotency key or another server-side deduplication strategy.
+
+### Production Hardening Checklist
+
+- [ ] Current request owns the right to commit state.
+- [ ] `AbortError` is not shown as a generic failure.
+- [ ] `useMemo` is not added without a reason.
+- [ ] Initial loading is distinguishable from background refresh when needed.
+- [ ] Response payloads are validated when application correctness requires it.
+- [ ] Long-running requests have an intentional timeout policy where appropriate.
+- [ ] Retry policy considers HTTP method and idempotency.
+- [ ] POST retry does not accidentally create duplicate records.
 
 # Day 25 Outcome
 

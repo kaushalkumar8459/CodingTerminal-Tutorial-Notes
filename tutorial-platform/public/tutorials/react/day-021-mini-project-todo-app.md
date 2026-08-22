@@ -27,6 +27,7 @@ track: react
 - [Assessment](#assessment)
 - [Interview Questions](#interview-questions)
 - [Verification Checklist](#verification-checklist)
+- [Production-Readiness Notes](#production-readiness-notes)
 - [Day 21 Outcome](#day-21-outcome)
 
 ## Goal
@@ -585,123 +586,100 @@ An effect plus another state variable creates unnecessary synchronization. Filte
 
 ## Assessment
 
-1. Why use a stable ID?
-2. Why is `map` appropriate for toggle/update?
-3. Why is `filter` appropriate for delete?
-4. Why should `visibleTodos` normally be derived?
-5. Where should edit state live?
-6. Why use functional state updates?
-7. What is the purpose of a React key?
-8. Why does a child receive callbacks rather than mutate parent state?
-9. Why does `type="button"` matter inside a form?
-10. Which parts of this application are candidates for `useEffect`, and which are not?
+### Quiz
+
+1. Why should `todos` be the source of truth instead of `visibleTodos`?
+2. Why is `crypto.randomUUID()` better than `Math.random()` for React keys?
+3. Why should `createdAt` not be used as the primary identity when IDs are available?
+4. What does a functional state updater solve?
+5. Why should filtering be derived during render?
+6. Why should a button inside a form use `type="button"` when it is not a submit action?
+7. What is the difference between an empty list and a filtered-empty list?
+8. Why must deleting the edited todo reset edit state?
+9. Why should state updates preserve immutable object/array references?
+10. What type of problem is `useEffect` intended to solve?
 
 ### Answers
 
-1. Stable IDs represent domain identity across renders.
-2. `map` returns a new array while changing only the matching item.
-3. `filter` returns a new array without the deleted item.
-4. It is synchronously calculated from `todos` and `filter` and does not need synchronization state.
-5. With the component that coordinates edit mode; in this reference architecture the parent owns `editingId`.
-6. The next state depends on the previous state, so the updater form communicates that dependency directly.
-7. A key gives React stable identity among siblings; it is not automatically a component prop.
-8. The parent owns the authoritative collection; callbacks let children express intent without knowing storage details.
-9. Buttons default to submit behavior in forms unless their type is specified otherwise.
-10. External persistence is a candidate; filtering, counts, and synchronous calculations are not.
+1. `todos` is the authoritative collection; the visible list can be derived from it and the selected filter.
+2. `crypto.randomUUID()` creates an ID when the item is created; `Math.random()` during render creates unstable identity.
+3. A timestamp represents creation time, not necessarily unique identity.
+4. It calculates next state from the latest previous state and avoids relying on a potentially stale captured value.
+5. It is a synchronous pure calculation from existing state, not synchronization with an external system.
+6. Otherwise the button defaults to submit behavior in a form.
+7. Empty means there are no todos at all; filtered-empty means todos exist but none match the current filter.
+8. Otherwise the UI can retain an ID and draft for an item that no longer exists.
+9. React state updates should replace rather than mutate existing structures so changes are observable and reasoning remains predictable.
+10. Synchronizing React with an external system or side effect, not calculating ordinary derived UI data.
 
 ## Interview Questions
 
 ### Beginner
 
-**How do you add an item to array state?**
+**How would you store todos in React?**  
+Use an array of objects in state, with a stable domain ID for each item.
 
-Create a new array, usually with the spread operator and the new item, rather than mutating the existing array.
-
-**How do you delete one item?**
-
-Use `filter` to return every item except the target ID.
+**How do you update one todo immutably?**  
+Use `map()` and return a new object only for the matching ID.
 
 ### Intermediate
 
-**How do you update one object inside an array?**
+**Why should visible todos not be stored separately?**  
+They are derived from `todos` and `filter`; storing them separately creates two sources of truth that can drift.
 
-Use `map`, match the ID, and return a new object for that item while preserving the others.
+**Why are stable keys important?**  
+They let React preserve the identity of the correct list item across inserts, deletes, and reordering.
 
-**Why is an index a poor key for an editable Todo list?**
-
-Indexes describe positions, not domain identity. Removing or reordering items can make positions point to different logical items.
-
-**Should filtering be implemented with an effect?**
-
-No. Filtering is synchronous derived data and belongs in render-time calculation.
-
-**Why use functional updates?**
-
-They explicitly calculate next state from previous state and are appropriate when updates depend on the current collection.
+**Why is `useEffect` unnecessary for counts and filtering?**  
+Those values are synchronously derivable from current state during render.
 
 ### Advanced
 
-**Why separate domain identity from content?**
+**How would you decide what belongs in state?**  
+Store values that represent independent changing data or user input; derive values that can be calculated reliably from existing props/state.
 
-An item's title can change while its identity must remain stable. Stable identity lets React and the application track the same logical item across updates.
+**How would you add persistence later?**  
+Treat browser storage or a backend as an external system and synchronize with it deliberately; the effect-based pattern can be introduced in the next section of the course.
 
-**How would you persist this application?**
-
-Synchronize React state with an external persistence mechanism such as `localStorage`. That synchronization is an effect because storage is outside React's render calculation.
-
-**When would you optimize filtering?**
-
-Only after measuring a real performance problem. For a small Todo list, straightforward derivation is preferable to premature memoization.
-
-**How would you scale this Todo app?**
-
-Separate domain/state logic from presentation, define clear component contracts, consider a reducer for complex transitions, and introduce server-state tooling only when data becomes remote. Do not add abstractions solely because the application has more files.
+**How would you scale the Todo architecture?**  
+Keep domain state ownership explicit, use semantic callback contracts, extract reusable components, and introduce a dedicated state/data layer only when the feature's complexity justifies it.
 
 ## Verification Checklist
 
-### Functional
+- [ ] Add works through a real form.
+- [ ] Whitespace-only titles are rejected.
+- [ ] IDs are stable and generated when items are created.
+- [ ] Toggle updates only the target item.
+- [ ] Edit preserves the todo ID.
+- [ ] Cancel resets edit state.
+- [ ] Deleting the edited item clears the editor.
+- [ ] Filtering is derived, not synchronized with an effect.
+- [ ] Counts are derived from `todos`.
+- [ ] Stable keys use `todo.id`.
+- [ ] No state mutation with `push`, `splice`, or direct object mutation.
+- [ ] Empty and filtered-empty states are distinct.
+- [ ] Non-submit form buttons use `type="button"`.
+- [ ] Checkbox labels are correctly associated.
+- [ ] Child components communicate through explicit callbacks.
+- [ ] Persistence is treated as external synchronization, not ordinary derived state.
 
-- [ ] Add valid todo
-- [ ] Reject whitespace-only todo
-- [ ] Toggle completion
-- [ ] Edit and save
-- [ ] Cancel edit
-- [ ] Delete
-- [ ] Delete currently edited item
-- [ ] Filter all/active/completed
-- [ ] Clear completed
-- [ ] Empty state
-- [ ] No-results state
+## Production-Readiness Notes
 
-### React correctness
+The reference implementation is intentionally small and browser-focused. In a production application, also consider:
 
-- [ ] Stable IDs
-- [ ] Stable React keys
-- [ ] No direct mutation
-- [ ] Functional updates used where previous state is required
-- [ ] Derived values are not duplicated as state
-- [ ] Child components communicate through callbacks
-- [ ] Edit preserves todo identity
-- [ ] No unnecessary effect for synchronous derivation
+- generating and validating IDs at the data boundary when todos come from an API
+- server-side validation and authorization for remote mutations
+- error, retry, and pending states for asynchronous operations
+- preserving user input when a remote save fails
+- persistence and migration/versioning if local storage is introduced
+- keyboard and screen-reader testing with the actual product UI
+- performance measurement before adding memoization or virtualization
+- automated tests for state transitions such as add, toggle, edit, delete, and clear-completed
 
-### Accessibility
-
-- [ ] Form uses a real `<form>`
-- [ ] Input has an associated label
-- [ ] Todo checkboxes have associated labels
-- [ ] Non-submit buttons use `type="button"`
-- [ ] Native controls are preferred over clickable generic elements
-
-### Quality
-
-- [ ] Component responsibilities are clear
-- [ ] State ownership is explainable
-- [ ] Code examples are internally consistent
-- [ ] Exercises progress from beginner to advanced
-- [ ] Interview questions test reasoning, not memorization
+These concerns are extensions of the same principles; they do not require adding effects to ordinary derived calculations.
 
 ## Day 21 Outcome
 
-You can now build and reason about a complete collection-based React feature without mutation, duplicated derived state, unstable identity, or unnecessary effects. You understand how state ownership, callbacks, keys, forms, and derived rendering work together.
+You have built a complete Todo application using the core React patterns from Days 1–20. More importantly, you can now reason about **state ownership, immutable updates, identity, derived data, controlled forms, callbacks, conditional rendering, and accessible interactions**.
 
-**Next:** Day 22 — `useEffect` fundamentals and synchronization with external systems.
+This prepares you for **Day 22: `useEffect` and synchronization with external systems**.
