@@ -20,7 +20,7 @@ Protect frontend flows by validating API contracts at runtime and handling malfo
 
 ## Explanation
 
-Static types alone cannot guarantee runtime API shape correctness. Runtime validation catches unexpected payload changes before they break UI.
+Static types alone cannot guarantee runtime API shape correctness. Runtime validation catches unexpected payload changes before they break UI. Treat data crossing an API boundary as untrusted until it has been validated, and keep transport DTOs separate from UI-facing models when the backend contract does not map cleanly to the view layer.
 
 ## Topic by Topic
 
@@ -38,13 +38,14 @@ Code Example:
 const UserSchema = z.object({ id: z.string(), name: z.string() });
 ```
 
-**Explanation:** Contract-first thinking reduces ambiguity because frontend and backend agree on shapes before integration bugs appear.
+**Explanation:** Contract-first thinking reduces ambiguity because frontend and backend agree on shapes before integration bugs appear. The contract should also describe nullability, enums, nested objects, and important constraints instead of checking only whether a property exists.
 
 **Key Points:**
 
 - Define data contracts explicitly.
 - Align frontend and backend expectations early.
 - Reduce guesswork during integration.
+- Model meaningful runtime constraints, not only property names.
 
 ### Topic 2: Runtime Parsing with Zod
 
@@ -60,13 +61,14 @@ Code Example:
 const result = UserSchema.safeParse(payload);
 ```
 
-**Explanation:** Runtime validation protects the app when external data does not match compile-time assumptions.
+**Explanation:** Runtime validation protects the app when external data does not match compile-time assumptions. `safeParse` is useful at application boundaries because it lets the caller choose a controlled failure path instead of throwing immediately.
 
 **Key Points:**
 
 - Parse untrusted data at boundaries.
 - Do not trust API responses blindly.
 - Use schema errors to improve debugging.
+- Prefer controlled validation failures for user-facing flows.
 
 ### Topic 3: Error Surface Strategy
 
@@ -82,13 +84,14 @@ Code Example:
 Monitoring.captureMessage("Contract mismatch");
 ```
 
-**Explanation:** Error surface strategy matters because validation failures need both safe user messaging and useful developer diagnostics.
+**Explanation:** Error surface strategy matters because validation failures need both safe user messaging and useful developer diagnostics. Capture enough metadata to identify the endpoint and schema version, but do not send sensitive payloads or credentials to monitoring systems.
 
 **Key Points:**
 
 - Separate user errors from developer details.
 - Keep logs actionable.
 - Avoid leaking raw internals to end users.
+- Redact sensitive payload fields before telemetry.
 
 ### Topic 4: Normalization Layer
 
@@ -104,13 +107,14 @@ Code Example:
 return UserSchema.parse(json);
 ```
 
-**Explanation:** A normalization layer keeps UI code cleaner by converting raw backend shapes into stable frontend-friendly models.
+**Explanation:** A normalization layer keeps UI code cleaner by converting raw backend shapes into stable frontend-friendly models. Keep this transformation near the data boundary so individual components do not independently reinterpret the same API response.
 
 **Key Points:**
 
 - Normalize once near the data boundary.
 - Keep UI components simpler.
 - Hide backend quirks from the view layer.
+- Keep transport and presentation models separate when needed.
 
 ### Topic 5: Version Drift and Backward Compatibility
 
@@ -126,13 +130,14 @@ Code Example:
 z.object({ status: z.string().default("unknown") });
 ```
 
-**Explanation:** Version drift is normal in real systems, so compatibility planning reduces breakage during backend evolution.
+**Explanation:** Version drift is normal in real systems, so compatibility planning reduces breakage during backend evolution. Defaults should be used only when the fallback value is semantically safe; silently defaulting a required security or business field can hide a breaking contract.
 
 **Key Points:**
 
 - Plan for contract changes over time.
 - Support transitional schemas carefully.
 - Document deprecation and migration behavior.
+- Do not use defaults to conceal critical contract failures.
 
 ### Topic 6: Operational Readiness for API Contracts and Runtime Validation
 
@@ -144,16 +149,23 @@ Add one operational rule (monitoring, rollback, security check, or browser suppo
 
 Code Example:
 
-`jsx
+```ts
 // Define an operational gate for safe rollout and rollback.
-`
-**Explanation:** Contract validation decisions should connect to operational rules because schema mismatches can break entire flows in production.
+const validationGate = {
+  monitorContractFailures: true,
+  redactSensitiveFields: true,
+  rollbackIfRegression: true,
+};
+```
+
+**Explanation:** Contract validation decisions should connect to operational rules because schema mismatches can break entire flows in production. Track mismatch rates by endpoint/version and use the signal to coordinate backend rollouts and frontend rollback decisions.
 
 **Key Points:**
 
 - Monitor validation failure rates.
 - Add rollback path for breaking contract changes.
 - Treat schemas as operational boundaries.
+- Redact sensitive fields from validation telemetry.
 
 ## Key Concepts
 
@@ -162,7 +174,8 @@ Code Example:
 - Safe fallback on malformed payloads
 - Centralized normalization layer
 - API evolution resilience
-
+- Transport vs presentation models
+- Contract observability and redaction
 - Operational excellence mindset
 
 ## Visual Concept Map
@@ -181,6 +194,8 @@ flowchart LR
 3. Validate payload in API client.
 4. Handle invalid payload with fallback UI.
 5. Log contract failures for triage.
+6. Redact sensitive fields before sending telemetry.
+7. Define a compatibility/deprecation strategy for the next API version.
 
 ## Hands-on Coding
 
@@ -201,7 +216,9 @@ const ProfileSchema = z.object({
 
 export async function fetchProfile() {
   const res = await fetch("/api/profile");
-  const json = await res.json();
+  if (!res.ok) throw new Error(`Profile request failed: ${res.status}`);
+
+  const json: unknown = await res.json();
   const parsed = ProfileSchema.safeParse(json);
   if (!parsed.success) throw new Error("Invalid profile contract");
   return parsed.data;
@@ -233,7 +250,8 @@ Analytics widget should not crash entire dashboard when payload shape is invalid
 
 ```ts
 try {
-  const data = AnalyticsSchema.parse(await response.json());
+  const json: unknown = await response.json();
+  const data = AnalyticsSchema.parse(json);
   setData(data);
 } catch (error) {
   Monitoring.captureException(error);
@@ -241,28 +259,34 @@ try {
 }
 ```
 
+**Review point:** Monitoring should capture safe context such as endpoint name and schema/version metadata while avoiding raw response payloads that may contain personal or sensitive information.
+
 ## Mini Exercise
 
 Scenario:
 You are responsible for `orders`, `profile`, and `notifications` endpoints.
 
-Add runtime schemas, safe parsing, and fallback behavior for all three.
+Add runtime schemas, safe parsing, and fallback behavior for all three. For each endpoint, document what should happen when the response is malformed, missing, or from an older compatible version.
 
 Expected output:
 
 - Frontend rejects malformed payloads safely
 - Monitoring captures contract mismatch details
 - UI remains stable with clear fallback messaging
+- Sensitive payload data is not exposed through telemetry
 
 ## Assessment Quiz
 
 ### Quiz Questions
 
-1. Why isnï¿½t TypeScript alone enough for API safety?
+1. Why isn't TypeScript alone enough for API safety?
 2. What does `safeParse` return?
 3. True or False: Invalid payload should always crash the whole page.
 4. Why centralize validation in API layer?
 5. How can schemas support evolving APIs?
+6. Why should `unknown` be preferred for unvalidated API JSON?
+7. What should monitoring capture when a contract fails?
+8. When is a default value dangerous in a schema?
 
 ### Quiz Answers
 
@@ -271,18 +295,24 @@ Expected output:
 3. False
 4. Consistent contract enforcement and less duplicated checks
 5. Optional fields/defaults and explicit version handling
+6. It forces the application to validate external data before treating it as a trusted shape.
+7. Safe diagnostic context such as endpoint/version/schema information without sensitive raw payloads.
+8. When it hides a required field or a meaningful breaking contract.
 
 ## Task
 
 - Add Zod schema checks for one API response
 - Add fallback + monitoring for invalid contract
+- Add safe telemetry/redaction handling
+- Document one backward-compatibility strategy
 - Complete mini exercise
 
 ## Self Check
 
 - You can enforce runtime API contracts in frontend code
 - You can prevent malformed payloads from breaking UI
-- You can answer at least 4 out of 5 quiz questions correctly
+- You can distinguish untrusted transport data from trusted application models
+- You can answer at least 6 out of 8 quiz questions correctly
 
 ## Interview Questions and Answers
 
@@ -300,7 +330,7 @@ Expected output:
 
 **Question:** What is a safe handling pattern for invalid payload?
 
-**Answer:** Catch parse error, log it, and show stable fallback UI.
+**Answer:** Catch parse error, log safe diagnostic context, and show stable fallback UI.
 
 **Question:** Where should contract validation happen?
 
@@ -314,10 +344,19 @@ Expected output:
 
 **Question:** How would you manage contract drift between teams?
 
-**Answer:** Shared schemas/contracts, versioning, and monitoring alerts for mismatch spikes.
+**Answer:** Shared schemas/contracts, versioning, compatibility rules, and monitoring alerts for mismatch spikes.
+
+**Question:** Why type an API response as `unknown` before validation?
+
+**Answer:** It prevents unvalidated external data from being treated as trusted application data and makes the parsing boundary explicit.
+
+**Question:** How would you roll out a breaking API contract safely?
+
+**Answer:** Introduce a compatible transition period, version or feature-gate the contract, monitor validation failures, migrate consumers, and remove the legacy path only after usage drops to an acceptable level.
 
 ## Day 87 Outcome
 
 - You can implement runtime contract safety for server integrations
 - You can maintain stable UI under API shape changes
+- You can design safer compatibility and observability strategies
 - You are ready for delivery automation in Day 88

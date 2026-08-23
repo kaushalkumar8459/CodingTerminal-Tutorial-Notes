@@ -20,7 +20,9 @@ Type React components end-to-end, including props, state, events, and hooks for 
 
 ## Explanation
 
-React + TypeScript improves UI contract safety by validating component props and internal state transitions at compile time.
+React + TypeScript improves UI contract safety by validating component props and internal state transitions at compile time. It is especially valuable at component boundaries, where incorrect props, event assumptions, and reusable abstractions can otherwise become runtime defects.
+
+TypeScript does not replace runtime validation. Data received from APIs, local storage, URL parameters, or users can still be malformed, so external data should be validated before it is treated as a trusted domain model.
 
 ## Topic by Topic
 
@@ -35,7 +37,14 @@ Define component props interface.
 Code Example:
 
 ```tsx
-type CardProps = { title: string; onOpen: () => void };
+type CardProps = {
+  title: string;
+  onOpen: () => void;
+};
+
+function Card({ title, onOpen }: CardProps) {
+  return <button onClick={onOpen}>{title}</button>;
+}
 ```
 
 **Explanation:** Typed props turn a component API into an explicit contract, which reduces misuse and improves autocomplete.
@@ -45,6 +54,7 @@ type CardProps = { title: string; onOpen: () => void };
 - Type props for every reusable component.
 - Keep prop names and types intentional.
 - Catch missing or wrong props early.
+- Prefer narrow prop contracts over passing large unrelated objects.
 
 ### Topic 2: Typed State and Setters
 
@@ -58,6 +68,7 @@ Code Example:
 
 ```tsx
 const [mode, setMode] = useState<"view" | "edit">("view");
+const [selectedId, setSelectedId] = useState<string | null>(null);
 ```
 
 **Explanation:** Explicit state types are especially helpful for nullable values, unions, and complex feature modes.
@@ -67,6 +78,7 @@ const [mode, setMode] = useState<"view" | "edit">("view");
 - Let inference help when simple.
 - Add explicit types when state meaning matters.
 - Use unions to model allowed UI states.
+- Keep state transitions aligned with the actual domain states.
 
 ### Topic 3: Typed Events
 
@@ -81,6 +93,10 @@ Code Example:
 ```tsx
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
   setName(e.target.value);
+
+const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+};
 ```
 
 **Explanation:** Typed events tell TypeScript exactly which element triggered the handler, so field access stays safe.
@@ -90,6 +106,7 @@ const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 - Type form and input events directly.
 - Avoid guessing event target shape.
 - Use React event generics consistently.
+- Type the event according to the actual element rather than using a broad event type.
 
 ### Topic 4: Typed Custom Hooks
 
@@ -102,7 +119,15 @@ Define hook return type for reusable logic.
 Code Example:
 
 ```tsx
-function useToggle(initial = false): [boolean, () => void] { ... }
+type ToggleResult = {
+  enabled: boolean;
+  toggle: () => void;
+};
+
+function useToggle(initial = false): ToggleResult {
+  // implementation omitted
+  return { enabled: initial, toggle: () => {} };
+}
 ```
 
 **Explanation:** Custom hooks are easier to reuse when their return shape is obvious and stable.
@@ -112,6 +137,7 @@ function useToggle(initial = false): [boolean, () => void] { ... }
 - Type hook parameters and return values.
 - Keep hook contracts small and predictable.
 - Improve consumer confidence with explicit signatures.
+- Expose only the state and actions consumers actually need.
 
 ### Topic 5: Generic Components
 
@@ -124,7 +150,15 @@ Build typed list component.
 Code Example:
 
 ```tsx
-function List<T>({ items, renderItem }: { items: T[]; renderItem: (item: T) => React.ReactNode }) { ... }
+function List<T>({
+  items,
+  renderItem,
+}: {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+}) {
+  return <div>{items.map(renderItem)}</div>;
+}
 ```
 
 **Explanation:** Generics let one component stay reusable without losing type safety for the specific data it renders.
@@ -134,6 +168,7 @@ function List<T>({ items, renderItem }: { items: T[]; renderItem: (item: T) => R
 - Use generics for reusable abstractions.
 - Preserve type information across props.
 - Avoid falling back to `any` in shared UI.
+- Keep generic APIs simple enough for consumers to understand.
 
 ### Topic 6: Scalability Decisions for React + TypeScript
 
@@ -145,9 +180,15 @@ Document one design decision for this topic with tradeoff notes so future contri
 
 Code Example:
 
-`jsx
-// Record architecture tradeoff and migration path in project docs.
-`
+```tsx
+// types/user.ts
+export interface User {
+  id: string;
+  name: string;
+}
+
+// Keep domain types close to their domain and reuse them at module boundaries.
+```
 
 **Explanation:** Typed React systems grow better when conventions are shared. Architecture notes keep the team aligned on prop, hook, and model patterns.
 
@@ -156,6 +197,7 @@ Code Example:
 - Document team typing patterns.
 - Note tradeoffs for strictness versus speed.
 - Keep React and TS conventions easy to follow.
+- Avoid creating one giant global type file that becomes a dependency hotspot.
 
 ## Key Concepts
 
@@ -164,7 +206,8 @@ Code Example:
 - Event typing correctness
 - Hook return signatures
 - Generic reusable components
-
+- Runtime validation at external boundaries
+- Strict TypeScript integration
 - Scalable architecture thinking
 
 ## Visual Concept Map
@@ -183,7 +226,9 @@ flowchart LR
 2. Convert components to `.tsx`.
 3. Type props, events, and local state.
 4. Add typed custom hooks and utility helpers.
-5. Ensure zero implicit any warnings.
+5. Replace avoidable `any` usage with precise types or `unknown` where appropriate.
+6. Validate external data before mapping it into trusted application models.
+7. Ensure zero implicit-any warnings and run the type checker in CI.
 
 ## Hands-on Coding
 
@@ -253,13 +298,14 @@ function GenericTable<T>({ rows, renderRow }: GenericTableProps<T>) {
 Scenario:
 You are converting an inventory management feature from JSX to TSX.
 
-Type all props, component state, event handlers, and one reusable generic list/table component.
+Type all props, component state, event handlers, and one reusable generic list/table component. Also identify any external data boundary that needs runtime validation before the data is used by the typed components.
 
 Expected output:
 
 - Feature compiles with strict checks
 - Runtime prop mismatch risks are reduced
 - Shared UI abstraction supports multiple typed models
+- External input is validated separately from compile-time typing
 
 ## Assessment Quiz
 
@@ -269,27 +315,37 @@ Expected output:
 2. What is a common benefit of event typing?
 3. True or False: Generics are only for backend code.
 4. Why type custom hook return values?
-5. What does implicit any warning indicate?
+5. What does an implicit any warning indicate?
+6. When should you use a union type for React state?
+7. True or False: TypeScript props automatically validate API data at runtime.
+8. When is a generic component a better choice than duplicating components for each model?
 
 ### Quiz Answers
 
-1. Enforces clear component contracts
-2. Prevents invalid event target usage
-3. False
-4. Ensures consumers use hook outputs correctly
-5. Missing type information that weakens safety
+1. Enforces clear component contracts.
+2. Prevents invalid event target usage and improves safe access to element-specific properties.
+3. False.
+4. It makes the hook's public contract clear and helps consumers use its output correctly.
+5. Missing type information that weakens compile-time safety.
+6. When the state has a finite, known set of valid modes or values.
+7. False. TypeScript types are compile-time constructs and do not validate arbitrary runtime data.
+8. When the UI behavior is shared while the data model varies and the generic API can preserve the required type information.
 
 ## Task
 
 - Convert one complete feature to typed React
 - Add types for props/state/events/hooks
+- Replace avoidable `any` usage
+- Identify one runtime validation boundary
 - Complete mini exercise
 
 ## Self Check
 
 - You can build strongly typed React components
 - You can design reusable typed abstractions
-- You can answer at least 4 out of 5 quiz questions correctly
+- You understand compile-time typing versus runtime validation
+- You can choose appropriate types for props, state, events, and hooks
+- You can answer at least 6 out of 8 quiz questions correctly
 
 ## Interview Questions and Answers
 
@@ -323,8 +379,18 @@ Expected output:
 
 **Answer:** Strict compiler rules, linting, and type checks in CI.
 
+**Question:** Why doesn't a TypeScript prop type validate an API response at runtime?
+
+**Answer:** TypeScript types are erased during compilation. Runtime data must be validated independently before it is trusted.
+
+**Question:** When should you avoid a generic component?
+
+**Answer:** When the abstraction is more complex than the repeated UI or when the generic API becomes difficult for consumers to understand. Duplication can sometimes be clearer than an overly generic component.
+
 ## Day 74 Outcome
 
 - You can ship production-style typed React features
 - You can reduce integration bugs through compile-time contracts
+- You can design reusable generic components without sacrificing type safety
+- You understand the boundary between compile-time types and runtime validation
 - You are ready for typed global state in Day 75
