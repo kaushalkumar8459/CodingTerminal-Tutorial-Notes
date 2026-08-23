@@ -20,7 +20,7 @@ Identify and fix memoization bugs, stale closures, and dependency-array mistakes
 
 ## Explanation
 
-Memoization improves performance but can introduce correctness bugs when closures capture outdated values or dependencies are incomplete.
+Memoization improves performance but can introduce correctness bugs when closures capture outdated values or dependencies are incomplete. The safe workflow is **correctness first, measurement second, optimization third**: make hook dependencies truthful, reproduce the behavior, measure the hotspot, then apply the smallest optimization that solves the measured problem.
 
 ## Topic by Topic
 
@@ -38,13 +38,14 @@ Code Example:
 const log = useCallback(() => console.log(count), []);
 ```
 
-**Explanation:** Closures are not a React feature alone, but React code makes closure mistakes very visible because renders create new function scopes often.
+**Explanation:** Closures are not a React feature alone, but React code makes closure mistakes very visible because renders create new function scopes often. The callback above permanently captures the value from the render in which it was created because its dependency list is empty.
 
 **Key Points:**
 
 - Remember closures capture render-time values.
 - Old closures can cause stale behavior.
 - Debugging starts with understanding that capture model.
+- A stable function identity does not mean a function sees the latest state.
 
 ### Topic 2: Dependency Array Truthfulness
 
@@ -62,13 +63,14 @@ useEffect(() => {
 }, [query]);
 ```
 
-**Explanation:** Dependency arrays must reflect the values your logic uses, otherwise effects and memoized values can drift from reality.
+**Explanation:** Dependency arrays must reflect the values your logic uses, otherwise effects and memoized values can drift from reality. Do not remove a dependency merely to make an effect run less often; instead, restructure the logic when the dependency relationship itself is wrong.
 
 **Key Points:**
 
 - Keep dependency arrays honest.
 - Missing dependencies cause stale logic.
 - Lint rules help catch common mistakes.
+- If a dependency causes unwanted work, investigate the design instead of suppressing the rule blindly.
 
 ### Topic 3: Over-memoization Pitfall
 
@@ -84,13 +86,14 @@ Code Example:
 const derived = useMemo(() => heavy(data), [data]);
 ```
 
-**Explanation:** Memoization has overhead, so using it on trivial calculations can make code harder to read without meaningful benefit.
+**Explanation:** Memoization has overhead, so using it on trivial calculations can make code harder to read without meaningful benefit. It can also become ineffective when dependencies are recreated unnecessarily.
 
 **Key Points:**
 
 - Memoize only where evidence supports it.
 - Do not optimize tiny calculations blindly.
 - Prefer clarity over unnecessary caching.
+- Verify that memoization actually improves the measured bottleneck.
 
 ### Topic 4: Stale State in Async Logic
 
@@ -106,13 +109,14 @@ Code Example:
 setCount((c) => c + 1);
 ```
 
-**Explanation:** Async callbacks often reveal stale closure bugs because they run later while the component state may already have changed.
+**Explanation:** Async callbacks often reveal stale closure bugs because they run later while the component state may already have changed. Functional updates are ideal when the next state depends on the previous state; refs are useful when asynchronous code needs access to a mutable latest value without triggering a render.
 
 **Key Points:**
 
 - Watch async logic carefully.
 - Use refs or functional updates when appropriate.
 - Test delayed behavior, not only immediate UI.
+- Cancel or ignore obsolete async work when results can arrive out of order.
 
 ### Topic 5: Debug Checklist
 
@@ -128,13 +132,14 @@ Code Example:
 // eslint-plugin-react-hooks catches missing dependencies.
 ```
 
-**Explanation:** A checklist keeps memoization debugging disciplined instead of relying on random tweaks to hooks and dependencies.
+**Explanation:** A checklist keeps memoization debugging disciplined instead of relying on random tweaks to hooks and dependencies. Reproduce the bug first, identify the captured value, inspect dependencies and identity changes, fix correctness, and then use profiling to decide whether optimization is necessary.
 
 **Key Points:**
 
 - Review dependencies first.
 - Then inspect prop identity and async flow.
 - Re-measure after each change.
+- Test both correctness and performance after optimization.
 
 ### Topic 6: Operational Readiness for Memoization Pitfalls and Stale Closures
 
@@ -146,16 +151,23 @@ Add one operational rule (monitoring, rollback, security check, or browser suppo
 
 Code Example:
 
-`jsx
+```jsx
 // Define an operational gate for safe rollout and rollback.
-`
-**Explanation:** Memoization bugs can be subtle in production, so high-risk performance changes should be paired with monitoring and rollback plans.
+const optimizationGate = {
+  measureBefore: true,
+  monitorAfterRelease: true,
+  rollbackIfRegression: true,
+};
+```
+
+**Explanation:** Memoization bugs can be subtle in production, so high-risk performance changes should be paired with monitoring and rollback plans. A performance optimization should have observable success criteria rather than being judged only by whether the code looks faster.
 
 **Key Points:**
 
 - Monitor affected screens after optimization.
 - Add safe rollback path for regressions.
 - Treat performance changes as production changes, not local tweaks.
+- Define measurable signals before rollout.
 
 ## Key Concepts
 
@@ -164,7 +176,6 @@ Code Example:
 - Correctness vs optimization balance
 - Async stale-state mitigation
 - Hook debugging discipline
-
 - Operational excellence mindset
 
 ## Visual Concept Map
@@ -184,6 +195,8 @@ flowchart TD
 3. Apply minimal correct dependency fixes.
 4. Validate behavior with rapid interaction scenarios.
 5. Keep only useful memoization.
+6. Profile before and after the optimization.
+7. Add regression coverage for the stale-value scenario.
 
 ## Hands-on Coding
 
@@ -217,10 +230,16 @@ Search results fail to update when query changes quickly.
 ```jsx
 useEffect(() => {
   let active = true;
-  fetch(`/api/search?q=${query}`)
-    .then((r) => r.json())
+  fetch(`/api/search?q=${encodeURIComponent(query)}`)
+    .then((r) => {
+      if (!r.ok) throw new Error(`Search failed: ${r.status}`);
+      return r.json();
+    })
     .then((data) => {
       if (active) setResults(data);
+    })
+    .catch((error) => {
+      if (active) setError(error);
     });
   return () => {
     active = false;
@@ -236,7 +255,7 @@ Countdown widget uses stale value in delayed callbacks.
 ```jsx
 useEffect(() => {
   const id = setInterval(() => {
-    setSeconds((s) => s - 1);
+    setSeconds((s) => Math.max(0, s - 1));
   }, 1000);
   return () => clearInterval(id);
 }, []);
@@ -247,13 +266,14 @@ useEffect(() => {
 Scenario:
 You are fixing a sales dashboard where filters and auto-refresh show inconsistent numbers.
 
-Find two stale-closure issues and one over-memoization case, then refactor safely.
+Find two stale-closure issues and one over-memoization case, then refactor safely. Record what value was stale, which dependency or update pattern caused it, and what measurement justified the final optimization decision.
 
 Expected output:
 
 - Correct, up-to-date values in callbacks/effects
 - Cleaner dependency arrays
 - Reduced unnecessary memoization complexity
+- A regression test for at least one stale-closure case
 
 ## Assessment Quiz
 
@@ -264,6 +284,9 @@ Expected output:
 3. True or False: Empty dependency array is always safest.
 4. What helps avoid stale state in async timers?
 5. When should memoization be removed?
+6. Why can a memoized callback still observe stale state?
+7. What should you do before adding `useMemo` to a component?
+8. Why should async search logic guard against obsolete responses?
 
 ### Quiz Answers
 
@@ -272,18 +295,25 @@ Expected output:
 3. False
 4. Functional updates or latest value refs
 5. When there is no measurable benefit and complexity increases
+6. Because memoization can preserve a callback identity while its closure still contains values from an older render.
+7. Reproduce and measure the actual performance bottleneck.
+8. A slower response from an older request could otherwise overwrite newer results.
 
 ## Task
 
 - Reproduce and fix stale closure in effect/callback
 - Remove one unnecessary memoization usage
+- Add one regression test for stale state
+- Measure one optimization before and after the change
 - Complete mini exercise
 
 ## Self Check
 
 - You can diagnose stale closures confidently
 - You can balance correctness and optimization
-- You can answer at least 4 out of 5 quiz questions correctly
+- You can explain why dependency arrays should be truthful
+- You can distinguish memoization from correctness
+- You can answer at least 6 out of 8 quiz questions correctly
 
 ## Interview Questions and Answers
 
@@ -291,7 +321,7 @@ Expected output:
 
 **Question:** What is a stale closure in React?
 
-**Answer:** A function using outdated values captured from earlier render.
+**Answer:** A function using outdated values captured from an earlier render.
 
 **Question:** Why include values in dependency arrays?
 
@@ -317,8 +347,17 @@ Expected output:
 
 **Answer:** Assuming they always improve performance regardless of context.
 
+**Question:** How would you debug a callback that is stable but sees an old value?
+
+**Answer:** Identify which render created the callback, inspect its dependency list, reproduce the interaction across renders, and determine whether the callback should depend on the changing value or instead use a functional update/ref-based design.
+
+**Question:** How do you decide whether a memoization optimization is successful?
+
+**Answer:** Compare a representative workload before and after the change using profiling or user-facing performance measurements, while confirming that behavior and correctness remain unchanged.
+
 ## Day 84 Outcome
 
 - You can fix complex stale closure and dependency bugs
 - You can apply memoization responsibly and safely
+- You can validate performance improvements with evidence
 - You are ready for SSR hydration mismatch debugging in Day 85
