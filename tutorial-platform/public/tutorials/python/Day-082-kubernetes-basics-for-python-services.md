@@ -9,23 +9,6 @@ track: python
 ---
 # Day 082 [Advanced]: Kubernetes Basics for Python Services
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 082 Outcome](#day-082-outcome)
-
 ## Goal
 
 Deploy and operate Python services on Kubernetes using core primitives for scaling, resilience, and controlled rollout.

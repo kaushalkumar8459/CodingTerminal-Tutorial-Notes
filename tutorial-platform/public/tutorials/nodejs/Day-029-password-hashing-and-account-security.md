@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 029 [Beginner]: Password Hashing and Account Security
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement secure password handling and account-protection controls for Node authentication systems.

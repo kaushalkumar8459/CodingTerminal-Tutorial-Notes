@@ -9,19 +9,6 @@ track: java
 ---
 # Day 10 [Beginner]: Methods Basics Parameters and Return Types
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 10 Outcome](#day-10-outcome)
-
 ## Goal
 
 Create reusable methods with parameters and return values to reduce duplication.

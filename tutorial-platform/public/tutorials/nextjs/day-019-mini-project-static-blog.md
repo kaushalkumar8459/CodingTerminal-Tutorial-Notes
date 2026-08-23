@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 19 [Beginner]: Mini Project — Static Blog
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 19 Outcome](#day-19-outcome)
-
 ## Goal
 
 Build a complete static blog with markdown content, dynamic post pages, listing with categories, SEO metadata, and proper error handling, applying everything learned in Days 1–18.

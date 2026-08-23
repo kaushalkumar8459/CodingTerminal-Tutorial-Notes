@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 041 [Intermediate]: File Uploads and Storage
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement secure and scalable file upload workflows in Node APIs.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 075 [Advanced]: Fullstack with Next.js Server Actions
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build modern fullstack Next.js features using Server Actions with secure mutation handling and robust UX patterns.

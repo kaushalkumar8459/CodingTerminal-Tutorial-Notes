@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 057 [Intermediate]: Feature Flags and Config Rollout
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Use feature flags and configuration rollout patterns to ship safely without full redeploys.

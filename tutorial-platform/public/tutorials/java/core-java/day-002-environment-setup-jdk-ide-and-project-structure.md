@@ -9,19 +9,6 @@ track: java
 ---
 # Day 2 [Beginner]: Environment Setup JDK IDE and Project Structure
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 2 Outcome](#day-2-outcome)
-
 ## Goal
 
 Set up a clean Java development environment and understand a basic Java project layout.

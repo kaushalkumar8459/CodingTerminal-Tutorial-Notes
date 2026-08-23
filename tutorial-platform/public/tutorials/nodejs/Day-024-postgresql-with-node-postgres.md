@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 024 [Beginner]: PostgreSQL with node-postgres
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Connect Node.js to PostgreSQL using node-postgres and implement safe SQL operations with parameterized queries.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 064 [Intermediate]: Domain Driven Design for Node
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Apply Domain-Driven Design in Node projects to model business complexity with clear boundaries and expressive code.

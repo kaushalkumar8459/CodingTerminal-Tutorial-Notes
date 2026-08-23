@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 12 [Beginner]: Environment Variables
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 12 Outcome](#day-12-outcome)
-
 ## Goal
 
 Store and access configuration values using environment variables in Next.js, understanding the difference between server-only and browser-exposed variables.

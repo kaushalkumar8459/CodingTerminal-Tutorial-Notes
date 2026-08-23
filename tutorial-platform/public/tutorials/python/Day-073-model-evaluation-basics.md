@@ -9,23 +9,6 @@ track: python
 ---
 # Day 073 [Advanced]: Model Evaluation Basics
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 073 Outcome](#day-073-outcome)
-
 ## Goal
 
 Evaluate ML models rigorously using suitable metrics, validation strategies, and error analysis for trustworthy decision making.

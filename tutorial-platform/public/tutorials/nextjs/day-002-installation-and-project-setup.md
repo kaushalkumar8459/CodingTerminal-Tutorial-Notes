@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 2 [Beginner]: Installation and Project Setup
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 2 Outcome](#day-2-outcome)
-
 ## Goal
 
 Set up a fully functional Next.js project with TypeScript, understand the generated folder structure, and run the development server confidently.

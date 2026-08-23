@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 026 [Beginner]: Authentication with JWT
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement practical JWT-based authentication flow in Node APIs with secure token generation and verification.

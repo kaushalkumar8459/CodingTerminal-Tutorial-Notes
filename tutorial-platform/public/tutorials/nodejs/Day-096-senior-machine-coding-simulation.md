@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 096 [Expert]: Senior Machine Coding Simulation
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Perform senior-level machine coding rounds with production-focused delivery quality: clean architecture, correctness, scalability, and communication.

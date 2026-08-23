@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 066 [Intermediate]: TypeScript with Node Basics
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Set up and use TypeScript in Node projects with strict typing, safer refactoring, and production-ready build flow.

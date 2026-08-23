@@ -224,6 +224,7 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
   const [youtubeVideos, setYoutubeVideos] = useState<TutorialVideo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isSyllabusOpen, setIsSyllabusOpen] = useState(false);
   const [isMobileTocDrawerOpen, setIsMobileTocDrawerOpen] = useState(false);
 
   const track = routeTrack && isTrackKey(routeTrack) ? routeTrack : null;
@@ -469,7 +470,12 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
           </header>
 
           {tocItems.length > 0 ? (
-            <details className="mb-6 overflow-hidden rounded-2xl border border-cyan-200 bg-cyan-50/70" aria-label="Lesson syllabus">
+            <details
+              className="mb-6 overflow-hidden rounded-2xl border border-cyan-200 bg-cyan-50/70"
+              aria-label="Lesson syllabus"
+              open={isSyllabusOpen}
+              onToggle={(event) => setIsSyllabusOpen(event.currentTarget.open)}
+            >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 text-left sm:p-5">
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-800">Syllabus</span>
@@ -478,7 +484,7 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
                   </span>
                 </div>
                 <span className="text-sm font-semibold text-cyan-800" aria-hidden="true">
-                  Show
+                  {isSyllabusOpen ? "Hide" : "Show"}
                 </span>
               </summary>
 

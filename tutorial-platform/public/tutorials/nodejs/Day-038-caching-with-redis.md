@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 038 [Intermediate]: Caching with Redis
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Apply Redis caching patterns to improve API performance while maintaining data correctness.

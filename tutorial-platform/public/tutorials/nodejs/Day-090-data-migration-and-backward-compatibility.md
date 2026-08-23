@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 090 [Advanced]: Data Migration and Backward Compatibility
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Execute safe production data migrations while preserving backward compatibility for services, clients, and operational workflows.

@@ -11,7 +11,8 @@ const generatedTutorialsFile = path.join(
 );
 const searchIndexFile = path.join(rootDir, "public", "search-index.json");
 const knownTracks = ["react", "nodejs", "python", "nextjs", "java"];
-const lessonFilePattern = /^day-\d{3}(?:_\d+)?-.+\.md$/i;
+const lessonFilePattern =
+  /^day-\d{3}(?:_\d+)?-(?!to-\d{3})(?!.*quality-audit-report).+\.md$/i;
 
 function toPosixPath(input) {
   return input.replaceAll("\\", "/");
@@ -268,6 +269,10 @@ async function listMarkdownFilesByTrack() {
         const fileName = path.basename(absolutePath);
 
         if (!isLessonMarkdownFileName(fileName)) {
+          continue;
+        }
+
+        if (/quality-audit-report/i.test(fileName)) {
           continue;
         }
 

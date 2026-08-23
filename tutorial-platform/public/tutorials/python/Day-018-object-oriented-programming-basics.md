@@ -9,23 +9,6 @@ track: python
 ---
 # Day 018 [Beginner]: Object Oriented Programming Basics
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 018 Outcome](#day-018-outcome)
-
 ## Goal
 
 Understand the basic ideas of object-oriented programming so you can model real-world entities using classes and objects.

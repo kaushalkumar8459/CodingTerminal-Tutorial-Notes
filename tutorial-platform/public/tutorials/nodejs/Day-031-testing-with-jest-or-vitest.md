@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 031 [Beginner]: Testing with Jest or Vitest
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build strong fundamentals for automated backend tests using Jest or Vitest.

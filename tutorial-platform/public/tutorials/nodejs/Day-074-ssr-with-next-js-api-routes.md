@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 074 [Advanced]: SSR with Next.js API Routes
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build fullstack-ready Next.js applications using SSR and API routes with performance, caching, and security best practices.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 005 [Beginner]: npm and Package Management
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Master practical npm workflows: dependency installation, semantic versioning, scripts, lockfiles, and package security checks.

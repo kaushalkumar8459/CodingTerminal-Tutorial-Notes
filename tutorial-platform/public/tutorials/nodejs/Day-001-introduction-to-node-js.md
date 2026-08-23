@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 001 [Beginner]: Introduction to Node.js
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand what Node.js is, where it fits in real products, and build your first practical backend-style script.

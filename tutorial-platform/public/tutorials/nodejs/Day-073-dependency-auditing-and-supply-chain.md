@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 073 [Advanced]: Dependency Auditing and Supply Chain
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a supply-chain security workflow for Node projects using dependency audits, provenance checks, and controlled update strategy.

@@ -9,23 +9,6 @@ track: python
 ---
 # Day 062 [Intermediate]: PostgreSQL with psycopg
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 062 Outcome](#day-062-outcome)
-
 ## Goal
 
 Connect Python applications to PostgreSQL using psycopg with safe queries, transaction control, and reliable error handling.

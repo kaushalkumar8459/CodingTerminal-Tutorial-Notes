@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 021 [Beginner]: MongoDB Basics
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand MongoDB fundamentals and perform practical document operations for backend APIs.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 094 [Expert]: Tech Lead Decision Framework
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a repeatable decision framework for tech leads to make high-quality architecture and delivery decisions under uncertainty.

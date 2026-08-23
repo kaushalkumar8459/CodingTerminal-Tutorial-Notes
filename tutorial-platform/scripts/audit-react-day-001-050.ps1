@@ -30,7 +30,6 @@ $rows = foreach ($f in $files) {
 
   $placeholderHits = Select-String -Path $f.FullName -Pattern '(?i)\bTBD\b|Coming soon|lorem ipsum'
 
-  $hasIndex = [bool](Select-String -Path $f.FullName -Pattern '^##\s+Index\s*$' -CaseSensitive:$false)
   $hasGoal = [bool](Select-String -Path $f.FullName -Pattern '^##\s+Goal\s*$' -CaseSensitive:$false)
   $hasPrereq = [bool](Select-String -Path $f.FullName -Pattern '^##\s+Prerequisites\s*$' -CaseSensitive:$false)
   $hasOutcome = [bool](Select-String -Path $f.FullName -Pattern '^##\s+Day\s+[0-9]+\s+Outcome\s*$|^##\s+Outcome\s*$' -CaseSensitive:$false)
@@ -52,7 +51,6 @@ $rows = foreach ($f in $files) {
   if ($badFence) { $priorityScore += 5 }
   if (-not $fenceBalanced) { $priorityScore += 5 }
   if ($placeholderHits) { $priorityScore += 3 }
-  if (-not $hasIndex) { $priorityScore += 1 }
   if (-not $hasGoal) { $priorityScore += 3 }
   if (-not $hasPrereq) { $priorityScore += 2 }
   if (-not $hasOutcome) { $priorityScore += 2 }
@@ -78,7 +76,6 @@ $rows = foreach ($f in $files) {
     BadFenceLines = if ($badFence) { ($badFence | ForEach-Object { $_.LineNumber }) -join ', ' } else { '' }
     FencesBalanced = $fenceBalanced
     PlaceholderCount = if ($placeholderHits) { $placeholderHits.Count } else { 0 }
-    HasIndex = $hasIndex
     HasGoal = $hasGoal
     HasPrerequisites = $hasPrereq
     HasOutcome = $hasOutcome
@@ -98,7 +95,6 @@ $issues = $rows | Where-Object {
   $_.BadFenceLines -ne '' -or
   -not $_.FencesBalanced -or
   $_.PlaceholderCount -gt 0 -or
-  -not $_.HasIndex -or
   -not $_.HasGoal -or
   -not $_.HasPrerequisites -or
   -not $_.HasOutcome
@@ -138,10 +134,10 @@ $topRanked = $ranked | Select-Object -First 15
 
 $md += '## Priority Ranking (Top 15)'
 $md += ''
-$md += '| File | Priority | Priority Score | Richness Score | Lines | Code Blocks | Index | Outcome |'
-$md += '|---|---|---:|---:|---:|---:|---|---|'
+$md += '| File | Priority | Priority Score | Richness Score | Lines | Code Blocks | Outcome |'
+$md += '|---|---|---:|---:|---:|---:|---|'
 foreach ($r in $topRanked) {
-  $md += ('| {0} | {1} | {2} | {3} | {4} | {5} | {6} | {7} |' -f $r.File, $r.PriorityLevel, $r.PriorityScore, $r.RichnessScore, $r.Lines, $r.CodeBlocks, $(if ($r.HasIndex) { 'OK' } else { 'MISS' }), $(if ($r.HasOutcome) { 'OK' } else { 'MISS' }))
+  $md += ('| {0} | {1} | {2} | {3} | {4} | {5} | {6} |' -f $r.File, $r.PriorityLevel, $r.PriorityScore, $r.RichnessScore, $r.Lines, $r.CodeBlocks, $(if ($r.HasOutcome) { 'OK' } else { 'MISS' }))
 }
 $md += ''
 
@@ -157,7 +153,6 @@ if ($issues.Count -eq 0) {
     if ($r.BadFenceLines) { $problems += 'malformed code fence marker lines: ' + $r.BadFenceLines }
     if (-not $r.FencesBalanced) { $problems += 'unbalanced triple backtick fences' }
     if ([int]$r.PlaceholderCount -gt 0) { $problems += 'placeholder phrases found: ' + $r.PlaceholderCount }
-    if (-not $r.HasIndex) { $problems += 'missing Index section' }
     if (-not $r.HasGoal) { $problems += 'missing Goal section' }
     if (-not $r.HasPrerequisites) { $problems += 'missing Prerequisites section' }
     if (-not $r.HasOutcome) { $problems += 'missing Outcome section' }
@@ -171,10 +166,10 @@ if ($issues.Count -eq 0) {
 
 $md += '## Full Matrix'
 $md += ''
-$md += '| File | Lines | Code Blocks | Frontmatter | Fences Balanced | Index | Goal | Prerequisites | Outcome | Placeholders | Richness | Priority |'
-$md += '|---|---:|---:|---|---|---|---|---|---|---:|---:|---:|'
+$md += '| File | Lines | Code Blocks | Frontmatter | Fences Balanced | Goal | Prerequisites | Outcome | Placeholders | Richness | Priority |'
+$md += '|---|---:|---:|---|---|---|---|---|---:|---:|---:|'
 foreach ($r in $rows) {
-  $md += ('| {0} | {1} | {2} | {3} | {4} | {5} | {6} | {7} | {8} | {9} | {10} | {11} |' -f $r.File, $r.Lines, $r.CodeBlocks, $(if ($r.FrontmatterOk) { 'OK' } else { 'FAIL' }), $(if ($r.FencesBalanced) { 'OK' } else { 'FAIL' }), $(if ($r.HasIndex) { 'OK' } else { 'MISS' }), $(if ($r.HasGoal) { 'OK' } else { 'MISS' }), $(if ($r.HasPrerequisites) { 'OK' } else { 'MISS' }), $(if ($r.HasOutcome) { 'OK' } else { 'MISS' }), $r.PlaceholderCount, $r.RichnessScore, $r.PriorityScore)
+  $md += ('| {0} | {1} | {2} | {3} | {4} | {5} | {6} | {7} | {8} | {9} | {10} |' -f $r.File, $r.Lines, $r.CodeBlocks, $(if ($r.FrontmatterOk) { 'OK' } else { 'FAIL' }), $(if ($r.FencesBalanced) { 'OK' } else { 'FAIL' }), $(if ($r.HasGoal) { 'OK' } else { 'MISS' }), $(if ($r.HasPrerequisites) { 'OK' } else { 'MISS' }), $(if ($r.HasOutcome) { 'OK' } else { 'MISS' }), $r.PlaceholderCount, $r.RichnessScore, $r.PriorityScore)
 }
 
 $md | Set-Content -Path $reportPath -Encoding UTF8

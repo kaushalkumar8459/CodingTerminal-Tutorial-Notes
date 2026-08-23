@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 086 [Advanced]: Incident Response and On-call Playbook
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a practical incident response and on-call system that reduces downtime, speeds recovery, and improves team reliability habits.

@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 8 [Beginner]: Static Assets and Public Folder
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 8 Outcome](#day-8-outcome)
-
 ## Goal
 
 Understand how to serve static files (images, fonts, icons, documents) using the `public/` directory and how to reference them in your Next.js application.

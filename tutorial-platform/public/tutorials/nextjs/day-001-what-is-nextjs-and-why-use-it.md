@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 1 [Beginner]: What is Next.js and Why Use It
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 1 Outcome](#day-1-outcome)
-
 ## Goal
 
 Understand what Next.js is, how it differs from plain React, and why it is a popular choice for modern web applications.

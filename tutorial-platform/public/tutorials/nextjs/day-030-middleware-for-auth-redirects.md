@@ -18,23 +18,6 @@ track: nextjs
 ---
 # Day 30 [Intermediate]: Middleware for Auth Redirects
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 30 Outcome](#day-30-outcome)
-
 ## Goal
 
 Master Middleware for Auth Redirects in Next.js and apply it effectively in real applications.

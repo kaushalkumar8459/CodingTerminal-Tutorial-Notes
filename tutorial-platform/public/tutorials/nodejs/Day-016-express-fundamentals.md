@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 016 [Beginner]: Express Fundamentals
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build your first practical Express API with correct app setup, middleware flow, and route design.

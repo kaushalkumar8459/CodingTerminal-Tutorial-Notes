@@ -9,19 +9,6 @@ track: java
 ---
 # Day 1 [Beginner]: What is Java and Where It Is Used
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 1 Outcome](#day-1-outcome)
-
 ## Goal
 
 Understand what Java is, why it became popular, and where it is used in real projects.

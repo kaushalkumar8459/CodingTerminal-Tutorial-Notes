@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 092 [Expert]: Compliance and Data Privacy
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement compliance-aware data privacy architecture in Node systems with practical controls for consent, minimization, retention, and auditability.

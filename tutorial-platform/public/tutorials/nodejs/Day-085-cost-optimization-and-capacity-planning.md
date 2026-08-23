@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 085 [Advanced]: Cost Optimization and Capacity Planning
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design data-driven cost optimization and capacity planning strategy for Node systems under real traffic and growth uncertainty.

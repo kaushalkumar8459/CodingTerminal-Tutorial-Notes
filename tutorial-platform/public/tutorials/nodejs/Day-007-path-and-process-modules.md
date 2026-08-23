@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 007 [Beginner]: Path and Process Modules
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Use Node path and process modules to build environment-safe, cross-platform CLI and service scripts.

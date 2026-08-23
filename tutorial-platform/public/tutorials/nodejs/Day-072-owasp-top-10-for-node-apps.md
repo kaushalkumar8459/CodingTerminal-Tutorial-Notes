@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 072 [Advanced]: OWASP Top 10 for Node Apps
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Map OWASP Top 10 risks to practical Node patterns and apply defensive controls in everyday backend development.

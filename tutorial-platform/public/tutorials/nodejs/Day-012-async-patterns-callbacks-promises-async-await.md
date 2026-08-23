@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 012 [Beginner]: Async Patterns - Callbacks, Promises, Async/Await
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Master Node asynchronous patterns and choose the right model for readable, reliable backend workflows.

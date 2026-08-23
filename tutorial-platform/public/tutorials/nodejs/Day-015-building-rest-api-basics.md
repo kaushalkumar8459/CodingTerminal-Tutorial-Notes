@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 015 [Beginner]: Building REST API Basics
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design and implement a beginner-friendly REST API with proper resource modeling, methods, and status codes.

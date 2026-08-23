@@ -9,23 +9,6 @@ track: python
 ---
 # Day 039 [Intermediate]: Data Structures in Python
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 039 Outcome](#day-039-outcome)
-
 ## Goal
 
 Build practical intuition for selecting Python data structures based on operation cost, readability, and problem constraints.

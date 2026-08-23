@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 052 [Intermediate]: Dockerizing Node Applications
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Package Node applications into secure, reproducible Docker images suitable for local development and production deployment.

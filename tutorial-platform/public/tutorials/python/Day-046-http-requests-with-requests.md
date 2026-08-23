@@ -9,23 +9,6 @@ track: python
 ---
 # Day 046 [Intermediate]: HTTP Requests with requests
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 046 Outcome](#day-046-outcome)
-
 ## Goal
 
 Learn to call HTTP APIs reliably using the requests library, with proper error handling, timeouts, and response validation.

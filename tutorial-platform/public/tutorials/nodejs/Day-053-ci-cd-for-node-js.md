@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 053 [Intermediate]: CI CD for Node.js
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build reliable CI/CD pipelines for Node.js that validate quality and deploy safely.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 099 [Expert]: Capstone Delivery and Portfolio Readiness
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Deliver a production-grade capstone and package it into a portfolio narrative that demonstrates senior Node engineering capability.

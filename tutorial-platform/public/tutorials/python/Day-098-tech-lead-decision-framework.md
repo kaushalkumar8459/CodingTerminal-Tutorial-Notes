@@ -9,23 +9,6 @@ track: python
 ---
 # Day 098 [Expert]: Tech Lead Decision Framework
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 098 Outcome](#day-098-outcome)
-
 ## Goal
 
 Use a structured framework to make high-impact tech lead decisions that balance product goals, engineering risk, and team execution capacity.

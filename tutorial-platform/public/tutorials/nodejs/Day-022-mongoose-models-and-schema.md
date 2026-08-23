@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 022 [Beginner]: Mongoose Models and Schema
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Use Mongoose schemas and models to enforce structure, validation, and reusable data logic in Node APIs.

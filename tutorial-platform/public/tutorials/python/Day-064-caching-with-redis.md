@@ -9,23 +9,6 @@ track: python
 ---
 # Day 064 [Intermediate]: Caching with Redis
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 064 Outcome](#day-064-outcome)
-
 ## Goal
 
 Implement Redis caching patterns in Python services to reduce latency, lower database load, and improve scalability.

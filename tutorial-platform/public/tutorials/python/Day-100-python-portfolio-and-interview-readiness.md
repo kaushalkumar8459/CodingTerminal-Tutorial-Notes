@@ -9,23 +9,6 @@ track: python
 ---
 # Day 100 [Expert]: Python Portfolio and Interview Readiness
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 100 Outcome](#day-100-outcome)
-
 ## Goal
 
 Consolidate your 100-day Python journey into a strong portfolio, interview strategy, and next-12-month growth roadmap.

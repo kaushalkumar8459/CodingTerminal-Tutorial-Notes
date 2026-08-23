@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 039 [Intermediate]: Background Jobs with BullMQ
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design and implement reliable background job processing with BullMQ for non-blocking backend workflows.

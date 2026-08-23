@@ -9,19 +9,6 @@ track: java
 ---
 # Day 6 [Beginner]: Input Output with Scanner and Formatting
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 6 Outcome](#day-6-outcome)
-
 ## Goal
 
 Take user input from terminal and print clean formatted output.

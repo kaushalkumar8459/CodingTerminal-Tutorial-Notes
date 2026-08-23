@@ -9,23 +9,6 @@ track: python
 ---
 # Day 071 [Advanced]: ETL Pipeline Basics
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 071 Outcome](#day-071-outcome)
-
 ## Goal
 
 Design reliable ETL pipelines that extract data from sources, transform it safely, and load clean outputs into analytics-ready storage.

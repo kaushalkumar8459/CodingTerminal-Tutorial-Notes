@@ -9,23 +9,6 @@ track: python
 ---
 # Day 043 [Intermediate]: Asyncio Fundamentals
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 043 Outcome](#day-043-outcome)
-
 ## Goal
 
 Understand asyncio core concepts and build non-blocking Python workflows for high-concurrency I/O operations.

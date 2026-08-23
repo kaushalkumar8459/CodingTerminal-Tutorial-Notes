@@ -9,23 +9,6 @@ track: python
 ---
 # Day 054 [Intermediate]: FastAPI Fundamentals
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 054 Outcome](#day-054-outcome)
-
 ## Goal
 
 Learn FastAPI core patterns for building modern typed APIs with automatic validation and interactive documentation.

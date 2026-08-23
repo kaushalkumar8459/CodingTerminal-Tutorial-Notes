@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 069 [Intermediate]: Monorepo Tooling Nx and Turborepo
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand and apply Nx or Turborepo to scale Node codebases with shared libraries, task pipelines, and faster CI.

@@ -9,19 +9,6 @@ track: java
 ---
 # Day 96 [Expert]: Docker Containerization and Deployment
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 96 Outcome](#day-96-outcome)
-
 ## Goal
 
 Learn to containerize Java applications with Docker for consistent deployment across development, testing, and production environments.

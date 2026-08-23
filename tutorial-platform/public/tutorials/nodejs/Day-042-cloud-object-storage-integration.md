@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 042 [Intermediate]: Cloud Object Storage Integration
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Integrate Node APIs with cloud object storage for scalable file management.

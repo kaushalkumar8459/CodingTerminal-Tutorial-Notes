@@ -9,23 +9,6 @@ track: python
 ---
 # Day 087 [Advanced]: API Contract and Runtime Validation
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 087 Outcome](#day-087-outcome)
-
 ## Goal
 
 Define and enforce robust API contracts with runtime validation so integrations stay stable and failures remain predictable.

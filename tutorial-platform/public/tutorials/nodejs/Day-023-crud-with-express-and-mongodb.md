@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 023 [Beginner]: CRUD with Express and MongoDB
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a complete CRUD API using Express and MongoDB with validation, error handling, and clean route design.

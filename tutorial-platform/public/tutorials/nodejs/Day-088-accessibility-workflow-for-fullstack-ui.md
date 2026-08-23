@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 088 [Advanced]: Accessibility Workflow for Fullstack UI
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build an end-to-end accessibility workflow for fullstack products that is measurable, testable, and integrated into everyday development.

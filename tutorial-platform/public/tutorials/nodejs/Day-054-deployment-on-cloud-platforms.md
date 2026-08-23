@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 054 [Intermediate]: Deployment on Cloud Platforms
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Deploy Node services on cloud platforms with environment strategy, reliability controls, and cost-aware operations.

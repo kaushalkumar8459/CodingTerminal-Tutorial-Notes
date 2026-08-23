@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 055 [Intermediate]: Observability Logs Metrics Traces
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement practical observability in Node services using structured logs, metrics, and distributed traces.

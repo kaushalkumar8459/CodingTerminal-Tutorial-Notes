@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 044 [Intermediate]: GraphQL Resolvers and Schema Design
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design maintainable GraphQL schemas and resolvers with strong boundaries, performance awareness, and clear contracts.

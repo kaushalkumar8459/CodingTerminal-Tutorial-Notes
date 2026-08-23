@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 056 [Intermediate]: Error Monitoring with Sentry
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Instrument a Node backend with Sentry to detect, triage, and resolve production errors faster.

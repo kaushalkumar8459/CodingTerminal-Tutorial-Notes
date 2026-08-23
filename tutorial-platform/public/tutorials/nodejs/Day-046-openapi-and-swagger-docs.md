@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 046 [Intermediate]: OpenAPI and Swagger Docs
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Create accurate, production-friendly API documentation using OpenAPI and Swagger UI.

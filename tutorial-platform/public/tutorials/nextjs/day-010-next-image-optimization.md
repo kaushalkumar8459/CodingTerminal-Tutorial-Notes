@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 10 [Beginner]: next/image Optimization
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 10 Outcome](#day-10-outcome)
-
 ## Goal
 
 Use the `<Image>` component from `next/image` to deliver automatically optimised, responsive, and lazy-loaded images in a Next.js application.

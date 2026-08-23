@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 098 [Expert]: Architecture Review and Tradeoff Defense
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Lead architecture reviews with evidence-based tradeoff defense, risk visibility, and decision traceability.

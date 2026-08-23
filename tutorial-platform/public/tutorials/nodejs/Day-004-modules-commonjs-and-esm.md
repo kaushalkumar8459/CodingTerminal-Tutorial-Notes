@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 004 [Beginner]: Modules, CommonJS, and ESM
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand Node module systems deeply and implement reusable code with both CommonJS and ESM patterns.

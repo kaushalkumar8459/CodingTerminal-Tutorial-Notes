@@ -9,19 +9,6 @@ track: java
 ---
 # Day 84 [Advanced]: Debugging Techniques and Diagnostic Tools
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 84 Outcome](#day-84-outcome)
-
 ## Goal
 
 Master systematic debugging approaches and use IDE and JVM tools to find and fix bugs efficiently.

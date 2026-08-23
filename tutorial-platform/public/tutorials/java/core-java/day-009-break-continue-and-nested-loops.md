@@ -9,19 +9,6 @@ track: java
 ---
 # Day 9 [Beginner]: break continue and Nested Loops
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 9 Outcome](#day-9-outcome)
-
 ## Goal
 
 Control loop flow using `break` and `continue`, and solve pattern problems with nested loops.

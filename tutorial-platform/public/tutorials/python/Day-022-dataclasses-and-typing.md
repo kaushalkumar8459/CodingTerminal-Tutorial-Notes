@@ -9,23 +9,6 @@ track: python
 ---
 # Day 022 [Beginner]: Dataclasses and Typing
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 022 Outcome](#day-022-outcome)
-
 ## Goal
 
 Learn how dataclasses reduce boilerplate and how type hints improve readability and tooling support.

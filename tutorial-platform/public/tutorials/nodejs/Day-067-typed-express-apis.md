@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 067 [Intermediate]: Typed Express APIs
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build Express APIs with strong request and response typing to reduce contract bugs and improve developer velocity.

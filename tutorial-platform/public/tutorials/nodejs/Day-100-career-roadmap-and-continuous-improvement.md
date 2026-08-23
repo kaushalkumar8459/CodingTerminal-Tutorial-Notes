@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 100 [Expert]: Career Roadmap and Continuous Improvement
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Convert your 100-day Node journey into a long-term growth roadmap with repeatable learning, delivery, and career acceleration systems.

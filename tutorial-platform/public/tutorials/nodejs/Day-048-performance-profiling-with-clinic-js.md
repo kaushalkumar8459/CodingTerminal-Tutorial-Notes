@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 048 [Intermediate]: Performance Profiling with clinic.js
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Profile Node application performance with clinic.js and turn findings into actionable optimizations.

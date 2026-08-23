@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 071 [Advanced]: Security Hardening Checklist
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Apply a production-grade security hardening checklist to Node services and reduce exploit surface before release.

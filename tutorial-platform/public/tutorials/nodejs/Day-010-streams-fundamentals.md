@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 010 [Beginner]: Streams Fundamentals
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand Node streams and build memory-efficient data pipelines for large file processing.

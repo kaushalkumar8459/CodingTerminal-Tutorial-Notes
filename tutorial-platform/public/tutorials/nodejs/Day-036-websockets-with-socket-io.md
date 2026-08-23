@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 036 [Intermediate]: WebSockets with Socket.IO
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build real-time communication features in Node applications using Socket.IO with production-safe patterns.
