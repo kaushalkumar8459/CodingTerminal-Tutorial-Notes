@@ -1,4 +1,4 @@
----
+﻿---
 title: Mini Project Todo App
 slug: day-021-mini-project-todo-app
 dayLabel: Day 21
@@ -8,27 +8,6 @@ order: 21
 track: react
 ---
 # Day 21 [Beginner → Intermediate]: Mini Project — Todo App
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Product Requirements](#product-requirements)
-- [Data Model](#data-model)
-- [State Design](#state-design-before-code)
-- [Architecture](#component-architecture)
-- [Implementation](#step-1--add-a-todo)
-- [Complete Reference Implementation](#step-9--complete-reference-implementation)
-- [Why This Project Matters Before useEffect](#why-this-project-matters-before-useeffect)
-- [Common Bugs](#common-bugs)
-- [Debugging Lab](#debugging-lab)
-- [Exercises](#exercises)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Verification Checklist](#verification-checklist)
-- [Production-Readiness Notes](#production-readiness-notes)
-- [Day 21 Outcome](#day-21-outcome)
 
 ## Goal
 
@@ -147,8 +126,8 @@ App
 ├── TodoForm
 ├── TodoFilters
 ├── TodoSummary
-└── TodoList
-    └── TodoItem
+┤── TodoList
+    ┤── TodoItem
 ```
 
 ### `App`

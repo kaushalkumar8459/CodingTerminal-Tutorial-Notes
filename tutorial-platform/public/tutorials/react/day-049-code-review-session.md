@@ -1,4 +1,4 @@
----
+﻿---
 title: Code Review Session
 slug: day-049-code-review-session
 dayLabel: Day 49
@@ -348,7 +348,7 @@ BlogPage
 ├── renders cards
 ├── renders editor
 ├── handles analytics
-└── formats every data structure
+┤── formats every data structure
 ```
 
 may be difficult to reason about.
@@ -359,8 +359,8 @@ A better boundary could be:
 BlogPage
 ├── BlogFilters
 ├── PostList
-│   └── PostCard
-└── BlogStatus
+│   ┤── PostCard
+┤── BlogStatus
 ```
 
 ### Review questions
@@ -445,13 +445,13 @@ Before
 ├── initial JS
 ├── request count
 ├── render duration
-└── interaction latency
+┤── interaction latency
 
 After
 ├── initial JS
 ├── request count
 ├── render duration
-└── interaction latency
+┤── interaction latency
 ```
 
 Use browser DevTools and production-oriented measurements rather than assumptions.
@@ -1145,7 +1145,7 @@ Risk-based prioritization, evidence-driven recommendations, constructive communi
 
 ---
 
-# 27. Final Project — Perform a Real Code Review
+# 27. Final Project - Perform a Real Code Review
 
 Use the **Day 48 Blog App** as the review target.
 
@@ -1179,14 +1179,14 @@ Instead write:
 
 ```text
 Problem
-→ Why it matters
-→ Concrete recommendation
-→ How to validate the fix
+-> Why it matters
+-> Concrete recommendation
+-> How to validate the fix
 ```
 
 ---
 
-# 28. Day 49 Outcome
+## Day 49 Outcome
 
 You can now perform a structured, production-oriented React code review instead of reviewing only formatting and syntax.
 
@@ -1207,4 +1207,4 @@ You can:
 
 ## Next
 
-**Day 50 — Redux / Redux Toolkit Introduction and Global State Architecture**
+**Day 50 - Redux / Redux Toolkit Introduction and Global State Architecture**

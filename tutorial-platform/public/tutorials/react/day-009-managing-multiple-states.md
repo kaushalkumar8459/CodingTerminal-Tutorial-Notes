@@ -1,4 +1,4 @@
----
+﻿---
 title: Managing Multiple States
 slug: day-009-managing-multiple-states
 dayLabel: Day 9
@@ -8,23 +8,6 @@ order: 9
 track: react
 ---
 # Day 9 [Intermediate]: Managing Multiple States
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 9 Outcome](#day-9-outcome)
 
 ## Goal
 
@@ -286,7 +269,7 @@ Keep state close to the components that use it. If two sibling components need t
 ```text
 Parent owns state
    ├── Child A reads data
-   └── Child B updates data
+   ┤── Child B updates data
 ```
 
 This is called **lifting state up**. The parent should own the state only when that shared ownership is actually needed; otherwise, keep state local to avoid unnecessary prop drilling and coupling.

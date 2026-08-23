@@ -1,4 +1,4 @@
----
+﻿---
 title: API Calls with Axios + Query Basics
 slug: day-026-api-calls-with-axios-query-basics
 dayLabel: Day 26
@@ -8,32 +8,6 @@ order: 26
 track: react
 ---
 # Day 26 [Intermediate]: API Calls with Axios + Query Basics
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Core Mental Model](#core-mental-model)
-- [Axios vs Fetch](#axios-vs-fetch)
-- [Installation](#installation)
-- [Topic by Topic](#topic-by-topic)
-- [Axios Configuration](#axios-configuration)
-- [API Service Layer](#api-service-layer)
-- [Error Handling](#error-handling)
-- [Loading, Success, Empty, Error](#loading-success-empty-error)
-- [Cancellation](#cancellation)
-- [Interceptors](#interceptors)
-- [Axios and Server State](#axios-and-server-state)
-- [Query Keys — Basics](#query-keys--basics)
-- [End-to-End Practical](#end-to-end-practical)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Lab](#debugging-lab)
-- [Hands-on Exercises](#hands-on-exercises)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Verification Checklist](#verification-checklist)
-- [Day 26 Outcome](#day-26-outcome)
 
 ## Goal
 
@@ -373,9 +347,9 @@ A request-driven UI should explicitly model states:
 
 ```text
 idle → loading → success
-              ↘ empty
-              ↘ error
-              ↘ cancelled
+              ↓ empty
+              ↓ error
+              ↓ cancelled
 ```
 
 Example:

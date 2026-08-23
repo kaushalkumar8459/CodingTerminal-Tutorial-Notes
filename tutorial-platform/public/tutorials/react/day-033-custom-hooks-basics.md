@@ -1,4 +1,4 @@
----
+﻿---
 title: Custom Hooks Basics
 slug: day-033-custom-hooks-basics
 dayLabel: Day 33
@@ -8,40 +8,6 @@ order: 33
 track: react
 ---
 # Day 33 [Intermediate]: Custom Hooks Basics
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [1. What Is a Custom Hook?](#1-what-is-a-custom-hook)
-- [2. Why Extract Logic?](#2-why-extract-logic)
-- [3. Logic Reuse vs State Sharing](#3-logic-reuse-vs-state-sharing)
-- [4. Rules of Hooks](#4-rules-of-hooks)
-- [5. Designing a Hook API](#5-designing-a-hook-api)
-- [6. Parameterized Hooks](#6-parameterized-hooks)
-- [7. Hook Dependencies and Closures](#7-hook-dependencies-and-closures)
-- [8. Effects and Cleanup Inside Hooks](#8-effects-and-cleanup-inside-hooks)
-- [9. `useLocalStorage` Safely](#9-uselocalstorage-safely)
-- [10. Practical Hooks](#10-practical-hooks)
-- [11. Composition](#11-composition)
-- [12. Stable Actions and `useCallback`](#12-stable-actions-and-usecallback)
-- [13. When Not to Create a Custom Hook](#13-when-not-to-create-a-custom-hook)
-- [14. Testing Custom Hooks](#14-testing-custom-hooks)
-- [15. Accessibility and Consumer Responsibility](#15-accessibility-and-consumer-responsibility)
-- [16. Async Hooks and Cancellation](#16-async-hooks-and-cancellation)
-- [17. Hook Contract and State-Machine Design](#17-hook-contract-and-state-machine-design)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Debugging Lab](#debugging-lab)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Production Checklist](#production-checklist)
-- [Final Project](#final-project)
-- [Self Check](#self-check)
-- [Day 33 Outcome](#day-33-outcome)
 
 ## Goal
 
@@ -161,7 +127,7 @@ Bad:
 ```jsx
 function useCounter(enabled) {
   if (enabled) {
-    const [count, setCount] = useState(0); // ❌
+    const [count, setCount] = useState(0); // ✗
   }
 }
 ```
@@ -259,7 +225,7 @@ Bad:
 function useDocumentTitle(title) {
   useEffect(() => {
     document.title = title;
-  }, []); // ❌ stale title
+  }, []); // ✗ stale title
 }
 ```
 
@@ -486,7 +452,7 @@ A robust conceptual state model is:
 
 ```text
 idle → loading → success
-             ↘ error
+             ↓ error
 
 loading/success/error → loading (refetch)
 ```
@@ -567,17 +533,17 @@ This prevents a common mistake: implementing internal effects first and only lat
 ```text
                     Custom Hook
                          │
-          ┌──────────────┼──────────────┐
+          ┌──────────────┴──────────────┐
           ↓              ↓              ↓
        State           Effects          Refs
           │              │              │
-          └──────────────┼──────────────┘
+          ┤──────────────┴──────────────┘
                          ↓
                  Reusable Behavior
                          ↓
                 Small Public API
                          ↓
-              ┌──────────┴──────────┐
+              ┌──────────┬──────────┐
               ↓                     ↓
         Component A            Component B
         own state              own state
@@ -686,7 +652,7 @@ Build a search hook that cancels or supersedes an old request when the query cha
 ```jsx
 function useFeature(enabled) {
   if (enabled) {
-    useEffect(() => {}, []); // ❌
+    useEffect(() => {}, []); // ✗
   }
 }
 ```
@@ -699,7 +665,7 @@ function useFeature(enabled) {
 function useDocumentTitle(title) {
   useEffect(() => {
     document.title = title;
-  }, []); // ❌
+  }, []); // ✗
 }
 ```
 
@@ -709,7 +675,7 @@ function useDocumentTitle(title) {
 
 ```jsx
 function useStorage(key) {
-  const [value] = useState(window.localStorage.getItem(key)); // ❌ SSR risk
+  const [value] = useState(window.localStorage.getItem(key)); // ✗ SSR risk
   return value;
 }
 ```
@@ -722,7 +688,7 @@ function useStorage(key) {
 function useOnlineStatus() {
   useEffect(() => {
     window.addEventListener('online', handleOnline);
-  }, []); // ❌ no cleanup
+  }, []); // ✗ no cleanup
 }
 ```
 

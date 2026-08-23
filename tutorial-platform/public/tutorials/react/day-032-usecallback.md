@@ -1,4 +1,4 @@
----
+﻿---
 title: useCallback
 slug: day-032-usecallback
 dayLabel: Day 32
@@ -253,7 +253,7 @@ Performance problem?
 Measure / profile
         ↓
 Compiler enabled?
-   ┌────┴─────┐
+   ┌────┬─────┐
   Yes        No
    ↓          ↓
 Prefer     Consider

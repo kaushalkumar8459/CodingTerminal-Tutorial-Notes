@@ -1,4 +1,4 @@
----
+﻿---
 title: Parent-Child Communication
 slug: day-020-parent-child-communication
 dayLabel: Day 20
@@ -8,25 +8,6 @@ order: 20
 track: react
 ---
 # Day 20 [Intermediate]: Parent-Child Communication
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Challenge](#debugging-challenge)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 20 Outcome](#day-20-outcome)
 
 ## Goal
 
@@ -446,12 +427,12 @@ A useful component contract separates responsibilities:
 Parent
 ├── owns shared state
 ├── owns business rules
-└── passes data + allowed actions
+┤── passes data + allowed actions
 
 Child
 ├── renders props
 ├── handles local presentation
-└── emits user intent
+┤── emits user intent
 ```
 
 This does not mean every business rule must live in the parent. The principle is to keep ownership explicit rather than making components reach into each other's internals.
@@ -481,14 +462,14 @@ Optimize only when a real rendering or dependency problem has been identified. C
 ```text
                   STATE OWNER
                       │
-             ┌────────┴────────┐
+             ┌────────┬────────┐
              │                 │
           value/data       callback API
              │                 │
              ▼                 ▲
           CHILD UI ──user──→ intent
              │                 │
-             └────── event ────┘
+             ┤────── event ────┘
                       │
                       ▼
                 owner updates state
@@ -504,8 +485,8 @@ Build this structure:
 TaskManager
 ├── AddTaskForm
 ├── TaskList
-│   └── TaskItem
-└── EmptyState
+│   ┤── TaskItem
+┤── EmptyState
 ```
 
 The parent owns the task collection:

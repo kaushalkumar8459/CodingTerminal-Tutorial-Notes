@@ -8,6 +8,8 @@
     "content:sync": "node ./scripts/content-pipeline.mjs sync",
     "content:generate": "node ./scripts/content-pipeline.mjs generate",
     "content:validate": "node ./scripts/content-pipeline.mjs validate",
+    "content:validate:react": "node ./scripts/validate-react-docs.mjs",
+    "content:fix:react": "node ./scripts/fix-react-mojibake.mjs",
     "content:frontmatter": "node ./scripts/content-pipeline.mjs frontmatter",
     "content:migrate": "node ./scripts/content-pipeline.mjs migrate",
     "build": "tsc -b && vite build",

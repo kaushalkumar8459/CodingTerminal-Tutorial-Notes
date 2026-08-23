@@ -1,4 +1,4 @@
----
+﻿---
 title: Dynamic Components
 slug: day-018-dynamic-components
 dayLabel: Day 18
@@ -8,25 +8,6 @@ order: 18
 track: react
 ---
 # Day 18 [Intermediate]: Dynamic Components
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Challenge](#debugging-challenge)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 18 Outcome](#day-18-outcome)
 
 ## Goal
 
@@ -268,7 +249,7 @@ const Reports = lazy(() => import("./Reports.jsx"));
 
 function App() {
   return (
-    <Suspense fallback={<p>Loading reports…</p>}>
+    <Suspense fallback={<p>Loading reports¦</p>}>
       <Reports />
     </Suspense>
   );

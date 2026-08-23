@@ -1,4 +1,4 @@
----
+﻿---
 title: createSlice Deep Dive
 slug: day-053-createslice-deep-dive
 dayLabel: Day 53
@@ -17,23 +17,6 @@ order: 53
 track: react
 ---
 # Day 53 [Advanced]: createSlice Deep Dive
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 53 Outcome](#day-53-outcome)
 
 ## Goal
 

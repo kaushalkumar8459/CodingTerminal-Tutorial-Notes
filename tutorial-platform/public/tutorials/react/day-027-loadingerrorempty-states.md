@@ -1,4 +1,4 @@
----
+﻿---
 title: Loading Error and Empty States
 slug: day-027-loadingerrorempty-states
 dayLabel: Day 27
@@ -8,32 +8,6 @@ order: 27
 track: react
 ---
 # Day 27 [Intermediate]: Loading, Error, Empty and Success States
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Core Mental Model](#core-mental-model)
-- [Request State Machine](#request-state-machine)
-- [Why These States Matter](#why-these-states-matter)
-- [Avoid Boolean Explosion](#avoid-boolean-explosion)
-- [Initial Loading vs Refreshing](#initial-loading-vs-refreshing)
-- [Loading States](#loading-states)
-- [Success States](#success-states)
-- [Empty States](#empty-states)
-- [Error States](#error-states)
-- [Retry](#retry)
-- [Accessibility](#accessibility)
-- [Reusable State Components](#reusable-state-components)
-- [Complete Practical](#complete-practical)
-- [Debugging Lab](#debugging-lab)
-- [Hands-on Exercises](#hands-on-exercises)
-- [Common Mistakes](#common-mistakes)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Verification Checklist](#verification-checklist)
-- [Day 27 Outcome](#day-27-outcome)
 
 ## Goal
 
@@ -88,12 +62,12 @@ loading
   ↓
 success ─────→ data
   │
-  └───────────→ empty
+  ┤───────────→ empty
 
 loading → error
 
 success(data) → refreshing → success(data)
-                         ↘ error while preserving old data
+                         ↓ error while preserving old data
 ```
 
 For a production application you may also need:

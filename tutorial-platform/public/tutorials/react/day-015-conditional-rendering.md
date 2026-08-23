@@ -1,4 +1,4 @@
----
+﻿---
 title: Conditional Rendering
 slug: day-015-conditional-rendering
 dayLabel: Day 15
@@ -8,25 +8,6 @@ order: 15
 track: react
 ---
 # Day 15 [Beginner → Intermediate]: Conditional Rendering
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Challenge](#debugging-challenge)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 15 Outcome](#day-15-outcome)
 
 ## Goal
 
@@ -132,7 +113,7 @@ A robust data-driven component should distinguish these states.
 ```jsx
 function ProductState({ status, products, error }) {
   if (status === "loading") {
-    return <p aria-live="polite">Loading products…</p>;
+    return <p aria-live="polite">Loading products¦</p>;
   }
 
   if (status === "error") {
@@ -170,7 +151,7 @@ Prefer a readable state model over a giant expression.
 
 ```jsx
 function CheckoutStatus({ status }) {
-  if (status === "loading") return <p>Processing…</p>;
+  if (status === "loading") return <p>Processing¦</p>;
   if (status === "success") return <p>Order placed.</p>;
   if (status === "error") return <p>Payment failed.</p>;
   return <p>Ready for payment.</p>;
@@ -210,7 +191,7 @@ Conditions can affect props too.
   disabled={isSubmitting}
   aria-busy={isSubmitting}
 >
-  {isSubmitting ? "Saving…" : "Save"}
+  {isSubmitting ? "Saving¦" : "Save"}
 </button>
 ```
 
@@ -287,7 +268,7 @@ Build a **Course Dashboard** with:
 ```jsx
 function Dashboard({ status, role, lessons = [] }) {
   if (status === "loading") {
-    return <p aria-live="polite">Loading dashboard…</p>;
+    return <p aria-live="polite">Loading dashboard¦</p>;
   }
 
   if (status === "error") {

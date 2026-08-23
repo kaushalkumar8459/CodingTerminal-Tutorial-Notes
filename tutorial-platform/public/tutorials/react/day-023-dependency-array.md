@@ -1,4 +1,4 @@
----
+﻿---
 title: Dependency Arrays, Closures & Effect Correctness
 slug: day-023-dependency-array
 dayLabel: Day 23
@@ -8,25 +8,6 @@ order: 23
 track: react
 ---
 # Day 23 [Intermediate]: Dependency Arrays, Closures & Effect Correctness
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Core Mental Model](#core-mental-model)
-- [Visual Concept Map](#visual-concept-map)
-- [Topic by Topic](#topic-by-topic)
-- [Dependency Decision Framework](#dependency-decision-framework)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Labs](#hands-on-labs)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Exercises](#debugging-exercises)
-- [Dependency Debugging Checklist](#dependency-debugging-checklist)
-- [Assessment](#assessment)
-- [Assessment Answers](#assessment-answers)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Final Verification Checklist](#final-verification-checklist)
-- [Day 23 Outcome](#day-23-outcome)
 
 ## Goal
 
@@ -85,7 +66,7 @@ If there is no external system, first ask whether the logic belongs in render or
 ```text
                  useEffect
                      │
-          ┌──────────┴──────────┐
+          ┌──────────┬──────────┐
           ↓                     ↓
    External system         No external system
           │                     │
@@ -96,7 +77,7 @@ If there is no external system, first ask whether the logic belongs in render or
           ↓
      Dependency array
           │
-    ┌─────┴─────┐
+    ┌─────┬─────┐
     ↓           ↓
  changed      unchanged
     ↓           ↓
@@ -324,7 +305,7 @@ When an effect has too many dependencies, use this sequence:
 Too many dependencies?
         ↓
 Does an external system exist?
-   ┌────┴────┐
+   ┌────┬────┐
   No        Yes
   ↓           ↓
 Remove     What values are read?

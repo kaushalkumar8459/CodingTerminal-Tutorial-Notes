@@ -1,4 +1,4 @@
----
+﻿---
 title: Nested Routes
 slug: day-044-nested-routes
 dayLabel: Day 44
@@ -46,7 +46,7 @@ For example:
 ├── overview
 ├── reports
 ├── reports/:id
-└── settings
+┤── settings
 ```
 
 The dashboard shell can remain mounted while only the child content changes.
@@ -253,12 +253,12 @@ Conceptually:
 DashboardLayout
 ├── Sidebar
 ├── Header
-└── Outlet
-    └── Reports
+┤── Outlet
+    ┤── Reports
         ├── Loading
         ├── Empty
         ├── Error
-        └── Data
+        ┤── Data
 ```
 
 This creates a good UX boundary: global navigation remains stable while the feature-specific content changes.
@@ -340,18 +340,18 @@ A feature-oriented structure can look like:
 ```text
 src/
 ├── app/
-│   └── router.jsx
+│   ┤── router.jsx
 ├── features/
 │   ├── dashboard/
 │   │   ├── DashboardLayout.jsx
 │   │   ├── Overview.jsx
-│   │   └── dashboard.routes.jsx
-│   └── reports/
+│   │   ┤── dashboard.routes.jsx
+│   ┤── reports/
 │       ├── Reports.jsx
 │       ├── ReportDetails.jsx
-│       └── reports.routes.jsx
-└── shared/
-    └── navigation/
+│       ┤── reports.routes.jsx
+┤── shared/
+    ┤── navigation/
 ```
 
 The exact structure can vary. The goal is clear ownership and a route tree that remains understandable as the application grows.
@@ -373,7 +373,7 @@ const Reports = lazy(() => import("./Reports"));
 
 function ReportsRoute() {
   return (
-    <Suspense fallback={<p>Loading reports…</p>}>
+    <Suspense fallback={<p>Loading reports¦</p>}>
       <Reports />
     </Suspense>
   );
@@ -623,7 +623,7 @@ Build:
 ├── users/:userId
 ├── reports
 ├── reports/:reportId
-└── settings
+┤── settings
 ```
 
 Requirements:

@@ -1,4 +1,4 @@
----
+﻿---
 title: Lifting State Up
 slug: day-019-lifting-state-up
 dayLabel: Day 19
@@ -8,25 +8,6 @@ order: 19
 track: react
 ---
 # Day 19 [Intermediate]: Lifting State Up
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Challenge](#debugging-challenge)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 19 Outcome](#day-19-outcome)
 
 ## Goal
 
@@ -54,7 +35,7 @@ Lifting state up means moving shared state to the nearest common ancestor that n
         Child A       Child B
         reads/acts    reads data
             │
-            └── callback → Parent
+            ┤── callback → Parent
 ```
 
 The rule is **not** “put all state in the top-level component.” Keep state as close as possible to where it is used, and lift only what is genuinely shared.
@@ -82,9 +63,9 @@ function SearchPage() {
 
 ```text
 App
-└── ProfileFeature
+┤── ProfileFeature
     ├── Editor
-    └── Preview
+    ┤── Preview
 ```
 
 `ProfileFeature` is preferable to `App` when only this feature needs the shared state.
@@ -300,7 +281,7 @@ Shared requirement
 Find common ancestor
        ↓
 Lift state
-   ↙       ↘
+   ↑       ↓
 values    callbacks
    ↓          ↓
 children → parent update
@@ -317,11 +298,11 @@ ProfileFeature
 ├── ProfileEditor
 │   ├── Name
 │   ├── Role
-│   └── City
-└── ProfilePreview
+│   ┤── City
+┤── ProfilePreview
     ├── Name
     ├── Role
-    └── City
+    ┤── City
 ```
 
 ```jsx

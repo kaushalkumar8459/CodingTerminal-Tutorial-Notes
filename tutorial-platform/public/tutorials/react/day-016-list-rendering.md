@@ -1,4 +1,4 @@
----
+﻿---
 title: List Rendering
 slug: day-016-list-rendering
 dayLabel: Day 16
@@ -8,24 +8,6 @@ order: 16
 track: react
 ---
 # Day 16 [Beginner → Intermediate]: List Rendering
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 16 Outcome](#day-16-outcome)
 
 ## Goal
 

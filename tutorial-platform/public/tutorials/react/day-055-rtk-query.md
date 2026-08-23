@@ -1,4 +1,4 @@
----
+﻿---
 title: RTK Query
 slug: day-055-rtk-query
 dayLabel: Day 55
@@ -17,23 +17,6 @@ order: 55
 track: react
 ---
 # Day 55 [Advanced]: RTK Query
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 55 Outcome](#day-55-outcome)
 
 ## Goal
 

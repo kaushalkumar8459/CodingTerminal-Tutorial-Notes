@@ -1,4 +1,4 @@
----
+﻿---
 title: useEffect Basics
 slug: day-022-useeffect-basics
 dayLabel: Day 22
@@ -8,23 +8,6 @@ order: 22
 track: react
 ---
 # Day 22 [Beginner → Intermediate]: `useEffect` Basics
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Core Mental Model](#core-mental-model)
-- [What Is an Effect](#what-is-an-effect)
-- [Effect Lifecycle](#effect-lifecycle)
-- [Topic by Topic](#topic-by-topic)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Exercises](#hands-on-exercises)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Lab](#debugging-lab)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Verification Checklist](#verification-checklist)
-- [Day 22 Outcome](#day-22-outcome)
 
 ## Goal
 

@@ -1,4 +1,4 @@
----
+﻿---
 title: React Components Basics
 slug: day-004-components-basics
 dayLabel: Day 4
@@ -8,24 +8,6 @@ order: 4
 track: react
 ---
 # Day 4 [Beginner]: React Components Basics
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Common Mistakes](#common-mistakes)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 4 Outcome](#day-4-outcome)
 
 ## Goal
 
@@ -184,7 +166,7 @@ App
 ├── Header
 ├── Card
 ├── Card
-└── Footer
+┤── Footer
 ```
 
 Composition is preferable to putting every screen concern into one giant `App` component.
@@ -281,14 +263,14 @@ A component tree represents React component structure. The browser DOM represent
 Component tree
 App
 ├── Header
-│   └── Navigation
-└── Content
+│   ┤── Navigation
+┤── Content
 
 Rendered host tree
 main
 ├── header
-│   └── nav
-└── section
+│   ┤── nav
+┤── section
 ```
 
 A component does not map one-to-one to a DOM element. A component can return a Fragment, several host elements, or other components.
@@ -332,11 +314,11 @@ Build a small dashboard shell.
 ```text
 src/
 ├── App.jsx
-└── components/
+┤── components/
     ├── Header.jsx
     ├── Sidebar.jsx
     ├── DashboardContent.jsx
-    └── Footer.jsx
+    ┤── Footer.jsx
 ```
 
 ### Step 2: Create components

@@ -1,4 +1,4 @@
----
+﻿---
 title: Pagination and Infinite Query
 slug: day-065-pagination-and-infinite-query
 dayLabel: Day 65
@@ -17,23 +17,6 @@ order: 65
 track: react
 ---
 # Day 65 [Advanced]: Pagination and Infinite Query
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 65 Outcome](#day-65-outcome)
 
 ## Goal
 

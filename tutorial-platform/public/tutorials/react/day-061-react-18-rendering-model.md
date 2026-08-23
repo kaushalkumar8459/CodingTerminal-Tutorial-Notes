@@ -1,4 +1,4 @@
----
+﻿---
 title: React 18+ Rendering Model
 slug: day-061-react-18-rendering-model
 dayLabel: Day 61
@@ -17,23 +17,6 @@ order: 61
 track: react
 ---
 # Day 61 [Advanced]: React 18+ Rendering Model
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 61 Outcome](#day-61-outcome)
 
 ## Goal
 

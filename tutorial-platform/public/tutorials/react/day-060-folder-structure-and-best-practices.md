@@ -1,4 +1,4 @@
----
+﻿---
 title: Folder Structure and Best Practices
 slug: day-060-folder-structure-and-best-practices
 dayLabel: Day 60
@@ -17,23 +17,6 @@ order: 60
 track: react
 ---
 # Day 60 [Advanced]: Folder Structure and Best Practices
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 60 Outcome](#day-60-outcome)
 
 ## Goal
 

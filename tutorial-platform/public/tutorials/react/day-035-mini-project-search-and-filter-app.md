@@ -1,4 +1,4 @@
----
+﻿---
 title: Mini Project - Search and Filter App
 slug: day-035-mini-project-search-and-filter-app
 dayLabel: Day 35
@@ -92,16 +92,16 @@ The finished application should support:
                   │ category             │
                   │ minPrice             │
                   │ sort                 │
-                  └──────────┬───────────┘
+                  ┤──────────┬───────────┘
                              │
                              ▼
                     Pure transformation
                              │
-                   ┌─────────┴─────────┐
+                   ┌─────────┬─────────┐
                    │                   │
                 Filter               Sort
                    │                   │
-                   └─────────┬─────────┘
+                   ┤─────────┬─────────┘
                              ▼
                        visibleResults
                              │
@@ -179,7 +179,7 @@ A good structure is:
 App
 ├── SearchBox
 ├── FilterPanel
-└── ProductResults
+┤── ProductResults
 ```
 
 `App` owns the filter state because both the controls and results depend on it.
@@ -590,7 +590,7 @@ idle
 loading
   ├── success + results
   ├── success + empty dataset
-  └── error
+  ┤── error
 ```
 
 There is another important state:

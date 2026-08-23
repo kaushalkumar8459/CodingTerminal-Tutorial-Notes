@@ -1,4 +1,4 @@
----
+﻿---
 title: Environment and Project Structure
 slug: day-002-environment-and-project-structure
 dayLabel: Day 2
@@ -10,26 +10,6 @@ youtubeVideos: []
 ---
 
 # Day 2 [Beginner]: Environment and Project Structure
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Environment Setup](#environment-setup)
-- [Why Project Structure Matters](#why-project-structure-matters)
-- [Vite React Project Anatomy](#vite-react-project-anatomy)
-- [Topic by Topic](#topic-by-topic)
-- [Recommended Structure](#recommended-structure)
-- [Feature-Based Structure](#feature-based-structure)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Common Mistakes](#common-mistakes)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 2 Outcome](#day-2-outcome)
 
 ## Goal
 
@@ -94,13 +74,13 @@ my-react-app/
 │   ├── App.jsx
 │   ├── App.css
 │   ├── index.css
-│   └── main.jsx
+│   ┤── main.jsx
 ├── index.html
 ├── package.json
 ├── package-lock.json
 ├── vite.config.js
 ├── .gitignore
-└── node_modules/
+┤── node_modules/
 ```
 
 After a production build, Vite also generates:
@@ -301,7 +281,7 @@ src/
 ├── App.jsx
 ├── App.css
 ├── index.css
-└── main.jsx
+┤── main.jsx
 ```
 
 This is a **convention**, not a React rule. You do not need every folder on day one; create folders when there is a clear reason to organize code that way.
@@ -325,23 +305,23 @@ src/
 ├── features/
 │   ├── auth/
 │   │   ├── components/
-│   │   │   └── LoginForm.jsx
+│   │   │   ┤── LoginForm.jsx
 │   │   ├── pages/
-│   │   │   └── LoginPage.jsx
-│   │   └── services/
-│   │       └── authService.js
-│   └── products/
+│   │   │   ┤── LoginPage.jsx
+│   │   ┤── services/
+│   │       ┤── authService.js
+│   ┤── products/
 │       ├── components/
-│       │   └── ProductCard.jsx
+│       │   ┤── ProductCard.jsx
 │       ├── pages/
-│       │   └── ProductListPage.jsx
-│       └── services/
-│           └── productService.js
+│       │   ┤── ProductListPage.jsx
+│       ┤── services/
+│           ┤── productService.js
 ├── shared/
 │   ├── components/
-│   └── hooks/
+│   ┤── hooks/
 ├── App.jsx
-└── main.jsx
+┤── main.jsx
 ```
 
 ### When to use it
@@ -366,14 +346,14 @@ npm run dev
 ```text
 src/
 ├── features/
-│   └── profile/
+│   ┤── profile/
 │       ├── components/
 │       ├── pages/
-│       └── services/
+│       ┤── services/
 ├── shared/
-│   └── components/
+│   ┤── components/
 ├── App.jsx
-└── main.jsx
+┤── main.jsx
 ```
 
 ### Step 3: Create `ProfileCard.jsx`
@@ -535,13 +515,13 @@ src/
 ├── features/
 │   ├── products/
 │   ├── cart/
-│   └── auth/
+│   ┤── auth/
 ├── shared/
 │   ├── components/
-│   └── hooks/
+│   ┤── hooks/
 ├── pages/             # only if the routing architecture benefits from it
 ├── App.jsx
-└── main.jsx
+┤── main.jsx
 ```
 
 ## Assessment Quiz
@@ -632,14 +612,14 @@ Build the following structure in your Day 2 project:
 ```text
 src/
 ├── features/
-│   └── profile/
+│   ┤── profile/
 │       ├── components/ProfileCard.jsx
 │       ├── pages/ProfilePage.jsx
-│       └── services/profileService.js
+│       ┤── services/profileService.js
 ├── shared/
-│   └── components/Button.jsx
+│   ┤── components/Button.jsx
 ├── App.jsx
-└── main.jsx
+┤── main.jsx
 ```
 
 Then:

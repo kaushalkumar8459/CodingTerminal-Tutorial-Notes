@@ -1,4 +1,4 @@
----
+﻿---
 title: Code Splitting
 slug: day-047-code-splitting
 dayLabel: Day 47
@@ -52,7 +52,7 @@ Core application
 ├── PDF export
 ├── Charts
 ├── Admin tools
-└── Rarely used configuration screens
+┤── Rarely used configuration screens
 ```
 
 Without useful split points, all of these can contribute to the initial JavaScript cost.
@@ -101,7 +101,7 @@ For example:
 Dashboard
 ├── KPI cards          ← immediate
 ├── Recent activity    ← immediate
-└── Analytics chart    ← optional/heavy
+┤── Analytics chart    ← optional/heavy
 ```
 
 Component splitting can defer the chart without delaying the rest of the dashboard.
@@ -151,7 +151,7 @@ export default function Dashboard() {
       </button>
 
       {showAnalytics && (
-        <Suspense fallback={<p role="status">Loading analytics…</p>}>
+        <Suspense fallback={<p role="status">Loading analytics¦</p>}>
           <AnalyticsChart />
         </Suspense>
       )}
@@ -300,8 +300,8 @@ Conceptually:
 
 ```text
                     ┌── Dashboard chunk
-React/runtime ──────┼── Reports chunk
-                    └── Analytics chunk
+React/runtime ──────┴── Reports chunk
+                    ┤── Analytics chunk
 
 Shared dependency → reusable shared chunk
 ```
@@ -503,7 +503,7 @@ const AuditLogPanel = lazy(() => import("./AuditLogPanel"));
 function PanelLoader({ label }) {
   return (
     <div role="status" aria-label={`Loading ${label}`}>
-      Loading {label}…
+      Loading {label}¦
     </div>
   );
 }
@@ -810,7 +810,7 @@ Dashboard
 ├── Audit logs
 ├── Export center
 ├── PDF viewer
-└── Advanced filters
+┤── Advanced filters
 ```
 
 Requirements:

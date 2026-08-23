@@ -1,4 +1,4 @@
----
+﻿---
 title: Mini Project - Blog App
 slug: day-048-mini-project-blog-app
 dayLabel: Day 48
@@ -114,32 +114,32 @@ Day 48 → integrate everything into a real application
 src/
 ├── app/
 │   ├── App.jsx
-│   └── routes.jsx
+│   ┤── routes.jsx
 ├── auth/
 │   ├── AuthContext.jsx
-│   └── ProtectedRoute.jsx
+│   ┤── ProtectedRoute.jsx
 ├── blog/
 │   ├── components/
 │   │   ├── PostCard.jsx
 │   │   ├── CategoryNav.jsx
-│   │   └── PostStatus.jsx
+│   │   ┤── PostStatus.jsx
 │   ├── layouts/
 │   │   ├── BlogLayout.jsx
-│   │   └── BlogAdminLayout.jsx
+│   │   ┤── BlogAdminLayout.jsx
 │   ├── pages/
 │   │   ├── BlogHome.jsx
 │   │   ├── CategoryPage.jsx
 │   │   ├── PostDetails.jsx
 │   │   ├── AdminDashboard.jsx
 │   │   ├── CreatePost.jsx
-│   │   └── EditPost.jsx
+│   │   ┤── EditPost.jsx
 │   ├── data/
-│   │   └── mockPosts.js
-│   └── api/
-│       └── postsApi.js
-└── shared/
+│   │   ┤── mockPosts.js
+│   ┤── api/
+│       ┤── postsApi.js
+┤── shared/
     ├── ErrorBoundary.jsx
-    └── PageLoader.jsx
+    ┤── PageLoader.jsx
 ```
 
 The exact structure is flexible. The important principle is separating route composition, reusable UI, data access, and feature pages.
@@ -302,7 +302,7 @@ Request succeeds ──→ data exists ──→ content
        │
        ├────────────→ no data ─────→ not found / empty
        │
-       └────────────→ request fails → error
+       ┤────────────→ request fails → error
 ```
 
 These are not interchangeable:
@@ -370,7 +370,7 @@ If role/permission checks are added:
 authenticated
     ↓
 permission check
- ┌──┴──┐
+ ┌──┬──┐
 allow deny
 ```
 
@@ -768,7 +768,7 @@ Author
 Admin
 ├── User management
 ├── Category management
-└── Content moderation
+┤── Content moderation
 ```
 
 Additional requirements:

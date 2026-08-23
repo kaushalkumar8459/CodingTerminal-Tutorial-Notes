@@ -1,4 +1,4 @@
----
+﻿---
 title: Theme Management
 slug: day-039-theme-management
 dayLabel: Day 39
@@ -49,7 +49,7 @@ App
 ├── Sidebar
 ├── Dashboard
 ├── Modal
-└── Footer
+┤── Footer
 ```
 
 Passing `theme` through every level is unnecessary. A focused `ThemeContext` gives components access to a shared preference without turning every intermediate component into a prop-passing layer.
@@ -127,7 +127,7 @@ A useful provider contract is:
 ThemeContext
 ├── theme        → user preference
 ├── setTheme     → update preference
-└── effectiveTheme → resolved light/dark mode
+┤── effectiveTheme → resolved light/dark mode
 ```
 
 Whether `effectiveTheme` is exposed through Context or derived by consumers depends on the architecture. Keep the contract small and avoid exposing implementation details unnecessarily.
@@ -400,7 +400,7 @@ ThemeProvider
    │
    ├── persistence
    │
-   └── document synchronization
+   ┤── document synchronization
           ↓
       effective theme
           ↓
@@ -663,10 +663,10 @@ Build a theme system for a course dashboard:
 ```text
 ThemeProvider
    ├── Header
-   │    └── ThemeControls
+   │    ┤── ThemeControls
    ├── Sidebar
    ├── CourseList
-   └── CoursePreview
+   ┤── CoursePreview
 ```
 
 Requirements:

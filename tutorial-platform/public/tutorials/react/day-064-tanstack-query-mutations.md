@@ -1,4 +1,4 @@
----
+﻿---
 title: TanStack Query Mutations
 slug: day-064-tanstack-query-mutations
 dayLabel: Day 64
@@ -17,23 +17,6 @@ order: 64
 track: react
 ---
 # Day 64 [Advanced]: TanStack Query Mutations
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 64 Outcome](#day-64-outcome)
 
 ## Goal
 

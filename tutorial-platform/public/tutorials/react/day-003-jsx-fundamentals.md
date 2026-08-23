@@ -1,4 +1,4 @@
----
+﻿---
 title: JSX Fundamentals
 slug: day-003-jsx-fundamentals
 dayLabel: Day 3
@@ -8,24 +8,6 @@ order: 3
 track: react
 ---
 # Day 3 [Beginner]: JSX Fundamentals
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [What JSX Is](#what-jsx-is)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Common Mistakes](#common-mistakes)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 3 Outcome](#day-3-outcome)
 
 ## Goal
 
@@ -111,7 +93,7 @@ Expressions can include:
 A JavaScript **statement** such as a standalone `if` cannot be placed directly inside JSX braces:
 
 ```jsx
-// ❌ Invalid JSX
+// ✗ Invalid JSX
 // <div>{if (isLoggedIn) { ... }}</div>
 ```
 
@@ -220,7 +202,7 @@ A JSX element without children should be self-closed:
 This is invalid JSX:
 
 ```jsx
-// ❌
+// ✗
 <img src="/logo.png" alt="Logo">
 ```
 
@@ -413,7 +395,7 @@ function App() {
 A boolean, `null`, or `undefined` does not normally produce visible text. Objects cannot be rendered directly as children:
 
 ```jsx
-// ❌ Do not do this
+// ✗ Do not do this
 // <p>{user}</p>
 ```
 

@@ -1,4 +1,4 @@
----
+﻿---
 title: Routes and Navigation
 slug: day-042-routes-and-navigation
 dayLabel: Day 42
@@ -557,9 +557,9 @@ App
 ├── Sidebar
 │   ├── Dashboard
 │   ├── Reports
-│   └── Settings
+│   ┤── Settings
 ├── CreateReport
-└── ReportSuccess
+┤── ReportSuccess
 ```
 
 Requirements:

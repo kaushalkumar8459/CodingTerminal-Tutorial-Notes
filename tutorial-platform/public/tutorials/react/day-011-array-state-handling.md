@@ -1,4 +1,4 @@
----
+﻿---
 title: Array State Handling
 slug: day-011-array-state-handling
 dayLabel: Day 11
@@ -271,7 +271,7 @@ An index key is not automatically forbidden. It can be acceptable for a genuinel
 Never generate random keys during render:
 
 ```jsx
-// ❌ Avoid
+// ✗ Avoid
 items.map((item) => <Row key={Math.random()} item={item} />)
 ```
 
@@ -300,7 +300,7 @@ This avoids creating two sources of truth:
 items → source of truth
   ├── filter() → visible items
   ├── reduce() → totals
-  └── filter() → counts
+  ┤── filter() → counts
 ```
 
 If a derived calculation becomes expensive, optimize it based on measurement rather than automatically turning the derived value into state.
@@ -530,7 +530,7 @@ One acceptable quantity rule is to remove an item when the resulting quantity is
 ### Mistake 1 — `push()` on state
 
 ```jsx
-// ❌
+// ✗
 items.push(newItem);
 setItems(items);
 ```
@@ -538,42 +538,42 @@ setItems(items);
 Use:
 
 ```jsx
-// ✅
+// ✓
 setItems((current) => [...current, newItem]);
 ```
 
 ### Mistake 2 — Mutating a nested object
 
 ```jsx
-// ❌
+// ✗
 item.quantity += 1;
 ```
 
 Use:
 
 ```jsx
-// ✅
+// ✓
 { ...item, quantity: item.quantity + 1 }
 ```
 
 ### Mistake 3 — Mutating with `sort()` or `reverse()`
 
 ```jsx
-// ❌
+// ✗
 items.sort(compareItems);
 ```
 
 Use:
 
 ```jsx
-// ✅
+// ✓
 [...items].sort(compareItems);
 ```
 
 ### Mistake 4 — Mutating with `splice()`
 
 ```jsx
-// ❌
+// ✗
 items.splice(index, 1);
 ```
 
@@ -587,7 +587,7 @@ next.splice(index, 1);
 ### Mistake 5 — Storing derived totals
 
 ```jsx
-// ❌
+// ✗
 const [totalPrice, setTotalPrice] = useState(0);
 ```
 
@@ -596,7 +596,7 @@ Prefer deriving it from `cart` when it is a deterministic calculation.
 ### Mistake 6 — Random keys
 
 ```jsx
-// ❌
+// ✗
 key={Math.random()}
 ```
 

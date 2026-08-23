@@ -1,4 +1,4 @@
----
+﻿---
 title: Lazy Loading Routes
 slug: day-046-lazy-loading-routes
 dayLabel: Day 46
@@ -282,7 +282,7 @@ Think in terms of:
 ```text
 Initial cost ↓
 Later route cost ↑
-Total eventual code ≈ application code
+Total eventual code â‰ˆ application code
 ```
 
 The benefit is reducing work on the critical path, not magically removing code.

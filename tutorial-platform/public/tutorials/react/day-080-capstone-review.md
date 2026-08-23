@@ -1,4 +1,4 @@
----
+﻿---
 title: Capstone Review
 slug: day-080-capstone-review
 dayLabel: Day 80
@@ -8,23 +8,6 @@ order: 80
 track: react
 ---
 # Day 80 [Advanced]: Capstone Review
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 80 Outcome](#day-80-outcome)
 
 ## Goal
 

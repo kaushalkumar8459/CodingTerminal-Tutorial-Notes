@@ -1,4 +1,4 @@
----
+﻿---
 title: Keys and Reconciliation
 slug: day-017-keys-and-reconciliation
 dayLabel: Day 17
@@ -8,25 +8,6 @@ order: 17
 track: react
 ---
 # Day 17 [Intermediate]: Keys and Reconciliation
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Challenge](#debugging-challenge)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 17 Outcome](#day-17-outcome)
 
 ## Goal
 
@@ -172,7 +153,7 @@ Use type / position / key identity
    ├── preserve matching instance
    ├── create new instance
    ├── remove old instance
-   └── update host output
+   ┤── update host output
 ```
 
 This is a teaching model, not an implementation-level description of every React optimization. Do not infer that React simply performs a generic DOM diff.

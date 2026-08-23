@@ -1,4 +1,4 @@
----
+﻿---
 title: createContext and Provider Setup
 slug: day-037-createcontext-and-provider-setup
 dayLabel: Day 37
@@ -683,7 +683,7 @@ EnrollmentProvider
 ├── error
 ├── enroll(course)
 ├── unenroll(courseId)
-└── clearAll()
+┤── clearAll()
 ```
 
 Requirements:

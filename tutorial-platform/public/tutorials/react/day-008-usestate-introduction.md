@@ -1,4 +1,4 @@
----
+﻿---
 title: useState Deep Introduction
 slug: day-008-usestate-introduction
 dayLabel: Day 8
@@ -553,7 +553,7 @@ Cart
    ├── quantity
    ├── remove
    ├── clear
-   └── derived total
+   ┤── derived total
 ```
 
 Use `useState` only. Do not introduce Context, reducers, or external state libraries yet. The purpose is to master local state first.

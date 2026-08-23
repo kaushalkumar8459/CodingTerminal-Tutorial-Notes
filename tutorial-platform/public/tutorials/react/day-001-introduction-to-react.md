@@ -1,4 +1,4 @@
----
+﻿---
 title: Introduction to React
 slug: day-001-introduction-to-react
 dayLabel: Day 1
@@ -10,28 +10,6 @@ youtubeVideos: [{"title":"Introduction to React","url":"https://www.youtube.com/
 ---
 
 # Day 1 [Beginner]: Introduction to React
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Why React](#why-react)
-- [When React Is a Good Fit](#when-react-is-a-good-fit)
-- [When React May Be Unnecessary](#when-react-may-be-unnecessary)
-- [React Mental Model](#react-mental-model)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Debugging Challenge](#debugging-challenge)
-- [Common Mistakes](#common-mistakes)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 1 Outcome](#day-1-outcome)
 
 ## Goal
 
@@ -493,8 +471,8 @@ export default App;
 ```text
 [count, setCount]
    │       │
-   │       └── function used to request a state update
-   └────────── current state value
+   │       ┤── function used to request a state update
+   ┤────────── current state value
 ```
 
 The setter does not simply mutate the current variable. It requests a state update. React can then render the component again with the new state value.
@@ -1169,7 +1147,7 @@ React
  ├── One-way Data Flow
  ├── Render
  ├── Reconciliation
- └── Commit
+ ┤── Commit
 ```
 
 You should also understand the basic engineering judgment behind React: use it when interactive, reusable UI complexity justifies it, and avoid adding it merely because a page is simple.

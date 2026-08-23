@@ -1,4 +1,4 @@
----
+﻿---
 title: Protected Routes
 slug: day-045-protected-routes
 dayLabel: Day 45
@@ -190,11 +190,11 @@ Application starts
 Restore session
        ↓
 Loading?
-  ↙         ↘
+  ↑         ↓
 Yes          No
  ↓            ↓
 Wait       user exists?
-             ↙    ↘
+             ↑    ↓
            Yes     No
             ↓       ↓
           Allow   Login
@@ -404,7 +404,7 @@ Use when many routes share the same requirement.
 ProtectedLayout
 ├── Dashboard
 ├── Reports
-└── Settings
+┤── Settings
 ```
 
 ### Nested permission boundaries
@@ -414,9 +414,9 @@ A large application may have:
 ```text
 AuthenticatedLayout
 ├── UserRoutes
-└── AdminLayout
+┤── AdminLayout
     ├── AdminDashboard
-    └── AdminReports
+    ┤── AdminReports
 ```
 
 Keep permission boundaries aligned with product/domain ownership rather than creating guards for every component.
@@ -491,14 +491,14 @@ This structure makes the access hierarchy visible:
 ```text
 Public
 ├── Login
-└── Forbidden
+┤── Forbidden
 
 Authenticated
 ├── Dashboard
 ├── Reports
-└── Admin
+┤── Admin
     ├── Admin Dashboard
-    └── Admin Reports
+    ┤── Admin Reports
 ```
 
 ## 14. Common Mistakes
@@ -754,15 +754,15 @@ Build:
 ```text
 Public
 ├── /login
-└── /forbidden
+┤── /forbidden
 
 Authenticated
 ├── /dashboard
 ├── /reports
-└── /admin
+┤── /admin
     ├── /admin/overview
     ├── /admin/users
-    └── /admin/reports
+    ┤── /admin/reports
 ```
 
 Requirements:

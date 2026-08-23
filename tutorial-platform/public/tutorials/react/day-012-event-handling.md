@@ -1,4 +1,4 @@
----
+﻿---
 title: Event Handling
 slug: day-012-event-handling
 dayLabel: Day 12
@@ -42,7 +42,7 @@ React event props use camelCase such as `onClick`, `onChange`, and `onSubmit`. P
 // Correct
 <button type="button" onClick={handleClick}>Save</button>
 
-// ❌ Calls the function during render
+// ✗ Calls the function during render
 <button type="button" onClick={handleClick()}>Save</button>
 ```
 
@@ -490,12 +490,12 @@ Build a **Candidate Review Panel** with:
 ### Mistake 1: Calling the handler during render
 
 ```jsx
-// ❌
+// ✗
 <button type="button" onClick={handleClick()}>Save</button>
 ```
 
 ```jsx
-// ✅
+// ✓
 <button type="button" onClick={handleClick}>Save</button>
 ```
 

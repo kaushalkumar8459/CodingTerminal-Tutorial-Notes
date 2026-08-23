@@ -1,4 +1,4 @@
----
+﻿---
 title: Mini Project - Product Listing UI
 slug: day-007-mini-project-product-listing-ui
 dayLabel: Day 7
@@ -35,9 +35,9 @@ Build a page with:
 App
 ├── ProductPage
 │   ├── PageHeader
-│   └── ProductList
-│       └── ProductCard × N
-└── CartSummary
+│   ┤── ProductList
+│       ┤── ProductCard × N
+┤── CartSummary
 ```
 
 The goal is not to maximize component count. Each component should have a useful responsibility.
@@ -215,12 +215,12 @@ Recommended small-project structure:
 src/
 ├── components/
 │   ├── ProductCard.jsx
-│   └── ProductList.jsx
+│   ┤── ProductList.jsx
 ├── data/
-│   └── products.js
+│   ┤── products.js
 ├── pages/
-│   └── ProductPage.jsx
-└── App.jsx
+│   ┤── ProductPage.jsx
+┤── App.jsx
 ```
 
 This is a learning architecture, not a rule that every React application must follow.

@@ -16,7 +16,13 @@ export function stripFrontmatter(markdown: string) {
 }
 
 export function stripLeadingH1(markdown: string) {
-  return markdown.replace(/^#\s+.+\r?\n(?:\r?\n)?/, "");
+  let cleaned = markdown.replace(/^\uFEFF/, "").trimStart();
+
+  while (/^#\s+.+(?:\r?\n|\r)/.test(cleaned)) {
+    cleaned = cleaned.replace(/^#\s+.+(?:\r?\n|\r)(?:\r?\n)?/, "").trimStart();
+  }
+
+  return cleaned;
 }
 
 function normalizeHeadingText(rawHeading: string) {

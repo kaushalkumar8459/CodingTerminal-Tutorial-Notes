@@ -1,4 +1,4 @@
----
+﻿---
 title: useContext in Components
 slug: day-038-usecontext-in-components
 dayLabel: Day 38
@@ -108,7 +108,7 @@ A useful context contract is explicit:
 AuthContext
 ├── user
 ├── login(credentials)
-└── logout()
+┤── logout()
 ```
 
 Keep provider implementation details behind that contract.
@@ -636,7 +636,7 @@ AuthProvider
    ├── Navbar
    ├── ProfileCard
    ├── CourseList
-   └── LogoutButton
+   ┤── LogoutButton
 ```
 
 Requirements:

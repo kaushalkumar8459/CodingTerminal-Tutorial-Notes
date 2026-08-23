@@ -1,4 +1,4 @@
----
+﻿---
 title: React Props Deep Dive
 slug: day-006-props-deep-dive
 dayLabel: Day 6
@@ -492,8 +492,8 @@ App
 │   ├── HeaderComponent (component prop)
 │   ├── UserCard (object props)
 │   ├── ActionButton (callback prop)
-│   └── Panel (children)
-└── Footer
+│   ┤── Panel (children)
+┤── Footer
 ```
 
 Acceptance criteria:

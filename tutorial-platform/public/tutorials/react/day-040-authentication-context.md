@@ -1,4 +1,4 @@
----
+﻿---
 title: Authentication Context
 slug: day-040-authentication-context
 dayLabel: Day 40
@@ -73,7 +73,7 @@ User = Alice
 Authorization
     ├── read courses ✓
     ├── submit exam ✓
-    └── manage users ✗
+    ┤── manage users ✗
 ```
 
 A logged-in student may be authenticated but not authorized to access an admin operation.
@@ -244,7 +244,7 @@ function DashboardGate() {
   const { user, status } = useAuth();
 
   if (status === "checking") {
-    return <p role="status">Checking your session…</p>;
+    return <p role="status">Checking your session¦</p>;
   }
 
   if (!user) {
@@ -527,7 +527,7 @@ function MainContent() {
   const { user, status } = useAuth();
 
   if (status === "checking") {
-    return <p role="status">Loading session…</p>;
+    return <p role="status">Loading session¦</p>;
   }
 
   return user ? <Dashboard /> : <LoginScreen />;
@@ -540,11 +540,11 @@ Architecture:
 AuthProvider
    │
    ├── Navbar
-   │     └── login/logout UI
+   │     ┤── login/logout UI
    │
-   └── MainContent
+   ┤── MainContent
          ├── LoginScreen
-         └── Dashboard
+         ┤── Dashboard
 ```
 
 ## 20. Common Mistakes
@@ -631,7 +631,7 @@ AuthProvider
 ├── status
 ├── login
 ├── logout
-└── refreshSession
+┤── refreshSession
 ```
 
 Roles:
@@ -794,7 +794,7 @@ AuthProvider
    ├── ProfileCard
    ├── CourseList
    ├── AdminLink
-   └── LogoutButton
+   ┤── LogoutButton
 ```
 
 Requirements:

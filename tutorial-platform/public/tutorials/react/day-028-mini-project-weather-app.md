@@ -1,4 +1,4 @@
----
+﻿---
 title: Mini Project Weather App
 slug: day-028-mini-project-weather-app
 dayLabel: Day 28
@@ -8,35 +8,6 @@ order: 28
 track: react
 ---
 # Day 28 [Intermediate]: Mini Project — Weather App
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Project Requirements](#project-requirements)
-- [Architecture](#architecture)
-- [State Ownership](#state-ownership)
-- [API Security](#api-security)
-- [Search Flow](#search-flow)
-- [Controlled Search Form](#controlled-search-form)
-- [API Layer](#api-layer)
-- [Request Lifecycle](#request-lifecycle)
-- [Race Conditions and Cancellation](#race-conditions-and-cancellation)
-- [Complete Reference Implementation](#complete-reference-implementation)
-- [Important Implementation Notes](#important-implementation-notes)
-- [Weather Data Presentation](#weather-data-presentation)
-- [Accessibility](#accessibility)
-- [UX States](#ux-states)
-- [Testing Checklist](#testing-checklist)
-- [Common Mistakes](#common-mistakes)
-- [Extensions](#extensions)
-- [Debugging Lab](#debugging-lab)
-- [Hands-on Exercises](#hands-on-exercises)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Final Acceptance Criteria](#final-acceptance-criteria)
-- [Day 28 Outcome](#day-28-outcome)
 
 ## Goal
 
@@ -96,7 +67,7 @@ WeatherApp
 ├── StatusMessage
 ├── WeatherCard
 ├── RecentSearches
-└── weatherService
+┤── weatherService
         ↓
      Weather API
 ```
@@ -155,7 +126,7 @@ loading
  ├── success + data → weather card
  ├── success + no usable result → empty state
  ├── HTTP/network error → error + retry
- └── cancellation → keep the current UI; no error
+ ┤── cancellation → keep the current UI; no error
 ```
 
 When refreshing existing data, do not automatically erase useful weather information. Model refresh separately from the initial empty loading screen when the product requires it.

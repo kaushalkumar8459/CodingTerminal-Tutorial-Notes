@@ -1,4 +1,4 @@
----
+﻿---
 title: Mini Project - Notes App
 slug: day-014-mini-project-notes-app
 dayLabel: Day 14
@@ -8,28 +8,6 @@ order: 14
 track: react
 ---
 # Day 14 [Beginner → Intermediate]: Mini Project — Notes App
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Feature Specification](#feature-specification)
-- [Data Model](#data-model)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [How to Verify the Project](#how-to-verify-the-project)
-- [Debugging Challenge](#debugging-challenge)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 14 Outcome](#day-14-outcome)
 
 ## Goal
 
@@ -289,8 +267,8 @@ Suggested architecture:
 App
 ├── NoteForm
 ├── FilterBar
-└── NoteList
-    └── NoteItem
+┤── NoteList
+    ┤── NoteItem
 ```
 
 `NoteForm` owns presentation of the controlled form but receives the source-of-truth values and callbacks from its owner.
@@ -604,7 +582,7 @@ Add editing without changing the note ID.
 ### Mistake 1 — Direct array mutation
 
 ```jsx
-// ❌
+// ✗
 notes.push(note);
 setNotes(notes);
 ```
@@ -612,14 +590,14 @@ setNotes(notes);
 Use:
 
 ```jsx
-// ✅
+// ✓
 setNotes((current) => [...current, note]);
 ```
 
 ### Mistake 2 — Direct object mutation
 
 ```jsx
-// ❌
+// ✗
 note.text = "New text";
 ```
 
@@ -628,7 +606,7 @@ Use an immutable object update inside `map`.
 ### Mistake 3 — Storing filtered notes
 
 ```jsx
-// ❌
+// ✗
 const [filteredNotes, setFilteredNotes] = useState([]);
 ```
 
@@ -637,7 +615,7 @@ Prefer deriving filtered notes from `notes` and `filter`.
 ### Mistake 4 — Changing identity during edit
 
 ```jsx
-// ❌
+// ✗
 { ...note, id: crypto.randomUUID(), text }
 ```
 
@@ -646,21 +624,21 @@ The ID should remain stable when the logical note is edited.
 ### Mistake 5 — Wrong button type
 
 ```jsx
-// ❌
+// ✗
 <button onClick={cancelEdit}>Cancel</button>
 ```
 
 Inside a form this may submit. Use:
 
 ```jsx
-// ✅
+// ✓
 <button type="button" onClick={cancelEdit}>Cancel</button>
 ```
 
 ### Mistake 6 — Random list keys
 
 ```jsx
-// ❌
+// ✗
 key={Math.random()}
 ```
 

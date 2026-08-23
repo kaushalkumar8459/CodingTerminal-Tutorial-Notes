@@ -1,4 +1,4 @@
----
+﻿---
 title: useRef
 description: Master useRef for DOM references, mutable values, imperative APIs, timers, previous values, and request handles.
 slug: day-029-useref
@@ -9,35 +9,6 @@ order: 29
 track: react
 ---
 # Day 29 [Intermediate]: `useRef`
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Core Mental Model](#core-mental-model)
-- [Ref vs State](#ref-vs-state)
-- [DOM References](#dom-references)
-- [Focus and Selection](#focus-and-selection)
-- [Previous Value Pattern](#previous-value-pattern)
-- [Timer Handles](#timer-handles)
-- [Request Handles](#request-handles)
-- [Ref Writes and Rendering](#ref-writes-and-rendering)
-- [Refs and Effects](#refs-and-effects)
-- [Callback Refs](#callback-refs)
-- [Imperative APIs](#imperative-apis)
-- [Strict Mode](#strict-mode)
-- [Common Patterns](#common-patterns)
-- [When Not to Use useRef](#when-not-to-use-useref)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Lab](#debugging-lab)
-- [Hands-on Exercises](#hands-on-exercises)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Testing Checklist](#testing-checklist)
-- [Production Considerations](#production-considerations)
-- [Final Acceptance Criteria](#final-acceptance-criteria)
-- [Day 29 Outcome](#day-29-outcome)
 
 ## Goal
 
@@ -90,7 +61,7 @@ For a mounted component instance:
 
 ```text
 Render 1 ──┐
-Render 2 ──┼── same ref object
+Render 2 ──┴── same ref object
 Render 3 ──┘       ↓
                 ref.current
 ```

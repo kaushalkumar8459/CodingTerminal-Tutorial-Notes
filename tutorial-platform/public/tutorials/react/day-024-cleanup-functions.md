@@ -1,4 +1,4 @@
----
+﻿---
 title: Effect Cleanup, Cancellation & Race Conditions
 slug: day-024-cleanup-functions
 dayLabel: Day 24
@@ -8,23 +8,6 @@ order: 24
 track: react
 ---
 # Day 24 [Intermediate]: Effect Cleanup, Cancellation & Race Conditions
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Core Mental Model](#core-mental-model)
-- [Cleanup Lifecycle](#cleanup-lifecycle)
-- [Topic by Topic](#topic-by-topic)
-- [End-to-End Practical](#end-to-end-practical)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Lab](#debugging-lab)
-- [Hands-on Exercises](#hands-on-exercises)
-- [Assessment Quiz](#assessment-quiz)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Production Checklist](#production-checklist)
-- [Day 24 Outcome](#day-24-outcome)
 
 ## Goal
 

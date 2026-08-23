@@ -1,4 +1,4 @@
----
+﻿---
 title: API Calls with Fetch
 slug: day-025-api-calls-with-fetch
 dayLabel: Day 25
@@ -8,25 +8,6 @@ order: 25
 track: react
 ---
 # Day 25 [Intermediate]: API Calls with `fetch`
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [API Request Mental Model](#api-request-mental-model)
-- [Topic by Topic](#topic-by-topic)
-- [Request State Machine](#request-state-machine)
-- [End-to-End Practical](#end-to-end-practical)
-- [Reference Implementation](#reference-implementation)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Lab](#debugging-lab)
-- [Hands-on Exercises](#hands-on-exercises)
-- [Assessment Quiz](#assessment-quiz)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Production Checklist](#production-checklist)
-- [Verification Checklist](#verification-checklist)
-- [Day 25 Outcome](#day-25-outcome)
 
 ## Goal
 
@@ -88,7 +69,7 @@ loading
       ↓
 ┌───────────────┐
 │ HTTP response │
-└───────────────┘
+┤───────────────┘
       ↓
 validate status
       ↓
@@ -98,7 +79,7 @@ validate application shape
       ↓
 ┌──────────┬──────────┐
 │ success  │ failure  │
-└──────────┴──────────┘
+┤──────────┬──────────┘
      ↓          ↓
  data/empty   error
 ```
@@ -113,7 +94,7 @@ For a simple screen:
 
 ```text
 idle → loading → success
-             ↘ error → loading (retry)
+             ↓ error → loading (retry)
 ```
 
 Success can contain either data or an empty collection:
@@ -121,7 +102,7 @@ Success can contain either data or an empty collection:
 ```text
 success
  ├── data
- └── empty
+ ┤── empty
 ```
 
 Do not confuse:
@@ -493,8 +474,8 @@ Build a User Directory that:
 UserDirectory
 ├── SearchBox
 ├── StatusMessage
-└── UserList
-    └── UserCard
+┤── UserList
+    ┤── UserCard
 ```
 
 The component that owns the request lifecycle should own the data state. Presentational children should receive data and callback contracts rather than directly owning the request lifecycle.
@@ -1023,7 +1004,7 @@ A retry policy that is reasonable for a GET may be dangerous for a POST that cre
 - [ ] Retry policy considers HTTP method and idempotency.
 - [ ] POST retry does not accidentally create duplicate records.
 
-# Day 25 Outcome
+## Day 25 Outcome
 
 You can now build a robust React API screen rather than a simplistic `fetch()` demo.
 

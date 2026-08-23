@@ -1,4 +1,4 @@
----
+﻿---
 title: Performance Optimization
 slug: day-058-performance-optimization
 dayLabel: Day 58
@@ -17,23 +17,6 @@ order: 58
 track: react
 ---
 # Day 58 [Advanced]: Performance Optimization
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 58 Outcome](#day-58-outcome)
 
 ## Goal
 

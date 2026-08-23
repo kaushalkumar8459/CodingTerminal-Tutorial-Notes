@@ -1,4 +1,4 @@
----
+﻿---
 title: Integration and E2E
 slug: day-070-integration-and-e2e
 dayLabel: Day 70
@@ -17,23 +17,6 @@ order: 70
 track: react
 ---
 # Day 70 [Advanced]: Integration and E2E
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 70 Outcome](#day-70-outcome)
 
 ## Goal
 

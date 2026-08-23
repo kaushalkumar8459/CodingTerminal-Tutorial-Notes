@@ -1,4 +1,4 @@
----
+﻿---
 title: Reusable Logic Patterns
 slug: day-034-reusable-logic-patterns
 dayLabel: Day 34
@@ -98,9 +98,9 @@ A boolean-only API can become ambiguous. A useful model is:
 
 ```text
 idle → loading → success
-             ↘ error
+             ↓ error
 success → refreshing → success
-                   ↘ error-with-data
+                   ↓ error-with-data
 ```
 
 `loading` and `refreshing` should not necessarily mean the same UX state.
@@ -349,7 +349,7 @@ Avoid:
 
 ```jsx
 function useFetch() {
-  return <Spinner />; // ❌
+  return <Spinner />; // ✗
 }
 ```
 
@@ -416,8 +416,8 @@ function JobsExplorer() {
       />
       <button type="button" onClick={clear}>Clear</button>
 
-      {status === "loading" && <p role="status">Loading jobs…</p>}
-      {status === "refreshing" && <p role="status">Updating results…</p>}
+      {status === "loading" && <p role="status">Loading jobs¦</p>}
+      {status === "refreshing" && <p role="status">Updating results¦</p>}
 
       {status === "error" && (
         <div role="alert">

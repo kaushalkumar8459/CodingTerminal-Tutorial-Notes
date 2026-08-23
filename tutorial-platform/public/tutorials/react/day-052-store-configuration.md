@@ -1,4 +1,4 @@
----
+﻿---
 title: Store Configuration
 slug: day-052-store-configuration
 dayLabel: Day 52
@@ -17,23 +17,6 @@ order: 52
 track: react
 ---
 # Day 52 [Advanced]: Store Configuration
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 52 Outcome](#day-52-outcome)
 
 ## Goal
 

@@ -1,4 +1,4 @@
----
+﻿---
 title: Senior Machine Coding Simulation
 slug: day-099-senior-machine-coding-simulation
 dayLabel: Day 99
@@ -8,23 +8,6 @@ order: 99
 track: react
 ---
 # Day 99 [Expert]: Senior Machine Coding Simulation
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 99 Outcome](#day-99-outcome)
 
 ## Goal
 

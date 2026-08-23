@@ -1,4 +1,4 @@
----
+﻿---
 title: Forms and Controlled Components
 slug: day-013-forms-and-controlled-components
 dayLabel: Day 13
@@ -8,25 +8,6 @@ order: 13
 track: react
 ---
 # Day 13 [Beginner → Intermediate]: Forms and Controlled Components
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Debugging Challenge](#debugging-challenge)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 13 Outcome](#day-13-outcome)
 
 ## Goal
 

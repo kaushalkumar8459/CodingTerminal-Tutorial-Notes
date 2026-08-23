@@ -1,4 +1,4 @@
----
+﻿---
 title: useMemo
 slug: day-031-usememo
 dayLabel: Day 31
@@ -8,38 +8,6 @@ order: 31
 track: react
 ---
 # Day 31 [Intermediate]: `useMemo`
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Learning Outcomes](#learning-outcomes)
-- [Core Mental Model](#core-mental-model)
-- [What useMemo Does](#what-usememo-does)
-- [Render vs DOM Work](#render-vs-dom-work)
-- [Basic Syntax](#basic-syntax)
-- [Dependency Arrays](#dependency-arrays)
-- [Purity and Side Effects](#purity-and-side-effects)
-- [useMemo vs useCallback vs React.memo](#usememo-vs-usecallback-vs-reactmemo)
-- [Referential Equality](#referential-equality)
-- [Stable Object and Array References](#stable-object-and-array-references)
-- [Expensive Calculations](#expensive-calculations)
-- [When Not to Use useMemo](#when-not-to-use-usememo)
-- [React Compiler and Manual Memoization](#react-compiler-and-manual-memoization)
-- [Common Dependency Pitfalls](#common-dependency-pitfalls)
-- [Mutation Pitfalls](#mutation-pitfalls)
-- [Strict Mode and Development Behavior](#strict-mode-and-development-behavior)
-- [Performance Measurement](#performance-measurement)
-- [Complete Practical](#complete-practical)
-- [Hands-on Labs](#hands-on-labs)
-- [Debugging Lab](#debugging-lab)
-- [Common Mistakes](#common-mistakes)
-- [Assessment](#assessment)
-- [Interview Questions](#interview-questions)
-- [Production Decision Framework](#production-decision-framework)
-- [Testing Checklist](#testing-checklist)
-- [Final Acceptance Criteria](#final-acceptance-criteria)
-- [Day 31 Outcome](#day-31-outcome)
 
 ## Goal
 
@@ -92,7 +60,7 @@ With `useMemo`:
 Component renders
       ↓
 Did dependencies change?
-   ┌──┴──┐
+   ┌──┬──┐
   NO    YES
    ↓      ↓
 reuse   calculate

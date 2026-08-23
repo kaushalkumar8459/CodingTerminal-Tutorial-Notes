@@ -1,4 +1,4 @@
----
+﻿---
 title: Reusable React Components
 slug: day-005-reusable-components
 dayLabel: Day 5
@@ -8,24 +8,6 @@ order: 5
 track: react
 ---
 # Day 5 [Beginner to Intermediate]: Reusable Components
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Common Mistakes](#common-mistakes)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 5 Outcome](#day-5-outcome)
 
 ## Goal
 
@@ -321,7 +303,7 @@ Dashboard
 ├── Button
 ├── StatCard
 ├── Panel
-└── UserList
+┤── UserList
 ```
 
 ### `StatCard`
