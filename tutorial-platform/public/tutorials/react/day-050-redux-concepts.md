@@ -381,9 +381,11 @@ export function CounterPanel() {
   return (
     <div>
       <p>Count: {count}</p>
-      <button type="button" onClick={() => dispatch({ type: "counter/increment" })}>+
+      <button type="button" onClick={() => dispatch({ type: "counter/increment" })}>
+        +
       </button>
-      <button type="button" onClick={() => dispatch({ type: "counter/decrement" })}>-
+      <button type="button" onClick={() => dispatch({ type: "counter/decrement" })}>
+        -
       </button>
       <button type="button" onClick={() => dispatch({ type: "counter/reset" })}>
         Reset
