@@ -20,7 +20,7 @@ Build production-grade authentication flow with token refresh, expiry handling, 
 
 ## Explanation
 
-Modern apps require resilient authentication behavior: token expiry recovery, secure persistence strategy, and graceful failure handling.
+Modern apps require resilient authentication behavior: token expiry recovery, secure persistence strategy, and graceful failure handling. The frontend should also avoid treating an access token as proof that the user is authorized for every action; authorization remains a server-side responsibility.
 
 ## Topic by Topic
 
@@ -38,13 +38,14 @@ Code Example:
 if (response.status === 401) refreshSession();
 ```
 
-**Explanation:** Separating access and refresh responsibilities improves security and makes session renewal flows more manageable.
+**Explanation:** Separating access and refresh responsibilities improves security and makes session renewal flows more manageable. In browser applications, prefer secure, appropriately scoped cookie-based session mechanisms when supported by the backend, and understand the CSRF implications of cookie authentication.
 
 **Key Points:**
 
 - Keep access tokens short-lived.
 - Use refresh flow for session continuity.
 - Design auth around both UX and security.
+- Treat token possession and authorization as different concepts.
 
 ### Topic 2: Interceptor-based Retry Flow
 
@@ -60,13 +61,14 @@ Code Example:
 return api(originalRequest);
 ```
 
-**Explanation:** Interceptors centralize retry behavior so every request does not need custom token refresh logic.
+**Explanation:** Interceptors centralize retry behavior so every request does not need custom token refresh logic. A retry should be bounded and the original request should be retried only after a confirmed refresh; otherwise an expired session can create an infinite request loop.
 
 **Key Points:**
 
 - Handle token expiry in one place.
 - Keep request code simpler.
 - Prevent duplicated retry logic.
+- Mark retried requests so the same request cannot loop indefinitely.
 
 ### Topic 3: Concurrent 401 Handling
 
@@ -82,13 +84,14 @@ Code Example:
 let isRefreshing = false;
 ```
 
-**Explanation:** Concurrent 401 handling matters because multiple failing requests can otherwise trigger duplicate refresh attempts and unstable auth state.
+**Explanation:** Concurrent 401 handling matters because multiple failing requests can otherwise trigger duplicate refresh attempts and unstable auth state. A robust implementation should resolve or reject all queued requests based on the same refresh result.
 
 **Key Points:**
 
 - Coordinate refresh attempts carefully.
 - Avoid race conditions across requests.
 - Release queued requests after refresh result.
+- Reject queued requests consistently when refresh fails.
 
 ### Topic 4: Fallback Logout Strategy
 
@@ -105,13 +108,14 @@ authStore.clear();
 navigate("/login");
 ```
 
-**Explanation:** When refresh fails, the app needs a clear fallback path so the user is not left in a broken partial-auth state.
+**Explanation:** When refresh fails, the app needs a clear fallback path so the user is not left in a broken partial-auth state. Logout should clear all client-side session state relevant to the application and should not expose sensitive information in redirect URLs or logs.
 
 **Key Points:**
 
 - Fail closed when session cannot recover.
 - Clear auth state fully on logout.
 - Redirect users to a safe re-auth flow.
+- Avoid leaking tokens or sensitive auth details through URLs and telemetry.
 
 ### Topic 5: Protected UX and Session Awareness
 
@@ -127,13 +131,14 @@ Code Example:
 <p>Your session expired. Please sign in again.</p>
 ```
 
-**Explanation:** Protected UX should guide the user through session changes instead of failing silently or surprising them.
+**Explanation:** Protected UX should guide the user through session changes instead of failing silently or surprising them. Where practical, preserve safe user intent, such as returning to the page they were viewing after successful re-authentication.
 
 **Key Points:**
 
 - Communicate session expiry clearly.
 - Preserve user intent where possible.
 - Keep protected-route experience predictable.
+- Never make sensitive session information part of user-visible URLs.
 
 ### Topic 6: Operational Readiness for Authentication Beyond Basics
 
@@ -145,16 +150,23 @@ Add one operational rule (monitoring, rollback, security check, or browser suppo
 
 Code Example:
 
-`jsx
+```ts
 // Define an operational gate for safe rollout and rollback.
-`
-**Explanation:** Advanced authentication changes are high risk, so rollout should include monitoring, rollback, and abuse-resistant checks.
+const optimizationGate = {
+  monitorAuthFailures: true,
+  monitorRefreshFailures: true,
+  rollbackIfRegression: true,
+};
+```
+
+**Explanation:** Advanced authentication changes are high risk, so rollout should include monitoring, rollback, and abuse-resistant checks. Monitor rates and patterns rather than logging access or refresh tokens themselves.
 
 **Key Points:**
 
-- Watch auth error spikes after release.
+- Watch auth error and refresh-failure spikes after release.
 - Keep rollback steps documented.
 - Treat auth flows as critical production infrastructure.
+- Never log raw access tokens, refresh tokens, cookies, or authorization headers.
 
 ## Key Concepts
 
@@ -163,7 +175,8 @@ Code Example:
 - Refresh deduplication under concurrency
 - Reliable logout fallback
 - Secure and user-friendly auth UX
-
+- Bounded retry and failure handling
+- Secure credential storage considerations
 - Operational excellence mindset
 
 ## Visual Concept Map
@@ -185,6 +198,9 @@ flowchart TD
 3. Implement single-flight refresh logic.
 4. Retry queued requests after refresh success.
 5. Force logout when refresh fails.
+6. Add a bounded retry guard so a request cannot loop indefinitely.
+7. Verify that sensitive tokens are excluded from logs, URLs, and analytics.
+8. Add tests for concurrent failures and refresh failure recovery.
 
 ## Hands-on Coding
 
@@ -208,6 +224,8 @@ api.interceptors.response.use(
 );
 ```
 
+**Review point:** In production, make sure refresh failures reject the original request, and exclude the refresh endpoint itself from this retry path to avoid loops.
+
 ### Example 2: Case - Single Refresh for Concurrent Requests
 
 Scenario:
@@ -220,12 +238,17 @@ let queue: Array<() => void> = [];
 async function refreshOnce() {
   if (isRefreshing) return new Promise<void>((resolve) => queue.push(resolve));
   isRefreshing = true;
-  await refreshAccessToken();
-  isRefreshing = false;
-  queue.forEach((resolve) => resolve());
-  queue = [];
+  try {
+    await refreshAccessToken();
+  } finally {
+    isRefreshing = false;
+    queue.forEach((resolve) => resolve());
+    queue = [];
+  }
 }
 ```
+
+**Review point:** A real implementation should distinguish successful refresh from failed refresh so queued requests can be rejected and redirected rather than retried with an invalid session.
 
 ### Example 3: Case - Graceful Expiry Logout
 
@@ -234,24 +257,27 @@ If refresh token is invalid, app should reset auth and route user to login.
 
 ```ts
 async function handleRefreshFailure() {
-  localStorage.removeItem("user");
   authStore.clear();
-  window.location.href = "/login?reason=session-expired";
+  window.location.assign("/login?reason=session-expired");
 }
 ```
+
+**Review point:** Do not put tokens, session identifiers, or backend error details into the URL. Keep the redirect reason generic and ensure server-side session invalidation occurs when required by the authentication design.
 
 ## Mini Exercise
 
 Scenario:
 You are building an HR portal with protected employee routes.
 
-Implement refresh-on-401, queued retry for concurrent failures, and fallback logout with expiry notification.
+Implement refresh-on-401, queued retry for concurrent failures, and fallback logout with expiry notification. Add a retry guard and explicitly document where credentials are stored and why that storage strategy is appropriate.
 
 Expected output:
 
 - Smooth auto-refresh for expired access token
 - No refresh storm under concurrent failures
 - Secure forced logout when refresh cannot recover
+- No infinite retry loop
+- No sensitive credentials written to logs or URLs
 
 ## Assessment Quiz
 
@@ -262,6 +288,9 @@ Expected output:
 3. True or False: On refresh failure, app should keep retrying forever.
 4. Why queue requests during token refresh?
 5. What should user experience include on session expiry?
+6. Why must authentication retries be bounded?
+7. What sensitive authentication data should frontend logs avoid capturing?
+8. Is possession of an access token the same as authorization to perform every operation?
 
 ### Quiz Answers
 
@@ -270,18 +299,25 @@ Expected output:
 3. False
 4. To avoid multiple refresh calls and race conditions
 5. Clear message and safe redirection to login
+6. To prevent infinite loops, request storms, and cascading failures
+7. Access tokens, refresh tokens, cookies, authorization headers, and equivalent secrets
+8. No. The backend must enforce authorization for the requested resource and action.
 
 ## Task
 
 - Add interceptor-based refresh flow with fallback logout
 - Handle concurrent 401 request scenarios safely
+- Add bounded retry behavior
+- Review credential storage and logging practices
 - Complete mini exercise
 
 ## Self Check
 
 - You can implement production-style auth recovery flows
 - You can prevent token-refresh race conditions
-- You can answer at least 4 out of 5 quiz questions correctly
+- You can explain safe credential storage tradeoffs
+- You can distinguish authentication from authorization
+- You can answer at least 6 out of 8 quiz questions correctly
 
 ## Interview Questions and Answers
 
@@ -315,8 +351,17 @@ Expected output:
 
 **Answer:** Simulate 401 bursts, refresh failures, retry success paths, and forced logout behavior.
 
+**Question:** Why should a refresh interceptor have a retry guard?
+
+**Answer:** Without a guard, a continuously failing refresh can cause the same request to enter an infinite 401 → refresh → retry cycle.
+
+**Question:** How should production telemetry handle authentication errors?
+
+**Answer:** Record safe metadata such as status categories, endpoint classes, and correlation IDs while never recording raw credentials, tokens, cookies, or authorization headers.
+
 ## Day 86 Outcome
 
 - You can implement robust authentication beyond basic login
 - You can recover expired sessions safely with fallback protections
+- You can reason about concurrency, bounded retries, and credential handling
 - You are ready for API runtime contract safety in Day 87
