@@ -20,7 +20,7 @@ Create a repeatable browser compatibility strategy that prevents cross-browser r
 
 ## Explanation
 
-Different browsers vary in CSS support, JS APIs, and rendering behavior. Compatibility planning ensures stable UX across target environments.
+Different browsers vary in CSS support, JS APIs, and rendering behavior. Compatibility planning ensures stable UX across target environments. A useful strategy is evidence-driven: combine real user traffic, browser support requirements, framework/tooling constraints, and the business cost of supporting older environments rather than choosing a browser list arbitrarily.
 
 ## Topic by Topic
 
@@ -38,13 +38,14 @@ Code Example:
 Chrome latest-2, Edge latest-2, Safari latest-2, Firefox latest-2
 ```
 
-**Explanation:** A browser support matrix sets expectations early, so development and QA effort matches real business needs.
+**Explanation:** A browser support matrix sets expectations early, so development and QA effort matches real business needs. The exact versions should be driven by product requirements and current analytics, not copied blindly from another project.
 
 **Key Points:**
 
 - Base support targets on users and business constraints.
 - Distinguish primary and minimum supported browsers.
 - Keep the matrix written and reviewable.
+- Review the matrix periodically as browser usage changes.
 
 ### Topic 2: CSS Compatibility and Fallbacks
 
@@ -61,13 +62,14 @@ display: flex;
 display: grid;
 ```
 
-**Explanation:** CSS compatibility planning means designing fallbacks so layout still works when the newest feature support is uneven.
+**Explanation:** CSS compatibility planning means designing fallbacks so layout still works when the newest feature support is uneven. Prefer feature detection and progressive enhancement over browser-name checks whenever possible.
 
 **Key Points:**
 
 - Use progressive enhancement where practical.
 - Add fallbacks for risky properties.
 - Test real layouts in target browsers.
+- Prefer capability detection over user-agent sniffing.
 
 ### Topic 3: JavaScript Compatibility
 
@@ -83,13 +85,14 @@ Code Example:
 import "core-js/stable";
 ```
 
-**Explanation:** JavaScript compatibility depends on both syntax support and runtime APIs, which is why transpilation and polyfills are different concerns.
+**Explanation:** JavaScript compatibility depends on both syntax support and runtime APIs, which is why transpilation and polyfills are different concerns. Avoid shipping a large global polyfill bundle when targeted or conditional support is sufficient.
 
 **Key Points:**
 
 - Configure build targets intentionally.
 - Polyfill only what the app truly needs.
 - Keep legacy support costs visible.
+- Distinguish syntax transformation from missing runtime APIs.
 
 ### Topic 4: Cross-browser Testing Workflow
 
@@ -105,13 +108,14 @@ Code Example:
 Login -> Search -> Checkout smoke path
 ```
 
-**Explanation:** Cross-browser testing should focus on critical journeys first, because those are the flows where regressions hurt most.
+**Explanation:** Cross-browser testing should focus on critical journeys first, because those are the flows where regressions hurt most. Automate stable journeys with a browser-testing tool and reserve manual exploratory testing for areas where visual or interaction differences are difficult to encode.
 
 **Key Points:**
 
 - Test core user journeys across browsers.
 - Mix manual and automated checks.
 - Reuse a stable smoke-test checklist.
+- Run the highest-risk compatibility tests in CI where practical.
 
 ### Topic 5: Compatibility Issue Triage
 
@@ -127,13 +131,14 @@ Code Example:
 P1: Broken checkout on Safari
 ```
 
-**Explanation:** Compatibility issues should be prioritized by business impact, not only by how technically interesting the bug is.
+**Explanation:** Compatibility issues should be prioritized by business impact, not only by how technically interesting the bug is. Include affected browser share, affected user journey, severity, reproducibility, and whether a safe workaround exists.
 
 **Key Points:**
 
 - Rank issues by severity and affected traffic.
 - Fix revenue or trust-impacting bugs first.
 - Keep triage rules consistent across releases.
+- Record browser/OS/version details needed to reproduce the defect.
 
 ### Topic 6: Operational Readiness for Browser Compatibility Strategy
 
@@ -145,16 +150,21 @@ Add one operational rule (monitoring, rollback, security check, or browser suppo
 
 Code Example:
 
-`jsx
-// Define an operational gate for safe rollout and rollback.
-`
-**Explanation:** Compatibility strategy becomes stronger when releases include support gates, monitoring, and rollback plans for browser-specific regressions.
+```yaml
+compatibilityGate:
+  browserMatrixReviewed: true
+  criticalFlowsCovered: true
+  rollbackReady: true
+```
+
+**Explanation:** Compatibility strategy becomes stronger when releases include support gates, monitoring, and rollback plans for browser-specific regressions. Track errors by browser and version when the telemetry platform can provide that information without collecting unnecessary user data.
 
 **Key Points:**
 
 - Add browser support checks to release flow.
 - Monitor production issues by browser when possible.
 - Keep a quick recovery plan for major compatibility failures.
+- Avoid collecting unnecessary user-identifying data for diagnostics.
 
 ## Key Concepts
 
@@ -163,7 +173,8 @@ Code Example:
 - Polyfill and transpilation planning
 - Cross-browser validation workflow
 - Impact-based compatibility triage
-
+- Capability detection and progressive enhancement
+- Browser-aware production monitoring
 - Operational excellence mindset
 
 ## Visual Concept Map
@@ -174,15 +185,19 @@ flowchart TD
 		B --> C[Manual + Automated Testing]
 		C --> D[Issue Triage]
 		D --> E[Stable Multi-browser UX]
+		E --> F[Production Monitoring]
+		F -->|Regression| G[Fix / Rollback]
 ```
 
 ## End-to-End Practical
 
-1. Define target browser matrix from analytics.
-2. Configure browserlist/build targets.
-3. Run smoke tests on three browsers.
-4. Fix one compatibility issue with fallback.
+1. Define target browser matrix from analytics and product requirements.
+2. Configure Browserlist/build targets.
+3. Run smoke tests on three representative browsers.
+4. Fix one compatibility issue with a capability-based fallback.
 5. Document compatibility checklist for releases.
+6. Add browser/version context to safe error telemetry.
+7. Define a rollback or mitigation path for severe browser-specific regressions.
 
 ## Hands-on Coding
 
@@ -202,6 +217,8 @@ A B2B dashboard needs official browser support policy for enterprise users.
 }
 ```
 
+**Review point:** This is an illustrative policy. In a real application, validate the list against current product analytics and the framework's supported browser baseline before adopting it.
+
 ### Example 2: Case - CSS Fallback for Layout Issue
 
 Scenario:
@@ -219,6 +236,8 @@ A pricing card layout breaks in older Safari due to unsupported gap behavior.
 }
 ```
 
+**Review point:** Prefer feature/capability testing where the actual issue is feature support. Avoid assuming every older Safari version has the same limitation.
+
 ### Example 3: Case - Polyfill for Missing API
 
 Scenario:
@@ -234,18 +253,21 @@ fetch("/api/status")
   });
 ```
 
+**Review point:** Confirm that the target browser actually lacks the API before shipping the polyfill, and let the build tooling manage the supported browser set where possible.
+
 ## Mini Exercise
 
 Scenario:
 You are preparing a travel booking app for launch in mixed browser environments.
 
-Define browser support matrix, test critical paths in Chrome/Firefox/Safari, and resolve one CSS or JS compatibility defect.
+Define browser support matrix, test critical paths in Chrome/Firefox/Safari, and resolve one CSS or JS compatibility defect. Record the affected browser/version, root cause, fallback, and regression test.
 
 Expected output:
 
 - Documented compatibility scope
 - Verified core journey behavior in target browsers
 - One concrete compatibility fix with fallback explanation
+- Regression test or repeatable verification step
 
 ## Assessment Quiz
 
@@ -256,6 +278,9 @@ Expected output:
 3. True or False: Cross-browser testing can be skipped if app works in Chrome.
 4. Why add CSS fallbacks?
 5. How should compatibility issues be prioritized?
+6. Why distinguish transpilation from polyfills?
+7. Why prefer capability detection over browser-name checks?
+8. What production signal can help identify browser-specific regressions?
 
 ### Quiz Answers
 
@@ -264,18 +289,24 @@ Expected output:
 3. False
 4. To maintain usable layout/behavior where features differ
 5. By business impact, affected traffic, and severity
+6. Transpilation changes unsupported syntax while polyfills provide missing runtime APIs.
+7. Browser-name checks can become brittle; capability detection tests what the environment can actually do.
+8. Error or performance telemetry segmented by browser/version, using appropriate privacy controls.
 
 ## Task
 
 - Test app on three browsers and fix one issue
 - Define compatibility policy and fallback strategy
+- Add a regression check for the fixed issue
+- Document browser/version evidence for one defect
 - Complete mini exercise
 
 ## Self Check
 
 - You can establish a browser compatibility strategy proactively
 - You can debug and fix cross-browser defects systematically
-- You can answer at least 4 out of 5 quiz questions correctly
+- You can distinguish transpilation, polyfills, and CSS fallbacks
+- You can answer at least 6 out of 8 quiz questions correctly
 
 ## Interview Questions and Answers
 
@@ -303,14 +334,23 @@ Expected output:
 
 **Question:** How do you keep compatibility strategy sustainable over time?
 
-**Answer:** Review analytics, update matrix periodically, automate key cross-browser tests.
+**Answer:** Review analytics, update matrix periodically, and automate key cross-browser tests.
 
 **Question:** What is a common release risk related to browser support?
 
-**Answer:** Introducing modern feature usage without fallback for high-traffic older environments.
+**Answer:** Introducing modern feature usage without fallback for high-traffic environments that are still inside the supported browser policy.
+
+**Question:** When should you use a polyfill instead of a transpiler?
+
+**Answer:** Use a polyfill when the target runtime lacks an API or built-in behavior; use transpilation when the target environment cannot parse newer JavaScript syntax.
+
+**Question:** How would you debug a browser-specific production regression?
+
+**Answer:** Identify browser/OS/version and affected journey from safe telemetry, reproduce on the same environment, isolate the unsupported capability or rendering difference, add a targeted fix and regression test, then monitor the next release.
 
 ## Day 90 Outcome
 
 - You can build and maintain a practical cross-browser strategy
 - You can reduce runtime surprises with proactive compatibility checks
+- You can distinguish build-time and runtime compatibility techniques
 - You are ready for observability and quality scaling topics in later modules
