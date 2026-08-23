@@ -9,19 +9,6 @@ track: java
 ---
 # Day 16 [Beginner]: Regular Expressions and Pattern Matching
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 16 Outcome](#day-16-outcome)
-
 ## Goal
 
 Learn to use regular expressions in Java to match, search, validate, and manipulate text patterns in strings.

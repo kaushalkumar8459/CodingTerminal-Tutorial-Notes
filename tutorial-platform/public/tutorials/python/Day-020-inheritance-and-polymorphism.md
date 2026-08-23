@@ -9,23 +9,6 @@ track: python
 ---
 # Day 020 [Beginner]: Inheritance and Polymorphism
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 020 Outcome](#day-020-outcome)
-
 ## Goal
 
 Understand how inheritance and polymorphism help reuse object-oriented code and make designs more flexible.

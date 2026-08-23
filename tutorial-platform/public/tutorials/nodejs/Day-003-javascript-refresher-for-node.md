@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 003 [Beginner]: JavaScript Refresher for Node
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Refresh the JavaScript patterns that matter most in Node.js: async flow, objects/arrays, error handling, and module-ready coding style.

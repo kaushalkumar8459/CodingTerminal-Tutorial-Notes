@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 070 [Intermediate]: Package Design and Internal Libraries
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design robust internal Node packages with clear APIs, semantic versioning discipline, and maintainable reuse patterns.

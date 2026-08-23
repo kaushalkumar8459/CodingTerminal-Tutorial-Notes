@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 062 [Intermediate]: Resilience Patterns Retry and Circuit Breaker
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement retry, timeout, backoff, and circuit-breaker patterns in Node services to reduce cascading failures.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 058 [Intermediate]: Message Brokers with RabbitMQ and Kafka
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand when and how to use RabbitMQ and Kafka for reliable asynchronous communication in Node systems.

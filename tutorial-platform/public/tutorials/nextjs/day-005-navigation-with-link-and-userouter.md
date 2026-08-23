@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 5 [Beginner]: Navigation with Link and useRouter
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 5 Outcome](#day-5-outcome)
-
 ## Goal
 
 Use the `<Link>` component for declarative navigation and the `useRouter` hook for programmatic navigation in Next.js App Router.

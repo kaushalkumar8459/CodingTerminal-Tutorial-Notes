@@ -9,23 +9,6 @@ track: python
 ---
 # Day 067 [Intermediate]: Data Processing with pandas
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 067 Outcome](#day-067-outcome)
-
 ## Goal
 
 Process, clean, and transform real-world tabular data efficiently using pandas for analytics and backend data pipelines.

@@ -224,13 +224,16 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
   const [youtubeVideos, setYoutubeVideos] = useState<TutorialVideo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isSyllabusOpen, setIsSyllabusOpen] = useState(false);
   const [isMobileTocDrawerOpen, setIsMobileTocDrawerOpen] = useState(false);
 
   const track = routeTrack && isTrackKey(routeTrack) ? routeTrack : null;
   const trackTutorials = useMemo(() => (track ? getTutorialsByTrack(track) : []), [track]);
   const tutorial = track && slug ? getTutorialBySlug(track, slug) : undefined;
   const tocItems = useMemo(() => extractTableOfContents(markdown), [markdown]);
-  const currentTutorialIndex = tutorial ? trackTutorials.findIndex((item) => item.slug === tutorial.slug) : -1;
+  const currentTutorialIndex = tutorial
+    ? trackTutorials.findIndex((item: (typeof trackTutorials)[number]) => item.slug === tutorial.slug)
+    : -1;
   const previousTutorial = currentTutorialIndex > 0 ? trackTutorials[currentTutorialIndex - 1] : null;
   const nextTutorial =
     currentTutorialIndex >= 0 && currentTutorialIndex < trackTutorials.length - 1
@@ -467,31 +470,43 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
           </header>
 
           {tocItems.length > 0 ? (
-            <section className="mb-6 rounded-2xl border border-cyan-200 bg-cyan-50/70 p-4 sm:p-5" aria-label="Lesson syllabus">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-800">Syllabus</h3>
-                <p className="text-xs font-semibold text-cyan-800">
-                  {tocItems.length} section{tocItems.length === 1 ? "" : "s"}
-                </p>
-              </div>
+            <details
+              className="mb-6 overflow-hidden rounded-2xl border border-cyan-200 bg-cyan-50/70"
+              aria-label="Lesson syllabus"
+              open={isSyllabusOpen}
+              onToggle={(event) => setIsSyllabusOpen(event.currentTarget.open)}
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 text-left sm:p-5">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-800">Syllabus</span>
+                  <span className="inline-flex items-center justify-center rounded-full bg-cyan-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-cyan-800">
+                    {tocItems.length} section{tocItems.length === 1 ? "" : "s"}
+                  </span>
+                </div>
+                <span className="text-sm font-semibold text-cyan-800" aria-hidden="true">
+                  {isSyllabusOpen ? "Hide" : "Show"}
+                </span>
+              </summary>
 
-              <ol className="mt-3 space-y-1.5 text-sm text-slate-700 sm:mt-4">
-                {tocItems.map((item) => (
-                  <li key={`syllabus-${item.id}`} className={item.level === 3 ? "pl-4" : ""}>
-                    <a
-                      href={`#${item.id}`}
-                      className="inline-flex rounded-md px-2 py-1 transition hover:bg-cyan-100 hover:text-cyan-800"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        scrollToSection(`#${item.id}`);
-                      }}
-                    >
-                      {item.text}
-                    </a>
-                  </li>
-                ))}
-              </ol>
-            </section>
+              <div className="border-t border-cyan-200/80 px-4 pb-4 pt-3 sm:px-5 sm:pb-5">
+                <ol className="space-y-1.5 text-sm text-slate-700">
+                  {tocItems.map((item) => (
+                    <li key={`syllabus-${item.id}`} className={item.level === 3 ? "pl-4" : ""}>
+                      <a
+                        href={`#${item.id}`}
+                        className="inline-flex rounded-md px-2 py-1 transition hover:bg-cyan-100 hover:text-cyan-800"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          scrollToSection(`#${item.id}`);
+                        }}
+                      >
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </details>
           ) : null}
 
           <div ref={contentRef} className="space-y-6">

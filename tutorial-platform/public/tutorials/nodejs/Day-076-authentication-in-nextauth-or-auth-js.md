@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 076 [Advanced]: Authentication in NextAuth or Auth.js
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement secure authentication flows using Auth.js with provider configuration, session strategy choices, and production hardening.

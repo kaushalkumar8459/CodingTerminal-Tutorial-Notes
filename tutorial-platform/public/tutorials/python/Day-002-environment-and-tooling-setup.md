@@ -9,23 +9,6 @@ track: python
 ---
 # Day 002 [Beginner]: Environment and Tooling Setup
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 002 Outcome](#day-002-outcome)
-
 ## Goal
 
 Set up Python, a code editor, and a basic terminal workflow so you can write, run, and debug programs comfortably.

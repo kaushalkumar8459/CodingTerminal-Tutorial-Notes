@@ -1,4 +1,4 @@
----
+﻿---
 title: Frontend Security Hardening
 slug: day-094-frontend-security-hardening
 dayLabel: Day 94
@@ -8,23 +8,6 @@ order: 94
 track: react
 ---
 # Day 94 [Expert]: Frontend Security Hardening
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 94 Outcome](#day-94-outcome)
 
 ## Goal
 

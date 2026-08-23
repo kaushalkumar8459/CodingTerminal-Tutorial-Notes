@@ -9,19 +9,6 @@ track: java
 ---
 # Day 110 [Expert]: Configuration Management Patterns and Strategies
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 110 Outcome](#day-110-outcome)
-
 ## Goal
 
 Design and implement flexible configuration systems that work across development, testing, and production environments without code changes.

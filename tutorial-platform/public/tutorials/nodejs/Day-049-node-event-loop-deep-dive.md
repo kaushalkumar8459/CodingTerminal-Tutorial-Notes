@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 049 [Intermediate]: Node Event Loop Deep Dive
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Develop deep practical understanding of Node event loop behavior to debug latency and concurrency issues.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 079 [Advanced]: Payment Integration Strategy
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design reliable payment integration architecture with idempotency, webhook verification, retries, and reconciliation workflows.

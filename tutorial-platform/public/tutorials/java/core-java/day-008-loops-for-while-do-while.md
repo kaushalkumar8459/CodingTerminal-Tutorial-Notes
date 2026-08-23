@@ -9,19 +9,6 @@ track: java
 ---
 # Day 8 [Beginner]: Loops for while do while
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 8 Outcome](#day-8-outcome)
-
 ## Goal
 
 Use loops to repeat logic efficiently with controlled exit conditions.

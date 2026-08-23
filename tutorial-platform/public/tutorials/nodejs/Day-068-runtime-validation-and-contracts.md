@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 068 [Intermediate]: Runtime Validation and Contracts
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement runtime validation and contract enforcement in Node APIs to prevent invalid data from entering core business logic.

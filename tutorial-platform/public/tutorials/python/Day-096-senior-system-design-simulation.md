@@ -9,23 +9,6 @@ track: python
 ---
 # Day 096 [Expert]: Senior System Design Simulation
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 096 Outcome](#day-096-outcome)
-
 ## Goal
 
 Practice senior-level system design interviews using a repeatable approach for requirement clarity, architecture, tradeoffs, and scaling decisions.

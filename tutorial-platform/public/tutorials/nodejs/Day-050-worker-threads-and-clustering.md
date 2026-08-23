@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 050 [Intermediate]: Worker Threads and Clustering
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Use worker threads and clustering effectively to improve Node application concurrency and throughput.

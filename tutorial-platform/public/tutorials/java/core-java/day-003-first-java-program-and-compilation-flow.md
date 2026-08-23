@@ -9,19 +9,6 @@ track: java
 ---
 # Day 3 [Beginner]: First Java Program and Compilation Flow
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 3 Outcome](#day-3-outcome)
-
 ## Goal
 
 Write your first Java program and understand each stage from source code to execution.

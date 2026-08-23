@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 083 [Advanced]: Micro Frontend and BFF Strategy
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design scalable product delivery with micro frontends and BFF layers while balancing autonomy, consistency, and operational complexity.

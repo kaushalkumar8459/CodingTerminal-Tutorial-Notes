@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 060 [Intermediate]: Microservices Fundamentals
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a strong foundation for designing and operating Node microservices with clear boundaries, communication patterns, and reliability controls.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 008 [Beginner]: Events and EventEmitter
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand Node's event-driven model and build practical EventEmitter-based workflows for decoupled logic.

@@ -1,4 +1,4 @@
----
+﻿---
 title: Managing Multiple States
 slug: day-009-managing-multiple-states
 dayLabel: Day 9
@@ -8,23 +8,6 @@ order: 9
 track: react
 ---
 # Day 9 [Intermediate]: Managing Multiple States
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 9 Outcome](#day-9-outcome)
 
 ## Goal
 
@@ -92,8 +75,21 @@ function RegistrationFields() {
 
   return (
     <>
-      <input value={name} onChange={(e) => setName(e.target.value)} />
-      <input value={email} onChange={(e) => setEmail(e.target.value)} />
+      <label>
+        Name
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
+      <label>
+        Email
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </label>
     </>
   );
 }
@@ -210,7 +206,7 @@ setCount((current) => current + 1);
 setCount((current) => current + 1);
 ```
 
-This is safer when multiple updates are queued in the same event because each updater receives the appropriate previous state in the update sequence.
+This is especially important when multiple updates are queued in the same event because each updater receives the pending state for that update sequence.
 
 Prefer:
 
@@ -262,7 +258,7 @@ const [status, setStatus] = useState("idle");
 // "idle" | "loading" | "success" | "error"
 ```
 
-This makes impossible combinations such as `loading + success` harder to represent.
+This makes impossible combinations such as `loading + success` harder to represent. A status string is a useful simple pattern; for more complex workflows, a reducer or state-machine approach may be appropriate later.
 
 ### Topic 8: State Ownership and Lifting State Up
 
@@ -273,10 +269,10 @@ Keep state close to the components that use it. If two sibling components need t
 ```text
 Parent owns state
    ├── Child A reads data
-   └── Child B updates data
+   ┤── Child B updates data
 ```
 
-This is called **lifting state up**. It prepares you for more advanced component communication patterns later in the curriculum.
+This is called **lifting state up**. The parent should own the state only when that shared ownership is actually needed; otherwise, keep state local to avoid unnecessary prop drilling and coupling.
 
 ## Key Concepts
 
@@ -323,6 +319,7 @@ Build a small registration screen that demonstrates the complete Day 9 model.
 6. Add an independent `isPreviewOpen` UI state.
 7. Add a `submitStatus` state using `idle`, `submitting`, `success`, and `error` rather than several contradictory booleans.
 8. Identify which state belongs to the component and which data could be passed to children.
+9. Verify the form remains controlled after reset and that the reset restores every relevant field.
 
 ## Hands-on Coding
 
@@ -337,24 +334,34 @@ export default function RegistrationForm() {
   const [city, setCity] = useState("");
 
   return (
-    <div>
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        placeholder="City"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
+    <form onSubmit={(e) => e.preventDefault()}>
+      <label>
+        Name
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
+      <label>
+        Email
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </label>
+      <label>
+        City
+        <input
+          placeholder="City"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+      </label>
       <p>{name} | {email} | {city}</p>
-    </div>
+    </form>
   );
 }
 ```

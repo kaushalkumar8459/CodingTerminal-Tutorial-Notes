@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 033 [Beginner]: Mocking and Test Doubles
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Use mocks, stubs, fakes, and spies correctly to isolate logic and create reliable automated tests.

@@ -1,4 +1,4 @@
----
+﻿---
 title: useReducer for Complex State
 slug: day-082-usereducer-for-complex-state
 dayLabel: Day 82
@@ -8,23 +8,6 @@ order: 82
 track: react
 ---
 # Day 82 [Intermediate]: useReducer for Complex State
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 82 Outcome](#day-82-outcome)
 
 ## Goal
 

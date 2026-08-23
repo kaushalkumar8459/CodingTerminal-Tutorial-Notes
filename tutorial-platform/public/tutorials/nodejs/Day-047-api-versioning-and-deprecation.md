@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 047 [Intermediate]: API Versioning and Deprecation
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design API evolution strategy with safe versioning, deprecation communication, and migration plans.

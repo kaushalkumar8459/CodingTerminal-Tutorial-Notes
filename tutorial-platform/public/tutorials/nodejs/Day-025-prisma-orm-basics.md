@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 025 [Beginner]: Prisma ORM Basics
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Use Prisma ORM to model relational data, run migrations, and build type-safe database operations in Node.js.

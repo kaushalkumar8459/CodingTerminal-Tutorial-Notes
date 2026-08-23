@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 21 [Intermediate]: SSR with fetch no-store
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 21 Outcome](#day-21-outcome)
-
 ## Goal
 
 Implement server-side rendering (SSR) using `fetch` with `cache: 'no-store'` to serve fresh data on every request.

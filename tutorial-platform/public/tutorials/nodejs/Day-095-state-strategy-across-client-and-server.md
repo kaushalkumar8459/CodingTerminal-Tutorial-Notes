@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 095 [Expert]: State Strategy Across Client and Server
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design a coherent state strategy across client and server that improves consistency, performance, and operational correctness.

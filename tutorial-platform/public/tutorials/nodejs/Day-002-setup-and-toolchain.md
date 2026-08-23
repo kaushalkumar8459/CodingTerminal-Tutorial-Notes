@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 002 [Beginner]: Setup and Toolchain
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Set up a clean Node.js developer environment with version control, scripts, linting basics, and reproducible project execution.

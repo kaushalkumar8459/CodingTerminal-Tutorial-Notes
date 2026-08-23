@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 11 [Beginner]: next/font Optimization
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 11 Outcome](#day-11-outcome)
-
 ## Goal
 
 Use `next/font` to load Google Fonts and local fonts with zero layout shift, optimal caching, and no external network requests from the browser.

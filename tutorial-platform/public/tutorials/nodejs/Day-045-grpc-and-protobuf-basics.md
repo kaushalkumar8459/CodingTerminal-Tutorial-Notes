@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 045 [Intermediate]: gRPC and Protobuf Basics
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand and implement basic gRPC services in Node using Protocol Buffers.

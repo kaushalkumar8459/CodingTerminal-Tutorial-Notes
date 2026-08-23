@@ -9,23 +9,6 @@ track: python
 ---
 # Day 068 [Intermediate]: Numerical Computing with NumPy
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 068 Outcome](#day-068-outcome)
-
 ## Goal
 
 Perform fast, reliable numerical computations using NumPy arrays, vectorized operations, and matrix-style transformations.

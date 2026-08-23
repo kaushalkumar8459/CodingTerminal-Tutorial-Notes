@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 077 [Advanced]: Real-time Collaboration Architecture
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design and implement scalable real-time collaboration systems with conflict handling, presence tracking, and resilience.

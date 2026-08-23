@@ -9,19 +9,6 @@ track: java
 ---
 # Day 57 [Intermediate]: SQL Fundamentals and Database Design
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 57 Outcome](#day-57-outcome)
-
 ## Goal
 
 Learn SQL basics, query optimization, and database design principles that you'll use when working with JDBC.

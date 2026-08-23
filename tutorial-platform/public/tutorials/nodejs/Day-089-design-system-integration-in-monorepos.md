@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 089 [Advanced]: Design System Integration in Monorepos
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement a scalable design system integration strategy in monorepos to ensure UI consistency, developer velocity, and safe upgrade workflows.

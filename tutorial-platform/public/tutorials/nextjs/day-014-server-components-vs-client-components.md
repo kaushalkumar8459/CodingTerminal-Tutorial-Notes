@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 14 [Beginner]: Server Components vs Client Components
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 14 Outcome](#day-14-outcome)
-
 ## Goal
 
 Clearly understand the difference between Server Components and Client Components in Next.js and know when to use each.

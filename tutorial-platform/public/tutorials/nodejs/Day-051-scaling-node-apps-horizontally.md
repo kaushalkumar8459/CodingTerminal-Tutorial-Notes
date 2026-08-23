@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 051 [Intermediate]: Scaling Node Apps Horizontally
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Scale Node APIs across multiple instances while keeping sessions, traffic routing, and reliability under control.

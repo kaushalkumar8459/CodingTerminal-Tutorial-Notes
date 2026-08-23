@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 22 [Intermediate]: SSG with fetch force-cache
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 22 Outcome](#day-22-outcome)
-
 ## Goal
 
 Use `fetch` with `force-cache` (or the default fetch behavior) to create statically generated pages that are pre-built at build time for maximum performance.

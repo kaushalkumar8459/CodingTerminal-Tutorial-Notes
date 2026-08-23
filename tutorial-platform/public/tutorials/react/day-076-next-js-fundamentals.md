@@ -1,4 +1,4 @@
----
+﻿---
 title: Next.js Fundamentals
 slug: day-076-next-js-fundamentals
 dayLabel: Day 76
@@ -8,23 +8,6 @@ order: 76
 track: react
 ---
 # Day 76 [Advanced]: Next.js Fundamentals
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 76 Outcome](#day-76-outcome)
 
 ## Goal
 

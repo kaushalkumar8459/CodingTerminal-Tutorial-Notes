@@ -9,23 +9,6 @@ track: python
 ---
 # Day 091 [Expert]: Distributed Systems Patterns
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 091 Outcome](#day-091-outcome)
-
 ## Goal
 
 Understand and apply core distributed systems patterns for reliability, scale, and correctness in Python backend platforms.

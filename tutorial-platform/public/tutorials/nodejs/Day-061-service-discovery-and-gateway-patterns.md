@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 061 [Intermediate]: Service Discovery and Gateway Patterns
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design a Node microservice edge architecture using API gateway and service discovery for resilient request routing.

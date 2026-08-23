@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 093 [Expert]: Platform Engineering for Node Teams
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a platform engineering model for Node teams that improves developer experience, reliability, security, and delivery throughput at scale.

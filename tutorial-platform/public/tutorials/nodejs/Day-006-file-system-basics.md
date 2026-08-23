@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 006 [Beginner]: File System Basics
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Work confidently with Node.js file system operations for reading, writing, and managing files safely.

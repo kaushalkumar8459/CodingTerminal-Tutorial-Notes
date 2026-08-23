@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 014 [Beginner]: HTTP Module Basics
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build and test raw Node HTTP servers, handle routing basics, and return structured API responses.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 087 [Advanced]: Performance Budget Governance
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement performance budgets as enforceable engineering governance so regressions are caught before they reach production.

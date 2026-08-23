@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 078 [Advanced]: Queue-driven Video Processing Case Study
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design a scalable queue-driven video processing pipeline for upload, transcode, thumbnail generation, and delivery.

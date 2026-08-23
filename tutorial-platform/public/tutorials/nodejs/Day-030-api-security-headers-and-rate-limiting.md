@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 030 [Beginner]: API Security Headers and Rate Limiting
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Harden Node APIs with security headers, request throttling, and abuse-resistant defaults.

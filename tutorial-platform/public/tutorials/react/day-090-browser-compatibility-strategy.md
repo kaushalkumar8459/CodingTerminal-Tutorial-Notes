@@ -1,4 +1,4 @@
----
+﻿---
 title: Browser Compatibility Strategy
 slug: day-090-browser-compatibility-strategy
 dayLabel: Day 90
@@ -8,23 +8,6 @@ order: 90
 track: react
 ---
 # Day 90 [Advanced]: Browser Compatibility Strategy
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 90 Outcome](#day-90-outcome)
 
 ## Goal
 

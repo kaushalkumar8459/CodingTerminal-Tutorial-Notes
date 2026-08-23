@@ -1,4 +1,4 @@
----
+﻿---
 title: Parent-Child Communication
 slug: day-020-parent-child-communication
 dayLabel: Day 20
@@ -8,24 +8,6 @@ order: 20
 track: react
 ---
 # Day 20 [Intermediate]: Parent-Child Communication
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Common Mistakes](#common-mistakes)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 20 Outcome](#day-20-outcome)
 
 ## Goal
 
@@ -142,7 +124,9 @@ It calls `onSelect` while rendering.
 This is correct:
 
 ```jsx
-<button onClick={() => onSelect("React")}>Select</button>
+<button type="button" onClick={() => onSelect("React")}>
+  Select
+</button>
 ```
 
 React receives a function and invokes it when the event occurs.
@@ -150,7 +134,7 @@ React receives a function and invokes it when the event occurs.
 If no payload is required, passing the function directly is also valid:
 
 ```jsx
-<button onClick={onSave}>Save</button>
+<button type="button" onClick={onSave}>Save</button>
 ```
 
 ### 4. Payload Design
@@ -234,6 +218,7 @@ function SearchInput({ value, onChange }) {
     <input
       value={value}
       onChange={(event) => onChange(event.target.value)}
+      aria-label="Search"
     />
   );
 }
@@ -258,15 +243,18 @@ A reusable child can translate a DOM event into domain information:
 ```jsx
 function DepartmentSelect({ employeeId, value, onDepartmentChange }) {
   return (
-    <select
-      value={value}
-      onChange={(event) =>
-        onDepartmentChange(employeeId, event.target.value)
-      }
-    >
-      <option value="HR">HR</option>
-      <option value="Engineering">Engineering</option>
-    </select>
+    <label>
+      Department
+      <select
+        value={value}
+        onChange={(event) =>
+          onDepartmentChange(employeeId, event.target.value)
+        }
+      >
+        <option value="HR">HR</option>
+        <option value="Engineering">Engineering</option>
+      </select>
+    </label>
   );
 }
 ```
@@ -329,7 +317,7 @@ function Dialog({ open, title, onClose, children }) {
   if (!open) return null;
 
   return (
-    <section aria-labelledby="dialog-title">
+    <section role="dialog" aria-modal="true" aria-labelledby="dialog-title">
       <h2 id="dialog-title">{title}</h2>
       {children}
       <button type="button" onClick={onClose}>
@@ -340,7 +328,7 @@ function Dialog({ open, title, onClose, children }) {
 }
 ```
 
-The parent controls whether the dialog is open; the child requests closing.
+The parent controls whether the dialog is open; the child requests closing. In production, focus management and a robust dialog primitive should also be considered.
 
 ### 12. Prop Drilling
 
@@ -397,6 +385,8 @@ Use props and callbacks for normal declarative data flow.
 Use refs for imperative operations such as focusing an input:
 
 ```jsx
+import { useRef } from "react";
+
 function SearchForm() {
   const inputRef = useRef(null);
 
@@ -406,7 +396,7 @@ function SearchForm() {
 
   return (
     <>
-      <input ref={inputRef} />
+      <input ref={inputRef} aria-label="Search" />
       <button type="button" onClick={focusInput}>
         Focus
       </button>
@@ -429,27 +419,27 @@ Use semantic interactive elements:
 
 Avoid using a clickable `<div>` when a button communicates the action naturally. A reusable communication API should preserve accessible behavior.
 
-### 16. Error Boundaries of Responsibility
+### 16. Boundaries of Responsibility
 
 A useful component contract separates responsibilities:
 
 ```text
 Parent
-├── owns state
+├── owns shared state
 ├── owns business rules
-└── passes data + allowed actions
+┤── passes data + allowed actions
 
 Child
 ├── renders props
 ├── handles local presentation
-└── emits user intent
+┤── emits user intent
 ```
 
 This does not mean every business rule must live in the parent. The principle is to keep ownership explicit rather than making components reach into each other's internals.
 
 ### 17. Callback Identity and Performance
 
-Every render creates function values when callbacks are defined inline. That alone is not a reason to use `useCallback`.
+Every render can create function values when callbacks are defined inline. That alone is not a reason to use `useCallback`.
 
 Optimize only when a real rendering or dependency problem has been identified. Component boundaries, state locality, and correct ownership usually matter before premature callback memoization.
 
@@ -472,14 +462,14 @@ Optimize only when a real rendering or dependency problem has been identified. C
 ```text
                   STATE OWNER
                       │
-             ┌────────┴────────┐
+             ┌────────┬────────┐
              │                 │
           value/data       callback API
              │                 │
              ▼                 ▲
           CHILD UI ──user──→ intent
              │                 │
-             └────── event ────┘
+             ┤────── event ────┘
                       │
                       ▼
                 owner updates state
@@ -495,8 +485,8 @@ Build this structure:
 TaskManager
 ├── AddTaskForm
 ├── TaskList
-│   └── TaskItem
-└── EmptyState
+│   ┤── TaskItem
+┤── EmptyState
 ```
 
 The parent owns the task collection:
@@ -693,6 +683,36 @@ Classify each scenario:
 8. Assuming prop drilling is always bad.
 9. Introducing Context before checking state placement or composition.
 10. Memoizing every callback without evidence of a performance problem.
+
+## Debugging Challenge
+
+This component accidentally invokes the callback during render:
+
+```jsx
+function DeleteButton({ taskId, onDelete }) {
+  return (
+    <button onClick={onDelete(taskId)}>
+      Delete
+    </button>
+  );
+}
+```
+
+### Diagnose
+
+`onDelete(taskId)` executes while React is rendering. The result is passed to `onClick`, so the handler is no longer a function. If the callback updates state, it can also trigger an update loop or other unexpected behavior.
+
+### Fix
+
+```jsx
+function DeleteButton({ taskId, onDelete }) {
+  return (
+    <button type="button" onClick={() => onDelete(taskId)}>
+      Delete
+    </button>
+  );
+}
+```
 
 ## Assessment Quiz
 

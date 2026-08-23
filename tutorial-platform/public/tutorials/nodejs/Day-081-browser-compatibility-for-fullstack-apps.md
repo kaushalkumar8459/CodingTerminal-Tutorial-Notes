@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 081 [Advanced]: Browser Compatibility for Fullstack Apps
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build fullstack applications that behave reliably across modern and legacy browsers without sacrificing performance or maintainability.

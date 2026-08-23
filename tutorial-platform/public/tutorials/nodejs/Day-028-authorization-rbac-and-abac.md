@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 028 [Beginner]: Authorization RBAC and ABAC
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement practical authorization checks using RBAC and ABAC strategies in Node APIs.

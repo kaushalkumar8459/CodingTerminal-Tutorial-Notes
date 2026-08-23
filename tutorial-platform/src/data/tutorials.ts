@@ -4746,7 +4746,7 @@ export const tutorials: TutorialMeta[] = [
     track: "react",
     slug: "day-001-introduction-to-react",
     dayLabel: "Day 1",
-    title: "Introduction to React 1",
+    title: "Introduction to React",
     level: "Beginner",
     estimatedMinutes: 30,
     order: 1,
@@ -5844,19 +5844,19 @@ export const tutorials: TutorialMeta[] = [
   },
 ];
 
-const tutorialsByTrack = tutorials.reduce(
+const tutorialsByTrack = tutorials.reduce<Record<TutorialMeta["track"], TutorialMeta[]>>(
   (accumulator, tutorial) => {
-    const trackList = accumulator[tutorial.track] ?? [];
-    trackList.push(tutorial);
-    accumulator[tutorial.track] = trackList;
+    const trackList = accumulator[tutorial.track];
+    accumulator[tutorial.track] = [...trackList, tutorial];
     return accumulator;
   },
   {
-    java: [] as TutorialMeta[],
-    nextjs: [] as TutorialMeta[],
-    nodejs: [] as TutorialMeta[],
-    python: [] as TutorialMeta[],
-    react: [] as TutorialMeta[],
+    javascript: [],
+    java: [],
+    nextjs: [],
+    nodejs: [],
+    python: [],
+    react: [],
   },
 );
 

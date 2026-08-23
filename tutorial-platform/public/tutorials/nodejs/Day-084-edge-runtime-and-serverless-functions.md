@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 084 [Advanced]: Edge Runtime and Serverless Functions
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design and deploy Node-compatible edge and serverless workloads with low latency, predictable cost, and runtime-safe architecture.

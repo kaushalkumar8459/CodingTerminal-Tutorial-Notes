@@ -1,4 +1,4 @@
----
+﻿---
 title: API Contracts and Runtime Validation
 slug: day-087-api-contracts-and-runtime-validation
 dayLabel: Day 87
@@ -8,23 +8,6 @@ order: 87
 track: react
 ---
 # Day 87 [Advanced]: API Contracts and Runtime Validation
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 87 Outcome](#day-87-outcome)
 
 ## Goal
 
@@ -275,7 +258,7 @@ Expected output:
 
 ### Quiz Questions
 
-1. Why isn�t TypeScript alone enough for API safety?
+1. Why isnï¿½t TypeScript alone enough for API safety?
 2. What does `safeParse` return?
 3. True or False: Invalid payload should always crash the whole page.
 4. Why centralize validation in API layer?

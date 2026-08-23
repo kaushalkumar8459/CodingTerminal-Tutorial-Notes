@@ -9,23 +9,6 @@ track: python
 ---
 # Day 050 [Intermediate]: Flask Forms and Validation
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 050 Outcome](#day-050-outcome)
-
 ## Goal
 
 Build robust Flask form flows with server-side validation, safe error feedback, and clean user input handling.

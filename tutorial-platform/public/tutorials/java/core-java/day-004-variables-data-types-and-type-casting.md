@@ -9,19 +9,6 @@ track: java
 ---
 # Day 4 [Beginner]: Variables Data Types and Type Casting
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 4 Outcome](#day-4-outcome)
-
 ## Goal
 
 Understand how Java stores values using types and how conversion between types works.

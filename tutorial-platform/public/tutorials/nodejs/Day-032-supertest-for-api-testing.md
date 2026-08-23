@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 032 [Beginner]: Supertest for API Testing
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Test Express API endpoints reliably using Supertest with status, headers, and response validation.

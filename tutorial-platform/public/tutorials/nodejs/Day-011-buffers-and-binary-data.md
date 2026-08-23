@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 011 [Beginner]: Buffers and Binary Data
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Learn how Node.js handles binary data using Buffer and apply it in file, network, and encoding scenarios.

@@ -9,19 +9,6 @@ track: java
 ---
 # Day 7 [Beginner]: Conditional Statements if else switch
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Day 7 Outcome](#day-7-outcome)
-
 ## Goal
 
 Control program flow using `if`, `else if`, `else`, and `switch`.

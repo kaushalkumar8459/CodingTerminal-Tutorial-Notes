@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 009 [Beginner]: Mini Project - CLI Notes
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a real CLI Notes Manager using Node fundamentals: process args, path/fs modules, and event-driven logging.

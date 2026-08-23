@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 20 [Beginner]: Metadata API and SEO Basics
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 20 Outcome](#day-20-outcome)
-
 ## Goal
 
 Use the Next.js Metadata API to add comprehensive SEO metadata, Open Graph tags, Twitter cards, sitemaps, and robots.txt to your application.

@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 035 [Beginner]: End to End Testing Fundamentals
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Understand and implement practical end-to-end tests that validate complete user journeys across backend systems.

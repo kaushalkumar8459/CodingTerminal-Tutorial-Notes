@@ -9,23 +9,6 @@ track: python
 ---
 # Day 053 [Intermediate]: Flask Testing and Deployment
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 053 Outcome](#day-053-outcome)
-
 ## Goal
 
 Learn how to test Flask applications reliably and prepare them for deployment with production-safe configuration.

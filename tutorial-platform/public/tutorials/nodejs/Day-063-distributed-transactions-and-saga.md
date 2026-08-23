@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 063 [Intermediate]: Distributed Transactions and Saga
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Model multi-service business workflows with saga orchestration/choreography and compensation logic.

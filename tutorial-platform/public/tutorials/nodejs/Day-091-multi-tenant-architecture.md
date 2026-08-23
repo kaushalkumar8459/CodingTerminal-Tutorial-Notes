@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 091 [Expert]: Multi-tenant Architecture
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design robust multi-tenant Node architectures that guarantee tenant isolation, predictable performance, and cost-efficient scale.

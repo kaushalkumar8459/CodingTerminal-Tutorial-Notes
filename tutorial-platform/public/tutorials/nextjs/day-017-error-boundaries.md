@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 17 [Beginner]: Error Boundaries
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 17 Outcome](#day-17-outcome)
-
 ## Goal
 
 Handle errors gracefully in Next.js using `error.tsx`, global error handling, and understand how error boundaries isolate failures in the App Router.

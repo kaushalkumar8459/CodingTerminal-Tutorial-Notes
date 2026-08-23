@@ -1,4 +1,4 @@
----
+﻿---
 title: Authentication Beyond Basics
 slug: day-086-authentication-beyond-basics
 dayLabel: Day 86
@@ -8,23 +8,6 @@ order: 86
 track: react
 ---
 # Day 86 [Advanced]: Authentication Beyond Basics
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 86 Outcome](#day-86-outcome)
 
 ## Goal
 

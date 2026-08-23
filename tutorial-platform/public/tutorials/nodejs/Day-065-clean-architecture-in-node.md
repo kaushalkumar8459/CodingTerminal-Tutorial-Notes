@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 065 [Intermediate]: Clean Architecture in Node
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement Clean Architecture in Node so business rules stay independent from frameworks and infrastructure.

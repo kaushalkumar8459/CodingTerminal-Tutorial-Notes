@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 043 [Intermediate]: GraphQL Basics with Apollo
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Build a practical GraphQL API using Apollo Server with query and mutation fundamentals.

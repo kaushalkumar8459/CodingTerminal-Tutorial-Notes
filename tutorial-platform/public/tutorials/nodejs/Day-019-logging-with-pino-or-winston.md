@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 019 [Beginner]: Logging with Pino or Winston
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Implement structured logging in Node APIs using Pino or Winston with useful operational context.

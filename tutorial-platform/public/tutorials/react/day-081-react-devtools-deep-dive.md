@@ -1,4 +1,4 @@
----
+﻿---
 title: React DevTools Deep Dive
 slug: day-081-react-devtools-deep-dive
 dayLabel: Day 81
@@ -8,23 +8,6 @@ order: 81
 track: react
 ---
 # Day 81 [Intermediate]: React DevTools Deep Dive
-
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 81 Outcome](#day-81-outcome)
 
 ## Goal
 
@@ -206,7 +189,7 @@ flowchart TD
 ### Example 1: Case - Prop Drilling Debug
 
 Scenario:
-A catalog filter doesn�t update deep card badges correctly.
+A catalog filter doesnï¿½t update deep card badges correctly.
 
 ```jsx
 function ProductList({ filter }) {

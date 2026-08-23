@@ -9,23 +9,6 @@ track: nextjs
 ---
 # Day 3 [Beginner]: File-based Routing Basics
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 3 Outcome](#day-3-outcome)
-
 ## Goal
 
 Understand how the Next.js App Router maps folder and file structure to URL routes, and create multiple routes without any router configuration.

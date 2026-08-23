@@ -9,23 +9,6 @@ track: python
 ---
 # Day 036 [Intermediate]: Algorithmic Complexity in Python
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 036 Outcome](#day-036-outcome)
-
 ## Goal
 
 Understand time and space complexity deeply enough to choose better algorithms and write scalable Python code.

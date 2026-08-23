@@ -9,23 +9,6 @@ track: python
 ---
 # Day 037 [Intermediate]: Recursion and Backtracking
 
-## Index
-
-- [Goal](#goal)
-- [Prerequisites](#prerequisites)
-- [Explanation](#explanation)
-- [Topic by Topic](#topic-by-topic)
-- [Key Concepts](#key-concepts)
-- [Visual Concept Map](#visual-concept-map)
-- [End-to-End Practical](#end-to-end-practical)
-- [Hands-on Coding](#hands-on-coding)
-- [Mini Exercise](#mini-exercise)
-- [Assessment Quiz](#assessment-quiz)
-- [Task](#task)
-- [Self Check](#self-check)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Day 037 Outcome](#day-037-outcome)
-
 ## Goal
 
 Master recursion fundamentals and backtracking patterns for solving tree-like and search-space problems in Python.

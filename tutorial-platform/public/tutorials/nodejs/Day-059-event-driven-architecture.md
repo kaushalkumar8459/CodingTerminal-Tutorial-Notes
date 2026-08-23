@@ -9,23 +9,6 @@ track: nodejs
 ---
 # Day 059 [Intermediate]: Event Driven Architecture
 
-## Index
-
-- Goal
-- Prerequisites
-- Explanation
-- Topic by Topic
-- Key Concepts
-- Visual Concept Map
-- End-to-End Practical
-- Hands-on Coding
-- Mini Exercise
-- Assessment Quiz
-- Task
-- Self Check
-- Interview Questions and Answers
-- Day Outcome
-
 ## Goal
 
 Design event-driven Node systems that are decoupled, resilient, and consistent under distributed conditions.
