@@ -20,7 +20,7 @@ Perform a complete capstone quality review across architecture, accessibility, p
 
 ## Explanation
 
-Capstone review ensures your project is not only functional, but also maintainable, performant, secure, and interview-ready.
+Capstone review ensures your project is not only functional, but also maintainable, performant, secure, accessible, observable, and interview-ready. The review should be evidence-driven: identify risks, prioritize them, apply fixes, and record measurable before/after results.
 
 ## Topic by Topic
 
@@ -36,15 +36,18 @@ Code Example:
 
 ```text
 No cross-feature deep imports without public APIs
+Feature -> shared allowed
+Shared -> feature disallowed
 ```
 
-**Explanation:** Capstone review starts with structure because architecture problems usually slow future work even when the app appears to function today.
+**Explanation:** Capstone review starts with structure because architecture problems usually slow future work even when the app appears to function today. Also look for circular dependencies, duplicated domain logic, oversized shared modules, and unclear ownership.
 
 **Key Points:**
 
 - Check boundaries before polishing details.
 - Look for coupling and unclear ownership.
 - Treat structure as a quality signal.
+- Verify public APIs and dependency direction.
 
 ### Topic 2: Testing and Reliability Review
 
@@ -58,15 +61,17 @@ Code Example:
 
 ```text
 login -> primary action -> success/failure path tests
+API failure -> user feedback -> recovery path test
 ```
 
-**Explanation:** Reliability review should focus on critical flows, not just test count. The goal is confidence where failure matters most.
+**Explanation:** Reliability review should focus on critical flows, not just test count. Include important failure and recovery paths so the project demonstrates realistic engineering quality.
 
 **Key Points:**
 
 - Test important paths first.
 - Include both success and failure cases.
 - Use multiple test levels when needed.
+- Do not treat coverage percentage as the only quality signal.
 
 ### Topic 3: Accessibility and UX Quality
 
@@ -80,14 +85,16 @@ Code Example:
 
 ```text
 Tab order, visible focus, proper labels, aria-live statuses
+Modal open -> focus moves into modal -> close -> focus returns
 ```
 
-**Explanation:** Accessibility review checks whether real users can operate the interface fully, not whether the UI simply looks complete.
+**Explanation:** Accessibility review checks whether real users can operate the interface fully, not whether the UI simply looks complete. Check keyboard access, semantic HTML, labels, focus management, contrast, and meaningful status feedback.
 
 **Key Points:**
 
 - Review keyboard behavior end to end.
 - Check semantics and feedback states.
+- Verify focus management for dialogs and menus.
 - Fix usability blockers before launch.
 
 ### Topic 4: Performance and Monitoring
@@ -102,6 +109,7 @@ Code Example:
 
 ```text
 LCP/INP/CLS targets + one monitoring event verification
+Performance regression -> alert -> investigation workflow
 ```
 
 **Explanation:** Performance and monitoring checks verify both speed and production visibility, which are key parts of real-world readiness.
@@ -110,6 +118,7 @@ LCP/INP/CLS targets + one monitoring event verification
 
 - Measure vitals against clear targets.
 - Confirm monitoring events are flowing.
+- Check bundle size and unnecessary network work.
 - Combine speed and observability checks.
 
 ### Topic 5: Portfolio and Interview Packaging
@@ -128,15 +137,18 @@ Code Example:
 ## Performance results
 
 ## Testing strategy
+
+## Known tradeoffs
 ```
 
-**Explanation:** A strong capstone is easier to discuss when the technical story is documented clearly for reviewers and interviewers.
+**Explanation:** A strong capstone is easier to discuss when the technical story is documented clearly for reviewers and interviewers. Evidence such as metrics, tests, and architecture decisions makes claims more credible.
 
 **Key Points:**
 
 - Summarize tradeoffs and decisions clearly.
 - Show evidence with metrics and tests.
 - Make reviewer understanding fast and easy.
+- Document known limitations honestly.
 
 ### Topic 6: Scalability Decisions for Capstone Review
 
@@ -148,9 +160,12 @@ Document one design decision for this topic with tradeoff notes so future contri
 
 Code Example:
 
-`jsx
-// Record architecture tradeoff and migration path in project docs.
-`
+```text
+Architecture decision:
+- Keep feature boundaries explicit
+- Record the tradeoff and migration path
+- Define the quality gate that protects the decision
+```
 
 **Explanation:** Final project review should leave a record of major decisions so the project is maintainable beyond the interview or demo stage.
 
@@ -159,6 +174,7 @@ Code Example:
 - Keep final design rationale documented.
 - Note what should improve next.
 - Treat capstone review as a maintenance handoff too.
+- Define quality gates for important decisions.
 
 ## Key Concepts
 
@@ -166,8 +182,7 @@ Code Example:
 - Risk-based testing and reliability
 - Accessibility compliance checks
 - Performance + observability validation
-- Storytelling for portfolio/interview
-
+- Portfolio/interview storytelling
 - Scalable architecture thinking
 
 ## Visual Concept Map
@@ -185,9 +200,12 @@ flowchart TD
 
 1. Select your best project as capstone.
 2. Run architecture and code health audit.
-3. Validate tests, accessibility, and performance.
-4. Fix highest-priority quality gaps.
-5. Publish final README and review notes.
+3. Validate tests, accessibility, performance, and security-related risks.
+4. Verify monitoring and error reporting in a production-like environment.
+5. Fix highest-priority quality gaps.
+6. Measure before/after improvements.
+7. Publish final README and review notes.
+8. Record remaining technical debt and next steps.
 
 ## Hands-on Coding
 
@@ -203,6 +221,7 @@ A candidate is preparing a project for frontend interview panel.
 | Testing       | Checkout integration test | Missing | Add MSW test        |
 | Accessibility | Modal focus loop          | Failing | Add focus restore   |
 | Performance   | LCP > 3.0s                | Failing | Optimize hero image |
+| Security      | Unsafe HTML rendering     | Review  | Remove/sanitize API |
 ```
 
 ### Example 2: Case - Performance + Error Monitoring Snapshot
@@ -237,6 +256,12 @@ Reviewer should understand architecture and engineering decisions quickly.
 - Feature-based architecture with typed state layer
 - SSR + ISR strategy by route requirement
 - RTL + integration + E2E coverage for critical flows
+
+## Engineering Tradeoffs
+
+- Why the selected state-management approach was chosen
+- Why routes use different rendering strategies
+- Known limitations and next improvements
 ```
 
 ## Mini Exercise
@@ -248,6 +273,7 @@ Run a full quality review and produce:
 
 - audit matrix
 - top 5 fixes
+- before/after measurements
 - final technical summary
 
 Expected output:
@@ -255,6 +281,7 @@ Expected output:
 - Concrete gap list with severity
 - Applied fixes and measurable improvements
 - Clear presentation for interview discussion
+- Documented remaining technical debt
 
 ## Assessment Quiz
 
@@ -265,26 +292,36 @@ Expected output:
 3. True or False: A working UI without tests is enough for strong portfolio quality.
 4. Why document performance before/after numbers?
 5. What makes a capstone interview-ready?
+6. Why should accessibility be reviewed before final release?
+7. Why is observability important after deployment?
+8. What is the purpose of documenting remaining technical debt?
 
 ### Quiz Answers
 
-1. Reliability and maintainability determine real-world readiness
-2. Unclear boundaries and tangled dependencies
-3. False
-4. Demonstrates evidence-based engineering impact
-5. Clear tradeoffs, quality signals, and polished technical narrative
+1. Reliability and maintainability determine real-world readiness.
+2. Unclear boundaries and tangled dependencies.
+3. False.
+4. It demonstrates evidence-based engineering impact.
+5. Clear tradeoffs, quality signals, measurable outcomes, and a polished technical narrative.
+6. Accessibility issues can block users from completing important workflows.
+7. It helps teams detect and diagnose production failures.
+8. It makes known risks visible and gives future work a prioritized starting point.
 
 ## Task
 
-- Run final checks on performance, tests, accessibility, and structure
+- Run final checks on performance, tests, accessibility, security, and structure
+- Verify production monitoring/error reporting
 - Implement top-priority quality fixes
+- Record before/after evidence
 - Complete mini exercise
 
 ## Self Check
 
 - You can perform structured capstone quality review
 - You can present engineering decisions with measurable outcomes
-- You can answer at least 4 out of 5 quiz questions correctly
+- You can evaluate accessibility, testing, performance, and production readiness
+- You can identify and prioritize technical debt
+- You can answer at least 6 out of 8 quiz questions correctly
 
 ## Interview Questions and Answers
 
@@ -302,11 +339,11 @@ Expected output:
 
 **Question:** How do you prioritize final capstone fixes?
 
-**Answer:** Start with highest user/business risk: crashes, core flow failures, accessibility blockers.
+**Answer:** Start with highest user/business risk: crashes, core flow failures, accessibility blockers, and severe performance regressions.
 
 **Question:** Which metrics strengthen portfolio credibility?
 
-**Answer:** Test coverage signals, performance improvements, and resolved reliability issues.
+**Answer:** Test quality signals, performance improvements, and resolved reliability issues.
 
 ### Advanced
 
@@ -316,10 +353,19 @@ Expected output:
 
 **Question:** What process keeps capstone quality sustainable post-release?
 
-**Answer:** CI quality gates, observability alerts, regression tests, and periodic architecture review.
+**Answer:** CI quality gates, observability alerts, regression tests, dependency checks, and periodic architecture review.
+
+**Question:** How do you distinguish technical debt from a normal future enhancement?
+
+**Answer:** Technical debt is a known shortcut or compromise that creates measurable maintenance, reliability, or change cost; a normal enhancement adds desired capability without necessarily representing a prior compromise.
+
+**Question:** How would you make a capstone review objective rather than subjective?
+
+**Answer:** Define measurable quality gates for architecture, tests, accessibility, performance, security, observability, and documentation, then record evidence and severity for each finding.
 
 ## Day 80 Outcome
 
 - You can run a complete professional-grade project review
 - You can transform project work into interview-ready evidence
+- You can identify measurable quality improvements and remaining risks
 - You have completed a scalable advanced React engineering track
