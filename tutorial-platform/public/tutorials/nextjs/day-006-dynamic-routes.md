@@ -11,7 +11,7 @@ track: nextjs
 
 ## Goal
 
-Create dynamic routes with square-bracket parameters, read params in page components, and generate static paths with `generateStaticParams`.
+Create dynamic routes with square-bracket parameters, read route parameters in page components, handle missing resources, generate known paths with `generateStaticParams`, and understand how dynamic URL segments relate to rendering and data freshness.
 
 ## Prerequisites
 
@@ -20,11 +20,13 @@ Create dynamic routes with square-bracket parameters, read params in page compon
 
 ## Explanation
 
-A dynamic route is a route where part of the URL is variable — like `/blog/nextjs-routing` or `/products/42`. In Next.js, you create a dynamic segment by naming a folder with square brackets: `[slug]` or `[id]`. The value inside the brackets becomes a route parameter you can read in your page component.
+A dynamic route is a route where part of the URL is variable — like `/blog/nextjs-routing` or `/products/42`. In the Next.js App Router, you create a dynamic segment by naming a folder with square brackets: `[slug]` or `[id]`. The value inside the brackets becomes a route parameter you can read in your page component.
 
-For example, the folder structure `app/blog/[slug]/page.tsx` matches any URL like `/blog/hello-world`, `/blog/typescript-tips`, etc. Inside the page component, you receive the `params` prop which is a Promise resolving to an object with the key `slug` (or whatever name you gave the bracket).
+For example, `app/blog/[slug]/page.tsx` matches URLs such as `/blog/hello-world` and `/blog/typescript-tips`. In current App Router page APIs, `params` is asynchronous, so examples use `params: Promise<...>` and `await params`.
 
-Dynamic routes can be combined with `generateStaticParams` to pre-render pages at build time. This gives you the performance of static generation for dynamic content — the best of both worlds. You tell Next.js all the possible values for your dynamic segments, and it pre-builds an HTML file for each one.
+A dynamic URL segment does **not automatically mean SSR on every request**. The route's rendering behavior depends on the route, its data access, caching/revalidation configuration, runtime requirements, and other Next.js behavior. URL dynamism, rendering strategy, and data freshness are related but distinct concepts.
+
+`generateStaticParams` is useful when you know a set of parameter values ahead of time. It provides known paths that Next.js can generate during the build process. It is not a universal definition of SSG, and it does not mean every request to a dynamic route must always be served as a static HTML file. Parameters not returned by `generateStaticParams` are handled according to the route's `dynamicParams` setting and overall rendering behavior.
 
 ## Topic by Topic
 
@@ -43,34 +45,34 @@ Code Example:
 // This creates /blog/:slug (matches /blog/hello, /blog/intro, etc.)
 
 type Props = {
-  params: Promise<{ slug: string }>; // slug is the dynamic part
+  params: Promise<{ slug: string }>;
 };
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params; // Extract the slug from params
+  const { slug } = await params;
 
   return (
     <article>
-      <h1>Post: {slug}</h1> {/* Display the dynamic value */}
+      <h1>Post: {slug}</h1>
     </article>
   );
 }
 ```
 
-**Explanation:** Square brackets `[slug]` in folder names make that segment dynamic. The value (e.g., "hello" from `/blog/hello`) is passed as `params.slug`. This pattern allows one page file to handle unlimited URLs.
-**Key Points:**
-- Understand the core concept behind Creating a Dynamic Segment.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+**Explanation:** Square brackets `[slug]` in folder names make that segment dynamic. The value from a URL such as `/blog/hello` is available as `params.slug`. One page file can therefore handle many URLs that follow the same route pattern.
 
+**Key Points:**
+- Dynamic segments use square brackets.
+- The folder name becomes the parameter key.
+- A dynamic URL does not by itself determine the rendering strategy.
 
 ### Topic 2: Reading Route Parameters
 
 Theory:
-Route params are passed as a `params` prop (a Promise in Next.js 15+) to the page component. Await them to get the actual values.
+In current Next.js App Router page APIs, route params are provided through a `params` prop that is asynchronous. Await it to access the actual values.
 
 Practical:
-Always `await params` in async server components to get the latest API behaviour.
+Use `await params` in an async page component before using the route values.
 
 Code Example:
 
@@ -79,7 +81,6 @@ Code Example:
 type Props = { params: Promise<{ id: string }> };
 
 async function getProduct(id: string) {
-  // In production, fetch from database or API
   return {
     id,
     name: `Product ${id}`,
@@ -101,22 +102,21 @@ export default async function ProductPage({ params }: Props) {
   );
 }
 ```
-**Explanation:**
-This topic explains Reading Route Parameters in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** `params` contains values captured by dynamic route segments. Route parameters arrive as strings, so convert them explicitly when your application expects a number or another type.
 
 **Key Points:**
-- Understand the core concept behind Reading Route Parameters.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Read route parameters from `params`.
+- Await `params` in current App Router page examples.
+- Validate or convert parameter values before using them as application data.
 
 ### Topic 3: generateStaticParams
 
 Theory:
-`generateStaticParams` is an async function exported from a dynamic page. It returns an array of param objects, telling Next.js which routes to pre-render at build time.
+`generateStaticParams` is an async function exported from a dynamic route. It returns parameter objects for known paths that Next.js can generate ahead of time.
 
 Practical:
-Return all known slugs from your CMS or database so they are statically generated.
+Return known slugs from a CMS, database, or other server-side source when those paths can be prepared during the build.
 
 Code Example:
 
@@ -124,7 +124,10 @@ Code Example:
 // app/blog/[slug]/page.tsx
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
 }
 
 async function getAllPosts() {
@@ -135,22 +138,21 @@ async function getAllPosts() {
   ];
 }
 ```
-**Explanation:**
-This topic explains generateStaticParams in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** The returned values tell Next.js which dynamic parameter combinations are known during the build. `generateStaticParams` is a path-generation mechanism; it should not be presented as the definition of all static rendering or caching behavior.
 
 **Key Points:**
-- Understand the core concept behind generateStaticParams.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Return objects whose keys match the dynamic segment names.
+- Use it for known paths that can be generated ahead of time.
+- Keep rendering strategy and data freshness as separate concepts.
 
 ### Topic 4: Handling Not Found for Dynamic Routes
 
 Theory:
-If a dynamic segment value does not correspond to real data, call `notFound()` from `next/navigation` to render the 404 page instead of crashing.
+If a dynamic segment value does not correspond to real data, call `notFound()` from `next/navigation` to stop rendering the current route segment and show the relevant not-found UI.
 
 Practical:
-Always guard against missing data in dynamic pages.
+Guard the result of a data lookup and call `notFound()` when the resource does not exist.
 
 Code Example:
 
@@ -165,24 +167,28 @@ async function getPost(slug: string) {
     hello: { title: "Hello World" },
     nextjs: { title: "Intro to Next.js" },
   };
+
   return posts[slug] ?? null;
 }
 
 export default async function BlogPost({ params }: Props) {
   const { slug } = await params;
   const post = await getPost(slug);
-  if (!post) notFound();
+
+  if (!post) {
+    notFound();
+  }
+
   return <h1>{post.title}</h1>;
 }
 ```
-**Explanation:**
-This topic explains Handling Not Found for Dynamic Routes in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** `notFound()` is appropriate when the requested resource does not exist. Protected resources should also be checked for authentication and authorization on the server; a dynamic URL is not a security boundary.
 
 **Key Points:**
-- Understand the core concept behind Handling Not Found for Dynamic Routes.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Handle missing resources explicitly.
+- Use `notFound()` for missing content.
+- Enforce authorization on the server for protected resources.
 
 ### Topic 5: Multiple Dynamic Segments
 
@@ -190,7 +196,7 @@ Theory:
 You can have multiple dynamic segments in a route by nesting dynamic folders: `app/[category]/[id]/page.tsx` matches `/electronics/42`.
 
 Practical:
-Use this for nested resource URLs common in e-commerce and CMS structures.
+Use multiple parameters for nested resource URLs common in e-commerce, documentation, and CMS applications.
 
 Code Example:
 
@@ -202,6 +208,7 @@ type Props = {
 
 export default async function ProductPage({ params }: Props) {
   const { category, productId } = await params;
+
   return (
     <div>
       <p>Category: {category}</p>
@@ -210,22 +217,21 @@ export default async function ProductPage({ params }: Props) {
   );
 }
 ```
-**Explanation:**
-This topic explains Multiple Dynamic Segments in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** Each bracketed folder contributes a property to `params`. The property names correspond to the dynamic folder names.
 
 **Key Points:**
-- Understand the core concept behind Multiple Dynamic Segments.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Multiple dynamic segments are supported.
+- Parameter names come from folder names.
+- Type every expected parameter explicitly.
 
 ### Topic 6: Dynamic Layout with Params
 
 Theory:
-Layouts in dynamic route segments also receive `params`. Use this to fetch section-level data (like a category name) for all pages within.
+A layout inside a dynamic route segment can also receive the route params. This can be useful for section-level UI, such as displaying a category name across pages under that segment.
 
 Practical:
-Fetch a category object in the layout and display the category name in the section header.
+Read the category parameter in the layout and use it in the section header.
 
 Code Example:
 
@@ -238,6 +244,7 @@ type Props = {
 
 export default async function CategoryLayout({ children, params }: Props) {
   const { category } = await params;
+
   return (
     <div>
       <h2 style={{ textTransform: "capitalize" }}>{category}</h2>
@@ -246,19 +253,18 @@ export default async function CategoryLayout({ children, params }: Props) {
   );
 }
 ```
-**Explanation:**
-This topic explains Dynamic Layout with Params in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** Dynamic layouts can use the route parameters associated with their dynamic segment. Keep data access in the appropriate server boundary and do not expose protected information merely because the value came from a URL.
 
 **Key Points:**
-- Understand the core concept behind Dynamic Layout with Params.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Dynamic layouts can receive params.
+- Use layouts for shared UI and section-level concerns.
+- Server-side authorization is still required for protected data.
 
 ### Topic 7: Linking to Dynamic Routes
 
 Theory:
-Generate `<Link href>` values dynamically using template literals or string interpolation with the actual parameter values.
+Generate `Link` destinations dynamically using the actual parameter values.
 
 Practical:
 Map over a list of items and create a link to each dynamic route.
@@ -285,77 +291,83 @@ export default function PostList() {
   );
 }
 ```
-**Explanation:**
-This topic explains Linking to Dynamic Routes in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** `Link` is the preferred choice for normal internal navigation. Prefetching can improve navigation performance, but it is an optimization rather than a guarantee that every destination request or piece of data is already cached.
 
 **Key Points:**
-- Understand the core concept behind Linking to Dynamic Routes.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Prefer `Link` for internal navigation.
+- Use stable keys for mapped lists.
+- Do not treat navigation as an authorization mechanism.
 
 ### Topic 8: Static vs Dynamic at Runtime
 
 Theory:
-By default, dynamic routes are server-rendered (SSR) on every request. Exporting `generateStaticParams` makes them statically generated at build time. Set `dynamicParams = false` to return 404 for any param not listed by `generateStaticParams`.
+A dynamic route segment describes the URL shape; it does **not** automatically mean that the page is server-rendered on every request. Rendering behavior depends on the route and its data/runtime characteristics. `generateStaticParams` provides known parameter values that can be generated ahead of time, while `dynamicParams = false` controls what happens for parameter values that were not returned by `generateStaticParams`.
 
 Practical:
-Use `generateStaticParams` for known content (blogs, docs) and SSR for user-generated or highly dynamic content.
+Use `generateStaticParams` when a known set of paths can be prepared ahead of time. For content that changes frequently, choose an appropriate data-fetching, caching, and revalidation strategy rather than assuming that a dynamic URL requires SSR.
 
 Code Example:
 
 ```tsx
 // app/blog/[slug]/page.tsx
-export const dynamicParams = false; // 404 for unknown slugs
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [{ slug: "post-1" }, { slug: "post-2" }];
+  return [
+    { slug: "post-1" },
+    { slug: "post-2" },
+  ];
 }
 ```
-**Explanation:**
-This topic explains Static vs Dynamic at Runtime in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** With `dynamicParams = false`, a parameter not returned by `generateStaticParams` is treated as not found. Without that setting, parameters outside the generated set can be handled according to the route's dynamic rendering behavior. This setting should not be described as a general SSR/SSG switch.
 
 **Key Points:**
-- Understand the core concept behind Static vs Dynamic at Runtime.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Dynamic URL segments and SSR are different concepts.
+- `generateStaticParams` provides known route parameters.
+- `dynamicParams = false` rejects parameters outside the generated set.
+- Rendering, caching, and revalidation should be chosen based on application requirements.
 
 ## Key Concepts
 
-- **Dynamic Segment**: A route folder named with brackets like `[slug]` that matches any URL value for that segment.
-- **params**: The prop passed to a dynamic page component containing the matched route parameter values.
-- **generateStaticParams**: A function that returns all param combinations to pre-render at build time.
-- **notFound()**: A function from `next/navigation` that triggers the nearest `not-found.tsx` page.
-- **dynamicParams**: A page-level export that controls whether unknown params return a 404 or are rendered at runtime.
-- **Multiple Dynamic Segments**: Nesting multiple bracket folders to create routes like `/[category]/[id]`.
-- **SSR for Dynamic Routes**: By default, dynamic routes are rendered on the server per request.
-- **SSG for Dynamic Routes**: Using `generateStaticParams` to pre-render dynamic routes at build time.
+- **Dynamic Segment**: A route folder named with brackets like `[slug]` that captures one URL segment.
+- **params**: The route parameter values supplied to a page or layout for dynamic segments.
+- **generateStaticParams**: Provides known parameter values for routes that can be generated ahead of time.
+- **notFound()**: Stops rendering the current route segment and displays the relevant not-found UI.
+- **dynamicParams**: Controls handling of parameter values not returned by `generateStaticParams`.
+- **Multiple Dynamic Segments**: Nesting multiple bracket folders to create routes such as `/[category]/[id]`.
+- **Rendering Strategy**: Determines how and when a route is rendered; a dynamic URL does not by itself select SSR.
+- **Caching/Revalidation**: Controls data reuse and freshness and should be considered separately from the route's URL shape.
 
 ## Visual Concept Map
 
 ```mermaid
 flowchart TD
   A[URL: /blog/hello-world] --> B[Match: app/blog/[slug]/page.tsx]
-  B --> C{generateStaticParams?}
-  C -->|Yes, slug in list| D[Serve Static HTML from CDN]
-  C -->|No or slug not in list| E[SSR: Render on Server]
-  B --> F[params.slug = 'hello-world']
-  F --> G[Fetch post data by slug]
-  G --> H{Post exists?}
-  H -->|Yes| I[Render Post Page]
-  H -->|No| J[notFound() → 404]
+  B --> C[params.slug = hello-world]
+  C --> D[Load post data]
+  D --> E{Post exists?}
+  E -->|Yes| F[Render Post Page]
+  E -->|No| G[notFound() → 404]
+  B --> H[generateStaticParams]
+  H --> I[Known parameter values]
+  I --> J[Can be generated ahead of time]
+  K[dynamicParams = false] --> L[Params outside generated set → not found]
+  M[Rendering + caching + revalidation] --> F
 ```
 
 ## End-to-End Practical
 
 1. Create `app/blog/[slug]/page.tsx` that reads `params.slug`.
 2. Create a mock data function that returns a post by slug.
-3. Use `notFound()` when the post doesn't exist.
-4. Add `generateStaticParams` to pre-render three blog posts.
+3. Use `notFound()` when the post does not exist.
+4. Add `generateStaticParams` for three known blog posts.
 5. Create a blog index at `app/blog/page.tsx` that links to each post.
-6. Visit `/blog/valid-slug` (renders), `/blog/unknown-slug` (404).
-7. Run `npm run build` and see the statically generated pages in the build output.
+6. Visit `/blog/valid-slug` and `/blog/unknown-slug` and observe the different outcomes.
+7. Run `npm run build` and inspect the build output without assuming that every dynamic URL is therefore permanently static.
+8. Experiment with `dynamicParams = false` and document how unknown parameter values behave.
+9. If the data changes frequently, consider an appropriate caching/revalidation strategy rather than equating dynamic routing with SSR.
 
 ## Hands-on Coding
 
@@ -393,13 +405,20 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = posts.find((p) => p.slug === slug);
-  return { title: post?.title ?? "Not Found" };
+
+  return {
+    title: post?.title ?? "Post Not Found",
+  };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = posts.find((p) => p.slug === slug);
-  if (!post) notFound();
+
+  if (!post) {
+    notFound();
+  }
+
   return (
     <article>
       <h1>{post.title}</h1>
@@ -428,17 +447,23 @@ const catalogue: Record<
   },
 };
 
-type Props = { params: Promise<{ category: string; productId: string }> };
+type Props = {
+  params: Promise<{ category: string; productId: string }>;
+};
 
 export default async function ProductPage({ params }: Props) {
   const { category, productId } = await params;
   const product = catalogue[category]?.[productId];
-  if (!product) notFound();
+
+  if (!product) {
+    notFound();
+  }
+
   return (
     <div>
-      <p style={{ color: "#666", textTransform: "capitalize" }}>{category}</p>
+      <p style={{ textTransform: "capitalize" }}>{category}</p>
       <h1>{product.name}</h1>
-      <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>${product.price}</p>
+      <p>${product.price}</p>
     </div>
   );
 }
@@ -460,27 +485,11 @@ export default function BlogIndexPage() {
   return (
     <div>
       <h1>Blog</h1>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+      <ul>
         {posts.map((post) => (
-          <li
-            key={post.slug}
-            style={{
-              marginBottom: "1.5rem",
-              borderBottom: "1px solid #eee",
-              paddingBottom: "1.5rem",
-            }}
-          >
-            <Link
-              href={`/blog/${post.slug}`}
-              style={{
-                fontSize: "1.25rem",
-                textDecoration: "none",
-                color: "#0070f3",
-              }}
-            >
-              {post.title}
-            </Link>
-            <p style={{ color: "#666", margin: "0.25rem 0 0" }}>{post.date}</p>
+          <li key={post.slug}>
+            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+            <p>{post.date}</p>
           </li>
         ))}
       </ul>
@@ -497,10 +506,11 @@ Build a user profile page at `/users/[username]` that shows a user's profile inf
 Steps:
 
 1. Create `app/users/[username]/page.tsx`.
-2. Create a mock `getUser(username)` function that returns user data for 3 known usernames and `null` for others.
+2. Create a mock `getUser(username)` function that returns user data for three known usernames and `null` for others.
 3. Show the user's name, bio, and join date on the page.
 4. Call `notFound()` if the user doesn't exist.
-5. Add `generateStaticParams` to pre-render the 3 known users.
+5. Add `generateStaticParams` for the three known users.
+6. Explain why `generateStaticParams` does not by itself mean every future request is SSR or every path is permanently static.
 
 Expected output:
 
@@ -515,16 +525,16 @@ Expected output:
 1. How do you create a dynamic route segment in Next.js?
 2. What prop receives the route parameters in a page component?
 3. What does `generateStaticParams` do?
-4. How do you show a 404 page when dynamic data is not found?
+4. Does a dynamic route automatically mean SSR on every request?
 5. What does setting `dynamicParams = false` do?
 
 ### Quiz Answers
 
 1. Name the folder with brackets: `[paramName]`. For example, `app/blog/[slug]/` creates a dynamic segment named `slug`.
-2. The `params` prop (a Promise in Next.js 15+) receives the route parameters. You `await params` to get the values.
-3. `generateStaticParams` returns an array of param objects that tell Next.js which routes to pre-render as static HTML at build time.
-4. Call `notFound()` from `next/navigation` — it triggers the nearest `not-found.tsx` and returns a 404 response.
-5. It makes Next.js return a 404 for any parameter value not included in the `generateStaticParams` result, preventing unknown routes from being server-rendered.
+2. The `params` prop receives the route parameters; in current App Router page APIs, it is awaited before reading the values.
+3. `generateStaticParams` returns known parameter objects that Next.js can use to generate dynamic paths ahead of time.
+4. No. A dynamic URL segment does not by itself determine the rendering strategy.
+5. It causes parameter values not returned by `generateStaticParams` to be treated as not found for that route.
 
 ## Task
 
@@ -533,13 +543,15 @@ Expected output:
 - Handle missing posts with `notFound()`.
 - Create a user profile page at `/users/[username]`.
 - Add `generateMetadata` to set unique titles for each post.
+- Document how your chosen caching/revalidation strategy affects data freshness.
 
 ## Self Check
 
 - Can you create a dynamic route folder with brackets?
-- Do you know how to read `params` in a page component?
-- Can you use `generateStaticParams` to pre-render dynamic routes?
-- Do you know how to show 404 for missing dynamic data?
+- Do you know how to read `params` in a current App Router page component?
+- Can you explain what `generateStaticParams` does without equating it to every form of SSG?
+- Do you understand why a dynamic URL does not automatically mean SSR?
+- Do you know how to show a 404 for missing dynamic data?
 - Have you built a blog listing that links to individual dynamic post pages?
 
 ## Interview Questions and Answers
@@ -547,31 +559,33 @@ Expected output:
 ### Beginner
 
 **Question:** How do you make a route that matches `/products/123` in Next.js?
-**Answer:** Create the folder `app/products/[id]/` with a `page.tsx` inside. The `[id]` folder is a dynamic segment that matches any value. The matched value is available as `params.id` in the component.
+**Answer:** Create `app/products/[id]/page.tsx`. The `[id]` folder is a dynamic segment, and the matched value is available through `params`.
 
 **Question:** What happens if a user visits a dynamic route URL that has no data?
-**Answer:** By default, the page still renders (with potentially empty/undefined data). To handle it properly, call `notFound()` when the data lookup returns null — this renders the 404 page.
+**Answer:** The application should explicitly handle the missing resource. After a lookup returns no record, call `notFound()` to render the appropriate not-found UI.
 
 ### Middle
 
 **Question:** What is the difference between using `generateStaticParams` and not using it on a dynamic route?
-**Answer:** Without `generateStaticParams`, the page is server-rendered on every request (SSR). With it, Next.js pre-renders those specific paths at build time into static HTML files served from a CDN — much faster and cheaper.
+**Answer:** `generateStaticParams` supplies known parameter values that can be generated ahead of time. Not using it does not simply mean “SSR on every request”; the route's rendering and data behavior depends on its configuration and runtime characteristics.
 
 **Question:** How would you handle a URL like `/shop/electronics/laptops/99` with multiple dynamic segments?
-**Answer:** Create nested dynamic folders: `app/shop/[category]/[subcategory]/[productId]/page.tsx`. Each bracket folder is a dynamic segment, and all matched values arrive in `params`.
+**Answer:** Create nested dynamic folders such as `app/shop/[category]/[subcategory]/[productId]/page.tsx`. Each bracketed folder contributes a property to `params`.
 
 ### Advanced
 
-**Question:** How does Next.js handle incremental static regeneration for dynamic routes?
-**Answer:** You can add `export const revalidate = 60` to a dynamic page alongside `generateStaticParams`. This tells Next.js to serve the cached static version but regenerate it in the background after 60 seconds — so content stays fresh without sacrificing performance.
+**Question:** How should you think about revalidation for dynamic routes?
+**Answer:** Revalidation controls data freshness and when cached content can be regenerated or refreshed. It should be chosen based on the application's freshness requirements; it should not be described as a synonym for SSR or as a property of the URL's dynamic segment.
 
 **Question:** Can `generateStaticParams` fetch data from a database or API?
-**Answer:** Yes — it is an async function that runs at build time on the server. You can call any data source, including databases and APIs, to get all possible parameter values.
+**Answer:** Yes. It runs in the server/build context and can obtain known parameter values from an appropriate data source. The build must have access to that data source, and applications should consider the size and freshness of the generated path set.
 
 ## Day 6 Outcome
 
 - You can create dynamic route segments using bracket folder names.
-- You know how to read route params in server components.
-- You can pre-render dynamic routes using `generateStaticParams`.
-- You handle missing data gracefully with `notFound()`.
+- You know how to read route params in current App Router page components.
+- You can use `generateStaticParams` for known paths.
+- You can handle missing data with `notFound()`.
+- You understand `dynamicParams` and multiple dynamic segments.
+- You understand that dynamic URLs, rendering strategy, caching, and data freshness are related but distinct concepts.
 - You are ready to learn catch-all routes on Day 7.
