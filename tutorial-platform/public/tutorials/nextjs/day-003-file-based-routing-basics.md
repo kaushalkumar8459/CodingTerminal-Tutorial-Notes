@@ -11,7 +11,7 @@ track: nextjs
 
 ## Goal
 
-Understand how the Next.js App Router maps folder and file structure to URL routes, and create multiple routes without any router configuration.
+Understand how the Next.js App Router maps folder and file structure to URL routes, and create multiple routes without manually configuring a client-side router.
 
 ## Prerequisites
 
@@ -20,18 +20,18 @@ Understand how the Next.js App Router maps folder and file structure to URL rout
 
 ## Explanation
 
-In traditional React apps, you configure routes manually using a library like React Router — you create a `<Routes>` component, list each `<Route path="..." element={...} />`, and maintain this mapping yourself. In Next.js, routing is file-based: the folder and file names inside the `app/` directory determine the URL structure automatically. This means less configuration and a structure that is easy to understand at a glance.
+In traditional React apps, you may configure routes manually using a library such as React Router. In the Next.js App Router, routing is primarily file-system based: folders represent URL segments and special files such as `page.tsx` define the UI for those segments. This reduces routing configuration and makes the URL hierarchy visible in the project structure.
 
-The key file in the App Router is `page.tsx`. When Next.js sees a `page.tsx` inside a folder, it treats that folder as a URL segment and the `page.tsx` as the component to render. So `app/blog/page.tsx` becomes accessible at `/blog`, `app/blog/posts/page.tsx` becomes `/blog/posts`, and so on. This nesting mirrors the URL hierarchy naturally.
+The key file in the App Router is `page.tsx`. When Next.js finds a `page.tsx` inside a route folder, that folder becomes a URL segment and the page component is rendered for that route. For example, `app/blog/page.tsx` maps to `/blog`, while `app/blog/posts/page.tsx` maps to `/blog/posts`. The folder hierarchy mirrors the URL hierarchy.
 
-There are other special files too: `layout.tsx` wraps children with shared UI, `loading.tsx` shows a loading skeleton while data fetches, `error.tsx` catches errors in that segment, and `not-found.tsx` renders when a route is not found. Today we focus on the basics — understanding routes and the `page.tsx` convention.
+There are other special files too: `layout.tsx` provides shared UI around a route subtree, `loading.tsx` provides a Suspense fallback during navigation or while the relevant route segment is waiting to render, `error.tsx` provides error UI for a route segment, and `not-found.tsx` handles not-found states. Today we focus on the routing fundamentals while introducing these conventions in context.
 
 ## Topic by Topic
 
 ### Topic 1: The page.tsx Convention
 
 Theory:
-Any folder inside `app/` with a `page.tsx` file becomes a publicly accessible URL route. The folder name is the URL segment.
+A folder inside `app/` becomes a UI route when it contains a `page.tsx` file. The folder name becomes the URL segment. The root `app/page.tsx` maps to `/`.
 
 Practical:
 Create `app/contact/page.tsx` → visit `http://localhost:3000/contact`.
@@ -49,11 +49,11 @@ export default function ContactPage() {
   );
 }
 
-// Automatic routing: This file creates the /contact route
-// No router config needed - the folder structure does it!
+// This file creates the /contact route.
+// No manual route configuration is required.
 ```
 
-**Explanation:** Just create a folder `contact/` with a `page.tsx` file, and Next.js automatically creates the `/contact` route. No configuration. This is file-based routing - the simplest approach.
+**Explanation:** Create a `contact/` folder under `app/` and place a `page.tsx` inside it. Next.js maps that segment to `/contact`. The component is a Server Component by default unless the file or an imported boundary requires client behavior.
 **Key Points:**
 - Understand the core concept behind The page.tsx Convention.
 - Apply it with the right Next.js feature and defaults.
@@ -63,7 +63,7 @@ export default function ContactPage() {
 ### Topic 2: Nested Routes
 
 Theory:
-Folders can be nested to create nested URL paths. Each folder in the path is one URL segment.
+Folders can be nested to create nested URL paths. Each folder in the path represents one URL segment.
 
 Practical:
 `app/blog/posts/page.tsx` maps to the URL `/blog/posts`.
@@ -84,7 +84,7 @@ export default function BlogPostsPage() {
 }
 ```
 
-**Explanation:** Nested folders create nested routes. The file structure directly maps to URLs. This is intuitive - you can predict the route just by looking at the folder structure.
+**Explanation:** Nested folders create nested routes. The file structure directly maps to URL segments, so you can usually predict a route by looking at its location in the `app/` directory.
 **Key Points:**
 - Understand the core concept behind Nested Routes.
 - Apply it with the right Next.js feature and defaults.
@@ -94,10 +94,10 @@ export default function BlogPostsPage() {
 ### Topic 3: The Root Route
 
 Theory:
-`app/page.tsx` is the root route — it renders at `/`. There must be a `page.tsx` at the top level of `app/` to serve the homepage.
+`app/page.tsx` is the root route — it renders at `/`. It is the App Router equivalent of the application's homepage route.
 
 Practical:
-This is the first thing visitors see when they arrive at your site.
+This is the page visitors see when they navigate to the root URL of your application.
 
 Code Example:
 
@@ -112,8 +112,7 @@ export default function HomePage() {
   );
 }
 ```
-**Explanation:**
-This topic explains The Root Route in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+**Explanation:** The root `page.tsx` is special because it represents `/`. Other routes are created by placing `page.tsx` inside named folders.
 
 **Key Points:**
 - Understand the core concept behind The Root Route.
@@ -124,7 +123,7 @@ This topic explains The Root Route in practical Next.js terms so you can build c
 ### Topic 4: Special Files — layout.tsx
 
 Theory:
-`layout.tsx` at any level wraps the `page.tsx` and all child routes at that level. It persists between route changes — React does not unmount it when navigating.
+`layout.tsx` at any level wraps the page and child routes in that route subtree. Layouts are preserved across navigations between child routes, which allows shared UI and client state in a layout to persist rather than being recreated for every navigation.
 
 Practical:
 Add a sidebar to all blog pages by creating `app/blog/layout.tsx`.
@@ -152,8 +151,7 @@ export default function BlogLayout({
   );
 }
 ```
-**Explanation:**
-This topic explains Special Files — layout.tsx in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+**Explanation:** A layout is shared UI around a route subtree. The `children` prop receives the currently active page or child layout. Layouts can be nested, so a page can be rendered inside multiple layout levels.
 
 **Key Points:**
 - Understand the core concept behind Special Files — layout.tsx.
@@ -164,10 +162,10 @@ This topic explains Special Files — layout.tsx in practical Next.js terms so y
 ### Topic 5: Special Files — loading.tsx
 
 Theory:
-`loading.tsx` is automatically shown while the `page.tsx` in the same folder is loading data. It uses React Suspense under the hood.
+`loading.tsx` defines a Suspense fallback for a route segment. Next.js can show it during navigation while the relevant segment is waiting to render, which is especially useful when the route contains asynchronous Server Components or other work that delays the segment.
 
 Practical:
-Add a spinner or skeleton UI inside `loading.tsx` to improve perceived performance.
+Add a spinner or skeleton UI inside `loading.tsx` to improve perceived performance while a route is pending.
 
 Code Example:
 
@@ -175,7 +173,7 @@ Code Example:
 // app/blog/loading.tsx
 export default function BlogLoading() {
   return (
-    <div>
+    <div aria-label="Loading blog" role="status">
       <div
         style={{
           background: "#eee",
@@ -196,8 +194,7 @@ export default function BlogLoading() {
   );
 }
 ```
-**Explanation:**
-This topic explains Special Files — loading.tsx in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+**Explanation:** Next.js uses React Suspense around the route segment so the fallback can be displayed while the segment is pending. `loading.tsx` is therefore a UI convention for handling pending navigation/rendering; it is not a definition of a particular rendering strategy such as SSR or SSG.
 
 **Key Points:**
 - Understand the core concept behind Special Files — loading.tsx.
@@ -208,27 +205,28 @@ This topic explains Special Files — loading.tsx in practical Next.js terms so 
 ### Topic 6: Special Files — not-found.tsx
 
 Theory:
-`not-found.tsx` renders when a resource is not found in a route segment. Call the `notFound()` function from `next/navigation` to trigger it programmatically.
+`not-found.tsx` defines UI for a not-found state in a route segment. You can call `notFound()` from `next/navigation` when a requested resource does not exist. A root `app/not-found.tsx` can provide a custom not-found experience for unmatched routes, while nested `not-found.tsx` files can handle not-found states within their segment.
 
 Practical:
-Provide a helpful message instead of the default "404 Not Found" page.
+Provide a helpful message instead of relying only on the default not-found page.
 
 Code Example:
 
 ```tsx
 // app/not-found.tsx
+import Link from "next/link";
+
 export default function NotFound() {
   return (
     <main>
       <h1>404 — Page Not Found</h1>
       <p>Sorry, the page you are looking for does not exist.</p>
-      <a href="/">Go Home</a>
+      <Link href="/">Go Home</Link>
     </main>
   );
 }
 ```
-**Explanation:**
-This topic explains Special Files — not-found.tsx in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+**Explanation:** `not-found.tsx` is used when Next.js needs to render a not-found state. For data-driven routes, calling `notFound()` is a common pattern after determining that the requested resource does not exist. `Link` is preferred for internal navigation.
 
 **Key Points:**
 - Understand the core concept behind Special Files — not-found.tsx.
@@ -239,10 +237,10 @@ This topic explains Special Files — not-found.tsx in practical Next.js terms s
 ### Topic 7: Folder Structure Best Practices
 
 Theory:
-Keep route folders lean — only routing files (page, layout, loading, error) inside `app/`. Move reusable components to a top-level `components/` folder.
+Organize route folders so the routing hierarchy is easy to understand, while taking advantage of Next.js route co-location. Files that are not special route files do not automatically become public URLs, so related components, types, and utilities can be colocated when that improves maintainability. Shared components can also live in a top-level `components/` folder.
 
 Practical:
-Use a structure that separates routing concerns from component logic.
+Choose a structure that separates shared application concerns from route-specific code without assuming that every helper must live outside `app/`.
 
 Code Example:
 
@@ -257,16 +255,16 @@ app/
     page.tsx
     posts/
       page.tsx
+    components/
+      PostCard.tsx
 components/
   Navbar.tsx
   Footer.tsx
-  Card.tsx
 lib/
   utils.ts
   db.ts
 ```
-**Explanation:**
-This topic explains Folder Structure Best Practices in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+**Explanation:** Route folders can contain more than just `page.tsx`. Co-location is supported because ordinary files such as `PostCard.tsx`, `types.ts`, and `utils.ts` do not create routes by themselves. A consistent project convention is still important for discoverability and reuse.
 
 **Key Points:**
 - Understand the core concept behind Folder Structure Best Practices.
@@ -277,24 +275,26 @@ This topic explains Folder Structure Best Practices in practical Next.js terms s
 ### Topic 8: URL Segments and Path Matching
 
 Theory:
-Each folder segment in `app/` maps directly to a URL segment. Only `page.tsx` (and `route.ts` for APIs) make a segment publicly accessible — other files in the folder are not exposed.
+Each folder segment in `app/` maps to a URL segment. A `page.tsx` defines the UI for a route, while a `route.ts` defines an HTTP endpoint for a Route Handler. Other files in the folder are not automatically exposed as URLs. A `page.tsx` and `route.ts` cannot represent two different public resources at the exact same route segment.
 
 Practical:
-You can put helper files, types, and utilities alongside route files without them becoming routes.
+You can put helper files, types, and utilities alongside route files without them becoming routes. Use `route.ts` when the segment should expose an HTTP API rather than a page UI.
 
 Code Example:
 
 ```
 app/
   dashboard/
-    page.tsx        ← PUBLIC: /dashboard
-    helpers.ts      ← NOT a route (no page.tsx)
+    page.tsx        ← UI route: /dashboard
+    helpers.ts      ← NOT a route
     types.ts        ← NOT a route
     settings/
-      page.tsx      ← PUBLIC: /dashboard/settings
+      page.tsx      ← UI route: /dashboard/settings
+  api/
+    users/
+      route.ts      ← Route Handler endpoint: /api/users
 ```
-**Explanation:**
-This topic explains URL Segments and Path Matching in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+**Explanation:** The App Router separates UI routes from Route Handlers. `app/dashboard/page.tsx` renders the dashboard UI, while `app/api/users/route.ts` handles HTTP requests such as GET or POST for `/api/users`. This distinction is important when learning routing and APIs together.
 
 **Key Points:**
 - Understand the core concept behind URL Segments and Path Matching.
@@ -304,14 +304,15 @@ This topic explains URL Segments and Path Matching in practical Next.js terms so
 
 ## Key Concepts
 
-- **File-based Routing**: Routes are automatically derived from the folder and file structure inside `app/`.
-- **page.tsx**: The special file that makes a folder segment a publicly accessible route.
+- **File-based Routing**: Routes are derived from the folder and special-file structure inside `app/`.
+- **page.tsx**: The special file that defines the UI for a URL route.
 - **Segment**: One URL path component separated by slashes (e.g. `blog` and `posts` are segments of `/blog/posts`).
-- **layout.tsx**: A component that wraps child routes and persists across navigations within its subtree.
-- **loading.tsx**: A Suspense fallback shown while a route segment loads.
-- **not-found.tsx**: Rendered when `notFound()` is called or a route segment has no match.
-- **Nested Routes**: Child folders create nested URL paths; layouts nest too.
-- **Co-location**: Non-route files (components, utilities) can live inside route folders and won't become routes.
+- **layout.tsx**: A component that wraps child routes and provides shared UI for its subtree.
+- **loading.tsx**: A Suspense fallback used while a route segment is pending.
+- **not-found.tsx**: UI for a not-found state, including states triggered with `notFound()`.
+- **Nested Routes**: Child folders create nested URL paths; layouts can nest too.
+- **Co-location**: Non-special files can live inside route folders without automatically becoming public routes.
+- **Route Handler**: A `route.ts` file that handles HTTP requests in the App Router.
 
 ## Visual Concept Map
 
@@ -325,8 +326,9 @@ flowchart TD
   D --> G[page.tsx → /blog]
   D --> H[posts/]
   H --> I[page.tsx → /blog/posts]
-  I --> J[loading.tsx Suspense Fallback]
-  A --> K[not-found.tsx → 404]
+  D --> J[loading.tsx Suspense Fallback]
+  A --> K[not-found.tsx → Not Found UI]
+  A --> L[api/users/route.ts → HTTP endpoint]
 ```
 
 ## End-to-End Practical
@@ -364,6 +366,8 @@ export default function Team() {
 
 ```tsx
 // app/blog/layout.tsx
+import Link from "next/link";
+
 export default function BlogLayout({
   children,
 }: {
@@ -372,8 +376,8 @@ export default function BlogLayout({
   return (
     <div className="blog-container">
       <nav className="blog-nav">
-        <a href="/blog">All Posts</a>
-        <a href="/blog/categories">Categories</a>
+        <Link href="/blog">All Posts</Link>
+        <Link href="/blog/categories">Categories</Link>
       </nav>
       <div className="blog-content">{children}</div>
     </div>
@@ -439,19 +443,19 @@ Expected output:
 
 ### Quiz Questions
 
-1. What filename must a folder have to become a publicly accessible route?
+1. What filename must a folder have to define a UI route?
 2. What does `app/about/team/page.tsx` map to as a URL?
 3. What is the difference between `layout.tsx` and `page.tsx`?
-4. How do you display a custom 404 page in Next.js App Router?
-5. Can you put non-route files (like utilities) inside route folders?
+4. How do you display a custom not-found page in the Next.js App Router?
+5. Can you put non-route files such as utilities inside route folders?
 
 ### Quiz Answers
 
-1. A folder needs a `page.tsx` file to become a publicly accessible route.
+1. A folder needs a `page.tsx` file to define a UI route.
 2. It maps to the URL `/about/team`.
-3. `page.tsx` is the route content (unique per URL), while `layout.tsx` wraps page content with shared UI and persists across navigations.
-4. Create `app/not-found.tsx` with your custom component — it renders for 404 errors automatically.
-5. Yes — only files named `page.tsx` or `route.ts` create public routes. Other files in the folder are not exposed as routes.
+3. `page.tsx` defines the UI for a route, while `layout.tsx` wraps the page and child routes with shared UI and can persist across navigations within its subtree.
+4. Create `app/not-found.tsx` for a root-level not-found experience, or place `not-found.tsx` in a route segment for a segment-specific not-found state. You can also call `notFound()` from `next/navigation` when a resource is missing.
+5. Yes. Ordinary files do not automatically become routes, so components, utilities, and types can be colocated with route files when that organization is useful.
 
 ## Task
 
@@ -474,31 +478,32 @@ Expected output:
 ### Beginner
 
 **Question:** How does Next.js know what to render for a given URL?
-**Answer:** It looks at the `app/` directory — the folder structure maps to the URL path. It finds the `page.tsx` in the matching folder and renders it.
+**Answer:** In the App Router, Next.js uses the `app/` file-system conventions. It matches the URL segments to the route folders and uses the relevant `page.tsx` to render the UI.
 
-**Question:** What happens if you visit a URL that has no matching `page.tsx`?
-**Answer:** Next.js renders the `not-found.tsx` component (if you've defined one) or its built-in 404 page.
+**Question:** What happens if you visit a URL that has no matching page?
+**Answer:** Next.js renders the appropriate not-found UI. A root `app/not-found.tsx` can customize the application-level not-found experience, while nested `not-found.tsx` files can customize not-found states for their segments.
 
 ### Middle
 
-**Question:** Why does `layout.tsx` persist between route navigations but `page.tsx` does not?
-**Answer:** React does not unmount the layout component when navigating between child routes — it only re-renders the `page.tsx` content. This is efficient because shared UI like navigation or sidebars does not need to re-mount.
+**Question:** Why does `layout.tsx` persist between route navigations but `page.tsx` represents the changing route content?
+**Answer:** Layouts define shared UI for a route subtree and are preserved across navigations between child routes. This allows shared UI and client state inside a layout to remain mounted while the active page changes.
 
 **Question:** Can you have multiple layouts at different levels in the app directory?
-**Answer:** Yes. Each folder can have its own `layout.tsx` that wraps only the routes within that subtree. Layouts nest — a child layout wraps its page inside the parent layout.
+**Answer:** Yes. Each folder can have its own `layout.tsx` that wraps routes within that subtree. Layouts nest, so a child page can be rendered through the root layout and any applicable nested layouts.
 
 ### Advanced
 
 **Question:** What is route co-location and why is it useful?
-**Answer:** Route co-location means placing components, utilities, or tests alongside their route files without exposing them as routes. It improves organisation by keeping closely related code together. Only `page.tsx` and `route.ts` create public routes, so other files are safe.
+**Answer:** Route co-location means placing components, utilities, types, or tests alongside related route files. Ordinary files do not become routes automatically, so co-location can keep feature-specific code together while shared code can remain in common folders.
 
-**Question:** How does Next.js implement streaming for routes with `loading.tsx`?
-**Answer:** It uses React Suspense. The page component is wrapped in a Suspense boundary automatically. While the async Server Component (page) resolves data, the `loading.tsx` fallback is streamed to the browser immediately, giving users instant feedback.
+**Question:** How does Next.js use streaming for routes with `loading.tsx`?
+**Answer:** `loading.tsx` provides a Suspense fallback for the route segment. When the segment is pending, Next.js can stream the fallback to the browser while the actual route content becomes ready. This improves perceived responsiveness without defining the route as SSR, SSG, or any other single rendering strategy.
 
 ## Day 3 Outcome
 
 - You understand how the App Router's file-based routing works.
 - You can create nested routes by creating nested folders with `page.tsx`.
 - You know the role of `layout.tsx`, `loading.tsx`, and `not-found.tsx`.
-- You have created a multi-page app with nested routes.
+- You understand that ordinary files can be colocated without automatically becoming routes.
+- You can distinguish UI routes (`page.tsx`) from Route Handlers (`route.ts`).
 - You are ready to explore pages and layouts in depth on Day 4.

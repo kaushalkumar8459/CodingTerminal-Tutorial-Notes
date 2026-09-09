@@ -20,20 +20,22 @@ Use catch-all routes (`[...slug]`) and optional catch-all routes (`[[...slug]]`)
 
 ## Explanation
 
-Sometimes you need a single page to handle routes with an unknown number of segments. For example, a documentation site might have URLs like `/docs/getting-started`, `/docs/guides/deployment`, and `/docs/guides/advanced/docker`. All of these could be handled by one page file if you use a catch-all route.
+Sometimes a single page needs to handle URLs with a variable number of path segments. A documentation site, for example, might have `/docs/getting-started`, `/docs/guides/deployment`, and `/docs/guides/advanced/docker`. A catch-all route can match those nested paths without creating a separate route file for every depth.
 
-A catch-all route is created by using three dots inside the brackets: `[...slug]`. This matches any number of segments after the parent path, and the `params.slug` value is an array of strings representing each segment. For `/docs/guides/deployment`, `slug` would be `['guides', 'deployment']`.
+A catch-all route uses three dots inside the brackets: `[...slug]`. It matches **one or more** segments after the parent path, and `params.slug` is an array of strings. For `/docs/guides/deployment`, `slug` is `['guides', 'deployment']`.
 
-An optional catch-all route uses double brackets: `[[...slug]]`. The difference is that this also matches the parent path with no additional segments. So `[[...slug]]` in `app/docs/` matches both `/docs` and `/docs/anything/here`.
+An optional catch-all route uses double brackets: `[[...slug]]`. It matches **zero or more** segments, so it can handle both `/docs` and `/docs/anything/here`. With the current App Router API, route `params` are asynchronous, so examples use `await params`.
 
-These patterns are perfect for documentation sites, wikis, CMS-driven pages, and any content tree with arbitrary depth.
+Catch-all routing defines how URLs are matched. It does **not** by itself mean SSR, static rendering, or dynamic rendering. Rendering behavior, data fetching, caching, and revalidation are separate concerns that depend on the route and its data/runtime requirements.
+
+These patterns are useful for documentation sites, wikis, CMS-driven pages, help centres, and other content trees with variable depth.
 
 ## Topic by Topic
 
 ### Topic 1: Catch-all Syntax [...slug]
 
 Theory:
-Name a folder with three dots inside brackets — `[...slug]` — to catch any number of URL segments. The matched segments arrive as an array in `params.slug`.
+Name a folder with three dots inside brackets — `[...slug]` — to capture one or more URL segments. The matched segments arrive as an array in `params.slug`.
 
 Practical:
 Use this for documentation or wiki pages where the depth of nesting varies.
@@ -43,12 +45,14 @@ Code Example:
 ```tsx
 // File: app/docs/[...slug]/page.tsx
 // Matches: /docs/intro, /docs/guide/setup, /docs/guide/advanced/docker
+// Does not match /docs by itself.
 
 type Props = { params: Promise<{ slug: string[] }> };
 
 export default async function DocsPage({ params }: Props) {
-  const { slug } = await params; // Extract slug array from params
-  const path = slug.join(" / "); // Convert array to readable path
+  const { slug } = await params;
+  const path = slug.join(" / ");
+
   return (
     <div>
       <h1>Documentation</h1>
@@ -58,45 +62,47 @@ export default async function DocsPage({ params }: Props) {
 }
 ```
 
-**Explanation:** The `[...slug]` syntax captures all remaining URL segments as an array. `/docs/guide/setup` results in `slug = ['guide', 'setup']`. This single page handles unlimited nested paths without creating separate files.
-**Key Points:**
-- Understand the core concept behind Catch-all Syntax [...slug].
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+**Explanation:** The `[...slug]` syntax captures all remaining URL segments as an array. `/docs/guide/setup` results in `slug = ['guide', 'setup']`. The route can therefore represent arbitrary nesting depth without creating separate route files for every level.
 
+**Key Points:**
+- `[...slug]` requires at least one segment.
+- `params.slug` is a `string[]`.
+- `/docs` is not matched by this route; use `[[...slug]]` when the parent route must also match.
 
 ### Topic 2: Optional Catch-all [[...slug]]
 
 Theory:
-Double brackets `[[...slug]]` make the segments optional. The page also matches the base route (no extra segments). `params.slug` is `undefined` when no segments are present.
+Double brackets `[[...slug]]` make the catch-all segment optional. The page matches the base route and nested routes, and `params.slug` is absent when no extra segments are present.
 
 Practical:
-Use this when the base route and nested routes should render in the same component with different behaviour.
+Use this when the base route and nested routes should share one page component.
 
 Code Example:
 
 ```tsx
 // File: app/docs/[[...slug]]/page.tsx
-// Matches: /docs (slug = undefined), /docs/intro (slug = ['intro']), /docs/guide/setup
+// Matches: /docs, /docs/intro, /docs/guide/setup
 
 type Props = { params: Promise<{ slug?: string[] }> };
 
 export default async function DocsPage({ params }: Props) {
   const { slug } = await params;
-  if (!slug) {
+  const segments = slug ?? [];
+
+  if (segments.length === 0) {
     return <h1>Documentation Home</h1>;
   }
-  return <h1>Doc: {slug.join(" → ")}</h1>;
+
+  return <h1>Doc: {segments.join(" → ")}</h1>;
 }
 ```
-**Explanation:**
-This topic explains Optional Catch-all [[...slug]] in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** `[[...slug]]` differs from `[...slug]` because the captured segment can be absent. Normalizing `slug` to an empty array makes the rest of the component easier to work with.
 
 **Key Points:**
-- Understand the core concept behind Optional Catch-all [[...slug]].
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- `[[...slug]]` matches zero or more segments.
+- `params.slug` may be `undefined` for the parent route.
+- Normalize optional parameters before using array methods.
 
 ### Topic 3: Building a Breadcrumb from slug Array
 
@@ -104,7 +110,7 @@ Theory:
 Since `slug` is an array of path segments, you can build a breadcrumb trail by mapping over the array and constructing partial paths.
 
 Practical:
-Show a breadcrumb like `Docs > Guide > Setup` at the top of each doc page.
+Show a breadcrumb such as `Docs > Guide > Setup` at the top of each documentation page.
 
 Code Example:
 
@@ -117,54 +123,52 @@ type Props = { params: Promise<{ slug: string[] }> };
 export default async function DocsPage({ params }: Props) {
   const { slug } = await params;
 
-  const breadcrumbs = slug.map((segment, index) => ({
-    label: segment.replace(/-/g, " "),
-    href: "/docs/" + slug.slice(0, index + 1).join("/"),
-  }));
-
   return (
     <div>
-      <nav
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          marginBottom: "1rem",
-          color: "#666",
-        }}
-      >
-        <Link href="/docs">Docs</Link>
-        {breadcrumbs.map((crumb) => (
-          <span key={crumb.href}>
-            <span> / </span>
-            <Link href={crumb.href} style={{ textTransform: "capitalize" }}>
-              {crumb.label}
-            </Link>
-          </span>
-        ))}
+      <nav aria-label="Breadcrumb">
+        <ol>
+          <li>
+            <Link href="/docs">Docs</Link>
+          </li>
+
+          {slug.map((segment, index) => {
+            const href = `/docs/${slug.slice(0, index + 1).join("/")}`;
+            const label = segment.replace(/-/g, " ");
+            const isCurrent = index === slug.length - 1;
+
+            return (
+              <li key={href}>
+                {isCurrent ? (
+                  <span aria-current="page">{label}</span>
+                ) : (
+                  <Link href={href}>{label}</Link>
+                )}
+              </li>
+            );
+          })}
+        </ol>
       </nav>
-      <h1 style={{ textTransform: "capitalize" }}>
-        {slug[slug.length - 1].replace(/-/g, " ")}
-      </h1>
+
+      <h1>{slug[slug.length - 1].replace(/-/g, " ")}</h1>
     </div>
   );
 }
 ```
-**Explanation:**
-This topic explains Building a Breadcrumb from slug Array in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** Each breadcrumb URL is created from the segments up to that point. The current page is marked with `aria-current="page"` instead of linking to itself, which gives screen readers useful context.
 
 **Key Points:**
-- Understand the core concept behind Building a Breadcrumb from slug Array.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Catch-all params naturally represent a path hierarchy.
+- Use `Link` for internal navigation.
+- Use semantic breadcrumb markup and identify the current page.
 
 ### Topic 4: Fetching Content for Catch-all Routes
 
 Theory:
-Use the `slug` array to construct a file path or database key to look up the correct content for each URL.
+Use the `slug` array to construct a stable content key, file path, or CMS lookup path. The URL is an input to the lookup, not a security boundary, so protected content still needs server-side authorization.
 
 Practical:
-In a documentation system, map `['guide', 'setup']` to a markdown file at `content/guide/setup.md`.
+Map `['guide', 'setup']` to a documentation key such as `guide/setup`.
 
 Code Example:
 
@@ -174,17 +178,23 @@ import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
-const content: Record<string, { title: string; body: string }> = {
+type Page = { title: string; body: string };
+
+const content: Record<string, Page> = {
   intro: { title: "Introduction", body: "Welcome to the docs." },
   "guide/setup": { title: "Setup Guide", body: "Install Node.js and Next.js." },
-  "guide/deployment": { title: "Deployment", body: "Deploy to Vercel." },
+  "guide/deployment": { title: "Deployment", body: "Deploy the application." },
 };
 
 export default async function DocsPage({ params }: Props) {
   const { slug } = await params;
   const key = slug.join("/");
   const page = content[key];
-  if (!page) notFound();
+
+  if (!page) {
+    notFound();
+  }
+
   return (
     <article>
       <h1>{page.title}</h1>
@@ -193,22 +203,22 @@ export default async function DocsPage({ params }: Props) {
   );
 }
 ```
-**Explanation:**
-This topic explains Fetching Content for Catch-all Routes in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** The route parameter can be transformed into a lookup key. In a real application the lookup might call a database, CMS, filesystem, or other server-side data source. Decide caching and revalidation according to how frequently that content changes; the catch-all route itself does not determine the rendering strategy.
 
 **Key Points:**
-- Understand the core concept behind Fetching Content for Catch-all Routes.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Convert the segment array into a predictable lookup key.
+- Handle missing content with `notFound()`.
+- Apply authentication/authorization on the server for protected content.
+- Choose caching and revalidation separately from route matching.
 
 ### Topic 5: generateStaticParams for Catch-all Routes
 
 Theory:
-`generateStaticParams` for catch-all routes returns an array of objects where each object has the `slug` key set to an array of strings.
+`generateStaticParams` returns known parameter combinations for a dynamic route. For a catch-all route, each `slug` value is an array of strings.
 
 Practical:
-Pre-render all known documentation pages at build time.
+Provide a known set of documentation paths that Next.js can use during build-time route generation.
 
 Code Example:
 
@@ -223,50 +233,49 @@ export async function generateStaticParams() {
   ];
 }
 ```
-**Explanation:**
-This topic explains generateStaticParams for Catch-all Routes in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** The shape of each returned object follows the route parameter shape. `generateStaticParams` is a way to enumerate known parameter values; it should not be treated as a synonym for all static rendering or caching behavior. For a large or changing content set, generating every possible path at build time may be undesirable.
 
 **Key Points:**
-- Understand the core concept behind generateStaticParams for Catch-all Routes.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Catch-all values are returned as arrays.
+- Each object represents one known parameter combination.
+- Build-time path generation and data caching are separate concepts.
+- Consider the number of paths and content freshness before generating a very large set.
 
 ### Topic 6: Combining Catch-all with Static Segments
 
 Theory:
-You can mix static and dynamic segments in a route. A static segment has a literal name; a catch-all segment handles the variable part. The most specific match wins.
+You can have a static route alongside a catch-all route. Static route segments are more specific than a catch-all match at the same path depth, so an exact static route can handle a special URL while the catch-all handles the remaining paths.
 
 Practical:
-`app/docs/changelog/page.tsx` (static) takes priority over `app/docs/[...slug]/page.tsx` for `/docs/changelog`.
+`app/docs/changelog/page.tsx` can handle `/docs/changelog` while `app/docs/[...slug]/page.tsx` handles other nested documentation paths.
 
 Code Example:
 
 ```tsx
-// app/docs/changelog/page.tsx — handles /docs/changelog specifically
+// app/docs/changelog/page.tsx
 export default function ChangelogPage() {
   return <h1>Changelog</h1>;
 }
 
-// app/docs/[...slug]/page.tsx — handles all other /docs/... paths
-// Next.js prefers the more specific static route
+// app/docs/[...slug]/page.tsx
+// Handles paths such as /docs/guide/setup.
 ```
-**Explanation:**
-This topic explains Combining Catch-all with Static Segments in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** Route matching determines which route owns the URL. Keep special, well-known URLs as explicit static routes when that makes the application clearer, and use catch-all routing for genuinely variable-depth paths.
 
 **Key Points:**
-- Understand the core concept behind Combining Catch-all with Static Segments.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Static routes can take precedence over a catch-all route for the same URL.
+- Use explicit routes for special cases when appropriate.
+- Route matching is separate from rendering and caching behavior.
 
 ### Topic 7: Error Handling in Catch-all Routes
 
 Theory:
-Wrap your catch-all page logic in try/catch and use `notFound()` or `error.tsx` to handle errors gracefully.
+Treat a missing document and an unexpected application failure differently. Use `notFound()` when the requested content does not exist. Let unexpected exceptions reach the route segment's `error.tsx` boundary instead of converting every exception into a 404.
 
 Practical:
-If loading the doc content fails (e.g., file not found), show a friendly error page.
+Return a not-found UI for an unknown documentation key while allowing unexpected data-source failures to be handled by an error boundary.
 
 Code Example:
 
@@ -275,50 +284,51 @@ Code Example:
 import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{ slug: string[] }> };
+type Content = { title: string; body: string };
 
 export default async function DocsPage({ params }: Props) {
   const { slug } = await params;
-  try {
-    const content = await loadDocContent(slug.join("/"));
-    if (!content) notFound();
-    return (
-      <article>
-        <h1>{content.title}</h1>
-        <p>{content.body}</p>
-      </article>
-    );
-  } catch {
+  const content = await loadDocContent(slug.join("/"));
+
+  if (!content) {
     notFound();
   }
+
+  return (
+    <article>
+      <h1>{content.title}</h1>
+      <p>{content.body}</p>
+    </article>
+  );
 }
 
-async function loadDocContent(path: string) {
-  const db: Record<string, { title: string; body: string }> = {
+async function loadDocContent(path: string): Promise<Content | null> {
+  const db: Record<string, Content> = {
     intro: { title: "Introduction", body: "Welcome." },
   };
+
   return db[path] ?? null;
 }
 ```
-**Explanation:**
-This topic explains Error Handling in Catch-all Routes in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** `notFound()` is for an expected missing resource. If `loadDocContent` unexpectedly throws because a service or database fails, that exception should not be turned into a 404; an appropriate `error.tsx` boundary can handle the unexpected failure.
 
 **Key Points:**
-- Understand the core concept behind Error Handling in Catch-all Routes.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- Missing content → `notFound()`.
+- Unexpected runtime/data failures → error boundary.
+- Do not catch every exception and turn it into a 404.
 
 ### Topic 8: When to Use Catch-all vs Dynamic Routes
 
 Theory:
-Use a regular dynamic segment `[id]` when you have exactly one variable part per URL level. Use catch-all `[...slug]` when the depth is variable (1 or more segments).
+Use a regular dynamic segment `[id]` or `[slug]` when one URL level is variable. Use catch-all `[...slug]` when one or more variable segments need to be captured by the same route. Use optional catch-all `[[...slug]]` when the parent path should also be handled.
 
 Practical:
-Blog posts → `[slug]` (one level). Documentation → `[...slug]` (variable depth).
+Blog posts often use `[slug]` because the URL has one variable segment. Documentation systems often use `[...slug]` because nesting depth varies.
 
 Code Example:
 
-```
+```text
 // Fixed depth — use [slug]
 app/blog/[slug]/page.tsx     → /blog/hello-world
 
@@ -326,26 +336,31 @@ app/blog/[slug]/page.tsx     → /blog/hello-world
 app/docs/[...slug]/page.tsx  → /docs/a
                              → /docs/a/b
                              → /docs/a/b/c
+
+// Zero or more segments — use [[...slug]]
+app/wiki/[[...slug]]/page.tsx → /wiki
+                              → /wiki/javascript
+                              → /wiki/javascript/closures
 ```
-**Explanation:**
-This topic explains When to Use Catch-all vs Dynamic Routes in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** Choose the least flexible route pattern that accurately represents the URL model. A catch-all route is useful when the depth itself is part of the data model, but it should not be used merely because it is convenient.
 
 **Key Points:**
-- Understand the core concept behind When to Use Catch-all vs Dynamic Routes.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
-
+- `[slug]` captures exactly one segment at that route level.
+- `[...slug]` captures one or more segments.
+- `[[...slug]]` captures zero or more segments.
 
 ## Key Concepts
 
 - **Catch-all Route**: A route using `[...slug]` that matches one or more URL segments after the parent.
 - **Optional Catch-all Route**: A route using `[[...slug]]` that also matches the parent path with no extra segments.
-- **slug Array**: The `params.slug` value for catch-all routes is an array of the matched URL segments.
-- **Breadcrumb**: A navigational component built from the `slug` array that shows the current path hierarchy.
-- **Specificity**: Next.js prefers more specific (static or regular dynamic) routes over catch-all routes when both match.
-- **generateStaticParams for catch-all**: Returns objects with `slug` as an array of strings to pre-render catch-all paths.
-- **Content Lookup by Path**: Using the joined `slug` array as a key to look up CMS or filesystem content.
-- **notFound()**: Should be called when the catch-all path does not correspond to valid content.
+- **slug Array**: The `params.slug` value for a catch-all route is an array of matched URL segments.
+- **Breadcrumb**: A navigation component built from the `slug` array to show the current path hierarchy.
+- **Route Specificity**: More specific route patterns can take precedence over a catch-all match for the same URL.
+- **generateStaticParams**: Returns known parameter combinations for dynamic route generation; for catch-all routes, `slug` is an array.
+- **Content Lookup by Path**: Using the joined `slug` array as a key to locate CMS, database, or filesystem content.
+- **notFound()**: Used when the requested catch-all path does not correspond to valid content.
+- **Rendering Strategy**: Catch-all routing does not itself determine SSR, static rendering, dynamic rendering, caching, or revalidation.
 
 ## Visual Concept Map
 
@@ -353,25 +368,27 @@ This topic explains When to Use Catch-all vs Dynamic Routes in practical Next.js
 flowchart TD
   A[URL Request] --> B{Route Matching}
   B -->|/docs/changelog| C[Static: app/docs/changelog/page.tsx]
-  B -->|/docs/a/b/c| D[Catch-all: app/docs/...slug/page.tsx]
-  D --> E[params.slug = a, b, c]
-  E --> F[Join slug array]
-  F --> G[Look up content by path]
+  B -->|/docs/a/b/c| D[Catch-all: app/docs/[...slug]/page.tsx]
+  B -->|/docs| E[Optional: app/docs/[[...slug]]/page.tsx]
+  D --> F[params.slug = a, b, c]
+  F --> G[Look up content]
   G --> H{Content Found?}
   H -->|Yes| I[Render Documentation Page]
   H -->|No| J[notFound 404]
-  B -->|/docs optional| K[Optional Catch-all with no slug]
+  G -->|Unexpected failure| K[error.tsx boundary]
 ```
 
 ## End-to-End Practical
 
 1. Create `app/docs/[...slug]/page.tsx` with a breadcrumb and content lookup.
-2. Create a mock content database with 5 entries at different depths.
-3. Add `generateStaticParams` returning the 5 content paths.
+2. Create a mock content database with entries at different depths.
+3. Add `generateStaticParams` for the known documentation paths.
 4. Visit each URL and confirm the breadcrumb and content render.
-5. Visit an unknown URL and confirm the 404 appears.
-6. Create `app/docs/page.tsx` (or change to `[[...slug]]`) to handle the `/docs` base route.
-7. Create a static `app/docs/changelog/page.tsx` and confirm it takes priority over the catch-all.
+5. Visit an unknown URL and confirm the not-found UI appears.
+6. Create `app/docs/[[...slug]]/page.tsx` if the same route should also handle `/docs`.
+7. Create a static `app/docs/changelog/page.tsx` and confirm the explicit route handles `/docs/changelog`.
+8. Add `error.tsx` for unexpected failures rather than treating every failure as a 404.
+9. Decide caching/revalidation based on content freshness rather than the catch-all syntax itself.
 
 ## Hands-on Coding
 
@@ -388,23 +405,23 @@ type DocPage = { title: string; content: string };
 const docs: Record<string, DocPage> = {
   "getting-started": {
     title: "Getting Started",
-    content: "Install Node.js v18+ and run npx create-next-app.",
+    content: "Install a supported Node.js release and run npx create-next-app.",
   },
   "guides/routing": {
     title: "Routing Guide",
-    content: "Next.js uses file-based routing.",
+    content: "Next.js App Router uses file-system conventions for routes.",
   },
   "guides/data-fetching": {
     title: "Data Fetching",
-    content: "Use async Server Components to fetch data.",
+    content: "Server Components can fetch data on the server.",
   },
   "reference/api": {
     title: "API Reference",
-    content: "Full list of Next.js APIs.",
+    content: "Reference for Next.js APIs.",
   },
   "reference/api/route-handlers": {
     title: "Route Handlers",
-    content: "Create API endpoints with route.ts files.",
+    content: "Create HTTP endpoints with route.ts files.",
   },
 };
 
@@ -417,49 +434,52 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = docs[slug.join("/")];
-  return { title: page?.title ?? "Not Found" };
+
+  return {
+    title: page?.title ?? "Documentation",
+    description: page ? `Documentation: ${page.title}` : "Documentation",
+  };
 }
 
 export default async function DocPage({ params }: Props) {
   const { slug } = await params;
   const key = slug.join("/");
   const page = docs[key];
-  if (!page) notFound();
 
-  const crumbs = slug.map((s, i) => ({
-    label: s.replace(/-/g, " "),
-    href: "/docs/" + slug.slice(0, i + 1).join("/"),
+  if (!page) {
+    notFound();
+  }
+
+  const crumbs = slug.map((segment, index) => ({
+    label: segment.replace(/-/g, " "),
+    href: `/docs/${slug.slice(0, index + 1).join("/")}`,
   }));
 
   return (
     <div>
-      <nav
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          marginBottom: "1.5rem",
-          fontSize: "0.875rem",
-          color: "#666",
-        }}
-      >
-        <Link href="/docs" style={{ color: "#0070f3" }}>
-          Docs
-        </Link>
-        {crumbs.map((c) => (
-          <span key={c.href}>
-            {" "}
-            /{" "}
-            <Link
-              href={c.href}
-              style={{ color: "#0070f3", textTransform: "capitalize" }}
-            >
-              {c.label}
-            </Link>
-          </span>
-        ))}
+      <nav aria-label="Breadcrumb">
+        <ol>
+          <li>
+            <Link href="/docs">Docs</Link>
+          </li>
+          {crumbs.map((crumb, index) => {
+            const isCurrent = index === crumbs.length - 1;
+
+            return (
+              <li key={crumb.href}>
+                {isCurrent ? (
+                  <span aria-current="page">{crumb.label}</span>
+                ) : (
+                  <Link href={crumb.href}>{crumb.label}</Link>
+                )}
+              </li>
+            );
+          })}
+        </ol>
       </nav>
+
       <h1>{page.title}</h1>
-      <p style={{ lineHeight: 1.8 }}>{page.content}</p>
+      <p>{page.content}</p>
     </div>
   );
 }
@@ -473,7 +493,9 @@ import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{ slug?: string[] }> };
 
-const wiki: Record<string, { title: string; body: string }> = {
+type WikiPage = { title: string; body: string };
+
+const wiki: Record<string, WikiPage> = {
   "": { title: "Wiki Home", body: "Welcome to the wiki." },
   javascript: { title: "JavaScript", body: "JS is a dynamic language." },
   "javascript/closures": {
@@ -484,9 +506,13 @@ const wiki: Record<string, { title: string; body: string }> = {
 
 export default async function WikiPage({ params }: Props) {
   const { slug } = await params;
-  const key = slug ? slug.join("/") : "";
+  const key = slug?.join("/") ?? "";
   const page = wiki[key];
-  if (!page) notFound();
+
+  if (!page) {
+    notFound();
+  }
+
   return (
     <article>
       <h1>{page.title}</h1>
@@ -500,6 +526,8 @@ export default async function WikiPage({ params }: Props) {
 
 ```tsx
 // app/pages/[...slug]/page.tsx
+import { notFound } from "next/navigation";
+
 type CmsPage = { heading: string; sections: string[] };
 
 async function fetchCmsPage(path: string): Promise<CmsPage | null> {
@@ -514,6 +542,7 @@ async function fetchCmsPage(path: string): Promise<CmsPage | null> {
       sections: ["Design", "Development", "SEO"],
     },
   };
+
   return pages[path] ?? null;
 }
 
@@ -522,12 +551,16 @@ type Props = { params: Promise<{ slug: string[] }> };
 export default async function CmsPage({ params }: Props) {
   const { slug } = await params;
   const page = await fetchCmsPage(slug.join("/"));
-  if (!page) return <h1>404 — Content not found</h1>;
+
+  if (!page) {
+    notFound();
+  }
+
   return (
     <div>
       <h1>{page.heading}</h1>
-      {page.sections.map((s) => (
-        <p key={s}>{s}</p>
+      {page.sections.map((section) => (
+        <p key={section}>{section}</p>
       ))}
     </div>
   );
@@ -544,14 +577,15 @@ Steps:
 1. Create `app/help/[...slug]/page.tsx`.
 2. Create a content map with 4 articles at varying depths.
 3. Display the article title and content.
-4. Show a breadcrumb navigation from the slug array.
-5. Return 404 for unrecognised paths.
+4. Show breadcrumb navigation from the slug array.
+5. Return the not-found UI for unrecognised paths.
+6. Add an `error.tsx` boundary for unexpected failures.
 
 Expected output:
 
 - `/help/account` shows the account article.
 - `/help/billing/payments` shows the payments article.
-- `/help/billing/unknown` shows the 404 page.
+- `/help/billing/unknown` shows the not-found page.
 - Breadcrumbs render correctly for each path.
 
 ## Assessment Quiz
@@ -561,24 +595,30 @@ Expected output:
 1. What folder name syntax creates a catch-all route?
 2. What type is `params.slug` in a catch-all route?
 3. What is the difference between `[...slug]` and `[[...slug]]`?
-4. How do you provide pre-rendered paths for catch-all routes in `generateStaticParams`?
-5. What happens when both a static route and a catch-all route match a URL?
+4. How do you provide known paths for catch-all routes with `generateStaticParams`?
+5. What happens when both a static route and a catch-all route can match a URL?
+6. Does a catch-all route automatically mean SSR?
+7. When should `notFound()` be used instead of an error boundary?
 
 ### Quiz Answers
 
-1. `[...slug]` — three dots inside brackets. For example, the folder `app/docs/[...slug]/` creates a catch-all.
-2. `params.slug` is a `string[]` — an array of the URL segments after the parent path.
-3. `[...slug]` requires at least one extra segment. `[[...slug]]` is optional — it also matches the base URL with no extra segments.
-4. Return an array of objects where each object has the slug key set to an array: `[{ slug: ['a', 'b'] }, { slug: ['c'] }]`.
-5. Next.js prefers the more specific match. A static route or regular dynamic route takes priority over a catch-all for the same URL.
+1. `[...slug]` — three dots inside brackets. For example, `app/docs/[...slug]/` creates a catch-all route.
+2. `params.slug` is a `string[]` for a normal catch-all route.
+3. `[...slug]` requires at least one extra segment. `[[...slug]]` is optional and can also match the base URL with no extra segments.
+4. Return an array of objects where each `slug` value is an array, such as `[{ slug: ['a', 'b'] }, { slug: ['c'] }]`.
+5. Next.js route matching uses route specificity, so an explicit static route can handle a URL instead of a catch-all route.
+6. No. Catch-all routing defines URL matching. Rendering strategy, data access, caching, and revalidation are separate concerns.
+7. Use `notFound()` for an expected missing resource. Let unexpected failures reach `error.tsx` or another appropriate error boundary.
 
 ## Task
 
 - Build a documentation site with `[...slug]` routing for variable-depth pages.
 - Add breadcrumb navigation built from the slug array.
-- Pre-render 5 pages using `generateStaticParams`.
-- Use a static route for `/docs/changelog` that takes priority.
-- Show a 404 for unrecognised paths.
+- Provide known paths using `generateStaticParams`.
+- Use a static route for `/docs/changelog` where appropriate.
+- Show the not-found UI for unrecognised paths.
+- Add an error boundary for unexpected failures.
+- Explain separately how rendering and caching should be chosen for the documentation data.
 
 ## Self Check
 
@@ -586,33 +626,35 @@ Expected output:
 - Do you understand the difference between `[...slug]` and `[[...slug]]`?
 - Can you build a breadcrumb from the slug array?
 - Do you know how to write `generateStaticParams` for catch-all routes?
-- Have you confirmed that static routes take priority over catch-all routes?
+- Can you distinguish `notFound()` from an unexpected application error?
+- Can you explain why a catch-all route does not automatically mean SSR?
+- Can you explain how caching/revalidation is separate from route matching?
 
 ## Interview Questions and Answers
 
 ### Beginner
 
 **Question:** What is a catch-all route in Next.js and when would you use it?
-**Answer:** A catch-all route (`[...slug]`) matches any number of URL segments with a single file. Use it for documentation, wikis, or any content tree with variable depth.
+**Answer:** A catch-all route (`[...slug]`) matches one or more URL segments with a single route file. It is useful for documentation, wikis, or content trees with variable depth.
 
 **Question:** What value does `params.slug` have for a catch-all route matching `/docs/guide/setup`?
-**Answer:** It is `['guide', 'setup']` — an array of the segments after the parent `/docs/` path.
+**Answer:** It is `['guide', 'setup']` — an array containing the segments after `/docs/`.
 
 ### Middle
 
 **Question:** How does an optional catch-all differ from a regular catch-all?
-**Answer:** `[[...slug]]` also matches the parent route with no additional segments. `params.slug` is `undefined` in that case. Use it when the base path and nested paths should use the same component.
+**Answer:** `[[...slug]]` can match the parent route with no additional segments, while `[...slug]` requires at least one segment. With no segments, the optional catch-all parameter is absent.
 
 **Question:** How do you handle deeply nested content in `generateStaticParams` for catch-all routes?
-**Answer:** Return an array of objects where each `slug` value is an array representing the path segments: `{ slug: ['a', 'b', 'c'] }` represents the path `/parent/a/b/c`.
+**Answer:** Return an array of objects where each `slug` value is an array representing the path segments, such as `{ slug: ['a', 'b', 'c'] }` for `/parent/a/b/c`.
 
 ### Advanced
 
 **Question:** How would you implement a CMS-driven page builder with a catch-all route?
-**Answer:** Use `[[...slug]]` to match all CMS page paths including the root. In the page component, join the slug array to form a path key, fetch the matching CMS page object, and render the content using a flexible component system (e.g., block renderer for different content types).
+**Answer:** Capture the segment array, validate it, turn it into a safe content lookup key, fetch the CMS content on the server, enforce authorization where required, call `notFound()` for missing content, and render the CMS blocks using a controlled component mapping.
 
 **Question:** What performance considerations exist for catch-all routes with many possible paths?
-**Answer:** `generateStaticParams` with thousands of paths increases build time. Use ISR (`revalidate`) to build pages on demand and cache them, rather than pre-rendering every possible path at build time.
+**Answer:** Generating thousands of known paths can increase build work. Consider the size and freshness of the content set, generate only useful known paths, and choose appropriate caching/revalidation or on-demand behavior rather than assuming every path should be generated at build time.
 
 ## Day 7 Outcome
 
@@ -620,4 +662,6 @@ Expected output:
 - You can create both required and optional catch-all segments.
 - You can build breadcrumbs from the slug array.
 - You know how to write `generateStaticParams` for catch-all paths.
+- You can distinguish missing resources from unexpected application errors.
+- You understand that catch-all routing does not itself determine SSR, static rendering, caching, or revalidation.
 - You are ready to learn about static assets and the public folder on Day 8.

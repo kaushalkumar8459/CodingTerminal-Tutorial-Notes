@@ -11,111 +11,109 @@ track: nextjs
 
 ## Goal
 
-Understand what Next.js is, how it differs from plain React, and why it is a popular choice for modern web applications.
+Understand what Next.js is, how it differs from plain React, how the App Router works at a high level, and why Next.js is widely used for modern production web applications.
 
 ## Prerequisites
 
 - Basic JavaScript knowledge
-- Node.js installed (v18+)
+- Node.js installed (Next.js 16 requires Node.js 20.9 or later)
 - VS Code installed
 
 ## Explanation
 
-Next.js is a React framework built by Vercel that adds powerful features on top of React — things React alone does not provide out of the box. When you write a plain React app, you get a Single Page Application (SPA) that runs entirely in the browser. This works well for dashboards and internal tools, but it has limitations for public-facing sites: poor SEO because search engines see an empty HTML shell, slow initial load because JavaScript must download and run before anything appears, and no built-in routing or data fetching conventions.
+Next.js is a React framework created by Vercel. React provides the component model and UI primitives, while Next.js provides an application framework around React with routing, server and client rendering capabilities, data-fetching conventions, optimization features, and server-side application features.
 
-Next.js solves these problems by offering server-side rendering (SSR), static site generation (SSG), and the newer App Router with React Server Components. With SSR, the HTML is generated on the server for every request so the browser gets a fully-formed page immediately — great for SEO and perceived performance. With SSG, pages are pre-built at deploy time into static HTML files that can be served from a CDN at blazing speed.
+A plain React application can be built as a client-rendered application, but React itself does not prescribe the complete application architecture. You may need to choose and configure routing, data fetching, code splitting, rendering, SEO metadata, and deployment patterns yourself. Next.js provides conventions for these concerns so teams can build and maintain production applications with less application-level plumbing.
 
-Beyond rendering, Next.js gives you file-based routing (no need to install React Router), API routes so you can write backend logic in the same project, image and font optimisation built-in, TypeScript support with zero config, and a rich ecosystem of official examples. This is why Next.js has become the de-facto standard for production React applications.
+Next.js supports multiple rendering approaches. A route can be statically rendered when its data and runtime behavior allow it, rendered dynamically when request-time information is required, or combine static and dynamic portions using features such as Suspense and Cache Components. Rendering strategy and caching strategy are related, but they are not the same thing. For example, a request can be rendered dynamically while selected data or components are cached, and revalidation controls when cached content becomes stale.
+
+The App Router uses React Server Components by default. Server Components can run on the server and can access server-only resources without sending their implementation JavaScript to the browser. A component that needs browser APIs, event handlers, or client hooks such as `useState` and `useEffect` can opt into the client boundary with `"use client"`. This server/client model helps keep browser JavaScript smaller when used deliberately.
+
+Beyond rendering and components, Next.js provides file-system routing, layouts, loading and error UI conventions, Route Handlers, metadata APIs, `next/image`, `next/font`, environment-variable support, navigation utilities, and deployment options. Next.js 16 is the current major release line used by this tutorial; always check the official release notes when working with version-specific behavior because the framework evolves quickly.
 
 ## Topic by Topic
 
 ### Topic 1: React vs Next.js
 
 Theory:
-React is a UI library — it only handles the view layer. Next.js is a full-stack React framework that adds routing, data fetching, server rendering, and more on top of React.
+React is a library for building user interfaces. Next.js is a React framework that provides an application structure and features around React, including routing, server/client rendering, data-fetching patterns, optimization, and server-side capabilities. Next.js does not replace React; it uses React as its UI foundation.
 
 Practical:
-Think of React as an engine and Next.js as the complete car — it includes the engine (React) plus the chassis, transmission, and navigation system.
+Think of React as the UI building system and Next.js as an application framework that provides the surrounding architecture. With plain React, you choose more pieces yourself. With Next.js, many common web-application concerns have established conventions.
 
 Code Example:
 
 ```jsx
-// Plain React app - you manage routing, data fetching, etc. yourself
-import { useState, useEffect } from "react";
+// Plain React component - data is requested from the browser
+import { useEffect, useState } from "react";
 
 export default function App() {
   const [data, setData] = useState(null);
 
-  // Must manually fetch data on component load
   useEffect(() => {
     fetch("/api/data")
-      .then((r) => r.json())
-      .then(setData);
+      .then((response) => response.json())
+      .then(setData)
+      .catch(console.error);
   }, []);
 
   return <div>{data ? data.message : "Loading..."}</div>;
 }
 ```
 
-**Explanation:** In plain React (without a framework), you must handle routing, data fetching, code splitting, and more yourself. This works but requires more boilerplate. Next.js provides these features out of the box.
+**Explanation:** This example shows one common client-side React pattern: the browser makes the request after the component mounts. In a Next.js App Router application, data can instead be fetched in a Server Component when appropriate, or through a Route Handler, Server Function/Action, or client-side request depending on the application requirement. Next.js gives you these choices rather than forcing every request into one pattern.
 **Key Points:**
-- Understand the core concept behind React vs Next.js.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+- React focuses on UI; Next.js provides a broader application framework around React.
+- Next.js can move appropriate work from the browser to the server.
+- Choose the data-fetching and rendering approach based on freshness, interactivity, security, and performance requirements.
 
 
 ### Topic 2: Server-side Rendering (SSR)
 
 Theory:
-With SSR, Next.js runs your React components on the server and sends ready-made HTML to the browser. This means faster first paint and better SEO.
+Server-side rendering means generating the HTML for a request on the server rather than relying entirely on the browser to construct the initial UI. SSR is a rendering strategy, not simply a particular `fetch` option. A dynamically rendered route may use request-specific information such as cookies, headers, or uncached data and produce HTML for that request.
 
 Practical:
-Every time a user visits the page, the server fetches fresh data and renders HTML before sending the response.
+Use dynamic server rendering when the response needs request-time information or data that should be resolved for the current request. Do not assume that every Server Component is SSR: Server Components can also participate in statically rendered or cached output.
 
 Code Example:
 
 ```tsx
-// app/page.tsx — Server Component fetches data on the server
-async function getData() {
-  // This runs on the server, not the browser
-  const res = await fetch("https://api.example.com/posts", {
-    cache: "no-store", // Fetch fresh data every time
-  });
-  return res.json();
-}
+// app/page.tsx — Server Component using request-time data
+import { headers } from "next/headers";
 
 export default async function Page() {
-  const posts = await getData(); // Data fetched before rendering
+  const requestHeaders = await headers();
+  const userAgent = requestHeaders.get("user-agent") ?? "unknown";
 
   return (
-    <ul>
-      {posts.map((p: { id: number; title: string }) => (
-        <li key={p.id}>{p.title}</li>
-      ))}
-    </ul>
+    <main>
+      <h1>Request Information</h1>
+      <p>User-Agent: {userAgent}</p>
+    </main>
   );
 }
 ```
 
-**Explanation:** Next.js Server Components fetch data on the server before rendering. The user receives fully-formed HTML immediately (good for SEO). No client-side loading spinner needed. The `cache: "no-store"` option prevents caching so fresh data loads each time.
+**Explanation:** Reading request-specific information such as headers makes the route depend on the incoming request. This is different from saying that `cache: "no-store"` defines SSR. Caching, revalidation, and rendering determine different parts of the application's behavior. Server Components also do not automatically mean that a new HTML document is generated for every request.
 **Key Points:**
-- Understand the core concept behind Server-side Rendering (SSR).
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+- SSR describes server-side HTML generation for a request.
+- Server Components and SSR are related but not synonymous concepts.
+- Rendering strategy and caching strategy should be considered separately.
 
 
 ### Topic 3: Static Site Generation (SSG)
 
 Theory:
-With SSG, pages are built into static HTML at build time. These files are then served from a CDN — extremely fast and cheap to host.
+Static rendering means Next.js can produce route output ahead of a request when the route's code and data allow it. This is useful for content that does not need to be generated uniquely for every request, such as many documentation, marketing, and public content pages.
 
 Practical:
-Use SSG for content that does not change on every request: marketing pages, blog posts, documentation.
+Use static rendering when content can be shared safely between requests and does not require request-time information. A statically rendered route can still be revalidated or contain dynamic portions when using the appropriate Next.js features.
 
 Code Example:
 
 ```tsx
-// app/about/page.tsx — no dynamic fetching, builds to static HTML
+// app/about/page.tsx — simple route with no request-time dependency
 export default function AboutPage() {
   return (
     <main>
@@ -126,48 +124,51 @@ export default function AboutPage() {
 }
 ```
 
-**Explanation:** This page has no dynamic data, so Next.js builds it to static HTML at deploy time. The HTML is served instantly from a CDN - no server rendering needed per request. This is the fastest option for static content.
+**Explanation:** This route has no request-specific data or browser-only behavior, so it is a good candidate for static rendering. Static rendering is not the same as saying that every page is permanently frozen at build time. Data fetching, revalidation, dynamic APIs, and Cache Components can change how a route is produced and kept fresh.
 **Key Points:**
-- Understand the core concept behind Static Site Generation (SSG).
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+- Static rendering is ideal when output can be shared across requests.
+- Static and dynamic behavior depends on the route's data and runtime characteristics.
+- Revalidation can provide freshness without requiring every request to rebuild the entire page.
 
 
 ### Topic 4: File-based Routing
 
 Theory:
-In Next.js, the folder structure inside the `app/` directory defines the URL structure automatically. No need to configure a router.
+In the App Router, folders and special files inside the `app/` directory define the route hierarchy. A `page.tsx` file makes a route publicly accessible. Folders can represent URL segments, while special files such as `layout.tsx`, `loading.tsx`, `error.tsx`, and `not-found.tsx` provide additional route behavior.
 
 Practical:
-Create `app/about/page.tsx` and Next.js automatically creates the `/about` route.
+Create `app/about/page.tsx` and Next.js creates the `/about` route. Create `app/blog/[slug]/page.tsx` for dynamic blog URLs such as `/blog/hello-nextjs`.
 
 Code Example:
 
 ```
 app/
-  page.tsx          → /           (homepage)
+  page.tsx                 → /
   about/
-    page.tsx        → /about      (nested route)
+    page.tsx               → /about
   blog/
-    page.tsx        → /blog       (blog list)
+    page.tsx               → /blog
     [slug]/
-      page.tsx      → /blog/:slug (dynamic blog post)
+      page.tsx             → /blog/:slug
+  api/
+    hello/
+      route.ts             → /api/hello
 ```
 
-**Explanation:** File structure automatically creates routes. No router configuration needed. Each folder becomes a URL segment. `[slug]` creates a dynamic segment. This structure mirrors the URL hierarchy naturally.
+**Explanation:** File structure defines routes in the App Router, so a separate client-side router configuration is normally unnecessary. Dynamic segments such as `[slug]` capture values from the URL. Route Handlers use `route.ts` rather than `page.tsx` because they return HTTP responses instead of UI.
 **Key Points:**
-- Understand the core concept behind File-based Routing.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+- `page.tsx` defines a UI route in the App Router.
+- `[slug]` creates a dynamic route segment.
+- `route.ts` defines an HTTP Route Handler and is distinct from a UI page.
 
 
 ### Topic 5: App Router vs Pages Router
 
 Theory:
-Next.js has two routing systems. The older Pages Router (`pages/` directory) and the newer App Router (`app/` directory) introduced in Next.js 13. The App Router supports React Server Components and is the recommended approach today.
+Next.js has two routing systems. The App Router uses the `app/` directory and is the recommended approach for new applications. The older Pages Router uses the `pages/` directory and remains important when maintaining existing applications. The App Router is built around React Server Components, nested layouts, streaming, and newer routing capabilities.
 
 Practical:
-New projects should use the App Router. You may encounter the Pages Router in older codebases.
+Use the App Router for new projects unless a project requirement specifically calls for the Pages Router. When reading an existing codebase, identify which router it uses before applying APIs because data fetching and routing conventions differ.
 
 Code Example:
 
@@ -177,27 +178,27 @@ export default function Home() {
   return <h1>Home (App Router)</h1>;
 }
 
-// Pages Router equivalent: pages/index.tsx
+// Pages Router: pages/index.tsx
 export default function Home() {
   return <h1>Home (Pages Router)</h1>;
 }
 ```
-**Explanation:**
-This topic explains App Router vs Pages Router in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** Both examples create a homepage, but they belong to different routing systems. Pages Router applications commonly use APIs such as `getServerSideProps` and `getStaticProps`; these are Pages Router concepts and should not be copied into an App Router page. App Router applications instead use Server Components, route conventions, and modern server/client APIs.
 
 **Key Points:**
-- Understand the core concept behind App Router vs Pages Router.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+- App Router uses `app/`; Pages Router uses `pages/`.
+- Prefer App Router for new applications.
+- Do not mix router-specific APIs without understanding which routing system they belong to.
 
 
 ### Topic 6: API Routes
 
 Theory:
-Next.js lets you write backend API endpoints inside the same project using Route Handlers in the App Router. No separate server needed.
+In the App Router, backend HTTP endpoints are called **Route Handlers** and are defined with `route.ts` or `route.js`. They can implement HTTP methods such as `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`. Pages Router applications use `pages/api/*` API Routes instead.
 
 Practical:
-Create `app/api/hello/route.ts` and it becomes a REST endpoint at `/api/hello`.
+Create `app/api/hello/route.ts` and expose a `GET` endpoint at `/api/hello`. For a real application, validate input, authenticate and authorize protected operations, and avoid returning sensitive server data.
 
 Code Example:
 
@@ -206,84 +207,108 @@ Code Example:
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  return NextResponse.json({ message: "Hello from Next.js API!" });
+  return NextResponse.json({ message: "Hello from a Next.js Route Handler!" });
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+
+  if (!body?.name || typeof body.name !== "string") {
+    return NextResponse.json(
+      { error: "name is required" },
+      { status: 400 }
+    );
+  }
+
+  return NextResponse.json({ message: `Hello, ${body.name}` }, { status: 201 });
 }
 ```
-**Explanation:**
-This topic explains API Routes in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** A Route Handler is server-side code that returns an HTTP response. It is useful when a browser, mobile application, webhook, or another service needs an HTTP endpoint. A Route Handler is not automatically a database layer or authentication system, so production endpoints should include appropriate validation, authorization, rate limiting, and error handling.
 
 **Key Points:**
-- Understand the core concept behind API Routes.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+- App Router uses Route Handlers in `route.ts` files.
+- HTTP methods are exported as functions such as `GET` and `POST`.
+- Validate and authorize incoming requests before performing protected operations.
 
 
 ### Topic 7: Deployment and Vercel
 
 Theory:
-Next.js is created by Vercel and deploys to Vercel with zero configuration. It also supports deployment to any Node.js server or as a Docker container.
+Next.js is created and maintained by Vercel, and Vercel provides a highly integrated deployment platform for Next.js applications. Next.js can also be deployed to other supported environments, including Node.js servers and container-based infrastructure, depending on the application's features and hosting requirements.
 
 Practical:
-Push your code to GitHub, connect the repo to Vercel, and your app is live in minutes with automatic deployments on every push.
+A common workflow is to push the application to GitHub and connect the repository to a deployment platform. Before production deployment, test the production build, configure environment variables securely, and verify that external services, image sources, authentication, and caching behave correctly.
 
 Code Example:
 
 ```bash
-# Deploy with Vercel CLI
+# Create a production build locally
+npm run build
+
+# Run the production server locally
+npm start
+
+# Optional: deploy with the Vercel CLI
 npx vercel
-# Or push to GitHub and connect at vercel.com
 ```
-**Explanation:**
-This topic explains Deployment and Vercel in practical Next.js terms so you can build correct routing, rendering, and data flow patterns in real applications.
+
+**Explanation:** Deployment is more than uploading static files. Applications using server rendering, Route Handlers, authentication, or other server features need a compatible runtime and correctly configured environment variables. Never commit secrets such as database passwords or API keys to source control.
 
 **Key Points:**
-- Understand the core concept behind Deployment and Vercel.
-- Apply it with the right Next.js feature and defaults.
-- Watch for common mistakes that affect performance, SEO, or maintainability.
+- Vercel provides first-class Next.js deployment support, but it is not the only deployment option.
+- Test `next build` and the production server before deployment.
+- Keep secrets in environment configuration rather than source code.
 
 
 ## Key Concepts
 
-- **Framework**: A structured set of tools and conventions built on top of a library (Next.js is a framework built on React).
-- **SSR (Server-Side Rendering)**: HTML is generated on the server per request, giving fast first paint and SEO benefits.
-- **SSG (Static Site Generation)**: HTML is generated at build time and served as static files from a CDN.
-- **App Router**: The modern Next.js routing system based on the `app/` directory and React Server Components.
-- **React Server Components (RSC)**: Components that run only on the server, reducing JavaScript sent to the browser.
-- **File-based Routing**: Routes are determined by the file and folder structure, not manual configuration.
-- **Route Handler**: A server-side API endpoint defined as a file inside `app/api/`.
-- **Hydration**: The process where React attaches event listeners to server-rendered HTML in the browser.
+- **Framework**: A structured application framework built around React; Next.js provides conventions for routing, rendering, data access, optimization, and deployment.
+- **SSR (Server-Side Rendering)**: Rendering HTML for a request on the server; SSR is a rendering strategy, not a synonym for `fetch({ cache: "no-store" })`.
+- **Static Rendering / SSG**: Producing route output ahead of requests when the route can be shared safely; data can also be revalidated when freshness is required.
+- **Dynamic Rendering**: Rendering that depends on request-time information or other dynamic runtime behavior.
+- **App Router**: The modern routing system based on the `app/` directory and React Server Components.
+- **React Server Components (RSC)**: Components that can run on the server and keep their implementation out of the browser JavaScript bundle.
+- **Client Component**: A component marked with `"use client"` when it needs client-side interactivity, browser APIs, or client React hooks.
+- **File-based Routing**: Routes are defined by the file and folder conventions in the selected Next.js router.
+- **Route Handler**: A server-side HTTP endpoint defined with `route.ts` in the App Router.
+- **Hydration**: The client-side React process that attaches behavior to server-rendered UI where client components are involved.
+- **Revalidation**: A mechanism for refreshing cached or pre-rendered data/output according to a freshness policy.
 
 ## Visual Concept Map
 
 ```mermaid
 flowchart TD
-  A[User Browser] -->|HTTP Request| B[Next.js Server]
-  B --> C{Rendering Strategy}
-  C -->|SSR| D[Render on Server per Request]
-  C -->|SSG| E[Serve Pre-built HTML from CDN]
-  C -->|CSR| F[Send JS Bundle to Browser]
-  D --> G[Send HTML + Hydrate]
+  A[User Browser] -->|Request| B[Next.js Application]
+  B --> C{Route / Rendering Needs}
+  C -->|Static-capable| D[Static or Cached Output]
+  C -->|Request-time data| E[Dynamic Server Rendering]
+  C -->|Interactive UI| F[Client Component]
+  D --> G[HTML + RSC Payload]
   E --> G
-  F --> H[Browser Renders]
-  G --> I[Fast First Paint + SEO]
-  H --> J[SPA Behaviour]
+  G --> H[Browser]
+  F --> I[Client JavaScript + Hydration]
+  H --> I
+  B --> J[Route Handler]
+  J --> K[HTTP Response]
 ```
 
 ## End-to-End Practical
 
-1. Visit the official Next.js website at nextjs.org and read the "Why Next.js" section.
-2. Compare a plain Create React App output in the browser DevTools (view source) vs a Next.js app — notice the difference in the HTML sent.
-3. Create a new Next.js project with `npx create-next-app@latest my-app` and choose the App Router option.
-4. Open the `app/page.tsx` file and observe the default server component structure.
-5. Run `npm run dev` and open `http://localhost:3000` — notice the page loads instantly with pre-rendered HTML.
-6. View the page source and observe that the HTML is fully populated (unlike a plain React SPA).
-7. Open DevTools Network tab and inspect the initial HTML response to understand what the server sends.
+1. Visit the official Next.js website and read the current "Why Next.js" and App Router documentation.
+2. Create a new Next.js project with `npx create-next-app@latest my-app` and use the App Router.
+3. Open `app/page.tsx` and observe that an App Router component is a Server Component by default.
+4. Create `app/about/page.tsx` and verify that `/about` is created from the folder structure.
+5. Add `app/api/hello/route.ts` and call `/api/hello` from the browser or an API client.
+6. Run `npm run dev` and inspect the browser Network tab to distinguish document requests, JavaScript, and other requests.
+7. Run `npm run build` followed by `npm start` to test the production build locally.
+8. Compare a static page with a page that reads request-time information and discuss why their rendering behavior can differ.
 
 ## Hands-on Coding
 
 ### Example 1: Your First Next.js Page
 
-Create a simple homepage that shows a welcome message.
+Create a simple homepage and observe the default Server Component behavior.
 
 ```tsx
 // app/page.tsx
@@ -291,7 +316,7 @@ export default function HomePage() {
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>Welcome to My Next.js App</h1>
-      <p>This page was rendered on the server.</p>
+      <p>This App Router page is a Server Component by default.</p>
     </main>
   );
 }
@@ -299,16 +324,18 @@ export default function HomePage() {
 
 ### Example 2: Adding a Second Page
 
-Add an About page to understand file-based routing.
+Add an About page and use Next.js `Link` for internal navigation.
 
 ```tsx
 // app/about/page.tsx
+import Link from "next/link";
+
 export default function AboutPage() {
   return (
     <main style={{ padding: "2rem" }}>
       <h1>About</h1>
-      <p>Next.js automatically creates routes from files.</p>
-      <a href="/">← Back to Home</a>
+      <p>Next.js automatically creates routes from the App Router file structure.</p>
+      <Link href="/">← Back to Home</Link>
     </main>
   );
 }
@@ -316,7 +343,7 @@ export default function AboutPage() {
 
 ### Example 3: A Simple API Route
 
-Create a GET endpoint that returns JSON data.
+Create a GET endpoint that returns JSON data. The endpoint runs on the server.
 
 ```tsx
 // app/api/status/route.ts
@@ -326,7 +353,7 @@ export async function GET() {
   return NextResponse.json({
     status: "ok",
     framework: "Next.js",
-    version: 14,
+    version: "16.x",
     timestamp: new Date().toISOString(),
   });
 }
@@ -335,86 +362,90 @@ export async function GET() {
 ## Mini Exercise
 
 Scenario:
-You want to understand the difference between what a browser receives from a Next.js app vs a plain React app.
+You want to understand the difference between static/server-generated HTML and a fully client-rendered application.
 
 Steps:
 
-1. Create a new Next.js app with `npx create-next-app@latest mini-exercise --typescript --app --no-tailwind`.
+1. Create a new Next.js app with `npx create-next-app@latest mini-exercise` and choose the App Router.
 2. Run `npm run dev` and open `http://localhost:3000`.
 3. Right-click the page and choose "View Page Source".
-4. Look for the `<h1>` tag — you should see it in the raw HTML (SSR/SSG).
-5. Compare this to a CRA app where the body is just `<div id="root"></div>`.
+4. Look for the visible page content in the returned document HTML.
+5. Open DevTools and inspect the Network tab to see the document request and subsequent resources.
+6. Remember that seeing HTML in the response does not by itself prove that every part of the route used SSR; Next.js can statically render, dynamically render, and stream different portions depending on the route.
 
 Expected output:
 
-- The Next.js page source contains visible text content in the HTML.
-- The `<h1>` heading is present in the raw HTML source.
-- This confirms the server sent pre-rendered HTML, not just a JS bundle.
+- The Next.js page source contains useful HTML content for the rendered page.
+- The page is not simply an empty `<div id="root"></div>` shell.
+- You can explain that HTML generation, client hydration, and caching are separate concepts.
 
 ## Assessment Quiz
 
 ### Quiz Questions
 
 1. What does Next.js add on top of React?
-2. What is the difference between SSR and SSG?
+2. What is the difference between SSR and static rendering?
 3. Which directory does the App Router use?
-4. How does file-based routing work in Next.js?
-5. What is a Route Handler in the App Router?
+4. What is the difference between a `page.tsx` file and a `route.ts` file?
+5. Are Server Components and SSR exactly the same concept?
 
 ### Quiz Answers
 
-1. Next.js adds server-side rendering, static generation, file-based routing, API routes, image/font optimisation, and more on top of React.
-2. SSR generates HTML on the server per request; SSG generates HTML at build time and serves static files. SSR is fresher, SSG is faster to serve.
+1. Next.js adds application-level conventions and features such as routing, server/client rendering, data-fetching patterns, Route Handlers, metadata, and performance optimizations on top of React.
+2. SSR generates HTML in response to a request, while static rendering produces reusable route output ahead of individual requests when the route allows it. Revalidation can be used when freshness is needed.
 3. The App Router uses the `app/` directory.
-4. Each folder inside `app/` maps to a URL segment. A `page.tsx` file inside that folder makes it a publicly accessible route.
-5. A Route Handler is a server-side API endpoint defined in a `route.ts` file inside `app/api/` (or any folder), handling HTTP methods like GET and POST.
+4. `page.tsx` defines a UI route, while `route.ts` defines an HTTP Route Handler that returns a response.
+5. No. Server Components are a React architecture in which components can execute on the server. They can participate in statically rendered, dynamically rendered, or streamed output; they are not automatically equivalent to SSR.
 
 ## Task
 
 - Create a Next.js project using `create-next-app` with TypeScript and the App Router.
-- Add a `/about` page and a `/contact` page.
-- Create an API route at `/api/hello` that returns `{ message: "Hello World" }`.
-- View the page source of each page to confirm server-rendered HTML.
-- Read the official Next.js "Getting Started" docs page.
+- Add an `/about` page and a `/contact` page.
+- Create an App Router Route Handler at `/api/hello` that returns `{ message: "Hello World" }`.
+- Replace any raw internal `<a href>` navigation with `next/link` where client-side Next.js navigation is appropriate.
+- Inspect the page source and Network tab, and explain what is rendered on the server and what is hydrated in the browser.
+- Run a production build and identify which routes are static or dynamic in the build output.
 
 ## Self Check
 
-- Can you explain what SSR and SSG mean in plain words?
-- Do you know how file-based routing works in the `app/` directory?
-- Have you successfully created a Next.js project and run it locally?
-- Do you understand why Next.js is preferred over plain React for production apps?
-- Can you create a basic API route that returns JSON?
+- Can you explain what Next.js provides beyond React?
+- Can you distinguish SSR, static rendering, dynamic rendering, caching, and revalidation?
+- Do you know that App Router Server Components are the default?
+- Do you know when `"use client"` is required?
+- Can you explain the difference between `page.tsx` and `route.ts`?
+- Can you create a basic Route Handler that returns JSON?
 
 ## Interview Questions and Answers
 
 ### Beginner
 
 **Question:** What is Next.js and how does it differ from React?
-**Answer:** Next.js is a React framework that adds server-side rendering, file-based routing, API routes, and optimisations. React is a library for building UI; Next.js is the full toolkit for building production web apps with React.
+**Answer:** React is a UI library for building components, while Next.js is a React framework that adds application-level conventions and features such as routing, server/client rendering, data-fetching patterns, optimization, metadata, and server-side capabilities.
 
 **Question:** What is the difference between client-side rendering and server-side rendering?
-**Answer:** In CSR, the browser downloads a JavaScript bundle and renders HTML on the client. In SSR, the server renders HTML and sends it to the browser — the user sees content faster and search engines can crawl it.
+**Answer:** In client-side rendering, the browser performs the main UI rendering work using JavaScript. In server-side rendering, the server generates HTML for the request and sends that HTML to the browser. A Next.js application can use both server and client rendering patterns, and a single route can contain both Server and Client Components.
 
 ### Middle
 
-**Question:** When would you choose SSG over SSR in Next.js?
-**Answer:** Choose SSG when content does not change per request (e.g. blog posts, marketing pages) — it gives maximum performance via CDN. Choose SSR when you need fresh data on every request (e.g. dashboards, personalised pages).
+**Question:** When would you choose static rendering over dynamic rendering in Next.js?
+**Answer:** Prefer static or cached output when content can safely be shared between requests and does not require request-time information. Use dynamic rendering when the result depends on request-specific data or runtime information. Revalidation and Cache Components can provide controlled freshness and a mixture of static and dynamic behavior.
 
 **Question:** What are React Server Components and how does Next.js use them?
-**Answer:** RSCs are React components that run only on the server. They can fetch data directly, access databases, and do not send JavaScript to the browser. Next.js App Router makes all components Server Components by default.
+**Answer:** Server Components can execute on the server and their implementation does not become browser JavaScript. They can perform server-side data access and compose UI without requiring `"use client"`. Next.js App Router uses Server Components by default. Components that need browser APIs, event handlers, or client hooks can be marked with `"use client"`.
 
 ### Advanced
 
-**Question:** Explain the hydration process and potential hydration mismatch errors.
-**Answer:** Hydration is when React attaches event handlers and state to server-rendered HTML in the browser. A mismatch error occurs when the server-rendered HTML differs from what React tries to render on the client — this can happen with dates, random values, or incorrect `use client` usage.
+**Question:** Explain hydration and potential hydration mismatch errors.
+**Answer:** Hydration is the client-side process that attaches React behavior to server-rendered UI for Client Components. A mismatch can occur when the server and browser produce different initial markup, for example because of non-deterministic values, browser-only APIs used during render, or different conditional output. Keep the initial server and client render consistent and isolate browser-only behavior to appropriate client-side effects or components.
 
 **Question:** How does the App Router differ architecturally from the Pages Router?
-**Answer:** The App Router is built around React Server Components and uses nested layouts with the `layout.tsx` file. It supports streaming, Suspense boundaries, and parallel/intercepting routes natively. The Pages Router uses `getServerSideProps`/`getStaticProps` functions and does not support RSC.
+**Answer:** The App Router uses the `app/` directory and is built around React Server Components, nested layouts, streaming, Suspense, and modern routing conventions. The Pages Router uses the `pages/` directory and legacy APIs such as `getServerSideProps` and `getStaticProps`. Both are valid routing systems, but App Router is the preferred approach for new applications.
 
 ## Day 1 Outcome
 
-- You understand what Next.js is and why it exists.
-- You can explain the difference between SSR, SSG, and CSR.
-- You know how the App Router's file-based routing works at a high level.
+- You understand what Next.js provides on top of React.
+- You can explain the difference between static rendering, dynamic rendering, SSR, CSR, caching, and revalidation at a high level.
+- You know that App Router uses Server Components by default and when `"use client"` is needed.
+- You understand the difference between App Router Route Handlers and Pages Router API Routes.
 - You have created and run a Next.js project locally.
 - You are ready to dive into project setup in Day 2.
