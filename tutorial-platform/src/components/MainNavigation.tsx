@@ -136,7 +136,7 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
           <Link
             to="/login"
             className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-cyan-50 sm:text-sm"
-          >
+          hidden>
             Login
           </Link>
         )}
