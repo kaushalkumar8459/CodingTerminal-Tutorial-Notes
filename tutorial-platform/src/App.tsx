@@ -8,6 +8,7 @@ import { getTrackLabel, isTrackKey } from "./data/tracks";
 import { getTutorialsByTrack } from "./data/tutorials";
 import { AdminPage } from "./pages/AdminPage";
 import { LoginPage } from "./pages/LoginPage";
+import { TextToSpeechPage } from "./pages/TextToSpeechPage";
 import { TutorialPage } from "./pages/TutorialPage";
 import { UnauthorizedPage } from "./pages/UnauthorizedPage";
 
@@ -92,6 +93,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      <Route path="/tools/text-to-speech" element={<TextToSpeechPage />} />
       <Route
         path="/admin"
         element={
