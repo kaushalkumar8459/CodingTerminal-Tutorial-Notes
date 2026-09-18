@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-const MAX_LEN = 5000;
+const MAX_LEN = 10000;
 const FEMALE_HINTS = ["female", "zira", "susan", "samantha", "victoria", "hazel", "aria", "jenny", "karen", "moira", "tessa"];
 const MALE_HINTS = ["male", "david", "mark", "daniel", "alex", "fred", "george", "guy", "james"];
 

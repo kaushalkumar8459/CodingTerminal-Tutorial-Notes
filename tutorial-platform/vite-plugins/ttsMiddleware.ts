@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import type { IncomingMessage } from "node:http";
 import type { Plugin } from "vite";
 
-const MAX_TEXT_LENGTH = 5000;
+const MAX_TEXT_LENGTH = 10000;
 
 type Language = "english" | "hindi";
 
