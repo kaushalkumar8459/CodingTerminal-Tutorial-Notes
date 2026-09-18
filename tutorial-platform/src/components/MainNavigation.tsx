@@ -109,6 +109,13 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
       </div>
 
       <div className="flex flex-wrap items-center justify-end gap-2 px-1">
+        <Link
+          to="/tools/text-to-speech"
+          className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-cyan-50 sm:text-sm"
+        >
+          🔊 Text to Speech
+        </Link>
+
         {isAuthenticated ? (
           <span className="rounded-lg bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600 sm:text-xs">
             {user?.role === "admin" ? "Admin" : "User"}: {user?.username}
