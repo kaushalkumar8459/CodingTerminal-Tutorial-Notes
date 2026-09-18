@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const MAX_LEN = 5000;
 const FEMALE_HINTS = ["female", "zira", "susan", "samantha", "victoria", "hazel", "aria", "jenny", "karen", "moira", "tessa"];
@@ -131,7 +132,13 @@ export function TextToSpeechPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,#ecfeff,#fff8e7_42%,#eef2ff)] text-slate-900">
       <div className="mx-auto max-w-2xl px-4 py-8 sm:py-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">Tools</p>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-slate-600 transition hover:text-cyan-700"
+        >
+          ← Back to Home
+        </Link>
+        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">Tools</p>
         <h1 className="mt-2 text-2xl font-extrabold text-slate-950 sm:text-3xl">🔊 Text to Speech</h1>
         <p className="mt-2 text-sm leading-6 text-slate-700">
           Type some text, choose a voice, then preview it in your browser or download it as a real audio file.
