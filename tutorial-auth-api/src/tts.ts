@@ -1,14 +1,14 @@
 import os from "node:os";
 import fs from "node:fs/promises";
-import type { IncomingMessage } from "node:http";
-import type { Plugin } from "vite";
+
+type Language = "english" | "hindi";
+type Gender = "male" | "female";
+type TextChunk = { text: string; bold: boolean };
 
 const MAX_TEXT_LENGTH = 10000;
 
-type Language = "english" | "hindi";
-
 // Newest-generation Microsoft neural voices, tuned for the most natural, human-like prosody.
-const VOICES: Record<Language, Record<"male" | "female", string>> = {
+const VOICES: Record<Language, Record<Gender, string>> = {
   english: {
     male: "en-US-AndrewMultilingualNeural",
     female: "en-US-AvaMultilingualNeural",
@@ -18,8 +18,6 @@ const VOICES: Record<Language, Record<"male" | "female", string>> = {
     female: "hi-IN-SwaraNeural",
   },
 };
-
-type TextChunk = { text: string; bold: boolean };
 
 // Emoji/pictographs aren't speakable and can make the free endpoint return an empty audio stream.
 function stripEmoji(text: string): string {
@@ -99,96 +97,25 @@ async function synthesizeChunks(
   return Buffer.concat(buffers);
 }
 
-function readJsonBody(req: IncomingMessage): Promise<Record<string, unknown>> {
-  return new Promise((resolve, reject) => {
-    let raw = "";
-    req.on("data", (chunk: Buffer) => {
-      raw += chunk.toString();
-    });
-    req.on("end", () => {
-      try {
-        resolve(raw ? JSON.parse(raw) : {});
-      } catch {
-        reject(new Error("Invalid JSON body."));
-      }
-    });
-    req.on("error", reject);
-  });
-}
+export async function synthesizeSpeech(
+  text: string,
+  gender: Gender,
+  language: Language,
+  rate: string,
+): Promise<Buffer> {
+  if (text.length > MAX_TEXT_LENGTH) {
+    throw new Error(`Text must be ${MAX_TEXT_LENGTH} characters or fewer.`);
+  }
 
-export function ttsMiddlewarePlugin(): Plugin {
-  return {
-    name: "tts-middleware",
-    configureServer(server) {
-      server.middlewares.use("/api/tts", async (req, res) => {
-        if (req.method !== "POST") {
-          res.statusCode = 405;
-          res.end("Method Not Allowed");
-          return;
-        }
+  const voice = VOICES[language][gender];
+  const { OUTPUT_FORMAT } = await import("msedge-tts");
+  const chunks = splitIntoChunks(text);
+  if (chunks.length === 0) chunks.push({ text, bold: false });
 
-        try {
-          const body = await readJsonBody(req);
-          const text = typeof body.text === "string" ? body.text.trim() : "";
-          const gender = body.gender === "female" ? "female" : "male";
-          const language: Language =
-            body.language === "hindi" ? "hindi" : "english";
-          const rate =
-            typeof body.rate === "string" && /^[+-]\d+%$/.test(body.rate)
-              ? body.rate
-              : "+0%";
-
-          if (!text) {
-            res.statusCode = 400;
-            res.setHeader("Content-Type", "application/json");
-            res.end(JSON.stringify({ error: "Text is required." }));
-            return;
-          }
-          if (text.length > MAX_TEXT_LENGTH) {
-            res.statusCode = 400;
-            res.setHeader("Content-Type", "application/json");
-            res.end(
-              JSON.stringify({
-                error: `Text must be ${MAX_TEXT_LENGTH} characters or fewer.`,
-              }),
-            );
-            return;
-          }
-
-          const voice = VOICES[language][gender];
-          const { OUTPUT_FORMAT } = await import("msedge-tts");
-          const chunks = splitIntoChunks(text);
-          if (chunks.length === 0) chunks.push({ text, bold: false });
-
-          const audio = await synthesizeChunks(
-            voice,
-            OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3,
-            chunks,
-            rate,
-          );
-
-          res.statusCode = 200;
-          res.setHeader("Content-Type", "audio/mpeg");
-          res.setHeader(
-            "Content-Disposition",
-            'attachment; filename="speech.mp3"',
-          );
-          res.end(audio);
-        } catch (err) {
-          console.error(
-            "TTS generation failed:",
-            err instanceof Error ? err.message : err,
-          );
-          res.statusCode = 500;
-          res.setHeader("Content-Type", "application/json");
-          res.end(
-            JSON.stringify({
-              error:
-                "Failed to generate audio. Check your internet connection and try again.",
-            }),
-          );
-        }
-      });
-    },
-  };
+  return synthesizeChunks(
+    voice,
+    OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3,
+    chunks,
+    rate,
+  );
 }
