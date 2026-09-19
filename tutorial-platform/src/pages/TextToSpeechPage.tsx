@@ -1,9 +1,35 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-const MAX_LEN = 5000;
+const MAX_LEN = 10000;
 const FEMALE_HINTS = ["female", "zira", "susan", "samantha", "victoria", "hazel", "aria", "jenny", "karen", "moira", "tessa"];
 const MALE_HINTS = ["male", "david", "mark", "daniel", "alex", "fred", "george", "guy", "james"];
+const ttsApiBaseUrl = import.meta.env.VITE_TTS_API_BASE_URL?.trim() ?? "";
+const STORAGE_KEY = "tts-sticky-note";
+const DEFAULT_TEXT = "Hello! This is a sample of text to speech conversion.";
+
+type StickyNote = {
+  text: string;
+  gender: Gender;
+  language: Language;
+  rate: number;
+};
+
+function loadStickyNote(): StickyNote | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return {
+      text: typeof parsed.text === "string" ? parsed.text : DEFAULT_TEXT,
+      gender: parsed.gender === "female" ? "female" : "male",
+      language: parsed.language === "hindi" ? "hindi" : "english",
+      rate: typeof parsed.rate === "number" ? parsed.rate : 1,
+    };
+  } catch {
+    return null;
+  }
+}
 
 type Gender = "male" | "female";
 type Language = "english" | "hindi";
@@ -17,15 +43,30 @@ function pickVoice(voices: SpeechSynthesisVoice[], gender: Gender, language: Lan
 }
 
 export function TextToSpeechPage() {
-  const [text, setText] = useState("Hello! This is a sample of text to speech conversion.");
-  const [gender, setGender] = useState<Gender>("male");
-  const [language, setLanguage] = useState<Language>("english");
-  const [rate, setRate] = useState(1);
+  const [text, setText] = useState(() => loadStickyNote()?.text ?? DEFAULT_TEXT);
+  const [gender, setGender] = useState<Gender>(() => loadStickyNote()?.gender ?? "male");
+  const [language, setLanguage] = useState<Language>(() => loadStickyNote()?.language ?? "english");
+  const [rate, setRate] = useState(() => loadStickyNote()?.rate ?? 1);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [status, setStatus] = useState<{ message: string; isError: boolean } | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const audioUrlRef = useRef<string | null>(null);
+
+  // Auto-save as a sticky note so the text and settings are restored next time this page is opened.
+  useEffect(() => {
+    const note: StickyNote = { text, gender, language, rate };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(note));
+  }, [text, gender, language, rate]);
+
+  function handleClearNote() {
+    localStorage.removeItem(STORAGE_KEY);
+    setText(DEFAULT_TEXT);
+    setGender("male");
+    setLanguage("english");
+    setRate(1);
+    setStatus({ message: "Sticky note cleared.", isError: false });
+  }
 
   useEffect(() => {
     if (!("speechSynthesis" in window)) return;
@@ -98,7 +139,11 @@ export function TextToSpeechPage() {
     setStatus({ message: "Generating audio…", isError: false });
 
     try {
-      const response = await fetch("/api/tts", {
+      if (!ttsApiBaseUrl) {
+        throw new Error("Configure VITE_TTS_API_BASE_URL to enable downloading generated audio.");
+      }
+
+      const response = await fetch(`${ttsApiBaseUrl}/tts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: trimmed, gender, language }),
@@ -106,7 +151,7 @@ export function TextToSpeechPage() {
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to generate audio.");
+        throw new Error(data.message || data.error || "Failed to generate audio.");
       }
 
       const blob = await response.blob();
@@ -146,6 +191,18 @@ export function TextToSpeechPage() {
         </p>
 
         <div className="mt-6 rounded-2xl border border-white/60 bg-white/80 p-4 shadow-[0_10px_30px_-22px_rgba(15,23,42,0.55)] backdrop-blur sm:p-6">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700">
+              📌 Sticky note — auto-saved on this device
+            </span>
+            <button
+              type="button"
+              onClick={handleClearNote}
+              className="cursor-pointer text-xs font-semibold text-slate-500 underline-offset-2 hover:text-rose-600 hover:underline"
+            >
+              Clear note
+            </button>
+          </div>
           <textarea
             value={text}
             maxLength={MAX_LEN}
