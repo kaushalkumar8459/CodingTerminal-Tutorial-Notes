@@ -170,12 +170,10 @@ app.post(
     const rawContent = req.body.rawContent ?? "";
 
     if (!contentPath || !rawContent) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          message: "contentPath and rawContent are required.",
-        });
+      return res.status(400).json({
+        ok: false,
+        message: "contentPath and rawContent are required.",
+      });
     }
 
     if (!isSafeContentPath(contentPath)) {
@@ -194,12 +192,10 @@ app.post(
       const targetPath = path.resolve(publicRoot, contentPath);
 
       if (!targetPath.startsWith(publicRoot)) {
-        return res
-          .status(400)
-          .json({
-            ok: false,
-            message: "Resolved path is outside allowed directory.",
-          });
+        return res.status(400).json({
+          ok: false,
+          message: "Resolved path is outside allowed directory.",
+        });
       }
 
       await mkdir(path.dirname(targetPath), { recursive: true });
@@ -236,12 +232,10 @@ app.post(
       return res.status(400).json({ ok: false, message: "Text is required." });
     }
     if (text.length > MAX_TTS_TEXT_LENGTH) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          message: `Text must be ${MAX_TTS_TEXT_LENGTH} characters or fewer.`,
-        });
+      return res.status(400).json({
+        ok: false,
+        message: `Text must be ${MAX_TTS_TEXT_LENGTH} characters or fewer.`,
+      });
     }
 
     try {
@@ -251,13 +245,11 @@ app.post(
       return res.send(audio);
     } catch (error) {
       console.error("TTS generation failed:", error);
-      return res
-        .status(500)
-        .json({
-          ok: false,
-          message:
-            "Failed to generate audio. Check your internet connection and try again.",
-        });
+      return res.status(500).json({
+        ok: false,
+        message:
+          "Failed to generate audio. Check your internet connection and try again.",
+      });
     }
   },
 );

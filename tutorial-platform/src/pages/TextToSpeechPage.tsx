@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 const MAX_LEN = 10000;
 const FEMALE_HINTS = ["female", "zira", "susan", "samantha", "victoria", "hazel", "aria", "jenny", "karen", "moira", "tessa"];
 const MALE_HINTS = ["male", "david", "mark", "daniel", "alex", "fred", "george", "guy", "james"];
-const ttsApiBaseUrl = import.meta.env.VITE_TTS_API_BASE_URL?.trim() ?? "";
+const ttsApiBaseUrl =
+  import.meta.env.VITE_TTS_API_BASE_URL?.trim() || import.meta.env.VITE_AUTH_API_BASE_URL?.trim() || "";
 const STORAGE_KEY = "tts-sticky-note";
 const DEFAULT_TEXT = "Hello! This is a sample of text to speech conversion.";
 
