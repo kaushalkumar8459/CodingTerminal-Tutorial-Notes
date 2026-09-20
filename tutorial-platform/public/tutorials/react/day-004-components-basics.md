@@ -7,6 +7,7 @@ estimatedMinutes: 75
 order: 4
 track: react
 ---
+
 # Day 4 [Beginner]: React Components Basics
 
 ## Goal
@@ -326,7 +327,11 @@ src/
 ```jsx
 // Header.jsx
 export default function Header() {
-  return <header><h1>Learning Dashboard</h1></header>;
+  return (
+    <header>
+      <h1>Learning Dashboard</h1>
+    </header>
+  );
 }
 ```
 
@@ -503,7 +508,9 @@ Use `Card` and `<Card />` instead.
 Avoid:
 
 ```jsx
-{Card()}
+{
+  Card();
+}
 ```
 
 Prefer:
@@ -640,3 +647,23 @@ No. A component can return another component, a Fragment, or one or more host el
 ## Day 4 Outcome
 
 You can build and compose React components, choose meaningful boundaries, reuse components with props and `children`, organize them across files, and distinguish components, React elements, and DOM nodes. You are ready for deeper reusable-component APIs in Day 5.
+
+## Interview Notes (Quick Revision)
+
+- A **component** is a JS function that returns UI (React elements); function components are today's standard, class components are mostly legacy.
+- Component names must start with an **uppercase letter** so React/JSX treats them as components, not DOM tags.
+- Never call a component like a plain function (`{Card()}`) — always render via JSX (`<Card />`). Manual calls bypass React's rendering model and break Hooks rules.
+- **Composition**: build bigger UI by combining small components (`<Header/>`, `<Footer/>` inside `<App/>`).
+- Not every repeated block needs a component — extract only when there's a clear responsibility, reuse, or testing benefit (avoid over-fragmenting).
+- A component doesn't always map to one DOM element — it can return another component, a Fragment, or several host elements.
+- Re-rendering a component ≠ recreating all its DOM nodes; React reconciles and commits only what changed.
+
+**Rapid-fire answers**
+
+| Question                                    | One-line Answer                                |
+| ------------------------------------------- | ---------------------------------------------- |
+| Why must component names be capitalized?    | So JSX treats them as components, not DOM tags |
+| Is `{Card()}` okay?                         | No — call via `<Card />`                       |
+| Does every component need state?            | No                                             |
+| Does a component always equal one DOM node? | No — could be Fragment/multiple elements       |
+| Function or class components today?         | Function components are standard               |

@@ -7,6 +7,7 @@ estimatedMinutes: 75
 order: 3
 track: react
 ---
+
 # Day 3 [Beginner]: JSX Fundamentals
 
 ## Goal
@@ -116,24 +117,18 @@ JSX attributes use React/DOM property naming conventions in many cases:
 function App() {
   const imageUrl = "/logo.png";
 
-  return (
-    <img
-      src={imageUrl}
-      alt="CodingTerminals logo"
-      className="logo"
-    />
-  );
+  return <img src={imageUrl} alt="CodingTerminals logo" className="logo" />;
 }
 ```
 
 Common examples:
 
-| HTML | JSX |
-|---|---|
-| `class` | `className` |
-| `for` | `htmlFor` |
-| `onclick` | `onClick` |
-| `tabindex` | `tabIndex` |
+| HTML       | JSX         |
+| ---------- | ----------- |
+| `class`    | `className` |
+| `for`      | `htmlFor`   |
+| `onclick`  | `onClick`   |
+| `tabindex` | `tabIndex`  |
 
 Attribute values can be strings:
 
@@ -249,13 +244,7 @@ function App() {
   const isLoggedIn = true;
 
   return (
-    <section>
-      {isLoggedIn ? (
-        <p>Welcome back</p>
-      ) : (
-        <p>Please log in</p>
-      )}
-    </section>
+    <section>{isLoggedIn ? <p>Welcome back</p> : <p>Please log in</p>}</section>
   );
 }
 ```
@@ -263,20 +252,26 @@ function App() {
 For showing something only when a condition is truthy:
 
 ```jsx
-{isLoggedIn && <button>Open Dashboard</button>}
+{
+  isLoggedIn && <button>Open Dashboard</button>;
+}
 ```
 
 Be careful with `&&` when the left side can be `0`, because `0` can be rendered as text:
 
 ```jsx
 // May display 0
-{items.length && <p>Items found</p>}
+{
+  items.length && <p>Items found</p>;
+}
 ```
 
 Prefer an explicit boolean condition when necessary:
 
 ```jsx
-{items.length > 0 && <p>Items found</p>}
+{
+  items.length > 0 && <p>Items found</p>;
+}
 ```
 
 ### Topic 7: Fragments
@@ -545,11 +540,9 @@ const topics = [
 ### Step 4: Add conditional UI
 
 ```jsx
-{learner.progress === 100 ? (
-  <p>Course completed!</p>
-) : (
-  <p>Keep learning.</p>
-)}
+{
+  learner.progress === 100 ? <p>Course completed!</p> : <p>Keep learning.</p>;
+}
 ```
 
 ### Step 5: Add a dynamic attribute
@@ -940,3 +933,28 @@ You can now:
 - Debug common JSX errors.
 
 Day 4 builds on this foundation with **React Components and component design**.
+
+## Interview Notes (Quick Revision)
+
+- **JSX** = a JavaScript syntax extension (not HTML, not a string); it's transformed at build time into JS, and rendering/reconciliation happen later at runtime — two separate steps.
+- `{}` in JSX accepts **expressions** only, not statements — a standalone `if` block can't go directly inside JSX braces (use a ternary or move logic outside).
+- Attribute differences from HTML: `className` (not `class`), `htmlFor` (not `for`), event props like `onClick` are camelCase.
+- Lowercase tags (`div`, `button`) = DOM/host elements; Uppercase tags (`Card`, `App`) = your components.
+- Self-closing tags are required for childless elements: `<img src="..." />`.
+- Lists render via `.map()`; **keys** give siblings stable identity for reconciliation — prefer stable IDs over `Math.random()`; index keys are acceptable only for static, non-reorderable lists.
+- `key` is a special reconciliation value, **not a normal prop** — if the component needs the same value, pass it again as an explicit prop.
+- Fragments (`<>...</>`) group multiple elements without adding an extra DOM node.
+- React **escapes** text rendered through JSX by default; `dangerouslySetInnerHTML` bypasses this and is a security-sensitive exception.
+- Returning multiple siblings requires one wrapper — a real element or a Fragment.
+
+**Rapid-fire answers**
+
+| Question                        | One-line Answer                               |
+| ------------------------------- | --------------------------------------------- |
+| Is JSX HTML?                    | No, it's a JS syntax extension compiled to JS |
+| Correct class attribute?        | `className`                                   |
+| Correct label attribute?        | `htmlFor`                                     |
+| Why keys in lists?              | Stable identity for reconciliation            |
+| Is `key` a regular prop?        | No, it's special to React                     |
+| Multiple root elements allowed? | No — wrap in one element or Fragment          |
+| Does JSX auto-escape text?      | Yes, by default                               |

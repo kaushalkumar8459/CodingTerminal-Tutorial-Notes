@@ -7,6 +7,7 @@ estimatedMinutes: 120
 order: 21
 track: react
 ---
+
 # Day 21 [Beginner → Intermediate]: Mini Project — Todo App
 
 ## Goal
@@ -131,21 +132,27 @@ App
 ```
 
 ### `App`
+
 Owns the feature state and state transitions when those values are shared.
 
 ### `TodoForm`
+
 Owns input presentation and reports submit/cancel actions through a clear API.
 
 ### `TodoFilters`
+
 Displays filter controls and reports the selected filter.
 
 ### `TodoSummary`
+
 Displays derived counts.
 
 ### `TodoList`
+
 Receives the currently visible collection and callbacks.
 
 ### `TodoItem`
+
 Displays one todo and emits actions. It does not mutate the parent's collection directly.
 
 Example API:
@@ -190,10 +197,8 @@ The next array depends on the previous array. The updater form explicitly expres
 function toggleTodo(id) {
   setTodos((current) =>
     current.map((todo) =>
-      todo.id === id
-        ? { ...todo, completed: !todo.completed }
-        : todo
-    )
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+    ),
   );
 }
 ```
@@ -230,11 +235,7 @@ function saveEdit(event) {
   if (!title || !editingId) return;
 
   setTodos((current) =>
-    current.map((todo) =>
-      todo.id === editingId
-        ? { ...todo, title }
-        : todo
-    )
+    current.map((todo) => (todo.id === editingId ? { ...todo, title } : todo)),
   );
 
   setEditingId(null);
@@ -265,9 +266,9 @@ For a larger dataset, performance can later be measured and optimized. Do not ad
 ## Step 6 — Stable Keys
 
 ```jsx
-{visibleTodos.map((todo) => (
-  <TodoItem key={todo.id} todo={todo} />
-))}
+{
+  visibleTodos.map((todo) => <TodoItem key={todo.id} todo={todo} />);
+}
 ```
 
 The key gives React stable identity among siblings. It is not automatically passed to `TodoItem` as a prop.
@@ -294,7 +295,9 @@ Use a real form so Enter submits naturally:
     onChange={(event) => setDraft(event.target.value)}
   />
   <button type="submit">Add</button>
-  <button type="button" onClick={resetEditor}>Cancel</button>
+  <button type="button" onClick={resetEditor}>
+    Cancel
+  </button>
 </form>
 ```
 
@@ -350,8 +353,8 @@ export default function App() {
     if (editingId) {
       setTodos((current) =>
         current.map((todo) =>
-          todo.id === editingId ? { ...todo, title } : todo
-        )
+          todo.id === editingId ? { ...todo, title } : todo,
+        ),
       );
     } else {
       setTodos((current) => [...current, createTodo(title)]);
@@ -363,10 +366,8 @@ export default function App() {
   function toggleTodo(id) {
     setTodos((current) =>
       current.map((todo) =>
-        todo.id === id
-          ? { ...todo, completed: !todo.completed }
-          : todo
-      )
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
     );
   }
 
@@ -406,9 +407,7 @@ export default function App() {
           onChange={(event) => setDraft(event.target.value)}
           placeholder="Enter a task"
         />
-        <button type="submit">
-          {editingId ? "Save" : "Add"}
-        </button>
+        <button type="submit">{editingId ? "Save" : "Add"}</button>
         {editingId && (
           <button type="button" onClick={resetEditor}>
             Cancel
@@ -453,9 +452,7 @@ export default function App() {
                 checked={todo.completed}
                 onChange={() => toggleTodo(todo.id)}
               />
-              <label htmlFor={`todo-${todo.id}`}>
-                {todo.title}
-              </label>
+              <label htmlFor={`todo-${todo.id}`}>{todo.title}</label>
               <button type="button" onClick={() => startEdit(todo)}>
                 Edit
               </button>
@@ -662,3 +659,22 @@ These concerns are extensions of the same principles; they do not require adding
 You have built a complete Todo application using the core React patterns from Days 1–20. More importantly, you can now reason about **state ownership, immutable updates, identity, derived data, controlled forms, callbacks, conditional rendering, and accessible interactions**.
 
 This prepares you for **Day 22: `useEffect` and synchronization with external systems**.
+
+## Interview Notes (Quick Revision)
+
+- Add/toggle/delete/edit todos immutably: `[...todos, item]`, `map()` + spread for update (matching by ID first, not updating all items accidentally), `filter()` for delete.
+- Derive `visibleTodos`/`completedCount` from the source todos array — don't store them as separate state.
+- Use the todo's stable ID as the list key — never index or `Math.random()`.
+- Non-submit buttons (like Cancel) inside a `<form>` need `type="button"` or they'll trigger a submit.
+- Clear `editingId`/draft state when the item being edited is deleted, to avoid stale edit mode.
+- Filtering by status is **derived UI**, not something that needs its own `useEffect` + extra state.
+
+**Rapid-fire answers**
+
+| Question                                         | One-line Answer                              |
+| ------------------------------------------------ | -------------------------------------------- |
+| How to toggle one todo without affecting others? | `map()`, only change the matching ID         |
+| Should completed count be its own state?         | No, derive it from the todos array           |
+| Why use `type="button"` on Cancel?               | Prevents accidental form submission          |
+| What happens if you delete a todo being edited?  | Must clear edit state to avoid staleness     |
+| Does filtering need an effect?                   | No, it's derived data computed during render |

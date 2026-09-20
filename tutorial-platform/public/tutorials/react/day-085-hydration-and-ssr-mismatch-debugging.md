@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 85
 track: react
 ---
+
 # Day 85 [Advanced]: Hydration and SSR Mismatch Debugging
 
 ## Goal
@@ -364,3 +365,21 @@ Expected output:
 - You can ship safer SSR features with deterministic rendering
 - You can verify hydration fixes using production-like workflows
 - You are ready for advanced authentication patterns in Day 86
+
+## Interview Notes (Quick Revision)
+
+- **Hydration** is React attaching event listeners/behavior to server-rendered HTML on the client — the initial client render must produce the **same output** as the server render, or React logs a mismatch warning.
+- Common mismatch causes: using browser-only values (`window`, `Date.now()`, `Math.random()`, `localStorage`) directly during the initial render.
+- Guard browser-only code so it doesn't run during SSR (e.g., check `typeof window !== "undefined"`, or defer to an effect that runs client-side only).
+- For genuinely client-only dynamic values, render a stable placeholder on first render, then update after mount (in an effect) rather than diverging from the server output immediately.
+- Debug hydration mismatches methodically: reproduce, compare server vs client output, isolate the non-deterministic value, apply a guard/fix, and verify in a production-like environment.
+
+**Rapid-fire answers**
+
+| Question                                      | One-line Answer                                                  |
+| --------------------------------------------- | ---------------------------------------------------------------- |
+| What is hydration?                            | Attaching behavior to server-rendered HTML on the client         |
+| What causes most hydration mismatches?        | Browser-only/non-deterministic values used during initial render |
+| How to guard browser-only code?               | Check `typeof window !== "undefined"` or use an effect           |
+| How to handle client-only dynamic values?     | Render a stable placeholder, update after mount                  |
+| What's the first step in hydration debugging? | Compare server vs client output to isolate the mismatch          |

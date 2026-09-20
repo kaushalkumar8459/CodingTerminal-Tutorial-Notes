@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 47
 track: react
 ---
+
 # Day 47 [Advanced]: Code Splitting
 
 ## Goal
@@ -146,9 +147,7 @@ export default function Dashboard() {
     <section>
       <h1>Dashboard</h1>
 
-      <button onClick={() => setShowAnalytics(true)}>
-        Open Analytics
-      </button>
+      <button onClick={() => setShowAnalytics(true)}>Open Analytics</button>
 
       {showAnalytics && (
         <Suspense fallback={<p role="status">Loading analytics¦</p>}>
@@ -208,11 +207,13 @@ async function handleOpenExport() {
 For a component, render the lazy component behind a state-controlled condition:
 
 ```jsx
-{isOpen && (
-  <Suspense fallback={<FeatureLoader />}>
-    <ExportPanel />
-  </Suspense>
-)}
+{
+  isOpen && (
+    <Suspense fallback={<FeatureLoader />}>
+      <ExportPanel />
+    </Suspense>
+  );
+}
 ```
 
 The distinction is important because code loading should correspond to a meaningful product event.
@@ -406,9 +407,7 @@ class ChunkErrorBoundary extends React.Component {
       return (
         <section role="alert">
           <h2>Feature could not be loaded</h2>
-          <button onClick={() => window.location.reload()}>
-            Reload
-          </button>
+          <button onClick={() => window.location.reload()}>Reload</button>
         </section>
       );
     }
@@ -515,12 +514,8 @@ export default function Dashboard() {
     <main>
       <h1>Dashboard</h1>
 
-      <button onClick={() => setPanel("analytics")}>
-        Analytics
-      </button>
-      <button onClick={() => setPanel("audit")}>
-        Audit Logs
-      </button>
+      <button onClick={() => setPanel("analytics")}>Analytics</button>
+      <button onClick={() => setPanel("audit")}>Audit Logs</button>
 
       {panel === "analytics" && (
         <Suspense fallback={<PanelLoader label="analytics" />}>
@@ -860,3 +855,22 @@ Requirements:
 You can now design production-oriented code splitting beyond routes, including optional component loading, dynamic utility imports, local Suspense boundaries, shared dependency analysis, caching, prefetch decisions, failure recovery, testing, and measurement.
 
 **Next:** Day 48 — Advanced React Performance Optimization.
+
+## Interview Notes (Quick Revision)
+
+- A good split point should justify its loading overhead — don't split tiny components just because you can.
+- Prefer **local** Suspense boundaries around optional features instead of one giant boundary hiding the whole app behind a loader.
+- Always handle **chunk load failures** (e.g., after a deployment changes hashed filenames) — otherwise a user can be stuck with a broken feature.
+- Code splitting affects **performance**, not authorization — lazy-loaded admin code still needs backend permission checks.
+- Bundler behavior (shared/vendor chunks) means `import()` doesn't always create a fully isolated chunk — check the real build output.
+- Always measure before/after with real build analysis and user-facing metrics — don't assume an optimization helped.
+
+**Rapid-fire answers**
+
+| Question                                         | One-line Answer                      |
+| ------------------------------------------------ | ------------------------------------ |
+| Should every small component be code-split?      | No, only meaningful split points     |
+| What handles a failed chunk load after deploy?   | Explicit recovery/retry logic        |
+| Does code splitting replace authorization?       | No, backend must still enforce it    |
+| Does `import()` always create an isolated chunk? | No, bundler chunk-sharing affects it |
+| How to validate a performance optimization?      | Measure real build/user metrics      |

@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 37
 track: react
 ---
+
 # Day 37 [Intermediate]: `createContext` and Provider Setup
 
 ## Goal
@@ -97,9 +98,7 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   return (
-    <AuthContext.Provider value={{ user }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }
 ```
@@ -195,18 +194,13 @@ const logout = useCallback(() => {
   setUser(null);
 }, []);
 
-const value = useMemo(
-  () => ({ user, login, logout }),
-  [user, login, logout]
-);
+const value = useMemo(() => ({ user, login, logout }), [user, login, logout]);
 ```
 
 Then:
 
 ```jsx
-<AuthContext.Provider value={value}>
-  {children}
-</AuthContext.Provider>
+<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 ```
 
 ### Important
@@ -307,16 +301,9 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const value = useMemo(
-    () => ({ user, login, logout }),
-    [user, login, logout]
-  );
+  const value = useMemo(() => ({ user, login, logout }), [user, login, logout]);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 ```
 
@@ -371,17 +358,13 @@ function Navbar() {
 React versions that support the newer Context provider shorthand may allow:
 
 ```jsx
-<AuthContext value={value}>
-  {children}
-</AuthContext>
+<AuthContext value={value}>{children}</AuthContext>
 ```
 
 Projects using older React versions should use:
 
 ```jsx
-<AuthContext.Provider value={value}>
-  {children}
-</AuthContext.Provider>
+<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 ```
 
 Follow the React version and project configuration rather than mixing syntax arbitrarily.
@@ -437,7 +420,7 @@ Test consumer behavior with the Provider it expects:
 render(
   <AuthProvider>
     <Navbar />
-  </AuthProvider>
+  </AuthProvider>,
 );
 ```
 
@@ -732,3 +715,22 @@ Requirements:
 You can now design `createContext` and Provider architecture with deliberate ownership, scope, domain actions, composition, guarded consumer Hooks, update boundaries, testing, and performance reasoning.
 
 **Next:** Day 38 — `useContext` in Components: consuming Context safely and designing consumer APIs.
+
+## Interview Notes (Quick Revision)
+
+- The **Provider** owns the shared state and passes it down via its `value` prop — consumers below it read that value.
+- A consumer rendered **above/outside** its Provider gets the default value (often `null`) — a common source of bugs.
+- Build a **guarded custom hook** (e.g., `useAuth()`) that throws a clear error if called outside its Provider, instead of letting consumers silently get `null`.
+- Split large contexts by **domain** (e.g., separate Auth and Theme contexts) rather than one giant context — keeps update boundaries clear.
+- Don't expose raw setters directly through context — expose semantic actions instead, to keep business rules centralized.
+- Don't copy a context value into local state unless it represents a genuinely different concept (like an editable draft) — otherwise it creates two sources of truth.
+
+**Rapid-fire answers**
+
+| Question                                            | One-line Answer                                 |
+| --------------------------------------------------- | ----------------------------------------------- |
+| What happens if a consumer is outside its Provider? | It gets the default value (often null)          |
+| How to catch "missing provider" bugs early?         | A guarded custom hook that throws a clear error |
+| Should you use one giant context for everything?    | No, split by domain                             |
+| Should you expose raw setters via context?          | No, expose semantic action functions            |
+| Is copying context value into local state safe?     | Only if it represents a distinct draft/concept  |

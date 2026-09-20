@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 65
 track: react
 ---
+
 # Day 65 [Advanced]: Pagination and Infinite Query
 
 ## Goal
@@ -307,23 +308,29 @@ Scenario:
 An e-learning catalog must clearly show when no more courses are available.
 
 ```jsx
-{feedQuery.isError && (
-  <button onClick={() => feedQuery.refetch()}>Retry</button>
-)}
+{
+  feedQuery.isError && (
+    <button onClick={() => feedQuery.refetch()}>Retry</button>
+  );
+}
 
-{feedQuery.data?.pages.flatMap((p) => p.items).length === 0 &&
-  !feedQuery.isPending && <p>No courses found.</p>}
+{
+  feedQuery.data?.pages.flatMap((p) => p.items).length === 0 &&
+    !feedQuery.isPending && <p>No courses found.</p>;
+}
 
-{feedQuery.hasNextPage ? (
-  <button
-    onClick={() => feedQuery.fetchNextPage()}
-    disabled={feedQuery.isFetchingNextPage}
-  >
-    {feedQuery.isFetchingNextPage ? "Loading..." : "Load More"}
-  </button>
-) : (
-  <p>No more courses.</p>
-)}
+{
+  feedQuery.hasNextPage ? (
+    <button
+      onClick={() => feedQuery.fetchNextPage()}
+      disabled={feedQuery.isFetchingNextPage}
+    >
+      {feedQuery.isFetchingNextPage ? "Loading..." : "Load More"}
+    </button>
+  ) : (
+    <p>No more courses.</p>
+  );
+}
 ```
 
 ## Mini Exercise
@@ -432,4 +439,23 @@ Expected output:
 - You can design resilient UX for large datasets
 - You can choose between page-based and cursor-based strategies
 - You can prevent common cache, retry, and rendering problems
+
+## Interview Notes (Quick Revision)
+
+- **Cursor-based pagination** (using an opaque cursor/token for "next page") handles frequently-changing data more reliably than **offset/page-based** pagination, which can skip/duplicate items if data shifts between requests.
+- Include filters/sort criteria in the **query key** so different filter combinations get their own cache entries instead of colliding.
+- For very large or infinite lists, consider **virtualization** to avoid unbounded DOM growth from continuously appended items.
+- Derive the "next page" params from the previous response (e.g., a `nextCursor` field) rather than hardcoding page-increment logic that can drift from server behavior.
+- Design resilient UX for large datasets: loading indicators per page fetch, error/retry for a failed page load without losing already-loaded data.
+
+**Rapid-fire answers**
+
+| Question                                              | One-line Answer                                   |
+| ----------------------------------------------------- | ------------------------------------------------- |
+| Cursor-based vs offset pagination for changing data?  | Cursor-based is more reliable                     |
+| Why include filters in the query key?                 | So different filter combos cache separately       |
+| Risk of unbounded infinite lists?                     | Excessive DOM growth — consider virtualization    |
+| Where should "next page" info come from?              | Derived from the previous response, not hardcoded |
+| Should a failed page fetch clear already-loaded data? | No, preserve it and allow retry                   |
+
 - You are ready for advanced form systems in upcoming lessons

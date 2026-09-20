@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 46
 track: react
 ---
+
 # Day 46 [Intermediate]: Lazy Loading Routes
 
 ## Goal
@@ -96,7 +97,7 @@ adapt it explicitly:
 const ReportsPage = lazy(() =>
   import("./pages/ReportsPage").then((module) => ({
     default: module.ReportsPage,
-  }))
+  })),
 );
 ```
 
@@ -111,7 +112,7 @@ import { Suspense } from "react";
 
 <Suspense fallback={<p>Loading reports...</p>}>
   <ReportsPage />
-</Suspense>
+</Suspense>;
 ```
 
 The fallback is not the application error state. It represents the temporary loading state while the component's code is unavailable.
@@ -195,7 +196,7 @@ const Settings = lazy(() => import("./Settings"));
       </Suspense>
     }
   />
-</Route>
+</Route>;
 ```
 
 The dashboard shell can remain visible while a child feature chunk loads.
@@ -218,7 +219,7 @@ const AdminPage = lazy(() => import("./pages/AdminPage"));
       </Suspense>
     </ProtectedRoute>
   }
-/>
+/>;
 ```
 
 The guard decides whether the user may enter the route. `Suspense` handles loading the route component.
@@ -320,9 +321,7 @@ class ChunkErrorBoundary extends React.Component {
       return (
         <section role="alert">
           <h2>Page could not be loaded</h2>
-          <button onClick={() => window.location.reload()}>
-            Reload page
-          </button>
+          <button onClick={() => window.location.reload()}>Reload page</button>
         </section>
       );
     }
@@ -573,7 +572,7 @@ Example route test:
 render(
   <MemoryRouter initialEntries={["/reports"]}>
     <AppRoutes />
-  </MemoryRouter>
+  </MemoryRouter>,
 );
 ```
 
@@ -732,3 +731,22 @@ Requirements:
 You can now design performance-aware route-level code splitting with React `lazy`, `Suspense`, nested layouts, protected routes, error recovery, prefetching decisions, measurement, and production deployment considerations.
 
 **Next:** Day 47 — Advanced Code Splitting and Performance Optimization.
+
+## Interview Notes (Quick Revision)
+
+- `React.lazy` + `<Suspense>` defer loading a component's code until it's needed — `Suspense` provides the loading fallback boundary.
+- `Suspense` handles the **loading** state, not errors — a failed dynamic import (chunk load failure) needs a separate error boundary/recovery path.
+- Don't lazy-load every component — excessive splitting creates request overhead; balance against the first-route/critical-path experience.
+- Lazy loading is a **performance technique**, not a security mechanism — it doesn't replace real authorization checks.
+- Prefetching optional routes can help perceived speed, but over-prefetching wastes bandwidth/battery, especially on constrained networks.
+- Measure real transfer/parse/execution impact — more chunks or smaller files don't automatically mean better performance.
+
+**Rapid-fire answers**
+
+| Question                               | One-line Answer                         |
+| -------------------------------------- | --------------------------------------- |
+| What does `Suspense` handle?           | The loading state, not errors           |
+| Does lazy loading secure admin routes? | No, it's a performance technique only   |
+| Should every component be lazy-loaded? | No, only meaningful split points        |
+| What handles a failed dynamic import?  | A separate error boundary/recovery path |
+| Is more chunks always better?          | No, measure actual performance impact   |

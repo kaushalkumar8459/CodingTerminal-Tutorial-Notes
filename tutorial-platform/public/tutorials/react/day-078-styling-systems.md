@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 78
 track: react
 ---
+
 # Day 78 [Advanced]: Styling Systems
 
 ## Goal
@@ -400,4 +401,23 @@ Expected output:
 - You can enforce consistency with tokens and variants
 - You can evaluate styling approaches using practical tradeoffs
 - You can include accessibility and governance in styling decisions
+
+## Interview Notes (Quick Revision)
+
+- Use **design tokens** (colors, spacing, typography values) as the single source of truth for styling — components consume tokens, not hardcoded values.
+- Establish reusable **component style contracts** (variants/themes) instead of ad-hoc one-off styles per usage.
+- Different styling approaches (CSS Modules, utility-first/Tailwind, CSS-in-JS) have different tradeoffs (bundle size, runtime cost, DX) — choose based on team/project needs, not by default habit.
+- Bake **accessibility** (color contrast, focus states, responsive behavior) into the styling system, not as an afterthought.
+- Governance (linting, shared component libraries) keeps styling consistent as a team/codebase scales.
+
+**Rapid-fire answers**
+
+| Question                                             | One-line Answer                                |
+| ---------------------------------------------------- | ---------------------------------------------- |
+| What are design tokens for?                          | Single source of truth for style values        |
+| Should styling be one-off per component?             | No, use reusable variant/theme contracts       |
+| Is one styling approach always best?                 | No, depends on tradeoffs for the project       |
+| Should accessibility be added after styling is done? | No, build it in from the start                 |
+| What keeps large-team styling consistent?            | Governance: tokens, linting, shared components |
+
 - You are ready for architecture-level planning in Day 79

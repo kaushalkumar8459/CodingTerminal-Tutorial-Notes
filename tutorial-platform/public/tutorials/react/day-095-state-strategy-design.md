@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 95
 track: react
 ---
+
 # Day 95 [Advanced]: State Strategy Design
 
 ## Goal
@@ -116,7 +117,7 @@ Code Example:
 ```ts
 const total = useMemo(
   () => items.reduce((sum, item) => sum + item.price, 0),
-  [items]
+  [items],
 );
 ```
 
@@ -368,3 +369,21 @@ Expected output:
 - You can select state tools with evidence-based reasoning
 - You can establish clear ownership and sources of truth
 - You are ready for design system integration at scale in Day 96
+
+## Interview Notes (Quick Revision)
+
+- Categorize state clearly: **local UI state**, **shared/global client state**, **server/remote state**, and **derived state** — each has a different "right tool."
+- Choose the tool based on **evidence** (actual sharing/complexity needs), not habit — `useState` → lifted state → Context → Redux/RTK Query, escalating only as truly needed.
+- Every piece of state should have one clear **owner** and a clear **write path** — avoid multiple places that can independently mutate the same logical value.
+- Don't store **derived state** separately — compute it from the source of truth.
+- Define **migration triggers**: know what signals (growing prop drilling, cross-feature sharing, sync bugs) indicate it's time to escalate to a more powerful state tool.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                         |
+| ---------------------------------------------- | ------------------------------------------------------- |
+| Main state categories?                         | Local UI, shared/global, server, derived                |
+| How to choose a state tool?                    | Based on evidence of actual complexity/sharing needs    |
+| Should state have multiple write paths?        | No, one clear owner/write path                          |
+| Should derived data be stored as state?        | No, compute it from the source                          |
+| What signals a need to escalate state tooling? | Growing prop drilling, cross-feature sharing, sync bugs |

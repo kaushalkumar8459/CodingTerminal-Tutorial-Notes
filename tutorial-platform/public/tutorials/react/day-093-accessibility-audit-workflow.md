@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 93
 track: react
 ---
+
 # Day 93 [Advanced]: Accessibility Audit Workflow
 
 ## Goal
@@ -213,7 +214,9 @@ Settings modal traps focus incorrectly and lacks descriptive title.
 ```jsx
 <div role="dialog" aria-modal="true" aria-labelledby="settings-title">
   <h2 id="settings-title">Settings</h2>
-  <button type="button" onClick={onClose}>Close</button>
+  <button type="button" onClick={onClose}>
+    Close
+  </button>
 </div>
 ```
 
@@ -351,3 +354,21 @@ Expected output:
 - You can drive measurable accessibility quality improvements
 - You can combine automated checks with manual accessibility validation
 - You are ready for advanced frontend security hardening in Day 94
+
+## Interview Notes (Quick Revision)
+
+- A production accessibility audit combines **automated tools** (axe, Lighthouse) with **manual verification** (real keyboard-only and screen-reader testing) — automated tools catch maybe a third of real issues.
+- Prioritize findings by **severity/impact** (blocks core tasks vs minor annoyance), not just by count of issues found.
+- Verify actual **keyboard operability** and screen-reader announcements for critical flows, not just static markup checks.
+- Track conformance against a recognized standard (**WCAG**) so findings are measurable and comparable over time.
+- Prevent regressions by integrating accessibility checks into the ongoing workflow (CI, code review), not just a one-time audit.
+
+**Rapid-fire answers**
+
+| Question                                                   | One-line Answer                           |
+| ---------------------------------------------------------- | ----------------------------------------- |
+| Are automated tools enough for an a11y audit?              | No, combine with manual testing           |
+| How should findings be prioritized?                        | By severity/real user impact              |
+| What standard is used for conformance targets?             | WCAG                                      |
+| Should audits check keyboard/screen-reader flows directly? | Yes, not just static markup               |
+| How to prevent accessibility regressions?                  | Integrate checks into CI/ongoing workflow |

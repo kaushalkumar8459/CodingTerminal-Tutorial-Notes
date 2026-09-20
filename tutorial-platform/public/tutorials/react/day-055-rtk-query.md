@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 55
 track: react
 ---
+
 ---
+
 title: RTK Query
 slug: day-055-rtk-query
 dayLabel: Day 55
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 55
 track: react
+
 ---
+
 # Day 55 [Advanced]: RTK Query
 
 ## Goal
@@ -336,8 +340,13 @@ A catalog screen should automatically fetch and cache product list.
 
 ```jsx
 function ProductList() {
-  const { data = [], isLoading, isFetching, isError, error } =
-    useGetProductsQuery();
+  const {
+    data = [],
+    isLoading,
+    isFetching,
+    isError,
+    error,
+  } = useGetProductsQuery();
 
   if (isLoading) return <p>Loading products...</p>;
   if (isError) {
@@ -493,3 +502,21 @@ Expected output:
 - You understand generated hooks, caching, subscriptions, and invalidation
 - You can choose sensible refetch and optimistic-update strategies
 - You are ready for final Redux mini-project integration ahead
+
+## Interview Notes (Quick Revision)
+
+- `createApi` + `fetchBaseQuery` define an **API slice**: endpoints (queries/mutations) that auto-generate React hooks (`useGetXQuery`, `useAddXMutation`).
+- RTK Query handles **caching, loading/error state, and subscriptions** automatically — you don't manually track `loading`/`error` booleans per request.
+- **Tag-based invalidation**: mutations invalidate specific cache tags, which triggers automatic refetching of queries providing those tags — keeps data fresh without manual refetch calls.
+- Optimistic updates let the UI update the cache immediately before the server confirms, with a rollback path if the mutation fails.
+- RTK Query is for **server state** (remote data with caching/sync needs) — distinct from plain Redux slices used for local/client UI state.
+
+**Rapid-fire answers**
+
+| Question                                             | One-line Answer                                                         |
+| ---------------------------------------------------- | ----------------------------------------------------------------------- |
+| What does `createApi` generate?                      | Auto-generated query/mutation hooks                                     |
+| How does RTK Query keep data fresh after a mutation? | Tag-based cache invalidation                                            |
+| Do you manually track loading/error with RTK Query?  | No, it's handled automatically                                          |
+| What is an optimistic update?                        | Updating the cache before server confirmation, with rollback on failure |
+| Is RTK Query for server state or local UI state?     | Server state                                                            |

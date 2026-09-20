@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 45
 track: react
 ---
+
 # Day 45 [Intermediate]: Protected Routes
 
 ## Goal
@@ -218,7 +219,7 @@ Without an explicit loading state, applications can briefly redirect valid users
 When several pages share the same authentication requirement, protect the layout boundary rather than duplicating the guard.
 
 ```jsx
-<Route element={<ProtectedRoute />}> 
+<Route element={<ProtectedRoute />}>
   <Route path="/dashboard" element={<DashboardLayout />}>
     <Route index element={<Overview />} />
     <Route path="reports" element={<Reports />} />
@@ -268,13 +269,7 @@ function AdminRoute() {
   if (isLoading) return <p>Checking session...</p>;
 
   if (!user) {
-    return (
-      <Navigate
-        to="/login"
-        state={{ from: location.pathname }}
-        replace
-      />
-    );
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
   if (user.role !== "admin") {
@@ -388,10 +383,7 @@ Choose the smallest meaningful boundary.
 Use when only one page needs special access.
 
 ```jsx
-<Route
-  path="/admin/reports"
-  element={<AdminReports />}
-/>
+<Route path="/admin/reports" element={<AdminReports />} />
 ```
 
 with protection applied by a wrapper/layout.
@@ -424,13 +416,7 @@ Keep permission boundaries aligned with product/domain ownership rather than cre
 ## 13. Complete Protected Application Example
 
 ```jsx
-import {
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "./useAuth";
 
 function ProtectedRoute() {
@@ -653,7 +639,7 @@ Example:
 render(
   <MemoryRouter initialEntries={["/reports"]}>
     <AppRoutes />
-  </MemoryRouter>
+  </MemoryRouter>,
 );
 ```
 
@@ -812,3 +798,23 @@ Requirements:
 You can now design production-oriented protected routing with authentication-aware guards, safe return navigation, asynchronous session handling, role/permission boundaries, accessible failure states, and a clear separation between frontend UX protection and backend security.
 
 **Next:** Day 46 — Lazy Loading and Route-Based Code Splitting.
+
+## Interview Notes (Quick Revision)
+
+- Don't redirect to login while auth status is still **loading** — wait for an explicit "checked" state to avoid false redirects/flicker.
+- Protecting `/login` with the same "must be unauthenticated" guard as protected pages can create an **infinite redirect loop** — design guard rules carefully.
+- Preserve the intended destination (`location.state.from`) for post-login redirect, but **validate it** — it's client-controlled and shouldn't be blindly trusted.
+- Client-side role checks are UX only — the backend must independently enforce **authorization** for every protected operation.
+- An authenticated user without sufficient permission should see a **forbidden** experience, not be treated as logged out.
+- Never put authentication tokens or secrets in the URL — URLs can leak via history, logs, analytics, and referrers.
+- Reuse guard logic via route-group/layout boundaries instead of duplicating it on every page.
+
+**Rapid-fire answers**
+
+| Question                                          | One-line Answer                          |
+| ------------------------------------------------- | ---------------------------------------- |
+| Should you redirect while auth is still loading?  | No, wait for the checked state           |
+| Is client role checking real security?            | No, backend must authorize independently |
+| What should an authorized-but-forbidden user see? | A forbidden page, not a login redirect   |
+| Should tokens go in the URL?                      | No, URLs can leak via history/logs       |
+| How to avoid duplicating guard logic?             | Use shared layout/route-group guards     |

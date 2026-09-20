@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 32
 track: react
 ---
+
 # Day 32 [Intermediate]: `useCallback`
 
 ## Goal
@@ -60,11 +61,11 @@ The important question is not "Can I memoize this?" but:
 
 ## `useCallback` vs `useMemo` vs `React.memo`
 
-| Tool | Memoizes | Main purpose |
-|---|---|---|
-| `useCallback` | function reference | preserve callback identity |
-| `useMemo` | calculated value | avoid repeated calculation |
-| `React.memo` | component rendering opportunity | skip a child render when props are equal |
+| Tool          | Memoizes                        | Main purpose                             |
+| ------------- | ------------------------------- | ---------------------------------------- |
+| `useCallback` | function reference              | preserve callback identity               |
+| `useMemo`     | calculated value                | avoid repeated calculation               |
+| `React.memo`  | component rendering opportunity | skip a child render when props are equal |
 
 `useCallback` does **not** stop the parent from rendering, and it does not automatically memoize the child.
 
@@ -97,7 +98,12 @@ function Parent() {
 
   return (
     <>
-      <button type="button" onClick={() => setTheme((current) => current === "light" ? "dark" : "light")}>
+      <button
+        type="button"
+        onClick={() =>
+          setTheme((current) => (current === "light" ? "dark" : "light"))
+        }
+      >
         Theme: {theme}
       </button>
       <SaveButton onSave={handleSave} />
@@ -133,9 +139,12 @@ Do not remove dependencies simply to make a callback stable. A stable but stale 
 This callback depends on `items`:
 
 ```jsx
-const addItem = useCallback((item) => {
-  setItems([...items, item]);
-}, [items]);
+const addItem = useCallback(
+  (item) => {
+    setItems([...items, item]);
+  },
+  [items],
+);
 ```
 
 A functional updater removes the need to read `items` from the closure:
@@ -175,7 +184,7 @@ Sometimes the simpler design is to define the function inside the effect instead
 const onSelect = useCallback(() => select(id), [id]);
 const options = { pageSize: 20 };
 
-<MemoizedTable onSelect={onSelect} options={options} />
+<MemoizedTable onSelect={onSelect} options={options} />;
 ```
 
 `options` is recreated on every render. A memoized child may still render even though `onSelect` is stable.
@@ -288,7 +297,12 @@ export default function App() {
 
   return (
     <main className={theme}>
-      <button type="button" onClick={() => setTheme((current) => current === "light" ? "dark" : "light")}>
+      <button
+        type="button"
+        onClick={() =>
+          setTheme((current) => (current === "light" ? "dark" : "light"))
+        }
+      >
         Theme: {theme}
       </button>
       <p>Items: {items.length}</p>
@@ -339,7 +353,7 @@ Explain why changing `userId` can leave the callback with an old value.
 
 ```jsx
 const onSave = useCallback(() => save(), []);
-<NormalChild onSave={onSave} />
+<NormalChild onSave={onSave} />;
 ```
 
 Explain why this does not automatically prevent `NormalChild` from rendering.
@@ -349,7 +363,7 @@ Explain why this does not automatically prevent `NormalChild` from rendering.
 ```jsx
 const onSave = useCallback(() => save(), []);
 const options = { mode: "fast" };
-<MemoChild onSave={onSave} options={options} />
+<MemoChild onSave={onSave} options={options} />;
 ```
 
 Identify the changing reference and propose a simpler contract.
@@ -471,3 +485,22 @@ Acceptance criteria:
 You can now reason about callback identity and use `useCallback` deliberately rather than mechanically.
 
 **Next:** Day 33 — React Context and avoiding unnecessary prop drilling.
+
+## Interview Notes (Quick Revision)
+
+- `useCallback` memoizes a **function's identity** (reference) across renders when its dependencies haven't changed — it doesn't make the function itself run faster.
+- Mainly useful when a stable function reference has a real consumer: a `React.memo`-wrapped child, or an effect dependency that shouldn't retrigger unnecessarily.
+- A stable callback doesn't make **everything else** about the child stable — other props/objects can still change identity.
+- Don't add `useCallback` to every handler by default — it has its own bookkeeping cost and only pays off with evidence.
+- `useCallback` should never be used to "fix" a correctness bug (like a stale closure) — fix the dependency array/design instead.
+- Same Hooks rules apply: never call Hooks conditionally or inside loops.
+
+**Rapid-fire answers**
+
+| Question                              | One-line Answer                                   |
+| ------------------------------------- | ------------------------------------------------- |
+| What does `useCallback` memoize?      | The function's reference/identity                 |
+| Does it make the function run faster? | No, only stabilizes identity                      |
+| When is it actually useful?           | With `React.memo` children or effect dependencies |
+| Should you wrap every handler in it?  | No, only with a proven need                       |
+| Can it fix a stale closure bug?       | No, fix the dependencies/design instead           |

@@ -6,7 +6,13 @@ level: Beginner
 estimatedMinutes: 75
 order: 1
 track: react
-youtubeVideos: [{"title":"Introduction to React","url":"https://www.youtube.com/watch?v=4tLBRy25xOQ&list=PLHX7ZNz5nHXnPLODZc_UsTmZ5z9xi49rP"}]
+youtubeVideos:
+  [
+    {
+      "title": "Introduction to React",
+      "url": "https://www.youtube.com/watch?v=4tLBRy25xOQ&list=PLHX7ZNz5nHXnPLODZc_UsTmZ5z9xi49rP",
+    },
+  ]
 ---
 
 # Day 1 [Beginner]: Introduction to React
@@ -183,16 +189,16 @@ Imagine a social feed containing posts, reactions, comments, notifications, and 
 
 React and Angular solve overlapping UI problems but provide different levels of built-in structure.
 
-| Area | React | Angular |
-|---|---|---|
-| Core positioning | UI library | Full application framework | 
-| UI syntax | JSX | Angular templates |
-| Components | Function components are common | Components with Angular decorators/metadata |
-| Routing | Commonly added through the ecosystem | Angular Router |
-| Dependency injection | Not a core React pattern | Built into Angular |
-| State/data patterns | Many ecosystem choices | Signals, RxJS, services, and other Angular patterns |
-| Flexibility | High | More opinionated |
-| Learning model | JavaScript + React concepts + ecosystem | Angular framework + TypeScript + Angular APIs |
+| Area                 | React                                   | Angular                                             |
+| -------------------- | --------------------------------------- | --------------------------------------------------- |
+| Core positioning     | UI library                              | Full application framework                          |
+| UI syntax            | JSX                                     | Angular templates                                   |
+| Components           | Function components are common          | Components with Angular decorators/metadata         |
+| Routing              | Commonly added through the ecosystem    | Angular Router                                      |
+| Dependency injection | Not a core React pattern                | Built into Angular                                  |
+| State/data patterns  | Many ecosystem choices                  | Signals, RxJS, services, and other Angular patterns |
+| Flexibility          | High                                    | More opinionated                                    |
+| Learning model       | JavaScript + React concepts + ecosystem | Angular framework + TypeScript + Angular APIs       |
 
 Neither is universally better. The appropriate choice depends on the product, team, ecosystem, and architectural requirements.
 
@@ -355,7 +361,7 @@ function App() {
 The important distinction is:
 
 ```jsx
-onClick={handleClick}
+onClick = { handleClick };
 ```
 
 passes the function to React, while:
@@ -369,9 +375,7 @@ calls the function while rendering. The second form is usually a bug when the in
 For an argument, use a function wrapper:
 
 ```jsx
-<button onClick={() => handleSelect("React")}>
-  Select React
-</button>
+<button onClick={() => handleSelect("React")}>Select React</button>
 ```
 
 **Event mental model**
@@ -753,11 +757,7 @@ import { useState } from "react";
 function Counter() {
   const [count, setCount] = useState(0);
 
-  return (
-    <button onClick={setCount(count + 1)}>
-      Count: {count}
-    </button>
-  );
+  return <button onClick={setCount(count + 1)}>Count: {count}</button>;
 }
 ```
 
@@ -844,9 +844,7 @@ This evaluates the setter while rendering.
 Use:
 
 ```jsx
-<button onClick={() => setCount((current) => current + 1)}>
-  Increase
-</button>
+<button onClick={() => setCount((current) => current + 1)}>Increase</button>
 ```
 
 ### Mistake 3: Unstable list keys
@@ -1153,3 +1151,34 @@ React
 You should also understand the basic engineering judgment behind React: use it when interactive, reusable UI complexity justifies it, and avoid adding it merely because a page is simple.
 
 The next lessons will go deeper into project structure, JSX, components, props, state, and the other concepts introduced here.
+
+## Interview Notes (Quick Revision)
+
+A fast recap of Day 1 — read this in a few minutes before an interview instead of the full lesson.
+
+- **React** = JavaScript **library** (not a framework) for building UIs, made by Facebook/Meta, open-sourced in 2013.
+- **Component** = reusable function that returns UI (JSX). Names start with an uppercase letter.
+- **JSX** = JavaScript syntax extension that looks like HTML; compiled to JS. One root element per return (or use a Fragment `<>`).
+- **Props** = read-only data passed **parent → child**. Child must not mutate props.
+- **State** = data owned by a component that can change over time; updated via a setter (`useState`), never mutated directly.
+- **Hook** = special function (e.g., `useState`) that lets function components use React features. Must be called at the top level, never inside `if`/loops/callbacks.
+- **Event handler** = pass the function reference (`onClick={handleClick}`), don't call it (`onClick={handleClick()}` runs during render — bug).
+- **Render → Reconciliation → Commit**: render produces element description → React compares (reconciles) new vs old → commits only the necessary DOM changes. A re-render ≠ full DOM rewrite.
+- **Virtual DOM**: implementation detail behind reconciliation, not a guarantee that React is "always faster."
+- **Keys** in lists: give siblings stable identity; must be unique and stable (avoid random values each render; index keys are risky with reordering).
+- **Declarative UI**: describe the UI for current state; let React handle updating the DOM (vs imperative step-by-step DOM changes).
+- **One-way data flow**: data flows parent → child via props; child notifies parent of changes via a **callback prop**, not by mutating anything directly.
+- **Component vs Element vs DOM node**: component (function) → React element (JSX result, a description) → DOM node (actual browser node).
+
+**Rapid-fire answers**
+
+| Question                           | One-line Answer                                        |
+| ---------------------------------- | ------------------------------------------------------ |
+| Framework or library?              | Library                                                |
+| Props mutable?                     | No, read-only                                          |
+| How does child update parent data? | Callback prop passed from parent                       |
+| Does re-render redraw whole DOM?   | No — only committed diffs                              |
+| Why keys in lists?                 | Stable identity across renders                         |
+| Can Hooks be conditional?          | No, top-level only                                     |
+| Correct handler syntax?            | `onClick={handleClick}`, not `onClick={handleClick()}` |
+| Data flow direction?               | Parent → child (one-way)                               |

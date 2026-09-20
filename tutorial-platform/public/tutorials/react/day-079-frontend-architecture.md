@@ -7,6 +7,7 @@ estimatedMinutes: 35
 order: 79
 track: react
 ---
+
 # Day 79 [Advanced]: Frontend Architecture
 
 ## Goal
@@ -362,4 +363,23 @@ Expected output:
 - You can align structure with team growth and product complexity
 - You can document and enforce architectural boundaries
 - You understand ownership, dependency direction, and governance tradeoffs
+
+## Interview Notes (Quick Revision)
+
+- Use **layered, modular architecture** with clear **feature ownership** — each feature owns its internal logic and exposes a narrow public surface.
+- Enforce a **one-way dependency flow** (e.g., features depend on shared, not on each other arbitrarily) to prevent tangled coupling.
+- Keep genuinely cross-cutting infrastructure (auth, API client, design system) in a **shared** layer, separate from feature-specific code.
+- Document architectural decisions (like an ADR: Context → Decision → Consequences) so the reasoning survives beyond the original author.
+- Use automated tooling (lint rules, import restrictions) to **enforce** architecture boundaries, not just rely on developer discipline.
+
+**Rapid-fire answers**
+
+| Question                                                 | One-line Answer                                              |
+| -------------------------------------------------------- | ------------------------------------------------------------ |
+| What is one-way dependency flow?                         | Dependencies flow in a consistent direction, avoiding cycles |
+| Where should cross-cutting code live?                    | A shared/infrastructure layer                                |
+| How to keep architecture decisions from being forgotten? | Document them (e.g., ADRs)                                   |
+| Should architecture rules rely only on developer memory? | No, enforce with tooling                                     |
+| What should each feature expose?                         | A narrow, well-defined public surface                        |
+
 - You are ready for final capstone consolidation in Day 80

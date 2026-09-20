@@ -7,6 +7,7 @@ estimatedMinutes: 90
 order: 16
 track: react
 ---
+
 # Day 16 [Beginner → Intermediate]: List Rendering
 
 ## Goal
@@ -84,9 +85,9 @@ const names = users.map((user) => user.name);
 ### 3. Rendering Components from Data
 
 ```jsx
-{products.map((product) => (
-  <ProductCard key={product.id} product={product} />
-))}
+{
+  products.map((product) => <ProductCard key={product.id} product={product} />);
+}
 ```
 
 The list component owns iteration. The item component can own presentation and item-level interactions.
@@ -103,9 +104,9 @@ Good keys are:
 - available from the data rather than generated during rendering
 
 ```jsx
-{users.map((user) => (
-  <UserCard key={user.id} user={user} />
-))}
+{
+  users.map((user) => <UserCard key={user.id} user={user} />);
+}
 ```
 
 A key is not automatically available as a normal child prop:
@@ -123,16 +124,18 @@ If the child needs the ID, pass it explicitly.
 Keys need to be unique among siblings in the same list. Nested lists have separate sibling scopes.
 
 ```jsx
-{teams.map((team) => (
-  <section key={team.id}>
-    <h2>{team.name}</h2>
-    <ul>
-      {team.members.map((member) => (
-        <li key={member.id}>{member.name}</li>
-      ))}
-    </ul>
-  </section>
-))}
+{
+  teams.map((team) => (
+    <section key={team.id}>
+      <h2>{team.name}</h2>
+      <ul>
+        {team.members.map((member) => (
+          <li key={member.id}>{member.name}</li>
+        ))}
+      </ul>
+    </section>
+  ));
+}
 ```
 
 A member ID only needs to be unique within that team's member list.
@@ -162,9 +165,7 @@ For data-driven screens, distinguish empty, loading, and error states. An empty 
 ```jsx
 const activeUsers = users.filter((user) => user.active);
 
-return activeUsers.map((user) => (
-  <UserCard key={user.id} user={user} />
-));
+return activeUsers.map((user) => <UserCard key={user.id} user={user} />);
 ```
 
 `filter()` does not mutate the original array.
@@ -184,17 +185,13 @@ For complex logic, prefer a named derived variable.
 `sort()` mutates the array it is called on. Never directly sort a state array.
 
 ```jsx
-const sortedUsers = [...users].sort((a, b) =>
-  a.name.localeCompare(b.name)
-);
+const sortedUsers = [...users].sort((a, b) => a.name.localeCompare(b.name));
 ```
 
 Modern JavaScript also provides `toSorted()` in supported runtimes:
 
 ```js
-const sortedUsers = users.toSorted((a, b) =>
-  a.name.localeCompare(b.name)
-);
+const sortedUsers = users.toSorted((a, b) => a.name.localeCompare(b.name));
 ```
 
 The important rule is that the source state must remain unchanged. If runtime/browser support is uncertain, use the spread-and-`sort()` form or verify your target environment before using `toSorted()`.
@@ -229,14 +226,16 @@ Store the **source of truth**. Derive views from it. If derivation becomes genui
 Each nested collection has its own key boundary.
 
 ```jsx
-{categories.map((category) => (
-  <section key={category.id}>
-    <h2>{category.name}</h2>
-    {category.products.map((product) => (
-      <p key={product.id}>{product.name}</p>
-    ))}
-  </section>
-))}
+{
+  categories.map((category) => (
+    <section key={category.id}>
+      <h2>{category.name}</h2>
+      {category.products.map((product) => (
+        <p key={product.id}>{product.name}</p>
+      ))}
+    </section>
+  ));
+}
 ```
 
 ### 12. Conditional Lists
@@ -263,7 +262,7 @@ function SearchResults({ query, results = [] }) {
 Avoid index keys when list identity can change through insertion, deletion, filtering, or reordering:
 
 ```jsx
-items.map((item, index) => <Row key={index} item={item} />)
+items.map((item, index) => <Row key={index} item={item} />);
 ```
 
 For a truly static collection whose order and membership never change, an index key can be acceptable. The goal is stable identity that matches the data semantics, not an absolute rule of never using indexes.
@@ -275,7 +274,7 @@ A useful test is: **if the item moves to another position, should its local comp
 Do not do this:
 
 ```jsx
-items.map((item) => <Row key={Math.random()} item={item} />)
+items.map((item) => <Row key={Math.random()} item={item} />);
 ```
 
 A new key on every render makes React treat items as new identities, which can destroy local component state, remount effects, lose focus, and cause unnecessary work.
@@ -287,11 +286,7 @@ function ProductList({ products, onSelect }) {
   return (
     <ul>
       {products.map((product) => (
-        <ProductItem
-          key={product.id}
-          product={product}
-          onSelect={onSelect}
-        />
+        <ProductItem key={product.id} product={product} onSelect={onSelect} />
       ))}
     </ul>
   );
@@ -308,20 +303,20 @@ Do not add memoization or virtualization automatically; measure the real bottlen
 
 ## Key Concepts
 
-| Concept | Rule |
-|---|---|
-| `map()` | Transform each item into UI |
-| `forEach()` | Side-effect iteration; not normal JSX mapping |
-| Key | Stable sibling identity |
-| Domain ID | Preferred key source |
-| Index key | Acceptable mainly for truly static lists |
-| Random key | Avoid; identity changes every render |
-| `filter()` | Creates a derived subset |
-| `sort()` | Mutates; copy first |
-| `toSorted()` | Non-mutating sort where supported |
-| Derived data | Calculate from source state |
-| Empty state | Explicitly communicate no items |
-| Key scope | Unique among the current siblings, not globally |
+| Concept      | Rule                                            |
+| ------------ | ----------------------------------------------- |
+| `map()`      | Transform each item into UI                     |
+| `forEach()`  | Side-effect iteration; not normal JSX mapping   |
+| Key          | Stable sibling identity                         |
+| Domain ID    | Preferred key source                            |
+| Index key    | Acceptable mainly for truly static lists        |
+| Random key   | Avoid; identity changes every render            |
+| `filter()`   | Creates a derived subset                        |
+| `sort()`     | Mutates; copy first                             |
+| `toSorted()` | Non-mutating sort where supported               |
+| Derived data | Calculate from source state                     |
+| Empty state  | Explicitly communicate no items                 |
+| Key scope    | Unique among the current siblings, not globally |
 
 ## Visual Concept Map
 
@@ -361,9 +356,27 @@ Build an Employee Directory with:
 
 ```jsx
 const employees = [
-  { id: 1, name: "Asha", role: "Recruiter", active: true, skills: ["Hiring", "Communication"] },
-  { id: 2, name: "Ravi", role: "Designer", active: false, skills: ["Figma", "UX"] },
-  { id: 3, name: "Nina", role: "Developer", active: true, skills: ["React", "TypeScript"] },
+  {
+    id: 1,
+    name: "Asha",
+    role: "Recruiter",
+    active: true,
+    skills: ["Hiring", "Communication"],
+  },
+  {
+    id: 2,
+    name: "Ravi",
+    role: "Designer",
+    active: false,
+    skills: ["Figma", "UX"],
+  },
+  {
+    id: 3,
+    name: "Nina",
+    role: "Developer",
+    active: true,
+    skills: ["React", "TypeScript"],
+  },
 ];
 
 function EmployeeCard({ employee }) {
@@ -599,3 +612,23 @@ It should identify the same logical item even when its position changes. A posit
 You can now build data-driven React lists with correct identity, immutable transformations, reusable item components, derived views, and realistic collection states. You understand `map()` versus `forEach()`, stable keys, key scope, index-key limitations, random-key problems, non-mutating sorting, and large-list performance trade-offs.
 
 Day 17 will go deeper into **keys, identity, and reconciliation**, including how changing a key can cause a component to remount and reset its local state.
+
+## Interview Notes (Quick Revision)
+
+- Use `.map()` to render lists (returns UI), not `.forEach()` (side-effect iteration, no return value used by JSX).
+- Prefer a **stable domain ID** as the key; index keys are acceptable mainly for lists that never reorder/insert/delete.
+- Never use `Math.random()` as a key — it creates a new identity every render, defeating the purpose.
+- `sort()`/`reverse()` mutate the array in place — copy first (`[...items].sort()`) or use `toSorted()` where supported.
+- Derive filtered/sorted views from source state instead of storing them as separate state.
+- Keys only need to be unique **among current siblings**, not globally unique across the whole app.
+- Explicitly handle collection states: loading, error, empty, filtered-empty, and success — don't just assume "has data."
+
+**Rapid-fire answers**
+
+| Question                                      | One-line Answer              |
+| --------------------------------------------- | ---------------------------- |
+| `.map()` or `.forEach()` for rendering lists? | `.map()`                     |
+| Best list key?                                | A stable domain ID           |
+| Is `Math.random()` a valid key?               | No, changes every render     |
+| Does `sort()` mutate the array?               | Yes, copy first              |
+| Key uniqueness scope?                         | Among siblings, not globally |

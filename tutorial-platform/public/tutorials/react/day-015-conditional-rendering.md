@@ -7,6 +7,7 @@ estimatedMinutes: 75
 order: 15
 track: react
 ---
+
 # Day 15 [Beginner → Intermediate]: Conditional Rendering
 
 ## Goal
@@ -60,9 +61,7 @@ Early returns are often clearer than deeply nested JSX.
 Use a ternary for a concise two-way choice.
 
 ```jsx
-<button type="button">
-  {isSaved ? "Saved" : "Save"}
-</button>
+<button type="button">{isSaved ? "Saved" : "Save"}</button>
 ```
 
 Avoid nested ternaries that require the reader to mentally decode multiple branches.
@@ -72,7 +71,9 @@ Avoid nested ternaries that require the reader to mentally decode multiple branc
 Use `&&` when there is an optional branch and no alternative UI.
 
 ```jsx
-{unreadCount > 0 && <span>{unreadCount} unread</span>}
+{
+  unreadCount > 0 && <span>{unreadCount} unread</span>;
+}
 ```
 
 #### Falsy-value pitfall
@@ -80,7 +81,9 @@ Use `&&` when there is an optional branch and no alternative UI.
 JavaScript returns the left operand when it is falsy. React can render `0`, so this can be surprising:
 
 ```jsx
-{count && <Badge />}
+{
+  count && <Badge />;
+}
 ```
 
 If `count` is `0`, the expression evaluates to `0`.
@@ -88,7 +91,9 @@ If `count` is `0`, the expression evaluates to `0`.
 Prefer:
 
 ```jsx
-{count > 0 && <Badge />}
+{
+  count > 0 && <Badge />;
+}
 ```
 
 Do not blindly apply `!!count && ...` when the business rule is specifically `count > 0`; an explicit condition communicates intent better.
@@ -140,7 +145,9 @@ The exact state model depends on the domain. If `products` is unavailable before
 - **Authorization:** What is the user allowed to do?
 
 ```jsx
-{user?.role === "admin" && <AdminPanel />}
+{
+  user?.role === "admin" && <AdminPanel />;
+}
 ```
 
 This controls what the browser displays. The backend must independently enforce authorization for protected operations.
@@ -186,11 +193,7 @@ This is a lightweight state-machine mindset. It does not mean every UI needs a f
 Conditions can affect props too.
 
 ```jsx
-<button
-  type="button"
-  disabled={isSubmitting}
-  aria-busy={isSubmitting}
->
+<button type="button" disabled={isSubmitting} aria-busy={isSubmitting}>
   {isSubmitting ? "Saving¦" : "Save"}
 </button>
 ```
@@ -226,15 +229,15 @@ Use the operator that matches the business rule rather than using fallbacks mech
 
 ## Key Concepts
 
-| Technique | Best fit |
-|---|---|
-| `if` / guard clause | Large or early-exit branches |
-| Ternary | Simple two-way choice |
-| `&&` | Optional UI branch with no alternative |
-| `null` | Intentionally render nothing |
-| Explicit status | Mutually exclusive UI states |
-| Separate component | Complex/reusable branch |
-| `?.` / `??` | Optional data and intentional fallbacks |
+| Technique           | Best fit                                |
+| ------------------- | --------------------------------------- |
+| `if` / guard clause | Large or early-exit branches            |
+| Ternary             | Simple two-way choice                   |
+| `&&`                | Optional UI branch with no alternative  |
+| `null`              | Intentionally render nothing            |
+| Explicit status     | Mutually exclusive UI states            |
+| Separate component  | Complex/reusable branch                 |
+| `?.` / `??`         | Optional data and intentional fallbacks |
 
 ## Visual Concept Map
 
@@ -286,9 +289,7 @@ function Dashboard({ status, role, lessons = [] }) {
   return (
     <section>
       <h1>Dashboard</h1>
-      {role === "admin" && (
-        <button type="button">Manage Users</button>
-      )}
+      {role === "admin" && <button type="button">Manage Users</button>}
       <p>{lessons.length} lessons</p>
     </section>
   );
@@ -468,3 +469,22 @@ No. It is best for optional UI where there is no alternate branch. Use `if` or a
 You can now model real UI states with clear, maintainable conditional rendering. You can choose between JavaScript control flow, ternaries, logical operators, guard clauses, optional chaining, and nullish coalescing based on the business rule. You also understand explicit status models, accessibility considerations, and why UI authorization is not a security boundary.
 
 You are now ready to apply the same state-driven thinking to dynamic collections on Day 16.
+
+## Interview Notes (Quick Revision)
+
+- Pick the right tool: `if`/guard clause for large branches, ternary for a simple two-way choice, `&&` for an optional branch with no alternative, explicit status value for mutually exclusive states.
+- `&&` with a numeric value is risky — `{count && <Badge/>}` renders `0` on the screen when `count` is `0`; use an explicit boolean check instead.
+- `||` treats **every falsy value** (`0`, `""`, `false`) as "absent"; `??` treats only `null`/`undefined` as absent — pick `??` when `0`/`""` are valid values.
+- Hiding UI (e.g., a Delete button) is **not a security boundary** — the server must independently authorize the actual operation.
+- Avoid deeply nested ternaries — extract to a variable, guard clause, or separate component for readability.
+- Model mutually exclusive states (loading/error/success/empty) with an explicit status field rather than multiple overlapping booleans.
+
+**Rapid-fire answers**
+
+| Question                                      | One-line Answer                             |
+| --------------------------------------------- | ------------------------------------------- | -------- | --- | --- | ----------------------------------------------------- |
+| Best pattern for optional branch with no alt? | `&&`                                        |
+| Risk of `{count && <X/>}`?                    | Renders `0` if count is 0                   |
+| `                                             |                                             | `vs`??`? | `   |     | `treats all falsy as missing,`??` only null/undefined |
+| Is hiding a button enough security?           | No, server must authorize independently     |
+| How to model 4+ mutually exclusive states?    | An explicit status value, not many booleans |

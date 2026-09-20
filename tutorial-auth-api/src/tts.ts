@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 
 type Language = "english" | "hindi";
 type Gender = "male" | "female";
+type SpeechRate = "slow" | "normal" | "fast";
 type TextChunk = { text: string; bold: boolean };
 
 const MAX_TEXT_LENGTH = 10000;
@@ -55,20 +56,19 @@ async function synthesizeChunks(
   voice: string,
   outputFormat: import("msedge-tts").OUTPUT_FORMAT,
   chunks: TextChunk[],
-  baseRate: string,
+  baseRate: SpeechRate,
 ): Promise<Buffer> {
   const { MsEdgeTTS } = await import("msedge-tts");
   const buffers: Buffer[] = [];
-  const baseRateNumber = parseInt(baseRate, 10) || 0;
-  const boldRateNumber = baseRateNumber - 12;
-  const boldRate = `${boldRateNumber >= 0 ? "+" : ""}${boldRateNumber}%`;
+  const edgeRate = baseRate === "normal" ? "medium" : baseRate;
+  const boldRate = baseRate === "fast" ? "medium" : "slow";
 
   for (const chunk of chunks) {
     // "x-loud" is an absolute SSML volume level, so it stays audible regardless of the base volume,
     // and combined with a higher pitch + slower rate it reads as clearly stressed/bold.
     const options = chunk.bold
       ? { rate: boldRate, pitch: "+18%", volume: "x-loud" }
-      : { rate: baseRate, volume: "soft" };
+      : { rate: edgeRate, volume: "soft" };
 
     const tts = new MsEdgeTTS();
     await tts.setMetadata(voice, outputFormat);
@@ -101,7 +101,7 @@ export async function synthesizeSpeech(
   text: string,
   gender: Gender,
   language: Language,
-  rate: string,
+  rate: SpeechRate,
 ): Promise<Buffer> {
   if (text.length > MAX_TEXT_LENGTH) {
     throw new Error(`Text must be ${MAX_TEXT_LENGTH} characters or fewer.`);

@@ -7,6 +7,7 @@ estimatedMinutes: 90
 order: 13
 track: react
 ---
+
 # Day 13 [Beginner → Intermediate]: Forms and Controlled Components
 
 ## Goal
@@ -52,7 +53,7 @@ const [name, setName] = useState("");
   name="name"
   value={name}
   onChange={(event) => setName(event.target.value)}
-/>
+/>;
 ```
 
 The value comes from state and changes through the setter. A label should be associated with the input in a real form.
@@ -342,7 +343,9 @@ return (
   <>
     <label htmlFor="note">Quick note</label>
     <input id="note" ref={noteRef} placeholder="Quick note" />
-    <button type="button" onClick={saveNote}>Save Note</button>
+    <button type="button" onClick={saveNote}>
+      Save Note
+    </button>
   </>
 );
 ```
@@ -576,3 +579,24 @@ Complex forms may need values, touched state, dirty state, errors, submission st
 ## Day 13 Outcome
 
 You can now design, implement, validate, reset, and explain React forms. You understand controlled and uncontrolled inputs, reusable handlers, input-specific value handling, validation, interaction state, accessibility, and production-oriented submission flow. You are ready to integrate these patterns into the Notes App on Day 14.
+
+## Interview Notes (Quick Revision)
+
+- **Controlled input**: value comes from state and updates via `onChange` — React owns the source of truth. **Uncontrolled input**: DOM manages its own value (accessed via ref) — React doesn't track every keystroke.
+- Use a **generic change handler** with computed property names for multi-field forms: `setForm(prev => ({ ...prev, [name]: value }))`.
+- Never mutate form state (`form.email = value`) — always produce a new object.
+- Checkboxes use `checked`, not `value`, for controlled boolean state.
+- Client-side validation is a **UX convenience only**; the server must always re-validate and authorize — never trust the browser.
+- Don't show every validation error immediately — track touched/submitted state so errors appear at the right time.
+- Avoid accidentally turning a controlled input into uncontrolled by passing `undefined` as its value — normalize with a default (e.g., `""`).
+- Wire submission through `<form onSubmit>`, not only a button's `onClick`, so Enter-key submission works.
+
+**Rapid-fire answers**
+
+| Question                                          | One-line Answer                           |
+| ------------------------------------------------- | ----------------------------------------- |
+| Controlled vs uncontrolled input?                 | Controlled = React state drives the value |
+| How to handle many form fields with one function? | Generic handler using `[e.target.name]`   |
+| Is client-side validation a security measure?     | No, server must validate independently    |
+| Checkbox value prop?                              | `checked`, not `value`                    |
+| When should errors be shown?                      | After field is touched or form submitted  |

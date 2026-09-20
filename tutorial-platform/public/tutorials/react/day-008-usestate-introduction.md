@@ -143,7 +143,7 @@ const [open, setOpen] = useState(false);
 
 <button type="button" onClick={() => setOpen((value) => !value)}>
   {open ? "Close" : "Open"}
-</button>
+</button>;
 ```
 
 Functional toggles are a clean pattern because the next value depends on the previous value.
@@ -195,9 +195,7 @@ setItems((current) => [...current, newItem]);
 Remove:
 
 ```jsx
-setItems((current) =>
-  current.filter((item) => item.id !== id)
-);
+setItems((current) => current.filter((item) => item.id !== id));
 ```
 
 Update one item:
@@ -205,8 +203,8 @@ Update one item:
 ```jsx
 setItems((current) =>
   current.map((item) =>
-    item.id === id ? { ...item, done: !item.done } : item
-  )
+    item.id === id ? { ...item, done: !item.done } : item,
+  ),
 );
 ```
 
@@ -561,3 +559,24 @@ Use `useState` only. Do not introduce Context, reducers, or external state libra
 ## Day 8 Outcome
 
 You understand state as a render-driven snapshot and can safely update primitive, object, nested-object, and array state using `useState`. You understand when to use functional updates, how to avoid duplicated derived state, and how state ownership affects component design. You are ready for multiple-state patterns and more complex state design in Day 9.
+
+## Interview Notes (Quick Revision)
+
+- **State** = data a component remembers across renders that affects what it renders (e.g., counter, form input, modal open/closed). Don't store what can be derived/calculated.
+- `useState(initial)` returns `[value, setter]`. Calling the setter **requests** a re-render; it does not mutate the current variable immediately (the current render's closure still holds the old value).
+- Use the **functional updater** form (`setCount(prev => prev + 1)`) whenever the next value depends on the previous one — critical when calling the setter multiple times in one handler.
+- React **batches** multiple state updates triggered in the same event into a single re-render.
+- Never mutate objects/arrays in state directly — always create a new object/array (`{ ...obj, field: x }`, `[...arr, item]`).
+- Each component **instance** has its own independent state — two `<Counter />` renders don't share values.
+- Common bug: calling the setter during render (`onClick={setCount(count+1)}`) — pass a function reference or arrow function instead.
+- Lazy initial state: `useState(() => expensiveInit())` avoids running expensive logic on every render — but should not run side effects.
+
+**Rapid-fire answers**
+
+| Question                                                 | One-line Answer                           |
+| -------------------------------------------------------- | ----------------------------------------- |
+| Does calling the setter update the variable immediately? | No, only on next render                   |
+| When to use functional update form?                      | When next state depends on previous state |
+| Does React batch state updates?                          | Yes, within the same event                |
+| Can you mutate state objects directly?                   | No, always create a new reference         |
+| Do sibling component instances share state?              | No, each instance is independent          |

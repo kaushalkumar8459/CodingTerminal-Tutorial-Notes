@@ -11,6 +11,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { TextToSpeechPage } from "./pages/TextToSpeechPage";
 import { TutorialPage } from "./pages/TutorialPage";
 import { UnauthorizedPage } from "./pages/UnauthorizedPage";
+import { YouTubeDetailsPage } from "./pages/YouTubeDetailsPage";
 
 function TutorialLayout() {
   const { track: routeTrack } = useParams();
@@ -94,6 +95,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="/tools/text-to-speech" element={<TextToSpeechPage />} />
+      <Route path="/tools/youtube-details" element={<YouTubeDetailsPage />} />
       <Route
         path="/admin"
         element={

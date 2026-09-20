@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 82
 track: react
 ---
+
 # Day 82 [Intermediate]: useReducer for Complex State
 
 ## Goal
@@ -396,3 +397,21 @@ Expected output:
 - You can separate pure state logic from asynchronous side effects
 - You can choose between useState and useReducer based on complexity rather than habit
 - You are ready for imperative component APIs in Day 83
+
+## Interview Notes (Quick Revision)
+
+- Prefer `useReducer` over multiple `useState` calls when state has **many related transitions** or complex, action-driven logic — it centralizes transition rules in one place.
+- The reducer function must stay **pure**: `(state, action) => newState`, no side effects, no mutation.
+- Keep async work (API calls) **outside the reducer** — dispatch plain actions like `fetchStarted`/`fetchSucceeded`/`fetchFailed` from an effect or handler, and let the reducer just react to them.
+- Well-named, intent-based actions (not `setX`) make state transitions self-documenting and testable in isolation.
+- Choose `useReducer` vs `useState` based on **actual complexity**, not habit — simple independent values are still fine as `useState`.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                |
+| ---------------------------------------------- | ---------------------------------------------- |
+| When to prefer `useReducer` over `useState`?   | Many related/complex state transitions         |
+| Must the reducer be pure?                      | Yes, no side effects or mutation               |
+| Where should async logic live?                 | Outside the reducer, dispatching plain actions |
+| How should actions be named?                   | Intent-based, not generic setters              |
+| Is `useReducer` always better than `useState`? | No, choose based on actual complexity          |

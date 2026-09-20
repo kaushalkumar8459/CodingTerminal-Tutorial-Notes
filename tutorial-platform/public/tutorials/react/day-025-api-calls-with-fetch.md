@@ -7,6 +7,7 @@ estimatedMinutes: 180
 order: 25
 track: react
 ---
+
 # Day 25 [Intermediate]: API Calls with `fetch`
 
 ## Goal
@@ -165,9 +166,9 @@ const [error, setError] = useState(null);
 Prefer a single status over contradictory booleans such as:
 
 ```jsx
-isLoading === true
-isError === true
-isSuccess === true
+isLoading === true;
+isError === true;
+isSuccess === true;
 ```
 
 unless your state model explicitly allows those combinations.
@@ -311,12 +312,9 @@ useEffect(() => {
   // request
 }, [retryToken]);
 
-<button
-  type="button"
-  onClick={() => setRetryToken((value) => value + 1)}
->
+<button type="button" onClick={() => setRetryToken((value) => value + 1)}>
   Retry
-</button>
+</button>;
 ```
 
 For production systems, consider retry limits, exponential backoff, jitter, and whether the failure is retryable.
@@ -371,13 +369,13 @@ A successful HTTP status does not guarantee the shape you expected.
 For example, this can still be wrong:
 
 ```json
-{"message":"unexpected payload"}
+{ "message": "unexpected payload" }
 ```
 
 when your UI expects:
 
 ```json
-[{"id":1,"name":"A"}]
+[{ "id": 1, "name": "A" }]
 ```
 
 In production, validate important response shapes with a schema/validation layer when the cost of malformed data is significant.
@@ -410,7 +408,7 @@ Do not create an effect just to filter fetched data:
 
 ```jsx
 const visibleUsers = users.filter((user) =>
-  user.name.toLowerCase().includes(query.toLowerCase())
+  user.name.toLowerCase().includes(query.toLowerCase()),
 );
 ```
 
@@ -551,7 +549,7 @@ export default function UserDirectory() {
     if (!normalizedQuery) return users;
 
     return users.filter((user) =>
-      user.name.toLowerCase().includes(normalizedQuery)
+      user.name.toLowerCase().includes(normalizedQuery),
     );
   }, [users, query]);
 
@@ -927,7 +925,7 @@ Filtering a small array is usually simple derived work:
 
 ```jsx
 const visibleUsers = users.filter((user) =>
-  user.name.toLowerCase().includes(query.trim().toLowerCase())
+  user.name.toLowerCase().includes(query.trim().toLowerCase()),
 );
 ```
 
@@ -952,9 +950,7 @@ HTTP success does not guarantee a valid payload. A production application can va
 ```jsx
 function isUser(value) {
   return (
-    value &&
-    typeof value.id === "number" &&
-    typeof value.name === "string"
+    value && typeof value.id === "number" && typeof value.name === "string"
   );
 }
 
@@ -1027,3 +1023,23 @@ retry + production concerns
 ```
 
 **Next:** Day 26 — API calls with Axios and query basics, building on the same request-state and error-handling principles rather than starting over.
+
+## Interview Notes (Quick Revision)
+
+- `fetch()` only **rejects on network failure** — a 404/500 still resolves successfully, so always check `response.ok` before treating a response as good data.
+- Never mark an effect callback itself `async` (`useEffect(async () => {})`) — define an inner async function and call it, since the effect must return `undefined` or a cleanup function, not a Promise.
+- Use `AbortController` + effect cleanup to cancel outdated requests when inputs (like search text) change quickly.
+- Cancellation is **cooperative**, not a full guarantee against races — also guard state updates against stale/older responses finishing after a newer one.
+- An empty successful result (`[]`) is valid data, not an error — don't conflate empty with failure.
+- Never expose secrets (API keys) in frontend code — anything shipped to the browser is visible to users, `.env` doesn't make it secret.
+- Don't blindly retry every failed request — some errors aren't retryable, and retries need limits/backoff, especially for non-idempotent methods like POST.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                        |
+| ---------------------------------------------- | -------------------------------------- |
+| Does `fetch` reject on HTTP 404?               | No, check `response.ok`                |
+| Can an effect callback be `async` directly?    | No, wrap an inner async function       |
+| Is cancellation alone enough to prevent races? | No, also guard against stale responses |
+| Is an empty list an error?                     | No, it's valid successful state        |
+| Are `.env` browser variables secret?           | No, they're visible to users           |

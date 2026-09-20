@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 66
 track: react
 ---
+
 # Day 66 [Advanced]: Advanced Forms with RHF + Zod
 
 ## Goal
@@ -137,13 +138,15 @@ const {
   aria-invalid={errors.email ? "true" : "false"}
   aria-describedby={errors.email ? "email-error" : undefined}
   {...register("email", { required: "Email is required" })}
-/>
+/>;
 
-{errors.email && (
-  <p id="email-error" role="alert">
-    {errors.email.message}
-  </p>
-)}
+{
+  errors.email && (
+    <p id="email-error" role="alert">
+      {errors.email.message}
+    </p>
+  );
+}
 ```
 
 For long forms, consider focusing the first invalid field after submit. Keep server errors distinguishable from client validation errors when that distinction helps the user recover.
@@ -177,14 +180,16 @@ const { fields, append, remove } = useFieldArray({
   name: "skills",
 });
 
-{fields.map((field, index) => (
-  <div key={field.id}>
-    <input {...register(`skills.${index}.value`)} />
-    <button type="button" onClick={() => remove(index)}>
-      Remove
-    </button>
-  </div>
-))}
+{
+  fields.map((field, index) => (
+    <div key={field.id}>
+      <input {...register(`skills.${index}.value`)} />
+      <button type="button" onClick={() => remove(index)}>
+        Remove
+      </button>
+    </div>
+  ));
+}
 ```
 
 For nested data, use RHF's field-name paths consistently, such as `address.city` or `skills.0.value`. Validation schemas should mirror the submitted data shape.
@@ -230,7 +235,7 @@ const onSubmit = async (data) => {
   <button type="submit" disabled={isSubmitting}>
     {isSubmitting ? "Saving..." : "Save"}
   </button>
-</form>
+</form>;
 ```
 
 In production, catch expected API failures and show an actionable form-level message. Disable duplicate submission while the same operation is pending, but do not use disabling as a substitute for server-side idempotency where duplicate requests are dangerous.
@@ -543,3 +548,21 @@ Expected output:
 - You can map server errors without losing valid user input
 - You can design accessible and reliable submission flows
 - You are ready for accessibility hardening in Day 67
+
+## Interview Notes (Quick Revision)
+
+- **React Hook Form (RHF)** keeps form state largely **outside React re-renders** (uncontrolled-style via refs) for performance, unlike a fully controlled form pattern.
+- **Zod** defines a schema-first validation contract; RHF's resolver connects that schema to form validation automatically.
+- Map **server-side validation errors** back onto specific fields without discarding the user's already-entered valid input.
+- Client-side (Zod) validation is UX only — the **server must always re-validate** independently, since client checks can be bypassed.
+- Dynamic field arrays (add/remove repeated fields) need stable keys per entry, same immutability principles as any list state.
+
+**Rapid-fire answers**
+
+| Question                                                               | One-line Answer                               |
+| ---------------------------------------------------------------------- | --------------------------------------------- |
+| Is RHF's form state fully controlled by React state?                   | No, it's mostly ref-based/uncontrolled-style  |
+| What connects Zod schemas to RHF?                                      | A resolver                                    |
+| Should server-side validation be skipped if Zod validates client-side? | No, server must always validate independently |
+| What happens to valid fields when a server error hits one field?       | They should be preserved, not cleared         |
+| What do dynamic field arrays need?                                     | Stable keys per entry                         |

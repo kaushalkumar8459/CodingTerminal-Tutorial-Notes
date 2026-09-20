@@ -7,6 +7,7 @@ estimatedMinutes: 120
 order: 22
 track: react
 ---
+
 # Day 22 [Beginner → Intermediate]: `useEffect` Basics
 
 ## Goal
@@ -666,3 +667,24 @@ Functions created during render normally receive a new identity. If that functio
 You now understand the **purpose, lifecycle, dependencies, cleanup, and boundaries of `useEffect`**, rather than memorizing syntax. You can distinguish render-time derivation, event-driven actions, and external synchronization.
 
 **Next:** Day 23 — dependency arrays, reactive dependencies, and stale-closure reasoning.
+
+## Interview Notes (Quick Revision)
+
+- `useEffect` is for **synchronizing React with something outside React** (DOM APIs, timers, subscriptions, network, storage) — not a generic "run after render" bucket.
+- If there's no external system involved, the logic probably belongs in **render** (pure calculation) or an **event handler**, not an effect.
+- Order: render → React commits → effect setup runs → dependency changes or unmount → cleanup runs → new setup (if still applicable).
+- An empty dependency array `[]` doesn't automatically make an effect "safe" — it can still capture stale values in its closure, and doesn't remove Strict Mode's extra dev-mode setup/cleanup cycle.
+- Never call browser APIs directly during render — render must stay pure.
+- Split unrelated synchronization concerns into **separate effects** rather than one giant effect.
+- An effect that updates state which is also one of its own dependencies can create an **infinite loop** — think through the state transition before writing the effect.
+- Don't suppress dependency-array lint warnings mechanically — they often reveal a real stale-closure or design bug.
+
+**Rapid-fire answers**
+
+| Question                                 | One-line Answer                            |
+| ---------------------------------------- | ------------------------------------------ |
+| What is `useEffect` really for?          | Synchronizing with an external system      |
+| Is `useEffect` just `componentDidMount`? | No, it's about reactive synchronization    |
+| Does `[]` prevent stale closures?        | No                                         |
+| Where should pure derived values go?     | Calculated during render, not in an effect |
+| What can cause an infinite effect loop?  | Effect updating its own dependency         |

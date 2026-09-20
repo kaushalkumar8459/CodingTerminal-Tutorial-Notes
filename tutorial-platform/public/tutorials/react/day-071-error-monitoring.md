@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 71
 track: react
 ---
+
 # Day 71 [Advanced]: Error Monitoring
 
 ## Goal
@@ -393,4 +394,24 @@ Expected output:
 - You can capture richer diagnostics for faster debugging
 - You can correlate production failures with releases and environments
 - You can design privacy-aware monitoring and alerting workflows
+
+## Interview Notes (Quick Revision)
+
+- Runtime error monitoring (e.g., Sentry-style SDKs) **captures exceptions** in production with context — going beyond what local development ever sees.
+- **Breadcrumbs** reconstruct the sequence of user actions leading up to an error, making production issues much easier to diagnose.
+- Correlate errors with **release/version** and environment so you can identify which deploy introduced a regression.
+- **Source maps** let you see readable stack traces (original source) instead of minified production code.
+- Be **privacy-aware**: scrub or avoid capturing sensitive user data (PII, tokens) in error reports and breadcrumbs.
+- Error monitoring complements Error Boundaries — boundaries contain the crash in the UI, monitoring makes the failure **observable and actionable** for the team.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                              |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| What do breadcrumbs help with?                 | Reconstructing the user flow before an error                 |
+| Why correlate errors with release version?     | To find which deploy caused a regression                     |
+| What do source maps enable?                    | Readable stack traces from minified code                     |
+| Should PII be sent to error monitoring tools?  | No, scrub sensitive data first                               |
+| How do Error Boundaries and monitoring relate? | Boundaries contain the crash; monitoring makes it observable |
+
 - You are ready for frontend security hardening in Day 72

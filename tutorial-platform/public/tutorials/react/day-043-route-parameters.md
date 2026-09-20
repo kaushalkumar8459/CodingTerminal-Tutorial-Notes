@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 43
 track: react
 ---
+
 # Day 43 [Intermediate]: Route Parameters
 
 ## Goal
@@ -60,10 +61,7 @@ The router matches the URL shape; it does not decide whether `42` or `abc` is a 
 A route can contain more than one parameter:
 
 ```jsx
-<Route
-  path="/users/:userId/orders/:orderId"
-  element={<OrderDetails />}
-/>
+<Route path="/users/:userId/orders/:orderId" element={<OrderDetails />} />
 ```
 
 For `/users/10/orders/500`, the params are conceptually:
@@ -194,9 +192,7 @@ function ProductList({ products }) {
     <ul>
       {products.map((product) => (
         <li key={product.id}>
-          <Link to={`/products/${product.id}`}>
-            {product.name}
-          </Link>
+          <Link to={`/products/${product.id}`}>{product.name}</Link>
         </li>
       ))}
     </ul>
@@ -535,7 +531,7 @@ Use a router test environment with explicit initial entries:
 render(
   <MemoryRouter initialEntries={["/products/2"]}>
     <AppRoutes />
-  </MemoryRouter>
+  </MemoryRouter>,
 );
 ```
 
@@ -693,3 +689,22 @@ Requirements:
 You can now build robust parameter-driven routes, validate URL input, connect route identity to local or remote data, handle loading/error/not-found states, prevent stale request updates, and design secure URL-driven detail pages.
 
 **Next:** Day 44 — Nested Routes and Layout Routes.
+
+## Interview Notes (Quick Revision)
+
+- Route params from `useParams()` always arrive as **strings** — convert/validate before using them as numbers or other types.
+- A syntactically valid URL doesn't mean the resource exists — validate the param against real data and handle a "not found" state explicitly.
+- Include the route param (e.g., `id`) in the effect's **dependency array**, or the component can keep showing stale data when navigating between similar routes.
+- Guard against **stale requests**: rapid navigation between params can let an older response overwrite the current one.
+- Never trust route params for **authorization** — a user can type any URL manually; the server must independently authorize access to the resource.
+- Use durable state (URL search params, storage) rather than navigation state for anything that must survive a refresh or be shareable/deep-linkable.
+
+**Rapid-fire answers**
+
+| Question                                              | One-line Answer                                |
+| ----------------------------------------------------- | ---------------------------------------------- |
+| What type are values from `useParams()`?              | Always strings                                 |
+| Does a valid URL guarantee the resource exists?       | No, validate separately                        |
+| Why include the param in the effect dependency array? | To avoid showing stale data on param change    |
+| Can route params be trusted for authorization?        | No, server must authorize independently        |
+| Where to store state that must survive a refresh?     | URL search params or another persistence layer |

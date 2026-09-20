@@ -35,12 +35,24 @@ function loadStickyNote(): StickyNote | null {
 type Gender = "male" | "female";
 type Language = "english" | "hindi";
 
+function createAudioFileName(date = new Date()) {
+  const timestamp = [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+    String(date.getHours()).padStart(2, "0"),
+    String(date.getMinutes()).padStart(2, "0"),
+    String(date.getSeconds()).padStart(2, "0"),
+  ].join("-");
+
+  return `speech-${timestamp}.mp3`;
+}
+
 function pickVoice(voices: SpeechSynthesisVoice[], gender: Gender, language: Language) {
   if (!voices.length) return null;
   const localeVoices = voices.filter((v) => v.lang.toLowerCase().startsWith(language === "hindi" ? "hi" : "en"));
-  const pool = localeVoices.length ? localeVoices : voices;
   const hints = gender === "female" ? FEMALE_HINTS : MALE_HINTS;
-  return pool.find((v) => hints.some((h) => v.name.toLowerCase().includes(h))) ?? pool[0];
+  return localeVoices.find((v) => hints.some((h) => v.name.toLowerCase().includes(h))) ?? localeVoices[0] ?? null;
 }
 
 export function TextToSpeechPage() {
@@ -93,7 +105,15 @@ export function TextToSpeechPage() {
   function speak(trimmed: string) {
     const utterance = new SpeechSynthesisUtterance(trimmed);
     const voice = pickVoice(voices, gender, language);
-    if (voice) utterance.voice = voice;
+    if (!voice) {
+      setStatus({
+        message: `No ${gender} ${language} voice is installed in this browser.`,
+        isError: true,
+      });
+      return;
+    }
+
+    utterance.voice = voice;
     utterance.rate = rate;
     utterance.onstart = () => {
       setIsSpeaking(true);
@@ -147,7 +167,12 @@ export function TextToSpeechPage() {
       const response = await fetch(`${ttsApiBaseUrl}/tts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: trimmed, gender, language }),
+        body: JSON.stringify({
+          text: trimmed,
+          gender,
+          language,
+          rate: rate === 0.75 ? "slow" : rate === 1.25 ? "fast" : "normal",
+        }),
       });
 
       if (!response.ok) {
@@ -161,7 +186,7 @@ export function TextToSpeechPage() {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "speech.mp3";
+      a.download = createAudioFileName();
       document.body.appendChild(a);
       a.click();
       a.remove();

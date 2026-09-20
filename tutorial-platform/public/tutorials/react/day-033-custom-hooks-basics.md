@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 33
 track: react
 ---
+
 # Day 33 [Intermediate]: Custom Hooks Basics
 
 ## Goal
@@ -83,7 +84,9 @@ With extraction:
 ```jsx
 function PanelA() {
   const panel = useToggle();
-  return <button onClick={panel.toggle}>{panel.value ? 'Close' : 'Open'}</button>;
+  return (
+    <button onClick={panel.toggle}>{panel.value ? "Close" : "Open"}</button>
+  );
 }
 ```
 
@@ -184,7 +187,7 @@ Before creating a hook, ask:
 Prefer a focused API:
 
 ```jsx
-useDebouncedValue(query, 300)
+useDebouncedValue(query, 300);
 ```
 
 over an abstraction that exposes unrelated policy flags:
@@ -255,10 +258,10 @@ function useWindowWidth() {
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -341,9 +344,9 @@ function useCounter(initial = 0) {
 ### `useSearch`
 
 ```jsx
-function useSearch(initial = '') {
+function useSearch(initial = "") {
   const [query, setQuery] = useState(initial);
-  const clear = () => setQuery('');
+  const clear = () => setQuery("");
 
   return { query, setQuery, clear };
 }
@@ -354,7 +357,7 @@ function useSearch(initial = '') {
 Custom hooks become more powerful when small hooks compose into a larger behavior.
 
 ```jsx
-function useSearchController(initial = '') {
+function useSearchController(initial = "") {
   const { query, setQuery, clear } = useSearch(initial);
   const { value: loading, setOn: start, setOff: stop } = useToggle(false);
 
@@ -397,7 +400,7 @@ A normal function is often better for pure transformations:
 
 ```jsx
 function formatPrice(value) {
-  return new Intl.NumberFormat('en-IN').format(value);
+  return new Intl.NumberFormat("en-IN").format(value);
 }
 ```
 
@@ -464,7 +467,7 @@ Example:
 ```jsx
 function useUser(userId) {
   const [state, setState] = useState({
-    status: 'idle',
+    status: "idle",
     data: null,
     error: null,
   });
@@ -474,7 +477,7 @@ function useUser(userId) {
     let active = true;
 
     async function load() {
-      setState({ status: 'loading', data: null, error: null });
+      setState({ status: "loading", data: null, error: null });
 
       try {
         const response = await fetch(`/api/users/${userId}`, {
@@ -487,12 +490,12 @@ function useUser(userId) {
 
         const data = await response.json();
         if (active) {
-          setState({ status: 'success', data, error: null });
+          setState({ status: "success", data, error: null });
         }
       } catch (error) {
-        if (error?.name === 'AbortError') return;
+        if (error?.name === "AbortError") return;
         if (active) {
-          setState({ status: 'error', data: null, error });
+          setState({ status: "error", data: null, error });
         }
       }
     }
@@ -515,16 +518,16 @@ The `active` guard demonstrates the response-ownership idea; `AbortController` r
 
 Before implementing an async or effectful hook, document its observable contract.
 
-| State/Action | Expected behavior |
-|---|---|
-| initial render | deterministic initial state |
-| input changes | old work is cleaned/cancelled where appropriate |
-| loading | consumer can show progress |
-| success | data is available and error is cleared |
-| error | error is exposed without hiding useful previous data unless contract says so |
-| cancellation | no stale update is published |
-| unmount | subscriptions/work are cleaned up |
-| retry | new request has clear ownership |
+| State/Action   | Expected behavior                                                            |
+| -------------- | ---------------------------------------------------------------------------- |
+| initial render | deterministic initial state                                                  |
+| input changes  | old work is cleaned/cancelled where appropriate                              |
+| loading        | consumer can show progress                                                   |
+| success        | data is available and error is cleared                                       |
+| error          | error is exposed without hiding useful previous data unless contract says so |
+| cancellation   | no stale update is published                                                 |
+| unmount        | subscriptions/work are cleaned up                                            |
+| retry          | new request has clear ownership                                              |
 
 This prevents a common mistake: implementing internal effects first and only later deciding what the hook's API should mean.
 
@@ -556,10 +559,10 @@ Build a reusable `useSearch` hook and two different consumers.
 ### Hook
 
 ```jsx
-function useSearch(initial = '') {
+function useSearch(initial = "") {
   const [query, setQuery] = useState(initial);
 
-  const clear = () => setQuery('');
+  const clear = () => setQuery("");
 
   return { query, setQuery, clear };
 }
@@ -579,7 +582,9 @@ function ProductFilter() {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      <button type="button" onClick={clear}>Clear</button>
+      <button type="button" onClick={clear}>
+        Clear
+      </button>
     </section>
   );
 }
@@ -599,7 +604,9 @@ function CommandSearch() {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      <button type="button" onClick={clear}>Reset</button>
+      <button type="button" onClick={clear}>
+        Reset
+      </button>
     </section>
   );
 }
@@ -687,7 +694,7 @@ function useStorage(key) {
 ```jsx
 function useOnlineStatus() {
   useEffect(() => {
-    window.addEventListener('online', handleOnline);
+    window.addEventListener("online", handleOnline);
   }, []); // ✗ no cleanup
 }
 ```
@@ -877,3 +884,23 @@ Use each where reuse is justified. For every hook document:
 You can now design custom hooks as focused, reusable behavior modules rather than as generic wrappers around arbitrary code. You understand state ownership, hook rules, effect dependencies, cleanup, browser boundaries, API design, async cancellation, testing, and appropriate abstraction.
 
 **Next:** Day 34 — reusable logic patterns, where these fundamentals are applied to more advanced async, debouncing, pagination, composition, and cancellation patterns.
+
+## Interview Notes (Quick Revision)
+
+- A **custom Hook** is just a regular function whose name starts with `use` that can call other Hooks — it exists to extract and reuse **stateful logic**, not UI markup.
+- Custom Hooks share **logic**, not state — each component calling the hook gets its own independent state instance.
+- Must follow the same **Rules of Hooks**: call at the top level, never conditionally, never inside loops/callbacks.
+- Design a clean, minimal **API contract** (inputs/outputs) rather than exposing every internal implementation detail.
+- Don't wrap `useCallback` around every function returned by a hook automatically — only when a consumer genuinely needs stable identity.
+- Custom Hooks with effects still need proper **cleanup** (timers, subscriptions, abort controllers).
+- Don't create a custom hook for every two lines of logic — extract when there's real reuse or meaningful complexity to hide.
+
+**Rapid-fire answers**
+
+| Question                                                  | One-line Answer                                        |
+| --------------------------------------------------------- | ------------------------------------------------------ |
+| What makes a function a "hook"?                           | Its name starts with `use` and it can call other Hooks |
+| Do custom hooks share state across components?            | No, each call gets independent state                   |
+| Can Hooks be called conditionally?                        | No, only at the top level                              |
+| Should every hook return `useCallback`-wrapped functions? | No, only if a consumer needs stable identity           |
+| When should you NOT extract a custom hook?                | When there's no real reuse or complexity to hide       |

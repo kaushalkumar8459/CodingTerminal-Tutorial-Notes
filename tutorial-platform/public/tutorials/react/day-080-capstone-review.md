@@ -7,6 +7,7 @@ estimatedMinutes: 45
 order: 80
 track: react
 ---
+
 # Day 80 [Advanced]: Capstone Review
 
 ## Goal
@@ -369,3 +370,21 @@ Expected output:
 - You can transform project work into interview-ready evidence
 - You can identify measurable quality improvements and remaining risks
 - You have completed a scalable advanced React engineering track
+
+## Interview Notes (Quick Revision)
+
+- A professional project review checks **quality gates**: correctness, testing, accessibility compliance, performance, and observability — not just "does it work."
+- Prioritize review effort by **risk** — high-impact areas (auth, payments, data integrity) deserve deeper scrutiny than low-risk cosmetic code.
+- Frame project work in interview terms: what problem it solved, what tradeoffs were made, and what measurable results followed (performance numbers, test coverage, bug reduction).
+- Explicitly document **known tradeoffs and remaining risks** — a mature engineer names limitations rather than implying a perfect solution.
+- Tie the whole course together: architecture, performance, accessibility, testing, and security should all show up in a portfolio project's story.
+
+**Rapid-fire answers**
+
+| Question                                                   | One-line Answer                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------ |
+| What should a professional review check beyond "it works"? | Testing, accessibility, performance, observability     |
+| How should review effort be prioritized?                   | By risk/impact of the area                             |
+| What should a portfolio story include?                     | Problem, tradeoffs, measurable results                 |
+| Should known limitations be hidden?                        | No, document them explicitly                           |
+| What ties this course together in a project?               | Architecture + performance + a11y + testing + security |

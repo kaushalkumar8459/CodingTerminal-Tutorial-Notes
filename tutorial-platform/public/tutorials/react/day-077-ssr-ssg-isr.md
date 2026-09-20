@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 77
 track: react
 ---
+
 # Day 77 [Advanced]: SSR, SSG, ISR
 
 ## Goal
@@ -368,4 +369,23 @@ Expected output:
 - You can optimize route behavior for SEO, freshness, and performance
 - You can define rendering policies using measurable requirements
 - You understand why deployment/runtime behavior matters
+
+## Interview Notes (Quick Revision)
+
+- **SSR** (Server-Side Rendering): renders per-request on the server — best for highly dynamic/personalized content, at the cost of runtime server work.
+- **SSG** (Static Site Generation): renders at build time — fastest delivery, best for stable/rarely-changing content.
+- **ISR** (Incremental Static Regeneration): static pages that revalidate/regenerate periodically — a middle ground between freshness and performance.
+- Choose the strategy based on **freshness requirements, personalization needs, and traffic patterns** — not a single default for the whole app.
+- All three interact with deployment/caching infrastructure — understand how your hosting platform handles revalidation and cache invalidation.
+
+**Rapid-fire answers**
+
+| Question                                  | One-line Answer                    |
+| ----------------------------------------- | ---------------------------------- |
+| SSR renders when?                         | Per request, at request time       |
+| SSG renders when?                         | At build time                      |
+| ISR renders when?                         | Build time + periodic revalidation |
+| Best choice for a stable marketing page?  | SSG                                |
+| Best choice for a personalized dashboard? | SSR                                |
+
 - You are ready for scalable styling systems in Day 78

@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 58
 track: react
 ---
+
 ---
+
 title: Performance Optimization
 slug: day-058-performance-optimization
 dayLabel: Day 58
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 58
 track: react
+
 ---
+
 # Day 58 [Advanced]: Performance Optimization
 
 ## Goal
@@ -301,11 +305,13 @@ Analytics charts should load only when the user opens the insights tab.
 ```jsx
 const AnalyticsPanel = lazy(() => import("./AnalyticsPanel"));
 
-{showInsights && (
-  <Suspense fallback={<p>Loading analytics...</p>}>
-    <AnalyticsPanel />
-  </Suspense>
-)}
+{
+  showInsights && (
+    <Suspense fallback={<p>Loading analytics...</p>}>
+      <AnalyticsPanel />
+    </Suspense>
+  );
+}
 ```
 
 Lazy loading can reduce the initial JavaScript needed for the page, but the feature still needs a useful loading fallback and should be measured to confirm that the reduced initial payload is worth the deferred loading cost.
@@ -409,3 +415,21 @@ Expected output:
 - You can improve performance without over-optimizing
 - You can validate changes with before/after measurements
 - You are ready for runtime failure resilience in Day 59
+
+## Interview Notes (Quick Revision)
+
+- Always **profile before optimizing** — identify the real hotspot rather than guessing where the bottleneck is.
+- Distinguish bottleneck categories: render work, JavaScript execution, network requests, and bundle size — each needs a different fix.
+- Apply `React.memo`/`useMemo`/`useCallback`, lazy loading, or code splitting only where profiling shows a **measured** benefit.
+- Weigh **complexity vs benefit** — an optimization that adds significant code complexity for a marginal gain often isn't worth it.
+- Validate every optimization with **before/after measurements**, not assumptions.
+
+**Rapid-fire answers**
+
+| Question                                | One-line Answer                               |
+| --------------------------------------- | --------------------------------------------- |
+| First step before optimizing?           | Profile to find the real bottleneck           |
+| Main bottleneck categories?             | Render, JS execution, network, bundle size    |
+| Should you add memoization everywhere?  | No, only where measurement shows a need       |
+| How to validate an optimization worked? | Compare before/after measurements             |
+| What's the risk of over-optimizing?     | Added complexity without proportional benefit |

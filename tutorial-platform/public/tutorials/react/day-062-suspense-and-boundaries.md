@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 62
 track: react
 ---
+
 ---
+
 title: Suspense and Boundaries
 slug: day-062-suspense-and-boundaries
 dayLabel: Day 62
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 62
 track: react
+
 ---
+
 # Day 62 [Advanced]: Suspense and Boundaries
 
 ## Goal
@@ -158,7 +162,7 @@ function ProductGridSkeleton() {
 
 <Suspense fallback={<ProductGridSkeleton />}>
   <ProductGrid />
-</Suspense>
+</Suspense>;
 ```
 
 For accessible loading experiences, make sure status text is understandable to assistive technology and avoid unnecessary repeated announcements when nested boundaries resolve quickly.
@@ -432,5 +436,23 @@ Expected output:
 - You can improve perceived speed with appropriate boundary granularity
 - You can combine loading and error containment correctly
 - You can distinguish code-splitting Suspense from ordinary effect-based data fetching
-- You are ready for deeper concurrent interactions in Day 63
 
+## Interview Notes (Quick Revision)
+
+- Use **nested Suspense boundaries** to show progressive loading — outer content can render while an inner, slower section still shows its own fallback.
+- Place boundaries at a **granularity that matches the UX** — one giant boundary hides everything; too many small ones create jarring, flickering loaders.
+- Suspense handles the loading **fallback**, but pair it with an **Error Boundary** for failure containment — they solve different problems.
+- Suspense for data fetching (with libraries that support it) is different from the older effect + `useState` pattern of manually tracking loading/error — don't mix mental models.
+- Route-level lazy-loaded components pair naturally with Suspense boundaries at the route/layout level.
+
+**Rapid-fire answers**
+
+| Question                                                   | One-line Answer                    |
+| ---------------------------------------------------------- | ---------------------------------- |
+| What does Suspense show while waiting?                     | A fallback UI                      |
+| Does Suspense catch errors?                                | No, pair it with an Error Boundary |
+| Should you use one giant Suspense boundary?                | No, match granularity to the UX    |
+| What enables progressive loading?                          | Nested Suspense boundaries         |
+| Is Suspense the same as manual effect-based loading state? | No, it's a different mental model  |
+
+- You are ready for deeper concurrent interactions in Day 63

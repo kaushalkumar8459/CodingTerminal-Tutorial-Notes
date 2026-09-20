@@ -7,6 +7,7 @@ estimatedMinutes: 35
 order: 97
 track: react
 ---
+
 # Day 97 [Expert]: Large-Scale Module Architecture
 
 ## Goal
@@ -362,3 +363,21 @@ Expected output:
 - You can improve scalability with domain contracts and dependency discipline
 - You can establish measurable architecture quality and ownership practices
 - You are ready for micro frontend strategy decisions in Day 98
+
+## Interview Notes (Quick Revision)
+
+- Decompose large codebases along **domain boundaries** (business capabilities), not arbitrary technical layers — each module owns a coherent piece of the domain.
+- Define **stable module API contracts** — what a module exposes publicly should be intentional and rarely need to change, insulating consumers from internal refactors.
+- Prevent **dependency cycles** between modules — enforce a consistent, one-way dependency direction with tooling, not just convention.
+- Design for **cross-team collaboration** — clear module ownership reduces coordination overhead as more teams work in the same codebase.
+- Track architecture quality with measurable indicators (import violations, cycle counts, ownership clarity), not just subjective code review opinions.
+
+**Rapid-fire answers**
+
+| Question                                   | One-line Answer                                         |
+| ------------------------------------------ | ------------------------------------------------------- |
+| How should large codebases be decomposed?  | Along domain/business boundaries                        |
+| What should a module's public API be like? | Stable and intentional                                  |
+| How to prevent dependency cycles?          | Enforce one-way dependency direction with tooling       |
+| Why does clear module ownership matter?    | Reduces cross-team coordination overhead                |
+| How to measure architecture quality?       | Concrete metrics (import violations, cycles, ownership) |

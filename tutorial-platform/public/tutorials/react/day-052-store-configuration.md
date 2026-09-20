@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 52
 track: react
 ---
+
 ---
+
 title: Store Configuration
 slug: day-052-store-configuration
 dayLabel: Day 52
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 52
 track: react
+
 ---
+
 # Day 52 [Advanced]: Store Configuration
 
 ## Goal
@@ -143,8 +147,7 @@ const store = configureStore({
     user: userReducer,
     cart: cartReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 ```
 
@@ -374,8 +377,7 @@ const store = configureStore({
     user: userReducer,
     cart: cartReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: import.meta.env.DEV,
 });
 ```
@@ -489,3 +491,21 @@ Expected output:
 - You understand `preloadedState`, middleware defaults, and DevTools configuration.
 - You can identify common store-configuration mistakes before they reach production.
 - You are ready for advanced slice logic in Day 53.
+
+## Interview Notes (Quick Revision)
+
+- `configureStore` combines multiple slice reducers into one store — each top-level key corresponds to a registered slice reducer.
+- `preloadedState` lets you initialize the store with existing data (e.g., from SSR or a saved session).
+- `configureStore` comes with sensible defaults: Redux DevTools integration and useful middleware (like serializability/immutability checks) enabled automatically in development.
+- Organize the store by **feature/domain slices**, not one giant reducer — keeps state shape scalable and maintainable.
+- Selector paths must exactly match how reducers were registered (`reducer: { cart: cartReducer }` → `state.cart...`).
+
+**Rapid-fire answers**
+
+| Question                                           | One-line Answer                           |
+| -------------------------------------------------- | ----------------------------------------- |
+| What does `configureStore` combine?                | Multiple slice reducers into one store    |
+| What is `preloadedState` for?                      | Initializing the store with existing data |
+| Does `configureStore` include DevTools by default? | Yes                                       |
+| Best way to organize a large store?                | Feature/domain-based slices               |
+| What must match the store's reducer keys?          | Selector paths used in components         |

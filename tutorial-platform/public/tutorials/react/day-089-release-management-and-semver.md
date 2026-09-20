@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 89
 track: react
 ---
+
 # Day 89 [Advanced]: Release Management and SemVer
 
 ## Goal
@@ -353,3 +354,21 @@ Expected output:
 - You can create clear and reliable release communication
 - You can connect release versioning with monitoring and rollback decisions
 - You are ready for browser compatibility strategy in Day 90
+
+## Interview Notes (Quick Revision)
+
+- **SemVer** format `MAJOR.MINOR.PATCH`: MAJOR = breaking changes, MINOR = backward-compatible new features, PATCH = backward-compatible fixes.
+- Classify every change correctly before tagging a release — an accidental breaking change tagged as MINOR/PATCH can silently break consumers.
+- Maintain a clear, structured **changelog** so users/teams understand what changed between versions.
+- Have a **rollback plan** ready — know exactly which prior version to redeploy if the new release causes issues.
+- Monitor closely right after release (error rates, key metrics) to catch regressions quickly — release isn't "done" at deploy time, it's done after verified stability.
+
+**Rapid-fire answers**
+
+| Question                                        | One-line Answer                     |
+| ----------------------------------------------- | ----------------------------------- |
+| What does SemVer's MAJOR version signal?        | A breaking change                   |
+| What does MINOR signal?                         | Backward-compatible new feature     |
+| What does PATCH signal?                         | Backward-compatible bug fix         |
+| Why maintain a changelog?                       | Clear communication of what changed |
+| What should follow immediately after a release? | Active monitoring for regressions   |

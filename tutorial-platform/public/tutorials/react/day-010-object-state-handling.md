@@ -7,6 +7,7 @@ estimatedMinutes: 60
 order: 10
 track: react
 ---
+
 # Day 10 [Intermediate]: Object State Handling
 
 ## Goal
@@ -104,11 +105,7 @@ function handleChange(event) {
 ```
 
 ```jsx
-<input
-  name="firstName"
-  value={profile.firstName}
-  onChange={handleChange}
-/>
+<input name="firstName" value={profile.firstName} onChange={handleChange} />
 ```
 
 `[name]` means the property key is evaluated dynamically. If `name` is `"firstName"`, the resulting update is equivalent to setting `firstName`.
@@ -136,11 +133,19 @@ function ProfileForm() {
     <form onSubmit={(event) => event.preventDefault()}>
       <label>
         First name
-        <input name="firstName" value={profile.firstName} onChange={handleChange} />
+        <input
+          name="firstName"
+          value={profile.firstName}
+          onChange={handleChange}
+        />
       </label>
       <label>
         Last name
-        <input name="lastName" value={profile.lastName} onChange={handleChange} />
+        <input
+          name="lastName"
+          value={profile.lastName}
+          onChange={handleChange}
+        />
       </label>
       <label>
         City
@@ -498,13 +503,25 @@ export default function App() {
       </label>
       <label>
         Email
-        <input name="email" type="email" value={registration.email} onChange={handleChange} />
+        <input
+          name="email"
+          type="email"
+          value={registration.email}
+          onChange={handleChange}
+        />
       </label>
       <label>
         Company
-        <input name="company" value={registration.company} onChange={handleChange} />
+        <input
+          name="company"
+          value={registration.company}
+          onChange={handleChange}
+        />
       </label>
-      <button type="button" onClick={() => setRegistration(createInitialRegistration())}>
+      <button
+        type="button"
+        onClick={() => setRegistration(createInitialRegistration())}
+      >
         Reset
       </button>
     </form>
@@ -733,5 +750,23 @@ By the end of Day 10, you can:
 - avoid redundant derived state
 - choose between object state and separate state variables based on relationships
 - recognize when state transitions are complex enough to consider `useReducer`
+
+## Interview Notes (Quick Revision)
+
+- Updating object state with the setter **replaces** the whole object — it does not auto-merge like class-component `setState`. Always spread the previous object: `setForm(prev => ({ ...prev, name: value }))`.
+- Use a **generic field handler** for forms: `handleChange(e) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))` (computed/dynamic property names via `[e.target.name]`).
+- Nested objects need nested spreads: `{ ...prev, address: { ...prev.address, city } }` — only copy containers along the path that changed, no need to deep-clone everything.
+- Arrays inside object state follow the same immutable array rules (map/filter/spread, never mutate in place).
+- Don't store derivable values as extra object fields — recompute them from existing state during render.
+- Consider `useReducer` when state transitions are numerous, complex, or action-driven — centralizes transition logic and is easier to test.
+
+**Rapid-fire answers**
+
+| Question                                          | One-line Answer                                 |
+| ------------------------------------------------- | ----------------------------------------------- |
+| Does the object state setter merge automatically? | No, you must spread manually                    |
+| How to update one field in a form object?         | Spread previous state + override that field     |
+| How to update a nested object field?              | Spread at every level down to the changed field |
+| When to prefer `useReducer` over `useState`?      | Complex/many related state transitions          |
 
 You are now ready to move from object state into the next state-data pattern in the curriculum.

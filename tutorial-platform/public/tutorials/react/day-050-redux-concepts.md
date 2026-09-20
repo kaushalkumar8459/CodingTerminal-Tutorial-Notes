@@ -226,7 +226,10 @@ function reducer(state = { count: 0 }, action) {
 For nested state, every changed object/array along the update path needs a new reference:
 
 ```jsx
-function profileReducer(state = { profile: { name: "Asha", city: "Kolkata" } }, action) {
+function profileReducer(
+  state = { profile: { name: "Asha", city: "Kolkata" } },
+  action,
+) {
   switch (action.type) {
     case "profile/cityChanged":
       return {
@@ -302,12 +305,12 @@ This separation also makes debugging easier because a state change can be traced
 
 Context and Redux solve related but different concerns.
 
-| Concern | Context | Redux |
-|---|---|---|
-| Primary purpose | Value delivery through tree | Structured state transitions |
-| Change tracking | Provider value identity | Action log + reducer transitions |
-| Tooling | Basic | Rich DevTools ecosystem |
-| Team-scale conventions | Flexible | Strong and explicit |
+| Concern                  | Context                     | Redux                            |
+| ------------------------ | --------------------------- | -------------------------------- |
+| Primary purpose          | Value delivery through tree | Structured state transitions     |
+| Change tracking          | Provider value identity     | Action log + reducer transitions |
+| Tooling                  | Basic                       | Rich DevTools ecosystem          |
+| Team-scale conventions   | Flexible                    | Strong and explicit              |
 | Async/business workflows | Usually application-defined | Strong ecosystem and conventions |
 
 Use Context for low-frequency shared values (theme, locale, auth snapshot). Use Redux when state transitions are frequent, cross-feature, and require strict traceability.
@@ -384,7 +387,8 @@ function libraryReducer(state = initialState, action) {
     case "library/issueMany":
       return {
         ...state,
-        booksIssued: state.booksIssued + Math.max(0, Number(action.payload) || 0),
+        booksIssued:
+          state.booksIssued + Math.max(0, Number(action.payload) || 0),
       };
     default:
       return state;
@@ -435,11 +439,17 @@ export default function LibraryPanel() {
     <section>
       <h2>Books Issued: {booksIssued}</h2>
 
-      <button type="button" onClick={() => dispatch({ type: "library/issueOne" })}>
+      <button
+        type="button"
+        onClick={() => dispatch({ type: "library/issueOne" })}
+      >
         Issue 1
       </button>
 
-      <button type="button" onClick={() => dispatch({ type: "library/returnOne" })}>
+      <button
+        type="button"
+        onClick={() => dispatch({ type: "library/returnOne" })}
+      >
         Return 1
       </button>
 
@@ -493,10 +503,16 @@ export function CounterPanel() {
   return (
     <div>
       <p>Count: {count}</p>
-      <button type="button" onClick={() => dispatch({ type: "counter/increment" })}>
+      <button
+        type="button"
+        onClick={() => dispatch({ type: "counter/increment" })}
+      >
         +
       </button>
-      <button type="button" onClick={() => dispatch({ type: "counter/decrement" })}>
+      <button
+        type="button"
+        onClick={() => dispatch({ type: "counter/decrement" })}
+      >
         -
       </button>
       <button type="button" onClick={() => dispatch({ type: "counter/reset" })}>
@@ -762,3 +778,23 @@ You now understand Redux fundamentals as an architecture, not only as a syntax p
 You can explain the store, actions, reducers, dispatch, selectors, immutable updates, and one-way data flow; connect Redux state to React; diagnose common state-management bugs; and make a reasoned decision about when Redux is appropriate.
 
 The classic APIs in this lesson are intentionally used to expose the underlying concepts. Next day (Day 51) will move from Redux core concepts to Redux Toolkit, where the same ideas become easier to implement with modern APIs.
+
+## Interview Notes (Quick Revision)
+
+- Redux's core cycle: UI dispatches an **action** → a pure **reducer** computes new state from `(state, action)` → the **store** updates → subscribed components re-render via **selectors**.
+- Reducers must be **pure** — never mutate state directly; always return a new state object.
+- Avoid vague action names like `setData` — name actions to describe the **intent** (e.g., `ticketClosed`).
+- Keep async side effects **out of reducers** — they belong in middleware/thunks/effects, not the pure reducer function.
+- Select only the state slice a component actually needs — selecting too much causes unnecessary re-renders.
+- Redux isn't mandatory for every app — it fits well for shared, cross-cutting state; simple local UI state is often better with `useState`/Context.
+- `createStore` (classic API) is largely superseded by `configureStore` (Redux Toolkit) for new applications.
+
+**Rapid-fire answers**
+
+| Question                            | One-line Answer                               |
+| ----------------------------------- | --------------------------------------------- |
+| Must reducers be pure?              | Yes, never mutate, always return new state    |
+| Where do async side effects belong? | Middleware/thunks, not the reducer            |
+| Is Redux required for every app?    | No, use it for genuinely shared/complex state |
+| Naming convention for actions?      | Intent-based, not generic (`setData`)         |
+| Preferred store-creation API today? | `configureStore` over classic `createStore`   |

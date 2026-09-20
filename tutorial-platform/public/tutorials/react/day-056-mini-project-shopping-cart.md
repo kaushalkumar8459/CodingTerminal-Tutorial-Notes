@@ -7,7 +7,9 @@ estimatedMinutes: 45
 order: 56
 track: react
 ---
+
 ---
+
 title: Mini Project - Shopping Cart
 slug: day-056-mini-project-shopping-cart
 dayLabel: Day 56
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 45
 order: 56
 track: react
+
 ---
+
 # Day 56 [Advanced]: Mini Project - Shopping Cart
 
 ## Goal
@@ -201,7 +205,7 @@ For a larger application, selectors such as `selectCartItems`, `selectTotalQty`,
 - Dispatch domain actions from UI interactions.
 - Avoid common mistakes through predictable React flow.
 
-### Topic 6: Production Guardrails for Mini Project   Shopping Cart
+### Topic 6: Production Guardrails for Mini Project Shopping Cart
 
 Theory:
 At this stage, strong engineering comes from repeatable quality checks that prevent regressions in state flow, edge cases, totals, and maintainability.
@@ -222,11 +226,11 @@ if (!isValidQuantity || !isValidPrice) {
 
 Use guardrails at the correct boundary. UI validation improves user experience, while reducer/domain validation protects the state contract from unexpected actions or stale data.
 
-**Explanation:** This topic explains Production Guardrails for Mini Project   Shopping Cart in a practical way so you can apply it confidently in real React projects.
+**Explanation:** This topic explains Production Guardrails for Mini Project Shopping Cart in a practical way so you can apply it confidently in real React projects.
 
 **Key Points:**
 
-- Understand the core idea of Production Guardrails for Mini Project   Shopping Cart.
+- Understand the core idea of Production Guardrails for Mini Project Shopping Cart.
 - Validate important state invariants.
 - Keep cart calculations deterministic.
 - Test add, remove, increment, decrement, clear, and empty-cart cases.
@@ -441,3 +445,21 @@ Expected output:
 - You can keep derived values synchronized with authoritative cart items
 - You can handle common edge cases and state invariants
 - You are ready for render optimization with React.memo in Day 57
+
+## Interview Notes (Quick Revision)
+
+- Adding the same item twice should be **idempotent** in effect — increment quantity on an existing cart line rather than creating a duplicate entry.
+- Use a **stable item identity** (product ID) as the key/lookup for cart line items, not array index.
+- Keep derived totals (subtotal, item count) computed from the authoritative cart items, not stored as separately-tracked state that can drift out of sync.
+- Handle edge cases explicitly: removing the last unit of an item, quantity going to zero, empty cart state.
+- Access cart data through **selectors** in components rather than reaching into the raw store shape directly.
+
+**Rapid-fire answers**
+
+| Question                                         | One-line Answer                         |
+| ------------------------------------------------ | --------------------------------------- |
+| What happens when adding an existing item again? | Quantity increments, no duplicate line  |
+| Best identity for a cart line item?              | The product's stable ID                 |
+| Should cart totals be separate state?            | No, derive them from the cart items     |
+| What happens when quantity hits zero?            | Handle as an explicit removal/edge case |
+| How should components read cart data?            | Through selectors                       |

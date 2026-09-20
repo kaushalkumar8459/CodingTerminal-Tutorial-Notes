@@ -7,6 +7,7 @@ estimatedMinutes: 100
 order: 20
 track: react
 ---
+
 # Day 20 [Intermediate]: Parent-Child Communication
 
 ## Goal
@@ -134,7 +135,9 @@ React receives a function and invokes it when the event occurs.
 If no payload is required, passing the function directly is also valid:
 
 ```jsx
-<button type="button" onClick={onSave}>Save</button>
+<button type="button" onClick={onSave}>
+  Save
+</button>
 ```
 
 ### 4. Payload Design
@@ -247,9 +250,7 @@ function DepartmentSelect({ employeeId, value, onDepartmentChange }) {
       Department
       <select
         value={value}
-        onChange={(event) =>
-          onDepartmentChange(employeeId, event.target.value)
-        }
+        onChange={(event) => onDepartmentChange(employeeId, event.target.value)}
       >
         <option value="HR">HR</option>
         <option value="Engineering">Engineering</option>
@@ -445,17 +446,17 @@ Optimize only when a real rendering or dependency problem has been identified. C
 
 ## Key Concepts
 
-| Concept | Meaning |
-|---|---|
-| Props | Parent-provided child inputs |
-| Callback prop | Function supplied by parent for child-triggered intent |
-| Payload | Data sent with a callback |
-| Controlled component | Important value is owned by parent |
-| One-way data flow | Data authority flows down; changes are requested upward |
-| Semantic API | Callback names describe domain intent |
-| Prop drilling | Forwarding props through uninterested layers |
-| Composition | Supplying UI through children/props |
-| Ref | Imperative handle, not normal data flow |
+| Concept              | Meaning                                                 |
+| -------------------- | ------------------------------------------------------- |
+| Props                | Parent-provided child inputs                            |
+| Callback prop        | Function supplied by parent for child-triggered intent  |
+| Payload              | Data sent with a callback                               |
+| Controlled component | Important value is owned by parent                      |
+| One-way data flow    | Data authority flows down; changes are requested upward |
+| Semantic API         | Callback names describe domain intent                   |
+| Prop drilling        | Forwarding props through uninterested layers            |
+| Composition          | Supplying UI through children/props                     |
+| Ref                  | Imperative handle, not normal data flow                 |
 
 ## Visual Concept Map
 
@@ -554,9 +555,7 @@ export default function TaskManager() {
 
   const completeTask = (id) => {
     setTasks((current) =>
-      current.map((task) =>
-        task.id === id ? { ...task, done: true } : task,
-      ),
+      current.map((task) => (task.id === id ? { ...task, done: true } : task)),
     );
   };
 
@@ -690,11 +689,7 @@ This component accidentally invokes the callback during render:
 
 ```jsx
 function DeleteButton({ taskId, onDelete }) {
-  return (
-    <button onClick={onDelete(taskId)}>
-      Delete
-    </button>
-  );
+  return <button onClick={onDelete(taskId)}>Delete</button>;
 }
 ```
 
@@ -837,3 +832,23 @@ Profile first, identify which subtree work is expensive, then consider state loc
 You can now design production-quality parent-child communication contracts: data flows down through props, user intent flows up through semantic callbacks, shared state has a clear owner, controlled components have explicit APIs, siblings coordinate through a common owner, and refs remain reserved for imperative work.
 
 **Next:** Day 21 combines these communication patterns in an integrated Todo mini-project.
+
+## Interview Notes (Quick Revision)
+
+- **One-way data flow**: data/authority flows down via props; a child requests change by invoking a **callback prop** upward — it never mutates parent data directly.
+- Use **semantic callback names** describing intent (e.g., `onDeleteItem`, `onToggleComplete`), not vague generic names like `onChange` for unrelated actions.
+- Pass an **ID/payload**, not the entire collection, when only a single item's identity is needed.
+- Never call a callback during render (`onDeleteItem(id)` directly in JSX) — only inside an event handler.
+- Refs are for **imperative** work (focus, measuring, scrolling) — not a substitute for normal prop/callback data flow.
+- Prop drilling isn't automatically bad — it's fine for a couple of layers; only address it (composition/Context) when it becomes a real maintenance burden.
+- Don't memoize every callback by default — only do so with evidence of an actual performance problem.
+
+**Rapid-fire answers**
+
+| Question                                      | One-line Answer                                     |
+| --------------------------------------------- | --------------------------------------------------- |
+| How does a child request a parent change?     | Invoke a callback prop                              |
+| Good callback naming?                         | Semantic, intent-based (`onDeleteItem`) not generic |
+| Should you pass the whole list or just an ID? | Just the ID/payload needed                          |
+| Are refs for parent-child data communication? | No, refs are for imperative actions                 |
+| Is prop drilling always bad?                  | No, only when it becomes unmanageable               |

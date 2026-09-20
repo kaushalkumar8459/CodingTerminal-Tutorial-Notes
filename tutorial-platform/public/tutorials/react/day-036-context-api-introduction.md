@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 36
 track: react
 ---
+
 # Day 36 [Intermediate]: Context API Introduction
 
 ## Goal
@@ -236,10 +237,7 @@ This makes provider value identity important:
 The object is newly created on every provider render. In a performance-sensitive tree, a stable value can help:
 
 ```jsx
-const value = useMemo(
-  () => ({ user, login }),
-  [user, login]
-);
+const value = useMemo(() => ({ user, login }), [user, login]);
 ```
 
 Do **not** blindly memoize every provider. First understand the render behavior and measure meaningful performance problems.
@@ -248,14 +246,14 @@ Also remember: memoizing the provider value does not automatically stop consumer
 
 ## 10. Props vs Context vs Composition
 
-| Situation | Good first choice |
-|---|---|
-| Parent → direct child | Props |
-| Sibling coordination | Lift state + callbacks |
-| Small subtree shared value | Context or composition |
-| Theme/auth used widely | Context |
+| Situation                   | Good first choice                  |
+| --------------------------- | ---------------------------------- |
+| Parent → direct child       | Props                              |
+| Sibling coordination        | Lift state + callbacks             |
+| Small subtree shared value  | Context or composition             |
+| Theme/auth used widely      | Context                            |
 | Complex global client state | Context + reducer or state library |
-| Remote server data | Server-state library |
+| Remote server data          | Server-state library               |
 
 The simplest mechanism that clearly expresses ownership should usually win.
 
@@ -494,3 +492,21 @@ Before introducing Context into a production feature, verify:
 You can now explain **prop drilling, Context, provider scope, default values, context updates, composition alternatives, and Context's architectural boundaries**.
 
 Day 37 will turn this mental model into a reusable **`createContext` + Provider architecture**, including provider contracts, custom hooks, value design, testing, and scalable composition.
+
+## Interview Notes (Quick Revision)
+
+- **Context** solves prop drilling — passing data through many layers that don't use it — by letting any descendant read a value without explicit prop passing at every level.
+- A consumer receives the value from the **nearest Provider** above it in the tree; without one, it falls back to the `createContext` default value.
+- Two `createContext()` calls, even with the same conceptual name, create **different context objects** — a Provider from one cannot supply a consumer of the other.
+- Context is **not a full state-management solution** — it doesn't provide selectors, so any value change re-renders all consumers of that context.
+- Use Context when a value is genuinely needed broadly across a subtree; prefer normal props/composition for simpler, shallower sharing.
+
+**Rapid-fire answers**
+
+| Question                                            | One-line Answer                                |
+| --------------------------------------------------- | ---------------------------------------------- |
+| What problem does Context solve?                    | Prop drilling through many uninterested layers |
+| What happens with no Provider above a consumer?     | It gets the `createContext` default value      |
+| Do two contexts with the same name share values?    | No, they're separate objects                   |
+| Does Context have selective (partial) re-rendering? | No, any change re-renders all consumers        |
+| Is Context a complete state manager?                | No, it's a value-sharing mechanism             |

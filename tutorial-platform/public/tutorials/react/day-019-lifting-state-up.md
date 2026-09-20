@@ -7,6 +7,7 @@ estimatedMinutes: 90
 order: 19
 track: react
 ---
+
 # Day 19 [Intermediate]: Lifting State Up
 
 ## Goal
@@ -111,10 +112,7 @@ function SearchBox({ value, onChange }) {
   return (
     <label>
       Search
-      <input
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      />
+      <input value={value} onChange={(event) => onChange(event.target.value)} />
     </label>
   );
 }
@@ -187,13 +185,19 @@ function Calculator() {
   const [scale, setScale] = useState("c");
   const [temperature, setTemperature] = useState("");
 
-  const celsius = scale === "c"
-    ? temperature
-    : temperature === "" ? "" : (Number(temperature) - 32) * 5 / 9;
+  const celsius =
+    scale === "c"
+      ? temperature
+      : temperature === ""
+        ? ""
+        : ((Number(temperature) - 32) * 5) / 9;
 
-  const fahrenheit = scale === "f"
-    ? temperature
-    : temperature === "" ? "" : Number(temperature) * 9 / 5 + 32;
+  const fahrenheit =
+    scale === "f"
+      ? temperature
+      : temperature === ""
+        ? ""
+        : (Number(temperature) * 9) / 5 + 32;
 
   // render two controlled TemperatureInput components
 }
@@ -245,13 +249,13 @@ Composition can reduce unnecessary state/configuration plumbing.
 
 ### 14. Lifting vs Context vs External State
 
-| Scope/problem | Starting point |
-|---|---|
-| One component | Local state |
-| Sibling components | Lift to nearest common owner |
-| Broad subtree | Context may fit |
+| Scope/problem                      | Starting point                   |
+| ---------------------------------- | -------------------------------- |
+| One component                      | Local state                      |
+| Sibling components                 | Lift to nearest common owner     |
+| Broad subtree                      | Context may fit                  |
 | Complex cross-cutting client state | Dedicated state solution may fit |
-| Server/cache data | Data-fetching/cache solution |
+| Server/cache data                  | Data-fetching/cache solution     |
 
 Do not introduce Context merely because two components share one value.
 
@@ -263,15 +267,15 @@ Possible techniques include state locality, component boundaries, reducing unnec
 
 ## Key Concepts
 
-| Concept | Meaning |
-|---|---|
-| Lifting state | Moving shared state to a common owner |
-| Single source of truth | One authoritative logical value |
-| Controlled component | Important value driven by props |
-| Derived value | Calculated from existing state/props |
-| Prop drilling | Passing data through uninterested layers |
-| Composition | Supplying UI through children/props |
-| Context | Sharing a value/dependency through a subtree |
+| Concept                | Meaning                                      |
+| ---------------------- | -------------------------------------------- |
+| Lifting state          | Moving shared state to a common owner        |
+| Single source of truth | One authoritative logical value              |
+| Controlled component   | Important value driven by props              |
+| Derived value          | Calculated from existing state/props         |
+| Prop drilling          | Passing data through uninterested layers     |
+| Composition            | Supplying UI through children/props          |
+| Context                | Sharing a value/dependency through a subtree |
 
 ## Visual Concept Map
 
@@ -325,7 +329,9 @@ function ProfileFeature() {
     <main>
       <ProfileEditor profile={profile} onFieldChange={updateField} />
       <ProfilePreview profile={profile} />
-      <button type="button" onClick={resetProfile}>Reset</button>
+      <button type="button" onClick={resetProfile}>
+        Reset
+      </button>
     </main>
   );
 }
@@ -438,9 +444,7 @@ function Editor({ profile, onChange }) {
   return (
     <input
       value={profile.name}
-      onChange={(event) =>
-        onChange({ ...profile, name: event.target.value })
-      }
+      onChange={(event) => onChange({ ...profile, name: event.target.value })}
     />
   );
 }
@@ -554,3 +558,23 @@ Start with the nearest common owner. Use Context when the shared dependency cros
 You can now decide where shared state belongs, synchronize siblings through a common owner, build controlled components, derive values safely, avoid duplicated state, handle controlled-input edge cases, and evaluate Context or external state solutions based on actual scope and complexity.
 
 **Next:** Day 20 applies these principles in a larger mini-project.
+
+## Interview Notes (Quick Revision)
+
+- **Lift state up** when two or more sibling components need to read/update the same value — move it to their nearest common parent, and pass it down via props (plus setters/callbacks).
+- Duplicated state (same fact stored in two places) can diverge and cause synchronization bugs — always aim for one source of truth.
+- **Controlled component**: an important value is driven entirely by props from the parent, not by internal uncontrolled state.
+- Don't copy a prop into local state just to "have a draft" — that copy won't auto-sync with the prop; use an explicit sync/reset model if truly needed, otherwise keep it controlled.
+- Server state (remote, fetched, cached, invalidated) is a different category from local UI state — don't treat them identically.
+- Introduce **Context** only when the shared dependency is needed broadly across many layers and prop-drilling becomes a genuine maintenance problem — not as the first fix for prop drilling.
+- Optimize (e.g., memoization) only after profiling shows a real performance issue, not preemptively.
+
+**Rapid-fire answers**
+
+| Question                                | One-line Answer                               |
+| --------------------------------------- | --------------------------------------------- |
+| When to lift state up?                  | When siblings need the same source of truth   |
+| Risk of duplicated state?               | Diverging copies causing sync bugs            |
+| Is copying props into local state safe? | Risky — it won't auto-sync with the prop      |
+| When to introduce Context?              | When prop drilling truly becomes unmanageable |
+| When to add memoization?                | After profiling shows an actual problem       |

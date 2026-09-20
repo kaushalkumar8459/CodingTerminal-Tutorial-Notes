@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 28
 track: react
 ---
+
 # Day 28 [Intermediate]: Mini Project — Weather App
 
 ## Goal
@@ -72,13 +73,13 @@ WeatherApp
      Weather API
 ```
 
-| Layer | Responsibility |
-|---|---|
-| `SearchForm` | Input and submit interaction |
-| `WeatherApp` | UI state and orchestration |
+| Layer            | Responsibility                 |
+| ---------------- | ------------------------------ |
+| `SearchForm`     | Input and submit interaction   |
+| `WeatherApp`     | UI state and orchestration     |
 | `weatherService` | HTTP request/response handling |
-| `WeatherCard` | Weather presentation |
-| `RecentSearches` | Recent-search interaction |
+| `WeatherCard`    | Weather presentation           |
+| `RecentSearches` | Recent-search interaction      |
 
 ## State Ownership
 
@@ -171,7 +172,7 @@ export async function getWeather(city, signal) {
 
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?${params}`,
-    { signal }
+    { signal },
   );
 
   let body = null;
@@ -182,7 +183,8 @@ export async function getWeather(city, signal) {
   }
 
   if (!response.ok) {
-    const message = body?.message || `Weather request failed (${response.status})`;
+    const message =
+      body?.message || `Weather request failed (${response.status})`;
     throw new Error(message);
   }
 
@@ -284,7 +286,8 @@ export default function App() {
     try {
       const result = await getWeather(value, controller.signal);
 
-      if (controller.signal.aborted || requestId !== requestIdRef.current) return;
+      if (controller.signal.aborted || requestId !== requestIdRef.current)
+        return;
 
       if (!result || !result.main || !Array.isArray(result.weather)) {
         setWeather(null);
@@ -294,15 +297,21 @@ export default function App() {
 
       setWeather(result);
       setStatus("success");
-      setRecentSearches((current) => [
-        value,
-        ...current.filter((item) => item.toLowerCase() !== value.toLowerCase()),
-      ].slice(0, 5));
+      setRecentSearches((current) =>
+        [
+          value,
+          ...current.filter(
+            (item) => item.toLowerCase() !== value.toLowerCase(),
+          ),
+        ].slice(0, 5),
+      );
     } catch (requestError) {
       if (requestError?.name === "AbortError") return;
       if (requestId !== requestIdRef.current) return;
 
-      setError(requestError instanceof Error ? requestError.message : "Request failed");
+      setError(
+        requestError instanceof Error ? requestError.message : "Request failed",
+      );
       setStatus("error");
     }
   }
@@ -329,8 +338,13 @@ export default function App() {
           onChange={(event) => setCity(event.target.value)}
           autoComplete="address-level2"
         />
-        <button type="submit" disabled={status === "loading" || status === "refreshing"}>
-          {status === "refreshing" || status === "loading" ? "Searching..." : "Search"}
+        <button
+          type="submit"
+          disabled={status === "loading" || status === "refreshing"}
+        >
+          {status === "refreshing" || status === "loading"
+            ? "Searching..."
+            : "Search"}
         </button>
       </form>
 
@@ -338,7 +352,9 @@ export default function App() {
 
       {(status === "loading" || status === "refreshing") && (
         <p role="status" aria-live="polite">
-          {status === "refreshing" ? "Updating weather..." : "Loading weather..."}
+          {status === "refreshing"
+            ? "Updating weather..."
+            : "Loading weather..."}
         </p>
       )}
 
@@ -347,7 +363,9 @@ export default function App() {
           <p>{error}</p>
           <button
             type="button"
-            onClick={() => searchWeather(undefined, lastSubmittedCityRef.current || city)}
+            onClick={() =>
+              searchWeather(undefined, lastSubmittedCityRef.current || city)
+            }
           >
             Retry
           </button>
@@ -355,7 +373,9 @@ export default function App() {
       )}
 
       {status === "empty" && (
-        <p role="status">No usable weather data was returned for this search.</p>
+        <p role="status">
+          No usable weather data was returned for this search.
+        </p>
       )}
 
       {weather && (status === "success" || status === "refreshing") && (
@@ -447,14 +467,14 @@ Do not duplicate these as independent state.
 
 ## UX State Matrix
 
-| State | Data | Progress | Error | Recommended UI |
-|---|---|---|---|---|
-| `idle` | none | no | no | Search instruction |
-| `loading` | none | yes | no | Initial loader |
-| `refreshing` | existing | yes | no | Keep data + refresh indicator |
-| `success` | valid | no | no | Weather card |
-| `empty` | unusable/none | no | no | No-data message |
-| `error` | existing or none | no | yes | Safe error + retry |
+| State        | Data             | Progress | Error | Recommended UI                |
+| ------------ | ---------------- | -------- | ----- | ----------------------------- |
+| `idle`       | none             | no       | no    | Search instruction            |
+| `loading`    | none             | yes      | no    | Initial loader                |
+| `refreshing` | existing         | yes      | no    | Keep data + refresh indicator |
+| `success`    | valid            | no       | no    | Weather card                  |
+| `empty`      | unusable/none    | no       | no    | No-data message               |
+| `error`      | existing or none | no       | yes   | Safe error + retry            |
 
 ## Testing Checklist
 
@@ -713,3 +733,23 @@ You can now build an end-to-end React API project while making deliberate decisi
 You should be able to explain the difference between **initial loading, refreshing, empty, error, and success**, and why cancellation and request identity solve related but different problems.
 
 **Next:** Day 29 — `useRef`, mutable values, DOM references, and imperative escape hatches.
+
+## Interview Notes (Quick Revision)
+
+- Never hardcode an API key in source, and remember `.env` variables shipped to the browser (e.g., Vite's `import.meta.env`) are **not secret**.
+- `fetch` resolves even on HTTP errors — always check `response.ok` before using the data.
+- Search should be driven by a real `<form onSubmit>`, not just a click handler, so keyboard submission (Enter) works.
+- Don't store derived weather fields (like formatted temperature) as separate state — compute them from the raw response during render.
+- Guard against **race conditions**: an older in-flight request finishing after a newer one shouldn't overwrite the latest result — combine `AbortController` cleanup with a request-identity check.
+- Clean up any active request in the effect's cleanup function when the component unmounts or the query changes.
+- Validate the shape of external API JSON before trusting it, since malformed data can silently break the UI.
+
+**Rapid-fire answers**
+
+| Question                                             | One-line Answer                                |
+| ---------------------------------------------------- | ---------------------------------------------- |
+| Are Vite env vars secret in the browser?             | No, they're visible to users                   |
+| Should search only use onClick?                      | No, use `<form onSubmit>` for keyboard support |
+| Should formatted weather values be separate state?   | No, derive them during render                  |
+| How to prevent stale responses overwriting new ones? | Abort + request-identity check                 |
+| Should you trust external API JSON blindly?          | No, validate its shape                         |

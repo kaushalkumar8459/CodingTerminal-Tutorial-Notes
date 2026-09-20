@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 53
 track: react
 ---
+
 # Day 53 [Advanced]: createSlice Deep Dive
 
 ## Goal
@@ -95,7 +96,7 @@ Reducers receive the dispatched action as their second argument. Redux Toolkit a
 addItem: (state, action) => {
   const product = action.payload;
   // update state using product
-}
+};
 ```
 
 Payloads should represent the information the reducer needs. Avoid passing unrelated UI data into a domain reducer when a smaller payload is sufficient.
@@ -115,7 +116,7 @@ addItem: (state, action) => {
   }
 
   state.items.push({ id, name, price, quantity: 1 });
-}
+};
 ```
 
 **Explanation:** The reducer receives dynamic data without requiring a separate reducer for every product. The payload contract should remain clear and predictable.
@@ -180,7 +181,7 @@ incrementQty: (state, action) => {
   if (item) {
     item.quantity += 1;
   }
-}
+};
 ```
 
 This is valid inside a Redux Toolkit reducer. The same direct mutation would not be appropriate when updating ordinary React state outside Immer.
@@ -190,7 +191,7 @@ For nested data:
 ```jsx
 updateAddress: (state, action) => {
   state.customer.address.city = action.payload.city;
-}
+};
 ```
 
 **Explanation:** Immer makes nested updates concise, but the reducer still needs correct business rules. Immer does not automatically prevent invalid state transitions.
@@ -227,7 +228,7 @@ extraReducers: (builder) => {
       state.status = "failed";
       state.error = action.error.message ?? "Unable to load cart";
     });
-}
+};
 ```
 
 The thunk itself is introduced in more detail in the following lessons. The important idea here is that a slice can react to external action types while keeping its own local reducers focused on synchronous domain transitions.
@@ -541,3 +542,21 @@ Expected output:
 - You understand when to use `extraReducers`.
 - You can recognize duplicated derived state and make an informed design choice.
 - You are ready for async Redux Toolkit workflows and thunk lifecycle handling in Day 54.
+
+## Interview Notes (Quick Revision)
+
+- Design clear **payload contracts** for each action — know exactly what shape of data a reducer expects.
+- Immer lets you write "mutating" code inside `createSlice` reducers for nested updates (`state.items[i].qty += 1`) safely — it's tracking changes to a draft, not the real state.
+- Use `reducers` for **synchronous** slice logic; use `extraReducers` to respond to actions defined **outside** the slice (like thunks from `createAsyncThunk`).
+- Keep reducers **deterministic** — same input state + action always produces the same output; extract pure helper functions for readability without hiding side effects.
+- Don't duplicate derived state inside the slice if it can be computed from existing fields via a selector.
+
+**Rapid-fire answers**
+
+| Question                                      | One-line Answer                                    |
+| --------------------------------------------- | -------------------------------------------------- |
+| Why can slice reducers "mutate" nested state? | Immer draft tracks changes safely                  |
+| `reducers` vs `extraReducers`?                | Own sync actions vs external actions (like thunks) |
+| Should reducers be deterministic?             | Yes, same input always same output                 |
+| Should derived state be stored in the slice?  | No, compute via a selector                         |
+| What should a good action have?               | A clear, well-defined payload contract             |

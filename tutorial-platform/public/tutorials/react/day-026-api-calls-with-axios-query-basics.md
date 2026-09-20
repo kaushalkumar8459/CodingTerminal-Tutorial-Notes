@@ -7,6 +7,7 @@ estimatedMinutes: 180
 order: 26
 track: react
 ---
+
 # Day 26 [Intermediate]: API Calls with Axios + Query Basics
 
 ## Goal
@@ -75,14 +76,14 @@ React UI state or server-state cache
 
 Keep these concerns separate:
 
-| Concern | Typical responsibility |
-|---|---|
-| Component | UI + user interaction |
-| Service | API/domain operation |
-| Axios | HTTP transport |
-| Validation | Trust boundary for external data |
-| Query library | Cache, synchronization, invalidation |
-| Backend | Authentication/authorization and business rules |
+| Concern       | Typical responsibility                          |
+| ------------- | ----------------------------------------------- |
+| Component     | UI + user interaction                           |
+| Service       | API/domain operation                            |
+| Axios         | HTTP transport                                  |
+| Validation    | Trust boundary for external data                |
+| Query library | Cache, synchronization, invalidation            |
+| Backend       | Authentication/authorization and business rules |
 
 ## Axios vs Fetch
 
@@ -124,8 +125,8 @@ const response = await axios.get("/users", {
   params: {
     page: 2,
     limit: 20,
-    search: "react"
-  }
+    search: "react",
+  },
 });
 ```
 
@@ -157,7 +158,7 @@ Query parameters:
 
 ```jsx
 axios.get("/users", {
-  params: { role: "admin", page: 2 }
+  params: { role: "admin", page: 2 },
 });
 ```
 
@@ -173,7 +174,7 @@ The backend API contract is the final authority.
 ```jsx
 await axios.post("/users", {
   name: "Asha",
-  email: "asha@example.com"
+  email: "asha@example.com",
 });
 ```
 
@@ -207,8 +208,8 @@ export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",
+  },
 });
 ```
 
@@ -390,7 +391,7 @@ Axios supports the standard `AbortController` signal:
 const controller = new AbortController();
 
 apiClient.get("/users", {
-  signal: controller.signal
+  signal: controller.signal,
 });
 
 controller.abort();
@@ -405,7 +406,7 @@ useEffect(() => {
   async function load() {
     try {
       const response = await apiClient.get("/users", {
-        signal: controller.signal
+        signal: controller.signal,
       });
       setUsers(response.data);
     } catch (error) {
@@ -451,7 +452,7 @@ apiClient.interceptors.request.use((config) => {
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 ```
 
@@ -513,7 +514,7 @@ When using a query library, a query key identifies a cached server-data request.
 Conceptually:
 
 ```jsx
-["users", { page: 2, search: "react" }]
+["users", { page: 2, search: "react" }];
 ```
 
 The key should contain every variable that changes the requested result.
@@ -521,7 +522,7 @@ The key should contain every variable that changes the requested result.
 Bad concept:
 
 ```jsx
-["users"]
+["users"];
 ```
 
 if the same query function also depends on `page` and `search`.
@@ -529,7 +530,7 @@ if the same query function also depends on `page` and `search`.
 Good concept:
 
 ```jsx
-["users", page, search]
+["users", page, search];
 ```
 
 Stable, deterministic query keys prevent unrelated requests from sharing the same cache identity. Follow the query library's documented key hashing/serialization rules rather than relying on object reference identity.
@@ -555,7 +556,7 @@ Build a **User Directory** with:
 export async function searchUsers({ search, page, signal }) {
   const response = await apiClient.get("/users", {
     params: { search, page, limit: 10 },
-    signal
+    signal,
   });
 
   return response.data;
@@ -583,7 +584,7 @@ function UserDirectory() {
         const data = await searchUsers({
           search,
           page,
-          signal: controller.signal
+          signal: controller.signal,
         });
 
         setUsers(data.items ?? []);
@@ -676,7 +677,7 @@ axios.get(`/users?page=${page}&search=${search}`);
 
 ```jsx
 axios.get("/users", {
-  params: { page, search }
+  params: { page, search },
 });
 ```
 
@@ -887,3 +888,23 @@ Validate or normalize external data at the service/application boundary so UI co
 You can now use Axios as a **clean HTTP transport layer** instead of scattering request details through React components. You understand query parameters, configuration, services, cancellation, errors, interceptors, runtime data boundaries, query keys, and the boundary between HTTP transport and server-state management.
 
 **Next:** Day 27 — Loading, Error, and Empty-State UX Patterns.
+
+## Interview Notes (Quick Revision)
+
+- Use Axios `params` for structured query strings instead of manually concatenating them.
+- HTTP error responses (404/500) are **not the same as network failures** — inspect `error.response` to distinguish a server response from a true network/config error.
+- Centralize API base URL/config and request logic in a **service layer**, not scattered across components.
+- Create Axios instances and register **interceptors once**, not repeatedly on every render/call.
+- Axios is a transport library, not a server-state cache — pair it with a query library (React Query, etc.) for caching/dedup/invalidation.
+- TypeScript types don't validate actual runtime JSON — validate critical external data at the boundary.
+- Not every 401 should trigger an automatic logout — auth flows vary, and naive refresh/logout logic can cause refresh loops.
+
+**Rapid-fire answers**
+
+| Question                                     | One-line Answer                                     |
+| -------------------------------------------- | --------------------------------------------------- |
+| Best way to send query params in Axios?      | The `params` config option                          |
+| Is a 404 a network error?                    | No, it's a server response — check `error.response` |
+| Where should API config live?                | A centralized service layer                         |
+| Is Axios a caching layer?                    | No, it's just a transport client                    |
+| Does TypeScript validate real API responses? | No, only compile-time shapes                        |

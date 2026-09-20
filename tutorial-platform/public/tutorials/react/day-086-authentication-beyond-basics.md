@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 86
 track: react
 ---
+
 # Day 86 [Advanced]: Authentication Beyond Basics
 
 ## Goal
@@ -365,3 +366,21 @@ Expected output:
 - You can recover expired sessions safely with fallback protections
 - You can reason about concurrency, bounded retries, and credential handling
 - You are ready for API runtime contract safety in Day 87
+
+## Interview Notes (Quick Revision)
+
+- On a `401`, the standard pattern is: attempt a **token refresh** → if successful, retry the original request; if refresh fails, clear the session and log out.
+- Guard against **concurrent refresh calls** — if multiple requests get a 401 simultaneously, deduplicate so only one refresh call happens, and queue/retry the others after it resolves.
+- Bound retries — don't retry refresh/requests indefinitely; fail gracefully to logout after a reasonable limit.
+- Logout must reliably **clear the real session** (tokens, cached user data) even if the logout network call itself fails.
+- Store credentials as securely as feasible (e.g., HttpOnly cookies over `localStorage` where possible) and never assume client storage is a secure vault.
+
+**Rapid-fire answers**
+
+| Question                                     | One-line Answer                                     |
+| -------------------------------------------- | --------------------------------------------------- |
+| What's the standard 401 flow?                | Refresh token → retry request, or logout on failure |
+| Why deduplicate refresh calls?               | To avoid multiple concurrent refresh attempts       |
+| Should retries be unbounded?                 | No, bound them and fail gracefully                  |
+| What must logout guarantee?                  | Session is cleared even if the network call fails   |
+| Is client storage a secure credential vault? | No, treat it as untrusted                           |

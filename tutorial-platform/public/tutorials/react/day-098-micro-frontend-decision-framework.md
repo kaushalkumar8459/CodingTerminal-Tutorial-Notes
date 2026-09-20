@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 98
 track: react
 ---
+
 # Day 98 [Expert]: Micro Frontend Decision Framework
 
 ## Goal
@@ -359,3 +360,21 @@ Expected output:
 - You can balance autonomy with complexity and governance realities
 - You can define rollout, failure, and fallback strategies for distributed frontends
 - You are ready for senior interview simulation in Day 99
+
+## Interview Notes (Quick Revision)
+
+- Micro frontends trade **team autonomy** for added **integration/operational complexity** — it's a deliberate tradeoff, not a default architecture choice.
+- Evaluate adoption against real **constraints** (team size, deployment independence needs, org structure) rather than following the trend.
+- Define **failure isolation and fallback strategy** upfront — one micro frontend crashing shouldn't take down the whole shell application.
+- Plan **shared dependency management** (design system, auth, shared libs) carefully — duplicated or mismatched shared deps are a common micro-frontend pitfall.
+- Use a structured **tradeoff matrix** (autonomy vs complexity vs governance overhead) to justify the decision, rather than an intuition-only call.
+
+**Rapid-fire answers**
+
+| Question                                             | One-line Answer                                    |
+| ---------------------------------------------------- | -------------------------------------------------- |
+| What do micro frontends trade for autonomy?          | Added integration/operational complexity           |
+| Should you adopt micro frontends by default?         | No, only when constraints justify it               |
+| What must be planned for one micro frontend failing? | Failure isolation/fallback for the rest of the app |
+| Common shared-dependency pitfall?                    | Duplicated or mismatched shared libraries          |
+| How to justify the decision rigorously?              | A tradeoff matrix against real constraints         |

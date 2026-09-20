@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 94
 track: react
 ---
+
 # Day 94 [Expert]: Frontend Security Hardening
 
 ## Goal
@@ -353,3 +354,22 @@ Expected output:
 - You can remediate high-impact findings with structured prioritization
 - You can distinguish browser-side defenses from authoritative server security controls
 - You are ready for state strategy design in Day 95
+
+## Interview Notes (Quick Revision)
+
+- Reduce **attack surface**: minimize where untrusted input touches rendering, storage, or navigation (e.g., avoid `dangerouslySetInnerHTML` with unsanitized data).
+- Manage **session/token risk**: prefer HttpOnly cookies where feasible, bound token lifetimes, and handle refresh/logout carefully (ties back to Day 86/72 concepts).
+- Watch **supply-chain risk** — audit and pin third-party dependencies; a compromised package is a real production risk.
+- Use platform-level controls (CSP, security headers) as **defense in depth**, layered on top of good coding practices — not a replacement for them.
+- Frontend security hardening is layered with **backend authority** — client-side controls improve UX/reduce risk but never replace server-side enforcement.
+- Track **residual risk** explicitly — not every risk can be eliminated; document what remains and why it's accepted.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                            |
+| ---------------------------------------------- | ---------------------------------------------------------- |
+| What reduces attack surface?                   | Minimizing where untrusted input touches rendering/storage |
+| What is a real supply-chain risk?              | A compromised/vulnerable third-party dependency            |
+| What do CSP/security headers provide?          | An additional defense-in-depth layer                       |
+| Do frontend controls replace backend security? | No, backend must always authoritatively enforce it         |
+| Should all risk be eliminated?                 | No, track and document accepted residual risk              |

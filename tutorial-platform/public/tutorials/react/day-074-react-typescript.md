@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 74
 track: react
 ---
+
 # Day 74 [Advanced]: React + TypeScript
 
 ## Goal
@@ -394,3 +395,21 @@ Expected output:
 - You can design reusable generic components without sacrificing type safety
 - You understand the boundary between compile-time types and runtime validation
 - You are ready for typed global state in Day 75
+
+## Interview Notes (Quick Revision)
+
+- Type props explicitly (`interface Props { title: string; onSelect: (id: string) => void }`) rather than relying on inference for a component's public contract.
+- Type union-based state carefully (e.g., `{ status: "idle" } | { status: "success"; data: T }`) so each state variant only has the fields that make sense for it.
+- Type event handlers using React's built-in event types (`React.ChangeEvent<HTMLInputElement>`) instead of `any`.
+- Generic components (e.g., a reusable `<List<T>>`) let you keep strong typing while still being reusable across different data shapes.
+- Compile-time types don't validate real runtime data — still validate external API responses at the boundary.
+
+**Rapid-fire answers**
+
+| Question                                | One-line Answer                                    |
+| --------------------------------------- | -------------------------------------------------- |
+| How should component props be typed?    | An explicit `interface`/`type`, not just inference |
+| Why type union-based state per variant? | Each state shape only carries relevant fields      |
+| How to type a change event handler?     | `React.ChangeEvent<HTMLInputElement>`              |
+| What do generics enable for components? | Reusability across types without losing safety     |
+| Do prop types validate real API data?   | No, still validate at runtime                      |

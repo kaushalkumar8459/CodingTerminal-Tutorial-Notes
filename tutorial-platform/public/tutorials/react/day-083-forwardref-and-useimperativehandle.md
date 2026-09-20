@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 83
 track: react
 ---
+
 # Day 83 [Intermediate]: forwardRef and useImperativeHandle
 
 ## Goal
@@ -58,10 +59,14 @@ Expose `focus` and `clear` methods only.
 Code Example:
 
 ```jsx
-useImperativeHandle(ref, () => ({
-  focus() {},
-  clear() {},
-}), []);
+useImperativeHandle(
+  ref,
+  () => ({
+    focus() {},
+    clear() {},
+  }),
+  [],
+);
 ```
 
 **Explanation:** `useImperativeHandle` lets a child expose a small controlled API instead of leaking its entire internal DOM structure. The dependency list should reflect values captured by the exposed methods; use `[]` only when the implementation does not need changing reactive values.
@@ -206,12 +211,16 @@ Customer support form should focus search input when command button is clicked.
 const SmartInput = React.forwardRef(function SmartInput(props, ref) {
   const inputRef = React.useRef(null);
 
-  React.useImperativeHandle(ref, () => ({
-    focus: () => inputRef.current?.focus(),
-    clear: () => {
-      if (inputRef.current) inputRef.current.value = "";
-    },
-  }), []);
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      focus: () => inputRef.current?.focus(),
+      clear: () => {
+        if (inputRef.current) inputRef.current.value = "";
+      },
+    }),
+    [],
+  );
 
   return <input ref={inputRef} {...props} />;
 });
@@ -226,10 +235,14 @@ Billing screen opens confirmation modal from different toolbar actions.
 const ConfirmModal = React.forwardRef(function ConfirmModal(_, ref) {
   const [open, setOpen] = React.useState(false);
 
-  React.useImperativeHandle(ref, () => ({
-    open: () => setOpen(true),
-    close: () => setOpen(false),
-  }), []);
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      open: () => setOpen(true),
+      close: () => setOpen(false),
+    }),
+    [],
+  );
 
   return open ? (
     <div role="dialog" aria-modal="true" aria-label="Confirm action">
@@ -362,3 +375,21 @@ Expected output:
 - You can distinguish imperative UI commands from declarative application state
 - You can test and maintain stable imperative component contracts
 - You are ready for memoization edge-case debugging in Day 84
+
+## Interview Notes (Quick Revision)
+
+- `forwardRef` lets a parent attach a ref to a **child component**, forwarding it down to an inner DOM node or exposed API.
+- `useImperativeHandle` customizes **what** the forwarded ref exposes — expose a narrow, intentional API (`focus()`, `scrollToTop()`) instead of the raw DOM node or full internal implementation.
+- Imperative APIs should be the **exception**, reserved for things that can't be expressed declaratively (focus, imperative animations, scrolling) — not a substitute for normal props/state data flow.
+- Keep the imperative surface small and stable so it's easy to test and won't break every time internals change.
+- Declarative state (props/state) should still drive the UI — imperative refs are for one-off commands, not ongoing data flow.
+
+**Rapid-fire answers**
+
+| Question                                                | One-line Answer                                           |
+| ------------------------------------------------------- | --------------------------------------------------------- |
+| What does `forwardRef` do?                              | Lets a parent attach a ref to a child component           |
+| What does `useImperativeHandle` control?                | What the forwarded ref actually exposes                   |
+| Should you expose the full internal DOM/implementation? | No, expose a narrow intentional API                       |
+| When should imperative APIs be used?                    | Only for things that can't be declarative (focus, scroll) |
+| Should imperative refs replace normal prop data flow?   | No, they're for one-off commands only                     |

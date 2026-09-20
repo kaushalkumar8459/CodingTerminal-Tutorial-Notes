@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 91
 track: react
 ---
+
 # Day 91 [Advanced]: Observability and Error Monitoring
 
 ## Goal
@@ -355,3 +356,21 @@ Expected output:
 - You can instrument context-rich monitoring for real incidents
 - You can control telemetry noise while preserving critical signals
 - You are ready for performance governance with budgets in Day 92
+
+## Interview Notes (Quick Revision)
+
+- Full observability combines multiple signals: **logs, metrics, errors, and traces** — not just error alerts alone.
+- Enrich captured errors with **context** (user action breadcrumbs, release version, environment) so incidents are actionable, not just noisy alerts.
+- Use **severity-based triage** — not every error needs a page at 2am; classify by real user/business impact.
+- Control alert **noise**: too many low-value alerts cause alert fatigue and real issues get missed — tune thresholds and dedupe.
+- Follow through with **postmortems**/prevention steps after incidents, not just a fix — feed learnings back into monitoring and code.
+
+**Rapid-fire answers**
+
+| Question                                     | One-line Answer                                   |
+| -------------------------------------------- | ------------------------------------------------- |
+| What signals make up full observability?     | Logs, metrics, errors, traces                     |
+| Why enrich errors with breadcrumbs/context?  | Makes incidents actionable, not just noisy alerts |
+| Should every error page someone immediately? | No, triage by severity/impact                     |
+| Risk of too many low-value alerts?           | Alert fatigue, real issues get missed             |
+| What should follow an incident fix?          | A postmortem and prevention follow-up             |

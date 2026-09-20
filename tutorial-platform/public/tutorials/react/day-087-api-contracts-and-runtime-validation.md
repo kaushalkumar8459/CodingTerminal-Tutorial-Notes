@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 87
 track: react
 ---
+
 # Day 87 [Advanced]: API Contracts and Runtime Validation
 
 ## Goal
@@ -360,3 +361,21 @@ Expected output:
 - You can maintain stable UI under API shape changes
 - You can design safer compatibility and observability strategies
 - You are ready for delivery automation in Day 88
+
+## Interview Notes (Quick Revision)
+
+- Validate external API responses at a **trusted boundary** (e.g., with Zod) before the rest of the app treats the data as trustworthy/typed.
+- On malformed/unexpected payloads, apply a **safe fallback** (empty state, default values, error state) rather than letting the app crash or render garbage.
+- Centralize normalization in one layer (a service/adapter) so the rest of the app works with a consistent internal shape, insulated from raw API quirks.
+- This validation layer gives **resilience to API evolution** — if the backend changes a field, you get a clear validation failure instead of silent bugs deep in the UI.
+- Redact sensitive fields before logging validation failures for observability, to avoid leaking user data.
+
+**Rapid-fire answers**
+
+| Question                                                | One-line Answer                                     |
+| ------------------------------------------------------- | --------------------------------------------------- |
+| Where should API responses be validated?                | At a trusted boundary layer (e.g., with Zod)        |
+| What happens on a malformed payload?                    | A safe fallback, not a crash                        |
+| Why centralize normalization?                           | Consistent internal shape, isolated from API quirks |
+| Benefit of runtime validation for API changes?          | Clear failure instead of silent downstream bugs     |
+| Should sensitive data be logged in validation failures? | No, redact it first                                 |

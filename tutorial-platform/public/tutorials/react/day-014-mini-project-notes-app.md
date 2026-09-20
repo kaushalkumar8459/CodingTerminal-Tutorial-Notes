@@ -7,6 +7,7 @@ estimatedMinutes: 120
 order: 14
 track: react
 ---
+
 # Day 14 [Beginner → Intermediate]: Mini Project — Notes App
 
 ## Goal
@@ -215,9 +216,7 @@ function saveEdit() {
 
   setNotes((current) =>
     current.map((note) =>
-      note.id === editingId
-        ? { ...note, text, priority: form.priority }
-        : note,
+      note.id === editingId ? { ...note, text, priority: form.priority } : note,
     ),
   );
 
@@ -231,9 +230,7 @@ function saveEdit() {
 
 ```jsx
 const visibleNotes =
-  filter === "all"
-    ? notes
-    : notes.filter((note) => note.priority === filter);
+  filter === "all" ? notes : notes.filter((note) => note.priority === filter);
 
 const totalCount = notes.length;
 const highPriorityCount = notes.filter(
@@ -288,11 +285,7 @@ App
 ```
 
 ```jsx
-<NoteList
-  notes={visibleNotes}
-  onEdit={startEdit}
-  onDelete={deleteNote}
-/>
+<NoteList notes={visibleNotes} onEdit={startEdit} onDelete={deleteNote} />
 ```
 
 ```jsx
@@ -317,14 +310,16 @@ The child requests actions through callbacks; it does not directly mutate the pa
 ### Topic 9: Stable Keys and Identity
 
 ```jsx
-{visibleNotes.map((note) => (
-  <NoteItem
-    key={note.id}
-    note={note}
-    onEdit={startEdit}
-    onDelete={deleteNote}
-  />
-))}
+{
+  visibleNotes.map((note) => (
+    <NoteItem
+      key={note.id}
+      note={note}
+      onEdit={startEdit}
+      onDelete={deleteNote}
+    />
+  ));
+}
 ```
 
 The note ID represents stable logical identity. Index keys are risky when items can be inserted, removed, filtered, or reordered. Random keys are especially problematic because they change between renders.
@@ -353,11 +348,11 @@ The note ID represents stable logical identity. Index keys are risky when items 
     <option value="high">High</option>
   </select>
 
-  <button type="submit">
-    {editingId !== null ? "Save Note" : "Add Note"}
-  </button>
+  <button type="submit">{editingId !== null ? "Save Note" : "Add Note"}</button>
   {editingId !== null && (
-    <button type="button" onClick={cancelEdit}>Cancel</button>
+    <button type="button" onClick={cancelEdit}>
+      Cancel
+    </button>
   )}
 </form>
 ```
@@ -402,18 +397,18 @@ const [notes, setNotes] = useState(readNotes);
 
 ## Key Concepts
 
-| Concept | Rule |
-|---|---|
-| State | Store source-of-truth data |
-| Derived data | Calculate from existing state |
-| Add | `[...current, item]` |
-| Remove | `filter` |
-| Update | `map` + object spread |
-| Form | Keep inputs controlled when React owns the value |
-| Identity | Preserve stable IDs during edits |
-| Keys | Use stable item identity |
-| Child actions | Communicate through callback props |
-| Persistence | Serialize/deserialize browser storage carefully |
+| Concept       | Rule                                             |
+| ------------- | ------------------------------------------------ |
+| State         | Store source-of-truth data                       |
+| Derived data  | Calculate from existing state                    |
+| Add           | `[...current, item]`                             |
+| Remove        | `filter`                                         |
+| Update        | `map` + object spread                            |
+| Form          | Keep inputs controlled when React owns the value |
+| Identity      | Preserve stable IDs during edits                 |
+| Keys          | Use stable item identity                         |
+| Child actions | Communicate through callback props               |
+| Persistence   | Serialize/deserialize browser storage carefully  |
 
 ### State Ownership Rule
 
@@ -548,9 +543,7 @@ function NoteItem({ note, onDelete }) {
 
 ```jsx
 const visibleNotes =
-  filter === "all"
-    ? notes
-    : notes.filter((note) => note.priority === filter);
+  filter === "all" ? notes : notes.filter((note) => note.priority === filter);
 
 const visibleCount = visibleNotes.length;
 ```
@@ -632,7 +625,9 @@ Inside a form this may submit. Use:
 
 ```jsx
 // ✓
-<button type="button" onClick={cancelEdit}>Cancel</button>
+<button type="button" onClick={cancelEdit}>
+  Cancel
+</button>
 ```
 
 ### Mistake 6 — Random list keys
@@ -711,9 +706,7 @@ Correct approach:
 
 ```jsx
 setNotes((current) =>
-  current.map((note) =>
-    note.id === id ? { ...note, text: "Updated" } : note,
-  ),
+  current.map((note) => (note.id === id ? { ...note, text: "Updated" } : note)),
 );
 ```
 
@@ -866,3 +859,23 @@ By the end of Day 14, you can:
 - explain the tradeoffs and limitations of `localStorage`.
 
 You are ready for **Day 15**, where the next React concept builds on this project foundation.
+
+## Interview Notes (Quick Revision)
+
+- Keep one **source of truth** (the notes array); derive filtered/searched views and counts instead of storing separate copies.
+- Immutable array ops: **add** `[...current, note]`, **remove** `filter()`, **update** `map()` + object spread — never `push()`/direct mutation.
+- Preserve the note's **stable ID** during edits — don't regenerate it (e.g., `crypto.randomUUID()`) on every save.
+- Cancel/secondary buttons inside a `<form>` need `type="button"`, or they'll accidentally submit the form.
+- Use the note's real ID as the list `key`, never `Math.random()`.
+- When restoring from `localStorage`, validate the parsed data's shape before rendering — don't assume it matches the current schema.
+- State ownership rule: keep state where its lifetime/consumers make sense, and lift it only when multiple components truly need coordinated access — not "always in the parent."
+
+**Rapid-fire answers**
+
+| Question                                     | One-line Answer                         |
+| -------------------------------------------- | --------------------------------------- |
+| Should filtered notes be separate state?     | No, derive from notes + filter criteria |
+| Does editing a note change its ID?           | No, ID stays stable                     |
+| Why does Cancel submit the form?             | Missing `type="button"`                 |
+| Is `localStorage` data always safe to trust? | No, validate its shape first            |
+| Best list key for notes?                     | The note's stable ID                    |

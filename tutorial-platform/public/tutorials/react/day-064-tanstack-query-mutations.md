@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 64
 track: react
 ---
+
 ---
+
 title: TanStack Query Mutations
 slug: day-064-tanstack-query-mutations
 dayLabel: Day 64
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 64
 track: react
+
 ---
+
 # Day 64 [Advanced]: TanStack Query Mutations
 
 ## Goal
@@ -50,7 +54,7 @@ const mutation = useMutation({ mutationFn: createItem });
 
 <button disabled={mutation.isPending} onClick={() => mutation.mutate(formData)}>
   {mutation.isPending ? "Saving..." : "Save"}
-</button>
+</button>;
 ```
 
 **Explanation:** This topic explains Mutation Lifecycle in a practical way so you can apply it confidently in real React projects. Mutation state should be part of the user experience rather than something hidden from the UI.
@@ -220,7 +224,7 @@ const mutation = useMutation({
 
 <button disabled={mutation.isPending} onClick={() => mutation.mutate(task)}>
   {mutation.isPending ? "Saving..." : "Save task"}
-</button>
+</button>;
 ```
 
 Retry policy should match the operation. Automatically repeating a read-only request is different from automatically repeating a payment or non-idempotent create operation. Coordinate retry behavior with backend idempotency and API semantics.
@@ -463,4 +467,23 @@ Expected output:
 - You can keep TanStack Query cache reliable after writes
 - You can implement optimistic updates with safe rollback
 - You can design retry and error behavior around real server semantics
+
+## Interview Notes (Quick Revision)
+
+- After a mutation succeeds, **invalidate the relevant query keys** so TanStack Query automatically refetches fresh data — keeps cache and server in sync.
+- **Optimistic updates** apply the expected result to the cache immediately (before server confirmation), with a **rollback** plan if the mutation fails.
+- Query key consistency matters — the same logical query must use the same key shape everywhere, or invalidation/cache lookups silently miss.
+- Design retry policy based on real semantics: **idempotent** operations (GET, PUT with same result) can retry safely; non-idempotent (POST creating a record) needs care to avoid duplicate writes.
+- Reusable mutation hooks centralize error/retry/optimistic-update logic instead of duplicating it per component.
+
+**Rapid-fire answers**
+
+| Question                                      | One-line Answer                                  |
+| --------------------------------------------- | ------------------------------------------------ |
+| How to keep cache fresh after a mutation?     | Invalidate the relevant query keys               |
+| What is an optimistic update?                 | Updating the cache before server confirmation    |
+| What happens if an optimistic mutation fails? | Roll back to the previous cache state            |
+| Should POST requests be retried freely?       | No, risk of duplicate writes — be careful        |
+| Why does query key consistency matter?        | Mismatched keys break invalidation/cache lookups |
+
 - You are ready for scalable pagination and infinite-query patterns in Day 65

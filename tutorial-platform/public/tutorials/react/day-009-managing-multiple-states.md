@@ -7,6 +7,7 @@ estimatedMinutes: 60
 order: 9
 track: react
 ---
+
 # Day 9 [Intermediate]: Managing Multiple States
 
 ## Goal
@@ -59,9 +60,11 @@ There is no universal rule saying “always use separate state” or “always u
 ### Topic 1: Independent State Variables
 
 #### Theory
+
 Use separate state variables when values have independent meaning or update independently.
 
 #### Practical
+
 Create name and email states separately.
 
 #### Code Example
@@ -77,10 +80,7 @@ function RegistrationFields() {
     <>
       <label>
         Name
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <input value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label>
         Email
@@ -107,16 +107,15 @@ function RegistrationFields() {
 ### Topic 2: Form Inputs and State
 
 #### Theory
+
 A controlled input gets its displayed value from React state and reports changes through an event.
 
 #### Practical
+
 Bind `value` and `onChange` to state.
 
 ```jsx
-<input
-  value={name}
-  onChange={(e) => setName(e.target.value)}
-/>
+<input value={name} onChange={(e) => setName(e.target.value)} />
 ```
 
 **Explanation:** React becomes the source of truth. The flow is:
@@ -135,9 +134,11 @@ User input → event → state setter → render → updated input
 ### Topic 3: Derived Display
 
 #### Theory
+
 A value that can be calculated from existing state is normally derived during render instead of stored as another state variable.
 
 #### Practical
+
 Show a live preview.
 
 ```jsx
@@ -161,9 +162,11 @@ return <p>Name: {fullName || "Your name"}</p>;
 ### Topic 4: Reset Pattern
 
 #### Theory
+
 Resetting several state values is common in forms and dialogs.
 
 #### Practical
+
 Use a reset function so the behavior is easy to reuse.
 
 ```jsx
@@ -199,6 +202,7 @@ function resetForm() {
 ### Topic 5: Functional Updates
 
 #### Theory
+
 When the next state depends on the previous state, use the functional updater form.
 
 ```jsx
@@ -219,6 +223,7 @@ over a value update when the calculation depends on the previous count.
 ### Topic 6: Split State vs Group State
 
 #### Theory
+
 Use separate state for unrelated values, but group values when they form a meaningful domain object or are naturally edited together.
 
 ```jsx
@@ -233,13 +238,13 @@ const [profile, setProfile] = useState({
 
 **Decision guide:**
 
-| Situation | Good starting point |
-|---|---|
-| Unrelated values | Separate state |
-| Related form/entity fields | Object state can be useful |
-| Values that always change together | Grouping may improve clarity |
-| Mutually exclusive UI states | One status value may be clearer |
-| Very complex transitions | Consider `useReducer` later |
+| Situation                          | Good starting point             |
+| ---------------------------------- | ------------------------------- |
+| Unrelated values                   | Separate state                  |
+| Related form/entity fields         | Object state can be useful      |
+| Values that always change together | Grouping may improve clarity    |
+| Mutually exclusive UI states       | One status value may be clearer |
+| Very complex transitions           | Consider `useReducer` later     |
 
 ### Topic 7: Avoid Impossible State Combinations
 
@@ -360,7 +365,9 @@ export default function RegistrationForm() {
           onChange={(e) => setCity(e.target.value)}
         />
       </label>
-      <p>{name} | {email} | {city}</p>
+      <p>
+        {name} | {email} | {city}
+      </p>
     </form>
   );
 }
@@ -546,3 +553,21 @@ You can now:
 - avoid redundant state and unnecessary synchronization.
 
 You are ready for **Day 10: Object State Handling**, where grouped state, immutable object updates, nested objects, and generic form handlers are explored in depth.
+
+## Interview Notes (Quick Revision)
+
+- Multiple independent `useState` calls are fine when values change independently and aren't logically one entity.
+- **Derived values** (totals, filtered lists, booleans computed from other state) should be calculated during render, not stored as their own state — storing them creates duplicate sources of truth that can go out of sync.
+- **Lifting state up**: when two components need the same data, move the state to their nearest common parent and pass it (and update functions) down via props.
+- Grouping into an object state is useful for related domain data; separate state variables are clearer when values change independently/at different times.
+- Model **mutually exclusive UI states** (e.g., loading/error/success) carefully to avoid impossible combinations.
+- Redundant state = same fact stored in two places → requires manual syncing → a common source of bugs.
+
+**Rapid-fire answers**
+
+| Question                                        | One-line Answer                                        |
+| ----------------------------------------------- | ------------------------------------------------------ |
+| When to lift state up?                          | When multiple components need the same source of truth |
+| Is grouping state into an object always better? | No, depends on whether values are related              |
+| Why avoid redundant state?                      | It creates multiple sources of truth that can desync   |
+| Should derived values be stored in state?       | No, calculate them during render                       |

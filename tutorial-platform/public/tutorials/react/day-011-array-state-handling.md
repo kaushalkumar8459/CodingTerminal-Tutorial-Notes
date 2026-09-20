@@ -7,6 +7,7 @@ estimatedMinutes: 90
 order: 11
 track: react
 ---
+
 # Day 11: Array State Handling
 
 ## Goal
@@ -90,9 +91,7 @@ For many applications, appending and sorting later is simpler than maintaining a
 ### 3. Remove Items
 
 ```jsx
-setSkills((current) =>
-  current.filter((skill) => skill !== "CSS")
-);
+setSkills((current) => current.filter((skill) => skill !== "CSS"));
 ```
 
 `filter` returns a new array containing only the items that should remain.
@@ -100,9 +99,7 @@ setSkills((current) =>
 For object arrays, remove by a stable identifier:
 
 ```jsx
-setTasks((current) =>
-  current.filter((task) => task.id !== id)
-);
+setTasks((current) => current.filter((task) => task.id !== id));
 ```
 
 ### 4. Update One Item
@@ -112,8 +109,8 @@ For arrays of objects, use `map` and copy the changed object:
 ```jsx
 setTasks((current) =>
   current.map((task) =>
-    task.id === id ? { ...task, done: !task.done } : task
-  )
+    task.id === id ? { ...task, done: !task.done } : task,
+  ),
 );
 ```
 
@@ -128,9 +125,7 @@ Unchanged objects can safely retain their references.
 
 ```jsx
 setItems((current) =>
-  current.map((item) =>
-    item.id === updated.id ? updated : item
-  )
+  current.map((item) => (item.id === updated.id ? updated : item)),
 );
 ```
 
@@ -141,8 +136,8 @@ If the replacement object may be incomplete, merge it deliberately instead:
 ```jsx
 setItems((current) =>
   current.map((item) =>
-    item.id === updated.id ? { ...item, ...updated } : item
-  )
+    item.id === updated.id ? { ...item, ...updated } : item,
+  ),
 );
 ```
 
@@ -191,10 +186,8 @@ A common immutable update is:
 ```jsx
 setCart((current) =>
   current.map((item) =>
-    item.id === id
-      ? { ...item, quantity: item.quantity + 1 }
-      : item
-  )
+    item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+  ),
 );
 ```
 
@@ -221,7 +214,7 @@ Create a copy first:
 
 ```jsx
 setItems((current) =>
-  [...current].sort((a, b) => a.name.localeCompare(b.name))
+  [...current].sort((a, b) => a.name.localeCompare(b.name)),
 );
 ```
 
@@ -234,9 +227,7 @@ setItems((current) => [...current].reverse());
 If sorting is only a display preference, consider keeping the underlying state order unchanged and deriving a sorted view instead:
 
 ```jsx
-const sortedItems = [...items].sort((a, b) =>
-  a.name.localeCompare(b.name)
-);
+const sortedItems = [...items].sort((a, b) => a.name.localeCompare(b.name));
 ```
 
 This is often preferable when sorting is presentation rather than data.
@@ -263,7 +254,7 @@ When a drag-and-drop library supplies stable IDs, prefer IDs for identifying the
 Use a stable key from the data when possible:
 
 ```jsx
-items.map((item) => <Row key={item.id} item={item} />)
+items.map((item) => <Row key={item.id} item={item} />);
 ```
 
 An index key is not automatically forbidden. It can be acceptable for a genuinely static list whose order and membership never change. It becomes risky when items are inserted, removed, or reordered because component identity can move between positions.
@@ -272,7 +263,7 @@ Never generate random keys during render:
 
 ```jsx
 // ✗ Avoid
-items.map((item) => <Row key={Math.random()} item={item} />)
+items.map((item) => <Row key={Math.random()} item={item} />);
 ```
 
 A key identifies an item to React's reconciliation process; it is not the same thing as the item's business ID, although the same stable ID is often a good choice for both.
@@ -282,10 +273,7 @@ A key identifies an item to React's reconciliation process; it is not the same t
 Do not store values that can be calculated from the array unless there is a specific architectural reason to do so.
 
 ```jsx
-const totalQuantity = cart.reduce(
-  (total, item) => total + item.quantity,
-  0
-);
+const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 ```
 
 Filtered data can also be derived:
@@ -307,19 +295,19 @@ If a derived calculation becomes expensive, optimize it based on measurement rat
 
 ## Key Concepts
 
-| Operation | Preferred pattern | Why |
-|---|---|---|
-| Add | `[...current, item]` | New array |
-| Insert | `slice()` + spread | New array without mutation |
-| Remove | `filter` | New array without target |
-| Update | `map` + object spread | New array + new changed object |
-| Replace | `map` | Preserves unchanged item references |
-| Clear | `[]` | Explicit new empty array |
-| Sort | `[...current].sort()` | Avoids mutating state |
-| Reverse | `[...current].reverse()` | Avoids mutating state |
-| Reorder | Copy + `splice()` | Mutation happens only on a copy |
-| Derived total | `reduce()` | Avoids redundant state |
-| Derived list | `filter()` | Avoids duplicate collection state |
+| Operation     | Preferred pattern        | Why                                 |
+| ------------- | ------------------------ | ----------------------------------- |
+| Add           | `[...current, item]`     | New array                           |
+| Insert        | `slice()` + spread       | New array without mutation          |
+| Remove        | `filter`                 | New array without target            |
+| Update        | `map` + object spread    | New array + new changed object      |
+| Replace       | `map`                    | Preserves unchanged item references |
+| Clear         | `[]`                     | Explicit new empty array            |
+| Sort          | `[...current].sort()`    | Avoids mutating state               |
+| Reverse       | `[...current].reverse()` | Avoids mutating state               |
+| Reorder       | Copy + `splice()`        | Mutation happens only on a copy     |
+| Derived total | `reduce()`               | Avoids redundant state              |
+| Derived list  | `filter()`               | Avoids duplicate collection state   |
 
 ### Functional Updates
 
@@ -342,8 +330,8 @@ setUsers((current) =>
   current.map((user) =>
     user.id === id
       ? { ...user, profile: { ...user.profile, city: "Delhi" } }
-      : user
-  )
+      : user,
+  ),
 );
 ```
 
@@ -406,7 +394,7 @@ function addProduct(product) {
       return current.map((item) =>
         item.id === product.id
           ? { ...item, quantity: item.quantity + 1 }
-          : item
+          : item,
       );
     }
 
@@ -421,10 +409,8 @@ function addProduct(product) {
 function increaseQuantity(id) {
   setCart((current) =>
     current.map((item) =>
-      item.id === id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    )
+      item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+    ),
   );
 }
 
@@ -434,7 +420,7 @@ function decreaseQuantity(id) {
       if (item.id !== id) return [item];
       if (item.quantity <= 1) return [];
       return [{ ...item, quantity: item.quantity - 1 }];
-    })
+    }),
   );
 }
 ```
@@ -442,14 +428,11 @@ function decreaseQuantity(id) {
 ### Derived totals
 
 ```jsx
-const totalQuantity = cart.reduce(
-  (total, item) => total + item.quantity,
-  0
-);
+const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 
 const totalPrice = cart.reduce(
   (total, item) => total + item.price * item.quantity,
-  0
+  0,
 );
 ```
 
@@ -623,10 +606,8 @@ Fix it with a stable ID when one exists:
 ```jsx
 setCart((current) =>
   current.map((item) =>
-    item.id === firstItemId
-      ? { ...item, quantity: item.quantity + 1 }
-      : item
-  )
+    item.id === firstItemId ? { ...item, quantity: item.quantity + 1 } : item,
+  ),
 );
 ```
 
@@ -772,3 +753,23 @@ When the same collection must be shared across distant components, persisted, sy
 You can safely manage dynamic arrays in React, including immutable add/remove/update/reorder operations, nested object updates, sorting, stable list identity, derived values, debugging, and practical collection management.
 
 You are ready for the next state-data pattern in the curriculum.
+
+## Interview Notes (Quick Revision)
+
+- Never mutate array state directly (`push`, `splice`, `sort`, `reverse` on the existing array) — always create a new array.
+- Common immutable patterns: **add** `[...current, item]`, **remove** `filter()`, **update** `map()` + object spread, **sort/reverse** `[...current].sort()`/`.reverse()` (copy first).
+- Use the **functional updater** form when the next array depends on the previous one: `setItems(current => [...current, item])`.
+- Immutability doesn't mean deep-cloning everything — only copy the array and the specific nested object that changed.
+- Prefer a **stable domain ID** as the list key, not array index, especially if items can be added/removed/reordered.
+- Avoid storing derived totals/filtered lists as separate state — compute with `reduce()`/`filter()` from the source array during render.
+- For complex shared/synced collections, consider normalized state (records by ID + ordered ID list), lifting state, Context, `useReducer`, or an external store.
+
+**Rapid-fire answers**
+
+| Question                                     | One-line Answer                                             |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| How to add an item immutably?                | `setItems(c => [...c, item])`                               |
+| How to remove an item immutably?             | `setItems(c => c.filter(...))`                              |
+| How to update one item immutably?            | `setItems(c => c.map(...))` with a new object for the match |
+| Why not use index as key?                    | Index changes when items are inserted/removed/reordered     |
+| Should array state ever be mutated directly? | No, always produce a new array                              |

@@ -11,9 +11,11 @@ track: react
 # Day 6: Props Deep Dive — Basic to Advanced
 
 ## Goal
+
 Master React props deeply enough to design reusable component APIs, pass common data types, communicate from child to parent with callbacks, compose UI with `children`, use spread/rest correctly, pass components as props, and recognize prop-design problems.
 
 ## Prerequisites
+
 - Day 4 Components
 - Day 5 Reusable Components
 - JavaScript objects, arrays, functions, destructuring, rest/spread
@@ -52,32 +54,38 @@ Child needs a change → calls callback → owner updates value
 ## 2. Passing Different Data Types
 
 ### String
+
 ```jsx
 <User name="Asha" />
 ```
 
 ### Number
+
 ```jsx
 <User age={25} />
 ```
 
 ### Boolean
+
 ```jsx
 <User active={true} />
 <User active />
 ```
 
 ### Array
+
 ```jsx
 <User skills={["React", "Angular"]} />
 ```
 
 ### Object
+
 ```jsx
 <User profile={{ name: "Asha", role: "Developer" }} />
 ```
 
 ### Function
+
 ```jsx
 <User onSelect={handleSelect} />
 ```
@@ -164,11 +172,7 @@ React's data flow remains downward even when a child triggers a parent update.
 
 ```jsx
 function Child({ onSelect }) {
-  return (
-    <button onClick={() => onSelect("React")}>
-      Select React
-    </button>
-  );
+  return <button onClick={() => onSelect("React")}>Select React</button>;
 }
 
 function Parent() {
@@ -199,9 +203,7 @@ When the child needs to provide its own argument, wrap the call:
 ```jsx
 function ProductCard({ product, onAddToCart }) {
   return (
-    <button onClick={() => onAddToCart(product.id)}>
-      Add {product.name}
-    </button>
+    <button onClick={() => onAddToCart(product.id)}>Add {product.name}</button>
   );
 }
 ```
@@ -229,7 +231,7 @@ function Card({ children }) {
 <Card>
   <h2>Profile</h2>
   <p>React Developer</p>
-</Card>
+</Card>;
 ```
 
 `children` can contain text, elements, arrays of elements, or other renderable React content. It can also be empty. Treat it as a composition mechanism, not simply “a string inside a component.”
@@ -268,7 +270,7 @@ function Page({ header }) {
   return <main>{header}</main>;
 }
 
-<Page header={<Header />} />
+<Page header={<Header />} />;
 ```
 
 These are related but not identical: one receives a component value/type that can be rendered by the receiving component, while the other receives an already-created React element.
@@ -280,7 +282,7 @@ Spread can forward a group of properties:
 ```jsx
 const user = { name: "John", age: 20 };
 
-<User {...user} />
+<User {...user} />;
 ```
 
 Equivalent conceptually to:
@@ -380,12 +382,12 @@ A prop being an object does not make that object automatically immutable; immuta
 
 ## 14. Props vs State
 
-| Props | State |
-|---|---|
-| Input from outside component | Data managed by component/state owner |
-| Read-only from receiver's perspective | Updated through state API |
-| Controlled by parent/owner | Owned by state holder |
-| Used to configure a component | Used for changing UI data |
+| Props                                 | State                                 |
+| ------------------------------------- | ------------------------------------- |
+| Input from outside component          | Data managed by component/state owner |
+| Read-only from receiver's perspective | Updated through state API             |
+| Controlled by parent/owner            | Owned by state holder                 |
+| Used to configure a component         | Used for changing UI data             |
 
 A component can receive props and also own state. They are complementary concepts.
 
@@ -421,9 +423,7 @@ For example:
 ```jsx
 function UserEditor({ user, onChange }) {
   return (
-    <button onClick={() => onChange({ ...user, name: "Asha" })}>
-      Rename
-    </button>
+    <button onClick={() => onChange({ ...user, name: "Asha" })}>Rename</button>
   );
 }
 ```
@@ -497,6 +497,7 @@ App
 ```
 
 Acceptance criteria:
+
 - [ ] At least four prop types are demonstrated.
 - [ ] Object prop is treated immutably.
 - [ ] Child invokes a callback.
@@ -608,6 +609,7 @@ Take a component with more than eight configuration props. Identify which props 
 ## Final Practical Project
 
 Build a **Product Management Dashboard** with:
+
 - `ProductCard` receiving an object prop
 - `ProductCard` callback for Add to Cart
 - `SearchInput` forwarding native props with rest
@@ -633,5 +635,28 @@ You can now design and consume React component APIs from basic primitives throug
 - Prop drilling and possible alternatives
 - Type-safe prop contracts
 - Practical component API design
+
+## Interview Notes (Quick Revision)
+
+- **Props are read-only inputs** from parent to child — never mutate props or nested objects/arrays received through them.
+- Destructure props with default values for optional ones: `function Card({ title, size = "md" })`.
+- **Child → parent communication** happens via callback props (`onSelect`, `onAddToCart`), not by the child mutating anything directly.
+- Common bug: `onClick={handleClick()}` calls the function during render instead of passing it — should be `onClick={handleClick}` or `onClick={() => handleClick(arg)}`.
+- `children` lets a component render whatever content the parent passes — key composition tool; components can even be passed as props (e.g., icon/header slots).
+- **Spread props** (`{...props}`) forward multiple props at once; **rest props** collect the remaining ones (`function Input({ label, ...rest })`) — be careful blindly forwarding rest props to DOM elements (invalid HTML attributes, warnings).
+- Later attributes/spread override earlier ones when merging props.
+- **Props vs state**: props come from the parent and are read-only; state is owned and changed by the component itself.
+- **Prop drilling** = passing props through many intermediate layers that don't use them; alternatives include composition or Context (but Context isn't automatically the first fix).
+- TypeScript prop types catch shape mismatches at compile time but don't validate real runtime data (e.g., API responses) — still need runtime checks at boundaries.
+
+**Rapid-fire answers**
+
+| Question                                     | One-line Answer                                   |
+| -------------------------------------------- | ------------------------------------------------- |
+| Can a child modify its own props?            | No, props are read-only                           |
+| How does a child talk to its parent?         | Via a callback prop                               |
+| What's wrong with `onClick={handleClick()}`? | It runs during render, not on click               |
+| What is prop drilling?                       | Passing props through layers that don't need them |
+| Does TypeScript validate runtime API data?   | No, only compile-time shapes                      |
 
 This is the required depth for Props in the course. Day 7 applies these patterns in an integrated product project.

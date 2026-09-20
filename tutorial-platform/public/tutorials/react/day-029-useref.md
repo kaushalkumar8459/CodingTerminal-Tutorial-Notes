@@ -8,6 +8,7 @@ estimatedMinutes: 150
 order: 29
 track: react
 ---
+
 # Day 29 [Intermediate]: `useRef`
 
 ## Goal
@@ -80,14 +81,14 @@ A ref belongs to the component instance. When that component unmounts, its ref d
 
 ## Ref vs State
 
-| Question | State | Ref |
-|---|---|---|
-| Survives renders? | Yes | Yes |
-| Changing it schedules a render? | Yes | No |
-| Intended to drive JSX? | Yes | Usually no |
-| Can reference a DOM node? | No | Yes |
-| Good for timer/request handles? | Usually no | Yes |
-| React tracks changes automatically? | Yes | No |
+| Question                            | State      | Ref        |
+| ----------------------------------- | ---------- | ---------- |
+| Survives renders?                   | Yes        | Yes        |
+| Changing it schedules a render?     | Yes        | No         |
+| Intended to drive JSX?              | Yes        | Usually no |
+| Can reference a DOM node?           | No         | Yes        |
+| Good for timer/request handles?     | Usually no | Yes        |
+| React tracks changes automatically? | Yes        | No         |
 
 Ask:
 
@@ -251,8 +252,12 @@ function Poller() {
 
   return (
     <div>
-      <button type="button" onClick={start}>Start</button>
-      <button type="button" onClick={stop}>Stop</button>
+      <button type="button" onClick={start}>
+        Start
+      </button>
+      <button type="button" onClick={stop}>
+        Stop
+      </button>
     </div>
   );
 }
@@ -319,7 +324,9 @@ function Example() {
 
   return (
     <>
-      <button type="button" onClick={increment}>Increment</button>
+      <button type="button" onClick={increment}>
+        Increment
+      </button>
       <p>{valueRef.current}</p>
     </>
   );
@@ -423,15 +430,15 @@ If a timer, subscription, observer, or widget breaks when setup/cleanup is repea
 
 ## Common Patterns
 
-| Pattern | Example | Why ref? |
-|---|---|---|
-| DOM node | `inputRef.current` | Imperative browser operation |
-| Timer ID | `intervalRef.current` | Resource handle |
-| Abort controller | `controllerRef.current` | Cancellation handle |
-| Request ID | `requestIdRef.current` | Latest-request ownership |
-| Previous value | `previous.current` | Persist without rendering |
-| Third-party instance | `chartRef.current` | External imperative API |
-| Debug counter | `renders.current` | Diagnostics, not UI state |
+| Pattern              | Example                 | Why ref?                     |
+| -------------------- | ----------------------- | ---------------------------- |
+| DOM node             | `inputRef.current`      | Imperative browser operation |
+| Timer ID             | `intervalRef.current`   | Resource handle              |
+| Abort controller     | `controllerRef.current` | Cancellation handle          |
+| Request ID           | `requestIdRef.current`  | Latest-request ownership     |
+| Previous value       | `previous.current`      | Persist without rendering    |
+| Third-party instance | `chartRef.current`      | External imperative API      |
+| Debug counter        | `renders.current`       | Diagnostics, not UI state    |
 
 ## When Not to Use `useRef`
 
@@ -726,3 +733,23 @@ They can hide application state from React, create imperative coupling, make upd
 You can now use `useRef` deliberately rather than mechanically. You understand its two major roles—**DOM/imperative access and persistent mutable instance data**—and, more importantly, when **not** to use it.
 
 This prepares you for the next stage of the course, where refs, effects, memoization, and custom hooks can be combined to build reusable and performant React features.
+
+## Interview Notes (Quick Revision)
+
+- `useRef` gives a **mutable container** (`.current`) that persists across renders **without triggering a re-render** when changed — different from `useState`.
+- Two main uses: (1) accessing a **DOM node** (e.g., `inputRef.current.focus()`), (2) storing **persistent instance data** that shouldn't cause a render (timer IDs, previous values, request handles).
+- If a value needs to appear in the UI or trigger a re-render, use **state**, not a ref.
+- If a value can be calculated from existing props/state, **derive it** — don't store it in a ref either.
+- Don't read a DOM ref during render for imperative work — wait until after commit (in an effect) or use a callback ref when timing matters.
+- Each component **instance** has its own refs — they are not shared across instances.
+- Expose a **narrow imperative API** from a child (via `useImperativeHandle`) rather than exposing its entire internal implementation.
+
+**Rapid-fire answers**
+
+| Question                                         | One-line Answer                                          |
+| ------------------------------------------------ | -------------------------------------------------------- |
+| Does changing `ref.current` trigger a re-render? | No                                                       |
+| When to use state instead of a ref?              | When the value must appear in the UI or trigger a render |
+| Two main uses of `useRef`?                       | DOM access and persistent mutable instance data          |
+| Are refs shared between component instances?     | No, each instance has its own                            |
+| Should you read a DOM ref during render?         | No, only after commit or via a callback ref              |

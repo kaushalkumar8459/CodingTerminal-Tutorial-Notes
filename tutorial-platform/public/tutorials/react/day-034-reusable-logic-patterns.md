@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 34
 track: react
 ---
+
 # Day 34 [Intermediate]: Reusable Logic Patterns
 
 ## Goal
@@ -71,13 +72,7 @@ Repeated behavior + stable responsibility + clear API
 A hook should expose a small, predictable API.
 
 ```jsx
-const {
-  data,
-  status,
-  error,
-  isRefreshing,
-  refetch,
-} = useFetch(url);
+const { data, status, error, isRefreshing, refetch } = useFetch(url);
 ```
 
 Document:
@@ -414,7 +409,9 @@ function JobsExplorer() {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      <button type="button" onClick={clear}>Clear</button>
+      <button type="button" onClick={clear}>
+        Clear
+      </button>
 
       {status === "loading" && <p role="status">Loading jobs¦</p>}
       {status === "refreshing" && <p role="status">Updating results¦</p>}
@@ -422,7 +419,9 @@ function JobsExplorer() {
       {status === "error" && (
         <div role="alert">
           <p>Unable to load jobs.</p>
-          <button type="button" onClick={refetch}>Retry</button>
+          <button type="button" onClick={refetch}>
+            Retry
+          </button>
         </div>
       )}
 
@@ -718,3 +717,23 @@ Build a **Jobs Explorer** with:
 You can now build reusable async and interaction primitives with clear contracts, cleanup, cancellation, race protection, refresh-aware UX, testing, accessibility-aware composition, and a practical understanding of when not to abstract.
 
 **Next:** Day 35 — Search and Filter application, applying these reusable patterns in a complete feature.
+
+## Interview Notes (Quick Revision)
+
+- Reusable data hooks (like `useFetch`) should return **data/state**, not JSX — keep logic and presentation separate.
+- Always check `response.ok`; don't treat request **cancellation** as a user-facing error.
+- Debouncing delays/limits calls — it does **not** by itself solve race conditions (an older debounced call can still resolve after a newer one).
+- Clear the previous timer before setting a new one when debouncing.
+- Don't store derived/filtered results as separate state — compute them from source data.
+- Don't over-abstract — build the reusable hook once there are **multiple real consumers**, not preemptively.
+- Give each hook a single, focused responsibility rather than bundling unrelated concerns (e.g., fetching + pagination + debouncing all mixed together without clear boundaries).
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                 |
+| ---------------------------------------------- | ----------------------------------------------- |
+| Should a data hook return JSX?                 | No, only data/state                             |
+| Does debounce alone prevent race conditions?   | No, still need response/request identity guards |
+| When to build a reusable hook?                 | Once there are multiple real consumers          |
+| Should filtered/derived data be its own state? | No, compute it from source data                 |
+| Is cancellation a user-facing error?           | No, it's normal control flow                    |
