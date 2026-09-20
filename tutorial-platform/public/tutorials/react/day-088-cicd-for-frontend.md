@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 88
 track: react
 ---
+
 # Day 88 [Advanced]: CI/CD for Frontend
 
 ## Goal
@@ -243,15 +244,15 @@ Scenario:
 Product managers need clickable preview links for each PR.
 
 ```yaml
-  preview:
-    if: github.event_name == 'pull_request'
-    needs: validate
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - run: echo "Deploy preview environment"
+preview:
+  if: github.event_name == 'pull_request'
+  needs: validate
+  runs-on: ubuntu-latest
+  permissions:
+    contents: read
+    pull-requests: write
+  steps:
+    - run: echo "Deploy preview environment"
 ```
 
 **Review point:** In a real provider integration, use a short-lived deployment credential and never expose production secrets to an untrusted pull-request execution context.
@@ -262,15 +263,15 @@ Scenario:
 Main branch deploy requires approval gate for release manager.
 
 ```yaml
-  production:
-    if: github.ref == 'refs/heads/main'
-    needs: validate
-    environment: production
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - run: echo "Deploy to production"
+production:
+  if: github.ref == 'refs/heads/main'
+  needs: validate
+  environment: production
+  runs-on: ubuntu-latest
+  permissions:
+    contents: read
+  steps:
+    - run: echo "Deploy to production"
 ```
 
 **Review point:** Configure required reviewers/protected environments in the deployment platform and promote the exact artifact validated by CI where possible.
@@ -375,3 +376,21 @@ Expected output:
 - You can enforce release quality with automated guardrails
 - You can design safer preview, deployment, and rollback workflows
 - You are ready for formal release discipline in Day 89
+
+## Interview Notes (Quick Revision)
+
+- A good CI pipeline runs automated **quality gates** (lint, type-check, tests, build) on every push/PR before code can merge.
+- **Preview deployments** for PRs let reviewers validate changes in a real running environment before production.
+- Production deploys should have a clear **approval gate** and a **rollback plan** to a known-good artifact if a regression is detected post-deploy.
+- Keep builds **reproducible and traceable** (pinned versions, build provenance) so you can always identify exactly what's running in production.
+- Practice good **secret/permission hygiene** in CI — least privilege, no secrets in logs, scoped tokens.
+
+**Rapid-fire answers**
+
+| Question                                    | One-line Answer                                 |
+| ------------------------------------------- | ----------------------------------------------- |
+| What should run before merging a PR?        | Automated lint/test/build quality gates         |
+| What do PR preview deployments enable?      | Reviewing changes in a real running environment |
+| What should happen if production regresses? | Rollback to a known-good artifact               |
+| Why keep builds reproducible?               | To always know exactly what's deployed          |
+| What's a key CI security practice?          | Least-privilege secrets/permissions             |

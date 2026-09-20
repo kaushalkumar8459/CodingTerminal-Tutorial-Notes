@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 24
 track: react
 ---
+
 # Day 24 [Intermediate]: Effect Cleanup, Cancellation & Race Conditions
 
 ## Goal
@@ -267,11 +268,11 @@ This does **not** cancel the network request. It only invalidates the old result
 
 Comparison:
 
-| Technique | Cancels supported client-side work? | Prevents stale UI update? |
-|---|---:|---:|
-| `AbortController` | Yes, when the API supports abort | Usually, but explicit stale-result protection may still be useful |
-| Ignore flag | No | Yes |
-| Both | Yes, when supported | Yes |
+| Technique         | Cancels supported client-side work? |                                         Prevents stale UI update? |
+| ----------------- | ----------------------------------: | ----------------------------------------------------------------: |
+| `AbortController` |    Yes, when the API supports abort | Usually, but explicit stale-result protection may still be useful |
+| Ignore flag       |                                  No |                                                               Yes |
+| Both              |                 Yes, when supported |                                                               Yes |
 
 Use cancellation when useful, but understand that **cancellation and correctness are separate concerns**.
 
@@ -461,7 +462,7 @@ export default function Search({ query }) {
 
         const response = await fetch(
           `/api/search?q=${encodeURIComponent(trimmedQuery)}`,
-          { signal: controller.signal }
+          { signal: controller.signal },
         );
 
         if (!response.ok) {
@@ -779,3 +780,23 @@ Before shipping an effect that creates ongoing work, verify:
 You can now build **reversible effect synchronizations** instead of treating cleanup as an unmount-only trick. You understand timers, subscriptions, event listeners, connections, abortable requests, stale results, debouncing, race conditions, stale closures, and Strict Mode behavior.
 
 **Next:** Day 25 — API calls with `fetch`, where these lifecycle principles are applied to real loading, error, empty, success, and request-state flows.
+
+## Interview Notes (Quick Revision)
+
+- Cleanup should **undo exactly what setup did**: `setInterval`↔`clearInterval`, `addEventListener`↔`removeEventListener`, `subscribe`↔`unsubscribe`, `fetch(signal)`↔`controller.abort()`.
+- `removeEventListener` only works if you pass the **same function reference** used in `addEventListener` — a new inline arrow function won't match.
+- Client-side `abort()` stops the client from waiting/reacting further — it does **not** undo server-side work that may have already happened.
+- Cleanup is not needed for every effect — only for ongoing work that must be stopped/released (timers, subscriptions, connections, listeners).
+- Watch for **stale async results**: an older request finishing after a newer one can overwrite current state — guard with an abort flag/ID check, not just cancellation alone.
+- Debounce (delaying/cancelling a scheduled call) is different from **request cancellation** (aborting work already in flight) — don't confuse the two.
+- Strict Mode intentionally double-invokes effect setup/cleanup in development to expose incorrect cleanup — don't disable it to "fix" the symptom.
+
+**Rapid-fire answers**
+
+| Question                                        | One-line Answer                                                 |
+| ----------------------------------------------- | --------------------------------------------------------------- |
+| What must cleanup do?                           | Reverse exactly what setup started                              |
+| Why doesn't `removeEventListener` always work?  | Wrong/mismatched function reference                             |
+| Does `abort()` undo server work?                | No, it only stops the client side                               |
+| Debounce vs cancellation?                       | Debounce delays/skips a call; cancellation stops in-flight work |
+| Why does Strict Mode double-run effects in dev? | To surface incorrect setup/cleanup pairs                        |

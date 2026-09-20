@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 73
 track: react
 ---
+
 # Day 73 [Advanced]: TypeScript Basics
 
 ## Goal
@@ -371,3 +372,21 @@ Expected output:
 - You can enforce stricter data and function contracts
 - You understand the boundary between compile-time types and runtime validation
 - You are ready for typed React components in Day 74
+
+## Interview Notes (Quick Revision)
+
+- TypeScript is **compile-time only** — it disappears at runtime and cannot validate data coming from outside the program (API responses, user input, storage).
+- Use `unknown` (not `any`) for values of uncertain type — `unknown` forces you to **narrow** the type before using it, preserving safety; `any` opts out of type checking entirely.
+- Prefer `interface`/`type` to define clear function/object contracts instead of relying on inferred shapes everywhere.
+- Union types model a value that can be one of several shapes/states (e.g., `"idle" | "loading" | "success" | "error"`).
+- Compile-time types don't replace runtime validation (e.g., Zod) at actual data boundaries like API responses.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                                |
+| ---------------------------------------------- | -------------------------------------------------------------- |
+| Does TypeScript exist at runtime?              | No, it's compile-time only                                     |
+| `unknown` vs `any`?                            | `unknown` requires narrowing before use; `any` disables checks |
+| Do TS types validate API responses at runtime? | No, need separate runtime validation                           |
+| What do union types model?                     | A value that can be one of several defined shapes              |
+| Best way to define object/function contracts?  | `interface`/`type` declarations                                |

@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 70
 track: react
 ---
+
 # Day 70 [Advanced]: Integration and E2E
 
 ## Goal
@@ -380,4 +381,24 @@ Expected output:
 - You can design practical layered testing strategy for production apps
 - You can reduce flakiness using deterministic data and condition-based synchronization
 - You can diagnose CI failures with useful test artifacts
+
+## Interview Notes (Quick Revision)
+
+- **Integration tests** verify multiple units working together (e.g., a form + API layer + state); **E2E tests** verify complete real user journeys through the actual running app — different scope and cost.
+- Use **MSW (Mock Service Worker)** to intercept network calls with deterministic mock responses, avoiding flaky reliance on real backends in tests.
+- Focus E2E coverage on **critical user paths** (login, checkout) rather than trying to E2E-test everything — it's the slowest, most expensive test layer.
+- Reduce flakiness with **deterministic test data** and condition-based waits (`waitFor`) instead of arbitrary sleeps.
+- On CI failures, capture **artifacts** (screenshots, videos, logs) to diagnose issues without needing to reproduce locally.
+- Layer tests: unit → component → integration → E2E, each layer catching different classes of bugs at the right cost.
+
+**Rapid-fire answers**
+
+| Question                         | One-line Answer                                   |
+| -------------------------------- | ------------------------------------------------- |
+| Integration vs E2E tests?        | Multiple units together vs full real user journey |
+| Why use MSW in tests?            | Deterministic mocked network responses            |
+| Should E2E cover every feature?  | No, focus on critical paths                       |
+| How to reduce test flakiness?    | Deterministic data + condition-based waits        |
+| What helps diagnose CI failures? | Captured artifacts like screenshots/logs          |
+
 - You are prepared for reliability-focused advanced modules ahead

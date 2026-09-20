@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 81
 track: react
 ---
+
 # Day 81 [Intermediate]: React DevTools Deep Dive
 
 ## Goal
@@ -355,3 +356,21 @@ Expected output:
 - You can distinguish normal rendering from actionable performance problems
 - You can connect local debugging findings with production validation
 - You are ready for complex state orchestration in Day 82
+
+## Interview Notes (Quick Revision)
+
+- React DevTools' **Components** tab shows the live component tree, props, state, and hooks — invaluable for inspecting what's actually rendered vs assumed.
+- The **Profiler** tab records commit costs and shows **why** a component re-rendered (props changed, state changed, parent re-rendered, context changed).
+- Use profiling to find real re-render culprits before reaching for `React.memo`/`useMemo`/`useCallback` — don't optimize blind.
+- A repeatable debugging workflow: reproduce → inspect tree/state → profile → identify actual cause → apply targeted fix → re-measure.
+- Local DevTools findings should connect to **production observability** (real user metrics) to confirm a fix actually matters at scale.
+
+**Rapid-fire answers**
+
+| Question                                          | One-line Answer                                  |
+| ------------------------------------------------- | ------------------------------------------------ |
+| What does the Components tab show?                | Live tree, props, state, hooks                   |
+| What does the Profiler show?                      | Commit costs and render causes                   |
+| Should you memoize before profiling?              | No, profile first to find the real cause         |
+| What's the debugging workflow order?              | Reproduce → inspect → profile → fix → re-measure |
+| Why connect DevTools findings to production data? | To confirm the fix matters at real-world scale   |

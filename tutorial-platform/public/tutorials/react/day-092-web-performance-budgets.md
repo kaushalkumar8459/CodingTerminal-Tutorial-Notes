@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 92
 track: react
 ---
+
 # Day 92 [Advanced]: Web Performance Budgets
 
 ## Goal
@@ -376,3 +377,21 @@ Expected output:
 - You can distinguish resource budgets from user-experience budgets
 - You can make performance improvements measurable and reproducible
 - You are ready for accessibility audit workflows in Day 93
+
+## Interview Notes (Quick Revision)
+
+- A **performance budget** sets a quantified limit (bundle size, LCP, TTI) that the team treats as a hard constraint, not just an aspiration.
+- Set budgets from a **real baseline measurement**, not arbitrary numbers — know your current state before setting a target.
+- Enforce budgets in **CI** so a regression fails the build automatically, rather than relying on manual review to catch it.
+- Distinguish **resource budgets** (JS/CSS/image size) from **user-experience budgets** (LCP, INP, CLS) — both matter, but they measure different things.
+- Prioritize budgets by **route importance** — the homepage/checkout flow often deserves a stricter budget than a rarely-visited admin page.
+
+**Rapid-fire answers**
+
+| Question                                 | One-line Answer                                  |
+| ---------------------------------------- | ------------------------------------------------ |
+| What is a performance budget?            | A hard, quantified limit on a performance metric |
+| Where should budget targets come from?   | A real measured baseline                         |
+| Where should budgets be enforced?        | In CI, to fail on regression automatically       |
+| Resource budget vs UX budget?            | Bundle/asset size vs metrics like LCP/INP/CLS    |
+| Should every route have the same budget? | No, prioritize by route importance               |

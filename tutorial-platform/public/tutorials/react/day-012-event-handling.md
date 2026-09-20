@@ -7,6 +7,7 @@ estimatedMinutes: 75
 order: 12
 track: react
 ---
+
 # Day 12 [Beginner to Intermediate]: Event Handling
 
 ## Goal
@@ -59,10 +60,7 @@ function Counter() {
   const [count, setCount] = useState(0);
 
   return (
-    <button
-      type="button"
-      onClick={() => setCount((current) => current + 1)}
-    >
+    <button type="button" onClick={() => setCount((current) => current + 1)}>
       Increase: {count}
     </button>
   );
@@ -87,7 +85,7 @@ const [name, setName] = useState("");
   name="name"
   value={name}
   onChange={(event) => setName(event.target.value)}
-/>
+/>;
 ```
 
 For production forms, pair inputs with labels:
@@ -109,7 +107,7 @@ function handleSubmit(event) {
 
 <form onSubmit={handleSubmit}>
   <button type="submit">Submit</button>
-</form>
+</form>;
 ```
 
 `preventDefault()` stops the browser's default form action. It does **not** stop event propagation.
@@ -200,9 +198,9 @@ Use `stopPropagation()` only when the child interaction should not also activate
 
 ### Topic 9: `preventDefault()` vs `stopPropagation()`
 
-| API | Purpose |
-|---|---|
-| `preventDefault()` | Prevents the browser's default action |
+| API                 | Purpose                                             |
+| ------------------- | --------------------------------------------------- |
+| `preventDefault()`  | Prevents the browser's default action               |
 | `stopPropagation()` | Stops the event from propagating to other ancestors |
 
 Example: a form may need `preventDefault()`, while a child button inside an intentionally clickable card may need `stopPropagation()`.
@@ -491,12 +489,16 @@ Build a **Candidate Review Panel** with:
 
 ```jsx
 // ✗
-<button type="button" onClick={handleClick()}>Save</button>
+<button type="button" onClick={handleClick()}>
+  Save
+</button>
 ```
 
 ```jsx
 // ✓
-<button type="button" onClick={handleClick}>Save</button>
+<button type="button" onClick={handleClick}>
+  Save
+</button>
 ```
 
 ### Mistake 2: Wrong checkbox property
@@ -516,7 +518,9 @@ Avoid:
 
 ```jsx
 <form onSubmit={handleSubmit}>
-  <button type="button" onClick={handleSubmit}>Save</button>
+  <button type="button" onClick={handleSubmit}>
+    Save
+  </button>
 </form>
 ```
 
@@ -550,7 +554,9 @@ Find the issue:
 
 ```jsx
 <form onSubmit={handleSubmit}>
-  <button type="button" onClick={handleSubmit}>Save</button>
+  <button type="button" onClick={handleSubmit}>
+    Save
+  </button>
 </form>
 ```
 
@@ -641,3 +647,23 @@ You can now:
 - debug common event-handling mistakes.
 
 You are ready to move into **controlled forms and validation in Day 13**.
+
+## Interview Notes (Quick Revision)
+
+- Pass the function reference (`onClick={handleClick}`), not a call (`onClick={handleClick()}`) — the latter runs during render.
+- For a parameterized handler, wrap it: `onClick={() => handleSelect(id)}`.
+- `event.target.value` for text inputs; `event.target.checked` for checkboxes — don't mix them up.
+- `preventDefault()` stops the browser's default action (e.g., form reload on submit); `stopPropagation()` stops the event from bubbling to parent handlers — different purposes, don't reach for `stopPropagation()` by default.
+- Prefer `<form onSubmit={...}>` with a `type="submit"` button over only wiring `onClick`, so keyboard/Enter submission still works.
+- Use semantic elements (`button`, `a`, `input`) instead of clickable `div`s for built-in accessibility and keyboard support.
+- State read inside a handler reflects a **snapshot** from that render; use functional updates (`setCount(prev => prev + 1)`) if the next value depends on the previous one.
+
+**Rapid-fire answers**
+
+| Question                                           | One-line Answer                                          |
+| -------------------------------------------------- | -------------------------------------------------------- |
+| Correct handler syntax?                            | `onClick={handleClick}`, not `handleClick()`             |
+| Checkbox state property?                           | `checked`, not `value`                                   |
+| Difference: `preventDefault` vs `stopPropagation`? | One blocks default browser action, other blocks bubbling |
+| Best way to submit a form?                         | `<form onSubmit>` + `type="submit"` button               |
+| Why avoid clickable `div`s?                        | Lose native keyboard/accessibility behavior              |

@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 54
 track: react
 ---
+
 ---
+
 title: Async Thunks
 slug: day-054-async-thunks
 dayLabel: Day 54
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 54
 track: react
+
 ---
+
 # Day 54 [Advanced]: Async Thunks
 
 ## Goal
@@ -81,18 +85,15 @@ Code Example:
 ```jsx
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchAll",
-  async () => {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+export const fetchProducts = createAsyncThunk("products/fetchAll", async () => {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
 
-    if (!response.ok) {
-      throw new Error(`Request failed: ${response.status}`);
-    }
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
 
-    return response.json();
-  },
-);
+  return response.json();
+});
 ```
 
 **Explanation:** The first argument becomes the action-type prefix. When the thunk runs, Redux Toolkit generates lifecycle actions such as `products/fetchAll/pending`, `products/fetchAll/fulfilled`, and `products/fetchAll/rejected`.
@@ -363,7 +364,8 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload ?? action.error.message ?? "Failed to fetch";
+        state.error =
+          action.payload ?? action.error.message ?? "Failed to fetch";
       });
   },
 });
@@ -528,3 +530,21 @@ Expected output:
 - You can reason about duplicate requests and retry behavior
 - You understand the limitations of hand-written async thunks for server-state management
 - You are ready for RTK Query abstraction in Day 55
+
+## Interview Notes (Quick Revision)
+
+- `createAsyncThunk` auto-generates **pending/fulfilled/rejected** action types for an async operation — handle these in `extraReducers`.
+- Use `rejectWithValue(error)` inside the thunk to pass a **structured error payload** to the `rejected` case, instead of relying on a generic thrown error.
+- Model request status explicitly (e.g., `status: "idle"|"loading"|"succeeded"|"failed"`) rather than scattering separate booleans.
+- Watch for duplicate/overlapping requests — decide on dedup/cancellation strategy if the same thunk can be dispatched multiple times quickly.
+- Hand-written thunks handle the request lifecycle but don't provide caching, invalidation, or automatic refetching — that's what RTK Query adds on top.
+
+**Rapid-fire answers**
+
+| Question                                            | One-line Answer                     |
+| --------------------------------------------------- | ----------------------------------- |
+| What action types does `createAsyncThunk` generate? | pending, fulfilled, rejected        |
+| How to pass a custom error shape on failure?        | `rejectWithValue(error)`            |
+| Where do you handle these lifecycle actions?        | `extraReducers` in the slice        |
+| What do hand-written thunks lack vs RTK Query?      | Caching, invalidation, auto-refetch |
+| Should status be modeled as multiple booleans?      | No, use one explicit status field   |

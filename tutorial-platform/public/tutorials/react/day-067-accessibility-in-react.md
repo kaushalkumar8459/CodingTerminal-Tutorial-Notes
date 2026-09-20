@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 67
 track: react
 ---
+
 # Day 67 [Advanced]: Accessibility in React
 
 ## Goal
@@ -430,4 +431,23 @@ Expected output:
 - You can enforce keyboard and screen-reader usability patterns
 - You can manage labels, errors, live regions, and focus reliably
 - You can combine automated checks with manual accessibility verification
+
+## Interview Notes (Quick Revision)
+
+- Prefer **semantic HTML elements** (`button`, `nav`, `label`) over generic `div`/`span` with ARIA bolted on — semantics give you keyboard/screen-reader support for free.
+- Ensure full **keyboard-only** operability — every interactive element must be reachable and usable without a mouse.
+- Use ARIA attributes (`aria-live`, `aria-label`, `aria-invalid`) to supplement, not replace, semantic markup — "no ARIA is better than bad ARIA."
+- Manage **focus lifecycle** deliberately: move focus to new content (modals, error summaries) and restore it appropriately when UI closes.
+- Combine **automated tools** (axe, lint rules) with **manual testing** (actual keyboard/screen-reader use) — automated tools alone don't catch everything.
+
+**Rapid-fire answers**
+
+| Question                                     | One-line Answer                           |
+| -------------------------------------------- | ----------------------------------------- |
+| Prefer semantic elements or ARIA-heavy divs? | Semantic elements first                   |
+| What must every interactive element support? | Full keyboard operability                 |
+| Is more ARIA always better?                  | No, bad ARIA can be worse than none       |
+| What should happen when a modal opens?       | Focus moves into it, and returns on close |
+| Is automated a11y testing sufficient alone?  | No, combine with manual testing           |
+
 - You are ready for measurable performance diagnostics in Day 68

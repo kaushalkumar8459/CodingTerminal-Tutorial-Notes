@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 61
 track: react
 ---
+
 ---
+
 title: React 18+ Rendering Model
 slug: day-061-react-18-rendering-model
 dayLabel: Day 61
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 61
 track: react
+
 ---
+
 # Day 61 [Advanced]: React 18+ Rendering Model
 
 ## Goal
@@ -166,9 +170,7 @@ function Results({ items, query }) {
 
   const filteredItems = useMemo(() => {
     const normalized = deferredQuery.trim().toLowerCase();
-    return items.filter((item) =>
-      item.name.toLowerCase().includes(normalized),
-    );
+    return items.filter((item) => item.name.toLowerCase().includes(normalized));
   }, [items, deferredQuery]);
 
   return <p>{filteredItems.length} matches</p>;
@@ -516,3 +518,21 @@ Expected output:
 - You can use batching, transitions, and deferred values with the correct mental model
 - You can write render-pure components and reliable effects
 - You are ready for async loading orchestration in Day 62
+
+## Interview Notes (Quick Revision)
+
+- React 18 **automatically batches** state updates in more situations than before — not just inside event handlers, but also in promises, timeouts, and native event handlers.
+- Concurrent rendering lets React distinguish **urgent** updates (typing, clicks) from **non-urgent** ones (large list re-render) and prioritize accordingly.
+- `startTransition` marks an update as **non-urgent**, letting urgent updates interrupt it; `useDeferredValue` gives you a deferred copy of a value that lags behind during heavy renders.
+- **Render phase** (calculating what UI should look like) is separate from the **commit phase** (applying changes to the DOM) — render can be interrupted/retried under concurrent rendering, so it must stay pure.
+- StrictMode's extra dev-mode render/effect cycles help surface impure renders and improper cleanup — don't disable it to hide symptoms.
+
+**Rapid-fire answers**
+
+| Question                                               | One-line Answer                            |
+| ------------------------------------------------------ | ------------------------------------------ |
+| What's new about batching in React 18?                 | Batches updates outside event handlers too |
+| Purpose of `startTransition`?                          | Mark an update as non-urgent/interruptible |
+| Purpose of `useDeferredValue`?                         | Get a deferred, lagging copy of a value    |
+| Why must render stay pure in concurrent mode?          | Render can be interrupted and retried      |
+| Should StrictMode be disabled to avoid double-invokes? | No, fix the underlying impurity instead    |

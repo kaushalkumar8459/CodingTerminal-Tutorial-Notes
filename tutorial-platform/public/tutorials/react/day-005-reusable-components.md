@@ -7,6 +7,7 @@ estimatedMinutes: 90
 order: 5
 track: react
 ---
+
 # Day 5 [Beginner to Intermediate]: Reusable Components
 
 ## Goal
@@ -376,7 +377,11 @@ function Dashboard() {
 ```jsx
 function Button({ label, variant = "primary", onClick }) {
   return (
-    <button type="button" className={`button button--${variant}`} onClick={onClick}>
+    <button
+      type="button"
+      className={`button button--${variant}`}
+      onClick={onClick}
+    >
       {label}
     </button>
   );
@@ -567,3 +572,21 @@ Give them a small UI-focused contract and pass the data they need through props.
 ## Day 5 Outcome
 
 You can design reusable components with clear APIs, props, defaults, variants, `children`, and callback props. You understand the difference between useful reuse and over-abstraction and are ready for the deep props patterns covered in Day 6.
+
+## Interview Notes (Quick Revision)
+
+- A reusable component should expose a **small, generic API**: props for data, default values for optional variants, `children` for flexible content, and callback props for parent notification.
+- Don't over-generalize: creating a component for every tiny variation, or a prop for every possible case, makes the abstraction harder to use than the duplicated code it replaces.
+- Prefer **composition** (`children`, passing components as props) over named props for every layout permutation.
+- Keep reusable presentational components independent of data-fetching — pass data in via props; keep fetch/storage concerns outside unless that's the component's explicit job.
+- Don't skip accessibility semantics while chasing visual reuse.
+- Build the abstraction only after a **real repeated pattern** exists — premature abstraction adds complexity without payoff.
+
+**Rapid-fire answers**
+
+| Question                                            | One-line Answer                                                           |
+| --------------------------------------------------- | ------------------------------------------------------------------------- |
+| When should you NOT make a component reusable?      | When it's one-off or the abstraction is more complex than the duplication |
+| How to keep components decoupled from data sources? | Pass data as props; keep fetching outside                                 |
+| `children` vs named prop?                           | Use `children` for flexible content, named props for specific meaning     |
+| What's over-generalization?                         | A prop for every possible variation, hurting simplicity                   |

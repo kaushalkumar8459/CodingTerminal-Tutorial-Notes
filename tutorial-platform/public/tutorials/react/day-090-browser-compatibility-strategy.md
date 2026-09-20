@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 90
 track: react
 ---
+
 # Day 90 [Advanced]: Browser Compatibility Strategy
 
 ## Goal
@@ -354,3 +355,21 @@ Expected output:
 - You can reduce runtime surprises with proactive compatibility checks
 - You can distinguish build-time and runtime compatibility techniques
 - You are ready for observability and quality scaling topics in later modules
+
+## Interview Notes (Quick Revision)
+
+- Define an explicit **browser support matrix/policy** (e.g., last 2 versions of major browsers) rather than guessing what to support.
+- Use **polyfills/transpilation** for older browsers only for the features you actually need — shipping unnecessary polyfills bloats the bundle.
+- Prefer **progressive enhancement/feature detection** (checking if a capability exists) over browser-sniffing (checking the user agent string), which is unreliable.
+- Combine automated cross-browser testing with manual verification for critical flows, since automated tools don't catch everything.
+- Monitor production with **browser-aware telemetry** to catch compatibility regressions that only affect a subset of users.
+
+**Rapid-fire answers**
+
+| Question                                              | One-line Answer                                                |
+| ----------------------------------------------------- | -------------------------------------------------------------- |
+| What should define supported browsers?                | An explicit support matrix/policy                              |
+| Feature detection or browser sniffing?                | Feature detection — more reliable                              |
+| Should you ship all polyfills to everyone?            | No, only what's needed for the target browsers                 |
+| Is automated testing enough for cross-browser issues? | No, combine with manual verification                           |
+| Why monitor by browser in production?                 | To catch compatibility regressions affecting a subset of users |

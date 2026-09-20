@@ -7,6 +7,7 @@ estimatedMinutes: 45
 order: 51
 track: react
 ---
+
 # Day 51 [Advanced]: Redux Toolkit Introduction
 
 ## Goal
@@ -174,7 +175,7 @@ With this configuration, the Redux state shape is:
 ```jsx
 {
   counter: {
-    value: 0
+    value: 0;
   }
 }
 ```
@@ -251,11 +252,7 @@ import { increment } from "./counterSlice";
 function IncrementButton() {
   const dispatch = useDispatch();
 
-  return (
-    <button onClick={() => dispatch(increment())}>
-      Increment
-    </button>
-  );
+  return <button onClick={() => dispatch(increment())}>Increment</button>;
 }
 ```
 
@@ -397,7 +394,7 @@ import App from "./App";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <App />
-  </Provider>
+  </Provider>,
 );
 ```
 
@@ -432,7 +429,8 @@ const counterSlice = createSlice({
   },
 });
 
-export const { increment, decrement, reset, incrementBy } = counterSlice.actions;
+export const { increment, decrement, reset, incrementBy } =
+  counterSlice.actions;
 export default counterSlice.reducer;
 ```
 
@@ -490,11 +488,7 @@ import { incrementBy } from "./counterSlice";
 function AddFiveButton() {
   const dispatch = useDispatch();
 
-  return (
-    <button onClick={() => dispatch(incrementBy(5))}>
-      Add 5
-    </button>
-  );
+  return <button onClick={() => dispatch(incrementBy(5))}>Add 5</button>;
 }
 
 export default AddFiveButton;
@@ -628,4 +622,24 @@ Add a `priority` field to the state and create a reducer that changes it from th
 - You can use generated action creators and payloads.
 - You understand Immer's role in immutable state updates.
 - You can connect Redux Toolkit state to React components with `Provider`, `useSelector`, and `useDispatch`.
+
+## Interview Notes (Quick Revision)
+
+- **Redux Toolkit (RTK)** is the official recommended way to write Redux — less boilerplate, sensible defaults, built-in best practices.
+- `createSlice` bundles initial state + reducers and **auto-generates action creators/types** — no manual action-type strings.
+- RTK reducers can use **mutation-like syntax** (`state.value += 1`) safely because they operate on an **Immer draft**, which produces the real immutable next state — this only applies inside the Immer-managed reducer context, not elsewhere in the app.
+- `configureStore` replaces manual `createStore` setup with good defaults (middleware, dev tools, checks).
+- Selector paths must match how reducers are registered in the store (e.g., `reducer: { counter: counterReducer }` → `state.counter.value`).
+- Not all state belongs in Redux — purely local, non-shared component state is often simpler as `useState`.
+
+**Rapid-fire answers**
+
+| Question                                   | One-line Answer                                |
+| ------------------------------------------ | ---------------------------------------------- |
+| What does `createSlice` generate?          | Action creators + the slice reducer            |
+| Why can RTK reducers "mutate" state?       | They operate on an Immer draft, not real state |
+| What replaces manual `createStore`?        | `configureStore`                               |
+| Is mutation-like syntax safe everywhere?   | No, only inside the Immer-managed reducer      |
+| Should every piece of state go into Redux? | No, only shared/cross-cutting state            |
+
 - You are ready for multi-slice store design and larger Redux state architecture in Day 52.

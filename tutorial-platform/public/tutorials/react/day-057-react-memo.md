@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 57
 track: react
 ---
+
 ---
+
 title: React.memo
 slug: day-057-react-memo
 dayLabel: Day 57
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 57
 track: react
+
 ---
+
 # Day 57 [Advanced]: React.memo
 
 ## Goal
@@ -97,10 +101,7 @@ const onClick = useCallback(() => {
 For an object prop, `useMemo` can provide a stable reference when the object should remain the same until its dependencies change:
 
 ```jsx
-const options = useMemo(
-  () => ({ pageSize: 20, sort: "price" }),
-  [],
-);
+const options = useMemo(() => ({ pageSize: 20, sort: "price" }), []);
 ```
 
 **Explanation:** Memoization checks references, not deep object contents. Creating `{}` or `() => {}` inline on every parent render creates a new reference. However, do not automatically wrap every value in `useMemo` or `useCallback`; the additional complexity should have a measurable reason.
@@ -128,9 +129,7 @@ const ProductRow = React.memo(function ProductRow({ product }) {
   return <p>{product.name}</p>;
 });
 
-products.map((product) => (
-  <ProductRow key={product.id} product={product} />
-));
+products.map((product) => <ProductRow key={product.id} product={product} />);
 ```
 
 **Explanation:** `key` helps React identify list items; it does not itself provide memoization. If a parent creates a brand-new `product` object for every row on every render, the memoized rows can still render because the `product` prop reference changed. Keep item identity and derived data stable where practical.
@@ -161,8 +160,7 @@ const ScoreCard = React.memo(
       </p>
     );
   },
-  (prev, next) =>
-    prev.name === next.name && prev.score === next.score,
+  (prev, next) => prev.name === next.name && prev.score === next.score,
 );
 ```
 
@@ -322,8 +320,7 @@ const ScoreCard = React.memo(
       </p>
     );
   },
-  (prev, next) =>
-    prev.name === next.name && prev.score === next.score,
+  (prev, next) => prev.name === next.name && prev.score === next.score,
 );
 ```
 
@@ -431,3 +428,20 @@ Expected output:
 - You can evaluate custom comparators and performance trade-offs
 - You are ready for the systematic optimization workflow in Day 58
 
+## Interview Notes (Quick Revision)
+
+- `React.memo` skips re-rendering a component if its **props are shallowly equal** (via `Object.is`) to the previous render's props.
+- It's defeated by unstable references — new object/array/function props on every render (unless memoized with `useMemo`/`useCallback`) will still trigger a re-render.
+- Keys and memoization solve **different problems**: keys are about list item identity/reconciliation; memoization is about skipping unnecessary re-renders.
+- A custom comparison function can be passed to `React.memo` for more control, but adds complexity — use only when default shallow comparison isn't sufficient.
+- Always validate the benefit with the **React DevTools Profiler** rather than assuming memoization helped.
+
+**Rapid-fire answers**
+
+| Question                                   | One-line Answer                                                 |
+| ------------------------------------------ | --------------------------------------------------------------- |
+| What does `React.memo` check?              | Shallow prop equality via `Object.is`                           |
+| What defeats `React.memo`?                 | Unstable object/array/function props                            |
+| Are keys and memoization the same thing?   | No, keys are about identity, memoization about skipping renders |
+| Should you always add a custom comparator? | No, only when default shallow check isn't enough                |
+| How to verify memoization helped?          | Measure with React DevTools Profiler                            |

@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 84
 track: react
 ---
+
 # Day 84 [Advanced]: Memoization Pitfalls and Stale Closures
 
 ## Goal
@@ -361,3 +362,21 @@ Expected output:
 - You can apply memoization responsibly and safely
 - You can validate performance improvements with evidence
 - You are ready for SSR hydration mismatch debugging in Day 85
+
+## Interview Notes (Quick Revision)
+
+- A **stale closure** happens when a function captures an old value from a previous render and keeps using it, even after state has changed — common with effects/callbacks missing dependencies.
+- Fix stale closures by including the right dependencies, using a **functional state update** (`setX(prev => ...)`), or a ref for values you intentionally want to read "live."
+- Async code (like a `setTimeout` or fetch callback) closes over whatever values existed **when it was created** — not the latest render's values, unless you account for that.
+- Memoization (`useMemo`/`useCallback`) can itself cause bugs if dependencies are incomplete — it may return a stale cached value.
+- Fix correctness issues first (proper dependencies/design), then apply memoization for measured performance — don't use memoization to paper over a stale-closure bug.
+
+**Rapid-fire answers**
+
+| Question                                          | One-line Answer                                            |
+| ------------------------------------------------- | ---------------------------------------------------------- |
+| What is a stale closure?                          | A function using an old captured value after state changed |
+| Common cause of stale closures?                   | Missing/incorrect effect or callback dependencies          |
+| How to read the "latest" value safely?            | Functional update or a ref                                 |
+| Can incomplete `useMemo` dependencies cause bugs? | Yes, it can return a stale cached value                    |
+| Should memoization fix a stale-closure bug?       | No, fix dependencies/design first                          |

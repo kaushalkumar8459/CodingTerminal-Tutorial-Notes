@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 60
 track: react
 ---
+
 ---
+
 title: Folder Structure and Best Practices
 slug: day-060-folder-structure-and-best-practices
 dayLabel: Day 60
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 60
 track: react
+
 ---
+
 # Day 60 [Advanced]: Folder Structure and Best Practices
 
 ## Goal
@@ -425,3 +429,21 @@ Expected output:
 - You can explain feature ownership, shared boundaries, and dependency direction
 - You can use practical guardrails to prevent architectural drift
 - You have completed a complete beginner-to-advanced React learning arc
+
+## Interview Notes (Quick Revision)
+
+- Organize by **feature-first** structure (`app/`, `features/`, `shared/`) rather than by generic type-only folders (all components together, all hooks together) for large apps.
+- Keep feature-specific code **inside its feature**; avoid feature-to-feature imports unless the dependency is intentional and clear.
+- `shared/` should hold genuinely reusable, feature-independent code — not become a dumping ground.
+- Prevent unintended **dependency cycles** and avoid exposing a feature's internal implementation details outside its own boundary (encapsulated "public API" per feature).
+- Use review checklists/tooling (imports, ownership, test placement) to enforce architecture conventions consistently, rather than relying on memory alone.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                |
+| ---------------------------------------------- | ---------------------------------------------- |
+| Best structure for a large React app?          | Feature-first (`app/`, `features/`, `shared/`) |
+| Should features import from each other freely? | No, only with intentional, clear dependencies  |
+| What belongs in `shared/`?                     | Genuinely reusable, feature-independent code   |
+| How to prevent architecture drift?             | Checklists/tooling enforced during review      |
+| Should a feature expose all its internals?     | No, keep a narrow public surface               |

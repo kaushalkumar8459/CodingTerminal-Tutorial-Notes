@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 72
 track: react
 ---
+
 # Day 72 [Advanced]: Security Basics
 
 ## Goal
@@ -354,3 +355,22 @@ Expected output:
 - You can audit and harden common risk areas
 - You understand secure session, validation, dependency, and browser-policy fundamentals
 - You are ready for TypeScript fundamentals in Day 73
+
+## Interview Notes (Quick Revision)
+
+- React escapes rendered text by default to reduce **XSS** risk — `dangerouslySetInnerHTML` bypasses this and must be used with sanitized input only.
+- Store auth tokens carefully: **HttpOnly cookies** are safer against XSS-driven token theft than `localStorage`, but cookies bring **CSRF** considerations that need their own mitigation (e.g., SameSite, CSRF tokens).
+- Never trust client-side validation as a security boundary — always **re-validate on the server**.
+- Keep dependencies patched and audited — a vulnerable third-party package is a common real-world attack vector.
+- Use **security headers/CSP** (Content-Security-Policy) as defense-in-depth against injected scripts.
+- Security is layered ("defense in depth") — no single mitigation (input validation, CSP, safe token storage) is sufficient alone.
+
+**Rapid-fire answers**
+
+| Question                                       | One-line Answer                                     |
+| ---------------------------------------------- | --------------------------------------------------- |
+| Does React auto-escape rendered text?          | Yes, by default                                     |
+| What bypasses that escaping?                   | `dangerouslySetInnerHTML`                           |
+| Safer token storage: cookie or localStorage?   | HttpOnly cookie (but consider CSRF)                 |
+| Is client-side validation a security boundary? | No, server must always validate                     |
+| What is "defense in depth"?                    | Multiple layered security mitigations, not just one |

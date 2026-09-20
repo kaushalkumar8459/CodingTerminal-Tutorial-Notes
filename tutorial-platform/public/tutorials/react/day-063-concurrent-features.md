@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 63
 track: react
 ---
+
 ---
+
 title: Concurrent Features
 slug: day-063-concurrent-features
 dayLabel: Day 63
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 63
 track: react
+
 ---
+
 # Day 63 [Advanced]: Concurrent Features
 
 ## Goal
@@ -106,9 +110,7 @@ function SearchResults({ items }) {
 
   const results = useMemo(() => {
     const normalized = deferredQuery.toLowerCase();
-    return items.filter((item) =>
-      item.name.toLowerCase().includes(normalized),
-    );
+    return items.filter((item) => item.name.toLowerCase().includes(normalized));
   }, [items, deferredQuery]);
 
   return (
@@ -214,11 +216,7 @@ import Search from "./Search";
 test("keeps the search input usable during updates", async () => {
   const user = userEvent.setup();
 
-  render(
-    <Search
-      items={[{ name: "React" }, { name: "Angular" }]}
-    />,
-  );
+  render(<Search items={[{ name: "React" }, { name: "Angular" }]} />);
 
   const input = screen.getByRole("textbox");
   await user.type(input, "React");
@@ -326,10 +324,7 @@ function CandidateSearch({ allCandidates }) {
       const normalized = next.toLowerCase();
       setResults(
         allCandidates.filter((candidate) =>
-          candidate.skills
-            .join(" ")
-            .toLowerCase()
-            .includes(normalized),
+          candidate.skills.join(" ").toLowerCase().includes(normalized),
         ),
       );
     });
@@ -361,9 +356,7 @@ function AnalyticsFilter({ rows }) {
 
   const filteredRows = useMemo(() => {
     const normalized = deferredQuery.toLowerCase();
-    return rows.filter((row) =>
-      row.region.toLowerCase().includes(normalized),
-    );
+    return rows.filter((row) => row.region.toLowerCase().includes(normalized));
   }, [rows, deferredQuery]);
 
   return (
@@ -496,4 +489,23 @@ Expected output:
 - You can distinguish urgent work from non-urgent rendering work
 - You can choose between `useTransition` and `useDeferredValue` based on data flow
 - You can test and measure responsiveness instead of relying on assumptions
+
+## Interview Notes (Quick Revision)
+
+- `useTransition` marks a **state update** as non-urgent, letting more urgent updates (typing, clicks) interrupt/take priority over it, and gives you an `isPending` flag.
+- `useDeferredValue` gives you a **deferred copy of a value** itself (not a state setter) — useful when you don't control the update but want the UI relying on that value to lag behind gracefully.
+- Choose `useTransition` when you own the state update triggering the slow work; choose `useDeferredValue` when you only have the value (e.g., a prop) and want to defer its use downstream.
+- Concurrent rendering means render work can be **paused/interrupted/retried** — components must stay pure and side-effect-free during render.
+- Don't add these hooks without measuring — validate that they actually improve perceived responsiveness for the specific interaction.
+
+**Rapid-fire answers**
+
+| Question                                           | One-line Answer                                        |
+| -------------------------------------------------- | ------------------------------------------------------ |
+| `useTransition` vs `useDeferredValue`?             | One wraps a state update, the other defers a value     |
+| What does `useTransition` give you?                | An `isPending` flag + a way to mark updates non-urgent |
+| Can render work be interrupted in concurrent mode? | Yes, so render must stay pure                          |
+| Should you add these hooks by default?             | No, only with a measured responsiveness need           |
+| What kind of updates should be deferred?           | Non-urgent, heavy re-renders (e.g., large lists)       |
+
 - You are ready for advanced server-write workflows in Day 64

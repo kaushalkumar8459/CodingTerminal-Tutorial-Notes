@@ -7,6 +7,7 @@ estimatedMinutes: 120
 order: 27
 track: react
 ---
+
 # Day 27 [Intermediate]: Loading, Error, Empty and Success States
 
 ## Goal
@@ -82,15 +83,15 @@ The exact state model should reflect the product's UX requirements rather than b
 
 A useful conceptual model is:
 
-| State | Meaning | Typical UI |
-|---|---|---|
-| `idle` | No request has started | Instructions / initial CTA |
-| `loading` | Initial request is running | Skeleton / loading indicator |
-| `success` | Request succeeded with data | Content |
-| `empty` | Request succeeded with zero relevant items | Empty-state guidance |
-| `refreshing` | Existing data remains while a new request runs | Existing content + subtle progress |
-| `error` | Request failed and no usable data is available | Error + retry |
-| `refresh-error` | Refresh failed but old data is still usable | Existing content + non-blocking error |
+| State           | Meaning                                        | Typical UI                            |
+| --------------- | ---------------------------------------------- | ------------------------------------- |
+| `idle`          | No request has started                         | Instructions / initial CTA            |
+| `loading`       | Initial request is running                     | Skeleton / loading indicator          |
+| `success`       | Request succeeded with data                    | Content                               |
+| `empty`         | Request succeeded with zero relevant items     | Empty-state guidance                  |
+| `refreshing`    | Existing data remains while a new request runs | Existing content + subtle progress    |
+| `error`         | Request failed and no usable data is available | Error + retry                         |
+| `refresh-error` | Refresh failed but old data is still usable    | Existing content + non-blocking error |
 
 Notice that **empty is usually derived from successful data**, while refreshing can be a separate UI concern layered over existing success data.
 
@@ -329,7 +330,7 @@ async function loadProducts() {
 
   try {
     const response = await apiClient.get("/products", {
-      params: { page, search }
+      params: { page, search },
     });
 
     setData(response.data.items ?? []);
@@ -472,12 +473,10 @@ async function loadProducts({ preserveData = false } = {}) {
 
   try {
     const response = await apiClient.get("/products", {
-      params: { search }
+      params: { search },
     });
 
-    const items = Array.isArray(response.data.items)
-      ? response.data.items
-      : [];
+    const items = Array.isArray(response.data.items) ? response.data.items : [];
 
     setProducts(items);
     setStatus("success");
@@ -507,12 +506,7 @@ if (status === "loading") {
 }
 
 if (status === "error") {
-  return (
-    <ErrorState
-      message={error}
-      onRetry={() => loadProducts()}
-    />
-  );
+  return <ErrorState message={error} onRetry={() => loadProducts()} />;
 }
 
 if (products.length === 0) {
@@ -526,9 +520,7 @@ if (products.length === 0) {
 
 return (
   <section>
-    {refreshing && (
-      <p aria-live="polite">Refreshing products...</p>
-    )}
+    {refreshing && <p aria-live="polite">Refreshing products...</p>}
     <ProductList products={products} />
   </section>
 );
@@ -553,9 +545,7 @@ async function loadProducts({ searchTerm, preserveData = false }) {
 
     if (requestId !== requestIdRef.current) return;
 
-    const items = Array.isArray(response.data.items)
-      ? response.data.items
-      : [];
+    const items = Array.isArray(response.data.items) ? response.data.items : [];
 
     setProducts(items);
     setStatus("success");
@@ -678,16 +668,16 @@ Simulate a slow first request followed by a faster second request. Verify that t
 
 Test at minimum:
 
-| Scenario | Expected UI |
-|---|---|
-| First request | Skeleton/loading |
-| Success with items | Content |
-| Success with zero items | Empty state |
-| Initial failure | Error + retry |
-| Refresh success | Old data then updated data |
-| Refresh failure | Old data + non-blocking error |
-| Cancelled request | No error message |
-| Rapid searches | Latest request wins |
+| Scenario                | Expected UI                   |
+| ----------------------- | ----------------------------- |
+| First request           | Skeleton/loading              |
+| Success with items      | Content                       |
+| Success with zero items | Empty state                   |
+| Initial failure         | Error + retry                 |
+| Refresh success         | Old data then updated data    |
+| Refresh failure         | Old data + non-blocking error |
+| Cancelled request       | No error message              |
+| Rapid searches          | Latest request wins           |
 
 ## Common Mistakes
 
@@ -847,3 +837,24 @@ obsolete request → cancelled or ignored
 ```
 
 You are now ready for the next stage: composing API-driven screens with more advanced data-fetching patterns, reusable hooks, and server-state management.
+
+## Interview Notes (Quick Revision)
+
+- Avoid **"boolean explosion"** (`loading`, `error`, `hasLoaded`, `isEmpty`, `refreshing` as separate booleans) — it allows impossible combinations; prefer one explicit `status` value (`idle`/`loading`/`success`/`error`).
+- Derive `isEmpty` from actual data (`status === "success" && data.length === 0`) rather than tracking it as its own flag.
+- An empty successful result is **not an error** — treat it as its own valid UI state.
+- Distinguish **initial loading** (no data yet) from **background refresh** (existing data being updated) to avoid unnecessary flicker/clearing.
+- Convert raw technical errors into **safe, user-facing messages** — never show stack traces or internal details.
+- Always give the user a **recovery action** (retry, clear filters, sign in) when a screen fails.
+- Never let an **older response overwrite** the result of a newer request — guard against stale/out-of-order async results.
+- Treat cancellation as a normal control-flow event, not a user-facing error.
+
+**Rapid-fire answers**
+
+| Question                                          | One-line Answer                            |
+| ------------------------------------------------- | ------------------------------------------ |
+| Why avoid multiple loading/error booleans?        | They allow impossible/contradictory states |
+| Is an empty list an error state?                  | No, it's a valid distinct state            |
+| Initial load vs refresh — same UI?                | No, they should be visually distinguished  |
+| Should raw errors be shown to users?              | No, convert to safe friendly messages      |
+| Should older responses ever overwrite newer ones? | No, guard against stale results            |

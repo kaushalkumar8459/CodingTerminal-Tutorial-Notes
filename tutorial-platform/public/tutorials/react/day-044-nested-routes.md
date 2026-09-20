@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 44
 track: react
 ---
+
 # Day 44 [Intermediate]: Nested Routes
 
 ## Goal
@@ -66,7 +67,7 @@ import { Route, Routes } from "react-router-dom";
     <Route path="reports" element={<Reports />} />
     <Route path="settings" element={<Settings />} />
   </Route>
-</Routes>
+</Routes>;
 ```
 
 The URL `/dashboard/reports` matches the parent and child route. The parent layout renders its shared UI and the child renders at the layout's `Outlet`.
@@ -266,13 +267,7 @@ This creates a good UX boundary: global navigation remains stable while the feat
 ## 11. Complete Dashboard Example
 
 ```jsx
-import {
-  Link,
-  NavLink,
-  Outlet,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Link, NavLink, Outlet, Route, Routes } from "react-router-dom";
 
 function DashboardLayout() {
   return (
@@ -510,7 +505,7 @@ Test the rendered route behavior with a router test environment:
 render(
   <MemoryRouter initialEntries={["/dashboard/reports"]}>
     <AppRoutes />
-  </MemoryRouter>
+  </MemoryRouter>,
 );
 ```
 
@@ -671,3 +666,22 @@ Requirements:
 You can now model complex React Router UI hierarchies with shared layouts, index routes, relative navigation, nested parameters, route-level error boundaries, feature organization, and scalable code-splitting boundaries.
 
 **Next:** Day 45 — Protected Routes and Authentication Guards.
+
+## Interview Notes (Quick Revision)
+
+- A nested route's child UI renders through the parent's `<Outlet />` — forgetting `Outlet` means the child route matches but nothing appears.
+- **Index routes** are the default child for a parent path and should not have their own `path` prop.
+- Don't duplicate the same layout/shell across pages — make it a shared **layout route** instead.
+- Nest routes only when the URL/UI ownership relationship is meaningful — excessive nesting adds mental overhead without benefit.
+- Route nesting/organization is a UX/structure tool, **not an authorization mechanism** — backend must still enforce permissions.
+- Don't lazy-load every nested route by default — code splitting has overhead; split along meaningful feature boundaries.
+
+**Rapid-fire answers**
+
+| Question                                  | One-line Answer                          |
+| ----------------------------------------- | ---------------------------------------- |
+| How does a child route's UI get rendered? | Via the parent's `<Outlet />`            |
+| Should an index route have a `path`?      | No                                       |
+| Is nested routing a security boundary?    | No, backend must still authorize         |
+| When to introduce a shared layout route?  | When multiple pages share the same shell |
+| Should everything be lazy-loaded?         | No, only meaningful feature boundaries   |

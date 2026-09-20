@@ -7,6 +7,7 @@ estimatedMinutes: 90
 order: 17
 track: react
 ---
+
 # Day 17 [Intermediate]: Keys and Reconciliation
 
 ## Goal
@@ -77,11 +78,7 @@ This does not make `key` available as `props.key`:
 If the child needs the identifier:
 
 ```jsx
-<Product
-  key={product.id}
-  productId={product.id}
-  product={product}
-/>
+<Product key={product.id} productId={product.id} product={product} />
 ```
 
 `key` is consumed by React and is not passed to the component as an ordinary prop.
@@ -96,9 +93,7 @@ const users = [
   { id: "u102", name: "Ravi" },
 ];
 
-users.map((user) => (
-  <UserRow key={user.id} user={user} />
-));
+users.map((user) => <UserRow key={user.id} user={user} />);
 ```
 
 Do not use `Math.random()` for a key during rendering. A new random value creates a new identity on every render and can cause unnecessary remounts, lost local state, and focus loss.
@@ -119,9 +114,7 @@ The positions changed, but the logical items did not. Stable keys allow React to
 ### 5. Why Index Keys Can Be Dangerous
 
 ```jsx
-items.map((item, index) => (
-  <Row key={index} item={item} />
-));
+items.map((item, index) => <Row key={index} item={item} />);
 ```
 
 An index key can be acceptable for a genuinely static list whose membership and order never change in a way that affects identity. It is risky when items can be inserted, deleted, filtered, or reordered.
@@ -161,7 +154,9 @@ This is a teaching model, not an implementation-level description of every React
 ### 7. Element Type Also Matters
 
 ```jsx
-{mode === "edit" ? <EditForm /> : <ViewMode />}
+{
+  mode === "edit" ? <EditForm /> : <ViewMode />;
+}
 ```
 
 Switching between different component types normally means React does not preserve the old component instance as though it were the same component type.
@@ -203,16 +198,12 @@ Use the same stable identifier for updates and list keys:
 
 ```jsx
 const removeTask = (id) => {
-  setTasks((current) =>
-    current.filter((task) => task.id !== id)
-  );
+  setTasks((current) => current.filter((task) => task.id !== id));
 };
 
 const renameTask = (id, title) => {
   setTasks((current) =>
-    current.map((task) =>
-      task.id === id ? { ...task, title } : task
-    )
+    current.map((task) => (task.id === id ? { ...task, title } : task)),
   );
 };
 ```
@@ -239,16 +230,16 @@ A member ID does not need to be unique across every team.
 
 ## Key Concepts
 
-| Concept | Meaning |
-|---|---|
-| Key | Identity hint for sibling elements |
-| Stable key | Same logical item keeps the same identity |
-| Index key | Position-based identity; safe only for suitable static lists |
-| Reconciliation | Relating the new rendered tree to the previous tree |
-| Remount | Old component instance is removed and a new one is created |
-| State preservation | Existing component identity allows local state to continue |
-| Key reset | Changing key intentionally creates a new identity |
-| Key scope | Uniqueness is required among relevant siblings, not globally |
+| Concept            | Meaning                                                      |
+| ------------------ | ------------------------------------------------------------ |
+| Key                | Identity hint for sibling elements                           |
+| Stable key         | Same logical item keeps the same identity                    |
+| Index key          | Position-based identity; safe only for suitable static lists |
+| Reconciliation     | Relating the new rendered tree to the previous tree          |
+| Remount            | Old component instance is removed and a new one is created   |
+| State preservation | Existing component identity allows local state to continue   |
+| Key reset          | Changing key intentionally creates a new identity            |
+| Key scope          | Uniqueness is required among relevant siblings, not globally |
 
 ## Visual Concept Map
 
@@ -302,9 +293,7 @@ export default function App() {
 
   const renameTask = (id, title) => {
     setTasks((current) =>
-      current.map((task) =>
-        task.id === id ? { ...task, title } : task
-      )
+      current.map((task) => (task.id === id ? { ...task, title } : task)),
     );
   };
 
@@ -317,14 +306,12 @@ export default function App() {
 
   return (
     <>
-      <button type="button" onClick={addTask}>Add</button>
+      <button type="button" onClick={addTask}>
+        Add
+      </button>
       <ul>
         {tasks.map((task) => (
-          <TaskRow
-            key={task.id}
-            task={task}
-            onRename={renameTask}
-          />
+          <TaskRow key={task.id} task={task} onRename={renameTask} />
         ))}
       </ul>
     </>
@@ -375,13 +362,13 @@ const items = [
 Explain why this is safer for a reorderable list:
 
 ```jsx
-items.map((item) => <Row key={item.id} item={item} />)
+items.map((item) => <Row key={item.id} item={item} />);
 ```
 
 than:
 
 ```jsx
-items.map((item, index) => <Row key={index} item={item} />)
+items.map((item, index) => <Row key={index} item={item} />);
 ```
 
 Then describe one scenario where an index key is acceptable.
@@ -421,9 +408,7 @@ Do not create a fresh ID while mapping existing items just to use it as a key. G
 This code is problematic:
 
 ```jsx
-items.map((item) => (
-  <Row key={Math.random()} item={item} />
-));
+items.map((item) => <Row key={Math.random()} item={item} />);
 ```
 
 ### What is wrong?
@@ -433,9 +418,7 @@ The key changes on every render, so React cannot reliably preserve the previous 
 ### Fix
 
 ```jsx
-items.map((item) => (
-  <Row key={item.id} item={item} />
-));
+items.map((item) => <Row key={item.id} item={item} />);
 ```
 
 If the data has no stable ID, assign one when the item enters application state rather than generating it in render.
@@ -541,3 +524,22 @@ The same logical item needs the same stable identity across renders. Generating 
 You can now reason about React list identity instead of treating `key` as boilerplate. You can diagnose state-moving bugs, choose appropriate keys, understand the practical reconciliation model, and intentionally use key changes when a fresh component instance is required.
 
 **Next:** Day 18 builds on component identity and dynamic component rendering.
+
+## Interview Notes (Quick Revision)
+
+- `key` is a special React value used only for reconciliation — it is **not accessible as a normal prop** (`props.key` doesn't work); pass the ID again explicitly if the child needs it.
+- A **stable key** means the same logical item keeps the same identity across renders, even if its position changes.
+- When a key changes, React treats it as a **different identity** — the old component instance can unmount (losing local state/effects) and a new one mounts.
+- Index keys are risky whenever items can be inserted, removed, or reordered — the position-based identity can attach to the wrong item.
+- Keys are primarily an **identity feature**, not a performance switch — correct identity helps reconciliation preserve/update the right instances.
+- Generate an item's ID when it's **created**, not during render — regenerating IDs while mapping breaks stable identity.
+
+**Rapid-fire answers**
+
+| Question                               | One-line Answer                                     |
+| -------------------------------------- | --------------------------------------------------- |
+| Is `key` available as `props.key`?     | No, it's special — pass it separately if needed     |
+| What happens when a key changes?       | Old instance unmounts, new one mounts, state resets |
+| Is key mainly about performance?       | No, it's about identity for reconciliation          |
+| When are index keys risky?             | When items are inserted/removed/reordered           |
+| When should an item's ID be generated? | At creation time, not during render                 |

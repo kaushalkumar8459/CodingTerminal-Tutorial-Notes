@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 69
 track: react
 ---
+
 # Day 69 [Advanced]: Testing with React Testing Library
 
 ## Goal
@@ -176,9 +177,7 @@ test("shows an API failure", async () => {
   server.use(failureHandler);
   render(<ProfileForm />);
 
-  await userEvent.setup().click(
-    screen.getByRole("button", { name: /save/i }),
-  );
+  await userEvent.setup().click(screen.getByRole("button", { name: /save/i }));
 
   expect(
     await screen.findByRole("alert", { name: /unable to save/i }),
@@ -245,10 +244,7 @@ test("adds a note", async () => {
   const user = userEvent.setup();
   render(<NotesForm />);
 
-  await user.type(
-    screen.getByRole("textbox", { name: /note/i }),
-    "Buy milk",
-  );
+  await user.type(screen.getByRole("textbox", { name: /note/i }), "Buy milk");
   await user.click(screen.getByRole("button", { name: /add/i }));
 
   expect(screen.getByText(/buy milk/i)).toBeInTheDocument();
@@ -268,9 +264,7 @@ test("shows success after save", async () => {
   await user.type(screen.getByLabelText(/name/i), "Asha");
   await user.click(screen.getByRole("button", { name: /save/i }));
 
-  expect(
-    await screen.findByText(/profile saved/i),
-  ).toBeInTheDocument();
+  expect(await screen.findByText(/profile saved/i)).toBeInTheDocument();
 });
 ```
 
@@ -287,9 +281,7 @@ test("shows email validation error", async () => {
   await user.type(screen.getByLabelText(/email/i), "wrong-format");
   await user.click(screen.getByRole("button", { name: /login/i }));
 
-  expect(
-    await screen.findByText(/invalid email/i),
-  ).toBeInTheDocument();
+  expect(await screen.findByText(/invalid email/i)).toBeInTheDocument();
 });
 ```
 
@@ -399,4 +391,24 @@ Expected output:
 - You can validate synchronous and asynchronous UI interactions
 - You can test important loading, success, empty, and failure states
 - You can build maintainable tests that survive reasonable refactoring
+
+## Interview Notes (Quick Revision)
+
+- React Testing Library favors testing **behavior/output**, not implementation details — query elements by role/label/text the way a user would find them.
+- Prefer `getByRole`/`getByLabelText` over test-only selectors like `data-testid` when possible — this also reinforces accessibility.
+- Use `userEvent` (over raw `fireEvent`) to simulate realistic user interactions (typing, clicking) more accurately.
+- For async UI, use `findBy*`/`waitFor` to assert on eventual state, rather than arbitrary timeouts.
+- Cover all meaningful UI states: **loading, success, empty, and error** — not just the happy path.
+- Keep tests **isolated and deterministic** — no shared mutable state between tests, predictable mocked data.
+
+**Rapid-fire answers**
+
+| Question                                               | One-line Answer                             |
+| ------------------------------------------------------ | ------------------------------------------- |
+| What should tests target — behavior or implementation? | Behavior/output                             |
+| Preferred query method?                                | By role/label, like a real user             |
+| Best way to simulate user interaction?                 | `userEvent`, not raw `fireEvent`            |
+| How to assert on async UI changes?                     | `findBy*`/`waitFor`, not arbitrary timeouts |
+| Which states should be tested?                         | Loading, success, empty, and error          |
+
 - You are ready for workflow-level validation in Day 70

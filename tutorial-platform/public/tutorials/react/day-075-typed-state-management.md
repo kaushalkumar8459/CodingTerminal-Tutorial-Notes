@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 75
 track: react
 ---
+
 # Day 75 [Advanced]: Typed State Management
 
 ## Goal
@@ -86,12 +87,9 @@ Use `PayloadAction<T>`.
 Code Example:
 
 ```ts
-addTodo: (
-  state,
-  action: PayloadAction<{ id: string; text: string }>
-) => {
+addTodo: (state, action: PayloadAction<{ id: string; text: string }>) => {
   state.items.push({ ...action.payload, done: false });
-}
+};
 ```
 
 **Explanation:** Reducer payload typing prevents invalid actions from slipping into state updates and documents the action contract for every consumer.
@@ -118,7 +116,7 @@ createAsyncThunk<User, string, { rejectValue: string }>(
   "users/fetch",
   async (id, thunkApi) => {
     // return User or thunkApi.rejectWithValue(...)
-  }
+  },
 );
 ```
 
@@ -385,3 +383,21 @@ Expected output:
 - You understand compile-time typing versus runtime validation in state flows
 - You can establish scalable typing conventions for Redux Toolkit
 - You are ready for framework-level progression starting Day 76
+
+## Interview Notes (Quick Revision)
+
+- Type each slice's state shape explicitly, and let **selectors** and hooks (`useAppSelector`/`useAppDispatch`) infer from the store type rather than duplicating types manually.
+- Type `createAsyncThunk` generics (`<Returned, ThunkArg>`) so `fulfilled`/`rejected` payloads are correctly typed in `extraReducers`.
+- Typed reducers still need real **runtime validation** at the data boundary (API responses) — types don't protect against malformed real data.
+- Keep types organized per feature/slice rather than one giant shared types file, mirroring the codebase's feature-oriented structure.
+- Typed selectors catch mismatched state-path errors at compile time, reducing a whole class of "undefined is not an object" bugs.
+
+**Rapid-fire answers**
+
+| Question                                    | One-line Answer                                                     |
+| ------------------------------------------- | ------------------------------------------------------------------- |
+| How to type `useSelector`/`useDispatch`?    | Create typed `useAppSelector`/`useAppDispatch` hooks from the store |
+| Do typed thunks validate real API data?     | No, still need runtime validation                                   |
+| Where should Redux types live?              | Organized per feature/slice                                         |
+| What does `createAsyncThunk` generics type? | The return value and thunk argument types                           |
+| Benefit of typed selectors?                 | Catches wrong state paths at compile time                           |

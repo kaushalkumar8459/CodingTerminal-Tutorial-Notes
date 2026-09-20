@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 96
 track: react
 ---
+
 # Day 96 [Expert]: Design System Integration
 
 ## Goal
@@ -267,7 +268,9 @@ export function Modal({ open, title, onClose, children }: ModalProps) {
   return (
     <div role="dialog" aria-modal="true" aria-labelledby={titleId}>
       <h2 id={titleId}>{title}</h2>
-      <button type="button" onClick={onClose}>Close</button>
+      <button type="button" onClick={onClose}>
+        Close
+      </button>
       {children}
     </div>
   );
@@ -397,3 +400,21 @@ Expected output:
 - You can align consistency, accessibility, and scalability in UI architecture
 - You can establish governance and migration practices for long-lived systems
 - You are ready for large-scale module architecture in Day 97
+
+## Interview Notes (Quick Revision)
+
+- A design system centers on **tokens** (colors, spacing, typography) driving consistent visuals across every component, rather than one-off styling per usage.
+- Define stable **component API contracts** (props, variants) so consuming teams have a predictable, documented surface to build against.
+- Bake **accessibility guarantees** into shared components once, so every consumer benefits automatically instead of re-solving it per feature.
+- Plan for **versioning and deprecation** — a design system used by many teams needs a clear migration path when components change or are removed.
+- Governance (contribution process, review, adoption tracking) is what keeps a design system consistent and trusted **at scale**, not just good initial design.
+
+**Rapid-fire answers**
+
+| Question                                           | One-line Answer                                 |
+| -------------------------------------------------- | ----------------------------------------------- |
+| What drives visual consistency in a design system? | Design tokens                                   |
+| Why define component API contracts?                | Predictable, documented surface for consumers   |
+| Where should accessibility be solved?              | Once, in shared components                      |
+| Why plan versioning/deprecation?                   | To support safe migration across many consumers |
+| What sustains a design system at scale?            | Governance and adoption practices               |

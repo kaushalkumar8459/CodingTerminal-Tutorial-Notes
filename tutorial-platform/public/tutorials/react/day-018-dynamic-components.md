@@ -7,6 +7,7 @@ estimatedMinutes: 90
 order: 18
 track: react
 ---
+
 # Day 18 [Intermediate]: Dynamic Components
 
 ## Goal
@@ -205,13 +206,13 @@ For real tab interfaces, also consider the accessibility requirements of the WAI
 
 These solve different problems.
 
-| Requirement | Good fit |
-|---|---|
-| Switch a panel inside one screen | Dynamic rendering |
-| URL represents the current page | Router |
-| Browser back/forward represents navigation | Router |
-| Dashboard widget type changes | Component map |
-| Component code should load only when needed | Lazy loading |
+| Requirement                                 | Good fit          |
+| ------------------------------------------- | ----------------- |
+| Switch a panel inside one screen            | Dynamic rendering |
+| URL represents the current page             | Router            |
+| Browser back/forward represents navigation  | Router            |
+| Dashboard widget type changes               | Component map     |
+| Component code should load only when needed | Lazy loading      |
 
 Do not use a router simply because the component changes.
 
@@ -277,17 +278,17 @@ For a true tab interface, implement the expected keyboard behavior and relations
 
 ## Key Concepts
 
-| Concept | Meaning |
-|---|---|
-| Dynamic component | Component selected at runtime |
-| Component map | Allowlisted mapping from identifier to component |
-| Component contract | Props/events shared by dynamic components |
-| Fallback | UI for missing or unsupported selection |
-| Component identity | Determines whether local state can be preserved |
-| Routing | URL/navigation concern, not simply component selection |
-| Lazy loading | Defers loading component code |
-| Key reset | Intentional new identity that can reset local state |
-| Allowlist | Restricts runtime configuration to known component references |
+| Concept            | Meaning                                                       |
+| ------------------ | ------------------------------------------------------------- |
+| Dynamic component  | Component selected at runtime                                 |
+| Component map      | Allowlisted mapping from identifier to component              |
+| Component contract | Props/events shared by dynamic components                     |
+| Fallback           | UI for missing or unsupported selection                       |
+| Component identity | Determines whether local state can be preserved               |
+| Routing            | URL/navigation concern, not simply component selection        |
+| Lazy loading       | Defers loading component code                                 |
+| Key reset          | Intentional new identity that can reset local state           |
+| Allowlist          | Restricts runtime configuration to known component references |
 
 ## Visual Concept Map
 
@@ -584,3 +585,22 @@ Keep shared state in a stable parent or another state owner, or keep the relevan
 You can build maintainable state-driven and configuration-driven component switching, design safe component registries, reason about identity and local state, and distinguish dynamic rendering from routing and code splitting.
 
 **Next:** Day 19 builds on these relationships by deciding where shared state should live.
+
+## Interview Notes (Quick Revision)
+
+- A **dynamic component** is chosen at runtime, typically via a **component map** (identifier → component reference), rather than a long `if`/`switch` chain.
+- Assign the selected component to a **capitalized variable** before rendering (`const Selected = Profile; return <Selected />`) — lowercase variables are treated as DOM tag names by JSX.
+- Always provide a **fallback UI** for an unsupported/missing selection instead of failing silently.
+- For server-driven component selection, use an **allowlist** of known component identifiers — never construct import paths or execute arbitrary code from untrusted config (security risk).
+- Dynamic rendering (choosing _which_ component) is different from **lazy loading** (deferring _when_ code downloads) and from **routing** (URL/navigation concerns) — they can combine but solve different problems.
+- Changing which component is rendered can **remount** it and reset local state — lift state elsewhere if it must survive the switch.
+
+**Rapid-fire answers**
+
+| Question                                            | One-line Answer                                                             |
+| --------------------------------------------------- | --------------------------------------------------------------------------- |
+| Why must the component variable be capitalized?     | Lowercase is treated as a DOM tag by JSX                                    |
+| How to safely select components from server config? | Allowlist of known identifiers, never arbitrary code                        |
+| Dynamic rendering vs lazy loading?                  | One picks the component, other controls when its code loads                 |
+| Dynamic rendering vs routing?                       | Routing is about URL/navigation; dynamic rendering is just component choice |
+| Does switching components preserve local state?     | Not necessarily — it can remount and reset it                               |

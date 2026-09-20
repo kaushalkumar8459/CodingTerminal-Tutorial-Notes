@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 76
 track: react
 ---
+
 # Day 76 [Advanced]: Next.js Fundamentals
 
 ## Goal
@@ -123,11 +124,7 @@ Use nested layouts for dashboard sections.
 Code Example:
 
 ```tsx
-export default function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <section className="dashboard-shell">{children}</section>;
 }
 ```
@@ -406,4 +403,23 @@ Expected output:
 - You can apply Server/Client Component boundaries with confidence
 - You can build route handlers and route-level loading UI
 - You understand intentional data-fetching and caching decisions
+
+## Interview Notes (Quick Revision)
+
+- Next.js **App Router**: file-based routing under `app/`, with `layout.tsx` for shared shells and nested folders for routes.
+- **Server Components** render on the server (no client JS shipped for them) by default; add `"use client"` only when a component needs interactivity/state/browser APIs — this is a **Client Component**.
+- Route handlers (`api/route.ts`) let you build backend endpoints alongside your frontend routes in the same project.
+- Data fetching/caching behavior in Next.js is **explicit and intentional** — you choose caching strategy per request rather than getting one default behavior everywhere.
+- Server-side validation/authorization still applies fully — Next.js's server rendering doesn't replace those responsibilities.
+
+**Rapid-fire answers**
+
+| Question                                    | One-line Answer                           |
+| ------------------------------------------- | ----------------------------------------- |
+| Default component type in App Router?       | Server Component                          |
+| How do you opt into a Client Component?     | Add `"use client"` at the top of the file |
+| Where do shared layouts live?               | `layout.tsx` files                        |
+| Where do backend endpoints live in Next.js? | Route handlers (`api/route.ts`)           |
+| Does SSR replace server-side authorization? | No, it's still required                   |
+
 - You are ready for rendering strategy depth in Day 77

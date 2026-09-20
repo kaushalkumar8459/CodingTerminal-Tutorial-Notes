@@ -7,6 +7,7 @@ estimatedMinutes: 45
 order: 99
 track: react
 ---
+
 # Day 99 [Expert]: Senior Machine Coding Simulation
 
 ## Goal
@@ -355,3 +356,21 @@ Expected output:
 - You can prioritize an MVP and validate critical paths under interview pressure
 - You can articulate tradeoffs and architecture clearly
 - You can turn self-review findings into a repeatable improvement plan
+
+## Interview Notes (Quick Revision)
+
+- Start every machine coding round by **clarifying requirements** — ambiguous scope is a common trap; confirm what's actually needed before coding.
+- Work in a **time-boxed** manner: prioritize an **MVP** that covers the critical path first, then layer in edge cases if time remains.
+- Continuously **articulate tradeoffs out loud** — interviewers weigh reasoning as much as the final code.
+- Senior-level signals include: clean component boundaries, sensible state ownership, handling loading/error/empty states, and basic accessibility — not just "does it run."
+- After finishing, do a quick **self-review**: what would you improve with more time, what did you deliberately skip, and why.
+
+**Rapid-fire answers**
+
+| Question                                        | One-line Answer                                      |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| First step in a machine coding round?           | Clarify requirements and scope                       |
+| What should be prioritized under time pressure? | An MVP covering the critical path                    |
+| What do interviewers weigh besides the code?    | Your articulated tradeoffs and reasoning             |
+| What are senior-level quality signals?          | Clean boundaries, state ownership, handled UI states |
+| What should follow finishing the exercise?      | A quick self-review of gaps/tradeoffs                |

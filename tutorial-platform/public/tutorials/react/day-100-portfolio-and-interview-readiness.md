@@ -7,6 +7,7 @@ estimatedMinutes: 35
 order: 100
 track: react
 ---
+
 # Day 100 [Expert]: Portfolio and Interview Readiness
 
 ## Goal
@@ -359,3 +360,21 @@ Expected output:
 - You can explain your engineering decisions in interview-ready form
 - You can support technical claims with credible evidence and measurable outcomes
 - You are ready to use the React track as proof of practical frontend depth
+
+## Interview Notes (Quick Revision)
+
+- Frame each portfolio project as **Problem → Solution → Impact** — interviewers care about the reasoning and measurable outcome, not just a feature list.
+- Back claims with **evidence**: performance numbers, test coverage, accessibility conformance, before/after metrics — not just "I optimized it."
+- Be ready to walk through **architecture decisions** and the tradeoffs behind them, structured and concise, not a meandering code tour.
+- Select portfolio projects that demonstrate **breadth across this course**: state management, performance, accessibility, testing, and security — not just UI polish.
+- Treat your portfolio as **iterative** — keep improving it with better evidence and clearer storytelling over time, not a one-time deliverable.
+
+**Rapid-fire answers**
+
+| Question                                         | One-line Answer                                      |
+| ------------------------------------------------ | ---------------------------------------------------- |
+| Best framing for a portfolio project?            | Problem → Solution → Impact                          |
+| What backs up a technical claim in an interview? | Concrete evidence/metrics                            |
+| What should a project story include?             | Architecture decisions and tradeoffs                 |
+| What should portfolio projects demonstrate?      | Breadth: state, performance, a11y, testing, security |
+| Is a portfolio a one-time deliverable?           | No, it should be iteratively improved                |

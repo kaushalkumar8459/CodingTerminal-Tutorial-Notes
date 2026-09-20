@@ -7,6 +7,7 @@ estimatedMinutes: 30
 order: 68
 track: react
 ---
+
 # Day 68 [Advanced]: Profiling and Web Vitals
 
 ## Goal
@@ -276,10 +277,7 @@ const ResultCard = memo(function ResultCard({ item }) {
   return <article>{item.title}</article>;
 });
 
-const visible = useMemo(
-  () => filterResults(data, filters),
-  [data, filters],
-);
+const visible = useMemo(() => filterResults(data, filters), [data, filters]);
 ```
 
 Verify with the Profiler that the change actually reduces useful render work before keeping it.
@@ -406,4 +404,23 @@ Expected output:
 - You can interpret LCP, INP, and CLS in context
 - You can implement measurable performance improvements
 - You can establish performance budgets and regression monitoring
+
+## Interview Notes (Quick Revision)
+
+- Core Web Vitals: **LCP** (Largest Contentful Paint — loading speed), **INP** (Interaction to Next Paint — responsiveness), **CLS** (Cumulative Layout Shift — visual stability).
+- **Lab data** (Lighthouse, local profiling) is useful for controlled comparisons; **real-user monitoring (RUM)** reflects actual user conditions — use both, they answer different questions.
+- Use the **React Profiler** to inspect actual commit costs and identify which components are re-rendering expensively.
+- Set explicit **performance budgets** (e.g., max bundle size, target LCP) and monitor for regressions over time, not just a one-time audit.
+- Always tie an optimization back to a **measured metric improvement**, not just intuition.
+
+**Rapid-fire answers**
+
+| Question                               | One-line Answer                                |
+| -------------------------------------- | ---------------------------------------------- |
+| What does LCP measure?                 | Loading speed (largest content render)         |
+| What does INP measure?                 | Responsiveness to interaction                  |
+| What does CLS measure?                 | Visual layout stability                        |
+| Lab data vs real-user data?            | Controlled comparison vs real-world conditions |
+| What tool inspects React commit costs? | React Profiler                                 |
+
 - You are ready for behavior-first testing in Day 69

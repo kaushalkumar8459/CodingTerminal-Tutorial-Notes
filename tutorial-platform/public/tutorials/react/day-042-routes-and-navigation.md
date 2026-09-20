@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 42
 track: react
 ---
+
 # Day 42 [Intermediate]: Routes and Navigation
 
 ## Goal
@@ -42,7 +43,7 @@ For internal application routes, use React Router's `Link`:
 ```jsx
 import { Link } from "react-router-dom";
 
-<Link to="/about">About</Link>
+<Link to="/about">About</Link>;
 ```
 
 A normal anchor is still appropriate for external destinations or resources that should be handled by the browser:
@@ -72,9 +73,7 @@ It can also expose `isPending` in router configurations where pending navigation
 <NavLink
   to="/reports"
   className={({ isActive, isPending }) =>
-    [isActive && "active", isPending && "pending"]
-      .filter(Boolean)
-      .join(" ")
+    [isActive && "active", isPending && "pending"].filter(Boolean).join(" ")
   }
 >
   Reports
@@ -262,12 +261,7 @@ The backend must independently validate authentication and authorization for pro
 ## 11. Complete Navigation Example
 
 ```jsx
-import {
-  Link,
-  NavLink,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 export function Navigation() {
   return (
@@ -455,7 +449,7 @@ Example with a router test environment:
 render(
   <MemoryRouter initialEntries={["/dashboard"]}>
     <Navigation />
-  </MemoryRouter>
+  </MemoryRouter>,
 );
 ```
 
@@ -606,3 +600,23 @@ Requirements:
 You can now build accessible React Router navigation, use programmatic navigation appropriately, handle transient navigation state, reason about browser history, and design safer post-login and route-transition flows.
 
 **Next:** Day 43 — Dynamic Routes and URL Parameters.
+
+## Interview Notes (Quick Revision)
+
+- Use `<Link>`/`<NavLink>` for internal navigation, not `<a>` — plain anchors trigger a full document reload instead of client-side routing.
+- Use `navigate()` for **programmatic** transitions (after a form submit, async success); use `<Link>` for normal user-clicked menu items.
+- Tie a success navigation to the **actual success result** of an operation, not called optimistically before it's confirmed.
+- Navigation state (`location.state`) is transient and client-controlled — don't use it as persistent storage or trust it for security decisions.
+- Never call `navigate()` directly during render (e.g., `if (!user) navigate("/login")`) — use a declarative route guard pattern instead.
+- Validate any post-login "return to" URL against an allowlist to prevent **open redirect** vulnerabilities.
+- `navigate(-1)` isn't guaranteed to return to your app's page — history may contain an external site or nothing useful.
+
+**Rapid-fire answers**
+
+| Question                                      | One-line Answer                                   |
+| --------------------------------------------- | ------------------------------------------------- |
+| `<Link>` vs `<a>` for internal routes?        | `<Link>` avoids full page reload                  |
+| When to use `navigate()`?                     | Programmatic transitions, not regular menu clicks |
+| Is navigation state secure storage?           | No, it's transient and client-controlled          |
+| Can you call `navigate()` during render?      | No, use a declarative guard instead               |
+| Risk of redirecting to any user-supplied URL? | Open redirect vulnerability — validate first      |

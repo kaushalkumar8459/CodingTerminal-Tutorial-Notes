@@ -7,6 +7,7 @@ estimatedMinutes: 180
 order: 35
 track: react
 ---
+
 # Day 35 [Intermediate]: Mini Project — Search & Filter App
 
 ## Goal
@@ -131,9 +132,9 @@ Source data should have a stable unique identifier.
 Use that identifier for the React `key`:
 
 ```jsx
-{products.map((product) => (
-  <ProductRow key={product.id} product={product} />
-))}
+{
+  products.map((product) => <ProductRow key={product.id} product={product} />);
+}
 ```
 
 Avoid array indexes as keys when list order or membership can change.
@@ -159,14 +160,14 @@ That duplicates derived information and creates synchronization problems.
 
 ### Source vs derived state
 
-| State | Type | Why |
-|---|---|---|
-| `query` | source | user input |
-| `category` | source | user choice |
-| `minPrice` | source | user choice |
-| `sort` | source | user choice |
-| `visibleProducts` | derived | calculated from the above |
-| `resultCount` | derived | `visibleProducts.length` |
+| State              | Type    | Why                          |
+| ------------------ | ------- | ---------------------------- |
+| `query`            | source  | user input                   |
+| `category`         | source  | user choice                  |
+| `minPrice`         | source  | user choice                  |
+| `sort`             | source  | user choice                  |
+| `visibleProducts`  | derived | calculated from the above    |
+| `resultCount`      | derived | `visibleProducts.length`     |
 | `hasActiveFilters` | derived | calculated from filter state |
 
 ## State Ownership
@@ -223,13 +224,10 @@ export function applyFilters(products, filters) {
   const normalizedQuery = filters.query.trim().toLowerCase();
 
   const filtered = products.filter((product) => {
-    const matchesQuery = product.name
-      .toLowerCase()
-      .includes(normalizedQuery);
+    const matchesQuery = product.name.toLowerCase().includes(normalizedQuery);
 
     const matchesCategory =
-      filters.category === "all" ||
-      product.category === filters.category;
+      filters.category === "all" || product.category === filters.category;
 
     const matchesPrice = product.price >= filters.minPrice;
 
@@ -294,7 +292,7 @@ If the calculation is expensive or stable result identity benefits a real downst
 ```jsx
 const visibleProducts = useMemo(
   () => applyFilters(products, { query, category, minPrice, sort }),
-  [products, query, category, minPrice, sort]
+  [products, query, category, minPrice, sort],
 );
 ```
 
@@ -502,7 +500,8 @@ function ProductResults({ products, onClear }) {
     <ul aria-label="Product results">
       {products.map((product) => (
         <li key={product.id}>
-          <strong>{product.name}</strong> — {product.category} — ${product.price}
+          <strong>{product.name}</strong> — {product.category} — $
+          {product.price}
         </li>
       ))}
     </ul>
@@ -519,7 +518,7 @@ export default function App() {
 
   const visibleProducts = useMemo(
     () => applyFilters(PRODUCTS, filters),
-    [query, category, minPrice, sort]
+    [query, category, minPrice, sort],
   );
 
   const updateFilter = useCallback((name, value) => {
@@ -576,7 +575,7 @@ For a large application, a more explicit selector-style design can make this rel
 ```jsx
 const visibleProducts = useMemo(
   () => applyFilters(PRODUCTS, { query, category, minPrice, sort }),
-  [query, category, minPrice, sort]
+  [query, category, minPrice, sort],
 );
 ```
 
@@ -785,7 +784,7 @@ A memoized result can also provide a stable array reference to a memoized child:
 ```jsx
 const visibleProducts = useMemo(
   () => applyFilters(products, filters),
-  [products, filters.query, filters.category, filters.minPrice, filters.sort]
+  [products, filters.query, filters.category, filters.minPrice, filters.sort],
 );
 
 return <MemoizedProductList products={visibleProducts} />;
@@ -844,7 +843,7 @@ expect(
     category: "all",
     minPrice: 0,
     sort: "name-asc",
-  })
+  }),
 ).toHaveLength(1);
 ```
 
@@ -947,7 +946,7 @@ products.sort(compareProducts);
 ```jsx
 const results = useMemo(
   () => applyFilters(products, { query, category, minPrice, sort }),
-  [products]
+  [products],
 );
 ```
 
@@ -959,7 +958,10 @@ const results = useMemo(
 
 ```jsx
 const filters = { query, category, minPrice, sort };
-const results = useMemo(() => applyFilters(products, filters), [products, filters]);
+const results = useMemo(
+  () => applyFilters(products, filters),
+  [products, filters],
+);
 ```
 
 **Problem:** `filters` is a new object every render.
@@ -979,7 +981,7 @@ const results = useMemo(() => applyFilters(products, filters), [products, filter
 ### Bug 6 — Wrong key
 
 ```jsx
-items.map((item, index) => <Row key={index} item={item} />)
+items.map((item, index) => <Row key={index} item={item} />);
 ```
 
 **Problem:** changing order can associate component state with the wrong item.
@@ -1198,3 +1200,23 @@ You can now reason about:
 - scalability
 
 **Next:** Day 36 — Context API and avoiding unnecessary prop drilling.
+
+## Interview Notes (Quick Revision)
+
+- Don't store the **filtered/visible list** as its own state — derive it from source data + current filter/search criteria during render.
+- Never mutate the source array with `sort()` — copy first (`[...items].sort()`).
+- Use stable domain IDs as list keys, not array index, for dynamic filtered lists.
+- Add `useMemo`/`useCallback` only with a measured reason — not automatically on every derived calculation or handler.
+- A "no results" state is a normal UI state, not an error — handle it explicitly, don't conflate with API failure.
+- Never trust URL query parameters blindly — validate/sanitize before using them to drive app state.
+- Don't fetch an entire large dataset just to filter it client-side if server-side filtering is feasible — consider scale.
+
+**Rapid-fire answers**
+
+| Question                                    | One-line Answer                       |
+| ------------------------------------------- | ------------------------------------- |
+| Should the filtered list be separate state? | No, derive it from source + criteria  |
+| Is "no results found" an error?             | No, it's a normal empty state         |
+| Should URL params be trusted directly?      | No, validate them first               |
+| Default best key for filtered list items?   | A stable domain ID                    |
+| When to add memoization here?               | Only with a measured performance need |

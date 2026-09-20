@@ -7,18 +7,23 @@ estimatedMinutes: 90
 order: 7
 track: react
 ---
+
 # Day 7: Mini Project — Product Listing UI
 
 ## Goal
+
 Build a complete data-driven product listing by combining components, props, arrays, `.map()`, stable keys, conditional rendering, callbacks, derived values, and basic component architecture.
 
 ## Prerequisites
+
 - Days 4–6 completed
 - JSX, components, props, arrays, `.map()`
 - Basic event handling
 
 ## Project Requirements
+
 Build a page with:
+
 - Product data
 - Reusable `ProductCard`
 - Product list/grid
@@ -131,6 +136,7 @@ export default ProductList;
 ```
 
 ### Why `key={product.id}`?
+
 Keys provide stable identity among siblings. They help React reconcile list changes and are not automatically available as `props.key` inside `ProductCard`. If the product is reordered, inserted, or removed, a stable identity helps React associate the correct item with the correct component instance.
 
 ## 5. Parent-Owned Cart Interaction
@@ -144,12 +150,7 @@ function ProductPage() {
     console.log("Add:", product.id);
   }
 
-  return (
-    <ProductList
-      products={products}
-      onAddToCart={handleAddToCart}
-    />
-  );
+  return <ProductList products={products} onAddToCart={handleAddToCart} />;
 }
 
 export default ProductPage;
@@ -179,7 +180,9 @@ Keep the data and product-listing responsibility below `App` so the root compone
 Stock is a good example:
 
 ```jsx
-{stock > 0 ? "In Stock" : "Out of Stock"}
+{
+  stock > 0 ? "In Stock" : "Out of Stock";
+}
 ```
 
 Disable actions that cannot be completed:
@@ -243,24 +246,31 @@ This is a learning architecture, not a rule that every React application must fo
 ## Hands-on Challenges
 
 ### Challenge 1
+
 Add `brand` and `discountPercent`.
 
 ### Challenge 2
+
 Show the original price with a calculated discounted price. Do not store the calculated price as duplicate source data.
 
 ### Challenge 3
+
 Add a `category` label.
 
 ### Challenge 4
+
 Make an out-of-stock product non-clickable and clearly communicate its unavailable state.
 
 ### Challenge 5
+
 Replace the static array with data returned by a local function that simulates an API. Keep `ProductCard` unchanged.
 
 ### Challenge 6
+
 Create a `CartSummary` that receives selected product IDs through props. Do not introduce state until Day 8.
 
 ### Challenge 7
+
 Create an empty-state test by passing `[]` to `ProductList` and verify that no `ProductCard` is rendered.
 
 ## Common Mistakes
@@ -357,3 +367,21 @@ Explain, without notes:
 ## Day 7 Outcome
 
 You have built a realistic data-driven UI and are ready to add changing application state in Day 8.
+
+## Interview Notes (Quick Revision)
+
+- Component tree planning matters: split by responsibility (`ProductList`, `ProductCard`, `CartSummary`), not just to maximize component count.
+- Render collections with `.map()` + **stable keys** tied to real product IDs, never array index if items can reorder, and never `Math.random()`.
+- Keep each `ProductCard` presentational — don't fetch data inside every card; pass data down via props from the parent that owns it.
+- Child → parent interaction (e.g., "Add to Cart") uses a **callback prop**; never call it directly during render (`onAddToCart(product)` in the JSX body is a bug).
+- Avoid unnecessary derived state — e.g., don't store `isOutOfStock` separately if it can be computed from `stock === 0` during render.
+- Always design an **empty-state UI** for empty collections.
+
+**Rapid-fire answers**
+
+| Question                                        | One-line Answer                     |
+| ----------------------------------------------- | ----------------------------------- |
+| Best key for a product list?                    | The product's stable ID             |
+| Should each card fetch its own data?            | No, pass data via props from parent |
+| How does a card notify parent of "add to cart"? | Callback prop                       |
+| Should `isOutOfStock` be separate state?        | No, derive it from stock count      |

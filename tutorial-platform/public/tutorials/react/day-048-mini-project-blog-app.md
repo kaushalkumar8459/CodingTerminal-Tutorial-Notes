@@ -7,6 +7,7 @@ estimatedMinutes: 180
 order: 48
 track: react
 ---
+
 # Day 48 [Advanced]: Mini Project — Production-Ready Blog App
 
 ## Goal
@@ -213,9 +214,7 @@ function PostCard({ post }) {
         <Link to={`/blog/${post.id}`}>{post.title}</Link>
       </h2>
       <p>{post.excerpt}</p>
-      <Link to={`/blog/category/${post.category}`}>
-        {post.category}
-      </Link>
+      <Link to={`/blog/category/${post.category}`}>{post.category}</Link>
     </article>
   );
 }
@@ -246,7 +245,7 @@ function CategoryPage({ posts }) {
   const category = slug?.toLowerCase();
 
   const filtered = posts.filter(
-    (post) => post.category.toLowerCase() === category
+    (post) => post.category.toLowerCase() === category,
   );
 
   if (filtered.length === 0) {
@@ -307,13 +306,13 @@ Request succeeds ──→ data exists ──→ content
 
 These are not interchangeable:
 
-| State | Meaning | Example UI |
-|---|---|---|
-| Loading | Request is still running | Skeleton/spinner |
-| Error | Request failed | Retry message |
-| Empty | Collection has no items | No posts yet |
-| Not found | Requested resource does not exist | Post not found |
-| Forbidden | User is authenticated but lacks permission | Access denied |
+| State     | Meaning                                    | Example UI       |
+| --------- | ------------------------------------------ | ---------------- |
+| Loading   | Request is still running                   | Skeleton/spinner |
+| Error     | Request failed                             | Retry message    |
+| Empty     | Collection has no items                    | No posts yet     |
+| Not found | Requested resource does not exist          | Post not found   |
+| Forbidden | User is authenticated but lacks permission | Access denied    |
 
 This distinction becomes especially important when the mock data is replaced by an API.
 
@@ -533,9 +532,7 @@ class FeatureErrorBoundary extends React.Component {
       return (
         <section role="alert">
           <h2>Feature could not be loaded</h2>
-          <button onClick={() => window.location.reload()}>
-            Reload
-          </button>
+          <button onClick={() => window.location.reload()}>Reload</button>
         </section>
       );
     }
@@ -818,3 +815,22 @@ Additional requirements:
 You now have a complete project that integrates the routing and performance concepts from Days 41–47 into one production-oriented React application. You can move from mock data toward a real API/CMS while preserving the route architecture and user experience.
 
 **Next:** Day 49 — Project Review, Refactoring, Testing and Production Hardening.
+
+## Interview Notes (Quick Revision)
+
+- Put category/filter state in the **URL** (not just component state) so views are shareable, bookmarkable, and refresh-safe.
+- A post that doesn't exist should be treated as a **resource-not-found** state, distinct from loading/error, with a clear path back.
+- Authentication/session logic lives in a shared auth layer + route guard for UX; the **backend independently enforces** real permissions.
+- Growing from a mock-data blog to a CMS means swapping the data layer (API/repository, server auth, pagination) while keeping the same route contract where possible.
+- For very large content sets, use server-side pagination/search/filtering rather than loading everything client-side.
+- Handle stale lazy chunks after deployment with content-hashed assets and a controlled reload/recovery path.
+
+**Rapid-fire answers**
+
+| Question                                         | One-line Answer                              |
+| ------------------------------------------------ | -------------------------------------------- |
+| Where should filter/category state live?         | In the URL, not just component state         |
+| How to treat a missing blog post?                | As an explicit not-found state               |
+| Does the route guard alone secure admin content? | No, backend must enforce authorization       |
+| Best approach for thousands of posts?            | Server-side pagination/search/filtering      |
+| How to handle stale chunks post-deploy?          | Content-hashed assets + recovery/reload path |

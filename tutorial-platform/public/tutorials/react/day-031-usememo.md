@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 31
 track: react
 ---
+
 # Day 31 [Intermediate]: `useMemo`
 
 ## Goal
@@ -73,10 +74,7 @@ The component **still renders**. Only the memoized calculation can be skipped.
 ## What useMemo Does
 
 ```jsx
-const total = useMemo(
-  () => calculateTotal(items),
-  [items]
-);
+const total = useMemo(() => calculateTotal(items), [items]);
 ```
 
 React can reuse the previous result when the dependencies are considered unchanged.
@@ -99,12 +97,10 @@ A component function can run again even if the final DOM changes very little.
 ```jsx
 function ProductList({ products, query }) {
   const visible = products.filter((product) =>
-    product.name.toLowerCase().includes(query.toLowerCase())
+    product.name.toLowerCase().includes(query.toLowerCase()),
   );
 
-  return visible.map((product) => (
-    <p key={product.id}>{product.name}</p>
-  ));
+  return visible.map((product) => <p key={product.id}>{product.name}</p>);
 }
 ```
 
@@ -115,10 +111,7 @@ First determine whether the calculation is expensive enough to matter.
 ## Basic Syntax
 
 ```jsx
-const value = useMemo(
-  () => calculateValue(a, b),
-  [a, b]
-);
+const value = useMemo(() => calculateValue(a, b), [a, b]);
 ```
 
 The calculation should be deterministic for the inputs represented by its dependencies:
@@ -140,7 +133,7 @@ const filtered = useMemo(() => {
   return products.filter(
     (product) =>
       product.category === category &&
-      product.name.toLowerCase().includes(query.toLowerCase())
+      product.name.toLowerCase().includes(query.toLowerCase()),
   );
 }, [products, category, query]);
 ```
@@ -151,7 +144,7 @@ const filtered = useMemo(() => {
 // Wrong: query is used but omitted.
 const filtered = useMemo(
   () => products.filter((p) => p.name.includes(query)),
-  [products]
+  [products],
 );
 ```
 
@@ -172,10 +165,7 @@ If `options` is recreated on every render, the memo can be invalidated on every 
 Prefer primitives where practical:
 
 ```jsx
-const result = useMemo(
-  () => calculate(data, 10, 100),
-  [data]
-);
+const result = useMemo(() => calculate(data, 10, 100), [data]);
 ```
 
 Or memoize the object only when there is a clear reason:
@@ -214,11 +204,11 @@ The memoized calculation should not mutate external state or perform I/O.
 
 These solve related but different problems:
 
-| Tool | What is memoized? | Primary purpose |
-|---|---|---|
-| `useMemo` | calculation result/value | avoid recalculating a value |
-| `useCallback` | function reference | preserve function identity |
-| `React.memo` | component rendering based on props | allow a component to skip renders when props are equal |
+| Tool          | What is memoized?                  | Primary purpose                                        |
+| ------------- | ---------------------------------- | ------------------------------------------------------ |
+| `useMemo`     | calculation result/value           | avoid recalculating a value                            |
+| `useCallback` | function reference                 | preserve function identity                             |
+| `React.memo`  | component rendering based on props | allow a component to skip renders when props are equal |
 
 Example:
 
@@ -278,7 +268,7 @@ const LABELS = ["Open", "Closed"];
 ```jsx
 const visibleRows = useMemo(
   () => expensiveTransform(records, filters),
-  [records, filters]
+  [records, filters],
 );
 
 return <MemoizedGrid rows={visibleRows} />;
@@ -294,10 +284,7 @@ A reasonable candidate is a calculation whose cost becomes noticeable with reali
 function Analytics({ records, startDate, endDate }) {
   const summary = useMemo(() => {
     return records
-      .filter(
-        (record) =>
-          record.date >= startDate && record.date <= endDate
-      )
+      .filter((record) => record.date >= startDate && record.date <= endDate)
       .reduce((total, record) => total + record.amount, 0);
   }, [records, startDate, endDate]);
 
@@ -329,7 +316,7 @@ is clearer than:
 ```jsx
 const fullName = useMemo(
   () => `${firstName} ${lastName}`,
-  [firstName, lastName]
+  [firstName, lastName],
 );
 ```
 
@@ -396,10 +383,7 @@ products.sort(compareProducts); // mutates products
 Prefer:
 
 ```jsx
-const sorted = useMemo(
-  () => [...products].sort(compareProducts),
-  [products]
-);
+const sorted = useMemo(() => [...products].sort(compareProducts), [products]);
 ```
 
 Likewise, if an array is mutated in place elsewhere, its reference can remain unchanged and memoized calculations may incorrectly reuse a result.
@@ -467,18 +451,14 @@ function ProductExplorer({ products }) {
     const normalizedQuery = query.trim().toLowerCase();
 
     const filtered = products.filter((product) => {
-      const matchesQuery = product.name
-        .toLowerCase()
-        .includes(normalizedQuery);
+      const matchesQuery = product.name.toLowerCase().includes(normalizedQuery);
       const matchesCategory =
         category === "all" || product.category === category;
       return matchesQuery && matchesCategory;
     });
 
     return [...filtered].sort((a, b) =>
-      sort === "price-asc"
-        ? a.price - b.price
-        : b.price - a.price
+      sort === "price-asc" ? a.price - b.price : b.price - a.price,
     );
   }, [products, query, category, sort]);
 
@@ -513,9 +493,7 @@ function ProductExplorer({ products }) {
       <button
         type="button"
         onClick={() =>
-          setTheme((current) =>
-            current === "light" ? "dark" : "light"
-          )
+          setTheme((current) => (current === "light" ? "dark" : "light"))
         }
       >
         Theme: {theme}
@@ -599,7 +577,7 @@ const result = useMemo(() => calculate(items, options), [items, options]);
 ```jsx
 const result = useMemo(
   () => calculate(items, { activeOnly }),
-  [items, activeOnly]
+  [items, activeOnly],
 );
 ```
 
@@ -741,14 +719,14 @@ Not universally. It can reduce the amount of manual memoization needed in suppor
 
 Before committing `useMemo`, answer:
 
-| Question | Decision |
-|---|---|
-| Is the calculation expensive? | If no, usually skip it |
-| Does the component render often? | If no, benefit may be small |
-| Are dependencies stable? | If no, fix the design first |
-| Is stable identity useful downstream? | If no, benefit may be small |
-| Is there measured or strongly justified benefit? | If no, prefer clarity |
-| Is the calculation pure? | Must be yes |
+| Question                                          | Decision                                                               |
+| ------------------------------------------------- | ---------------------------------------------------------------------- |
+| Is the calculation expensive?                     | If no, usually skip it                                                 |
+| Does the component render often?                  | If no, benefit may be small                                            |
+| Are dependencies stable?                          | If no, fix the design first                                            |
+| Is stable identity useful downstream?             | If no, benefit may be small                                            |
+| Is there measured or strongly justified benefit?  | If no, prefer clarity                                                  |
+| Is the calculation pure?                          | Must be yes                                                            |
 | Is the project using React Compiler optimization? | Check project configuration before adding redundant manual memoization |
 
 A good optimization has an explanation such as:
@@ -811,3 +789,23 @@ A weak explanation is:
 You can now make an evidence-based decision about memoization instead of mechanically adding `useMemo`.
 
 **Next:** Day 32 — `useCallback`, function identity, memoized children, stale closures, and callback dependency design.
+
+## Interview Notes (Quick Revision)
+
+- `useMemo` caches the **result of a calculation** between renders when its dependencies haven't changed — it does not prevent the component itself from rendering.
+- It's not a general-purpose performance switch — it has its own cost (comparing dependencies, retaining cached value) and should be justified by a real, measured problem.
+- Don't use it for **side effects** — that's what `useEffect` is for.
+- Omitting or getting dependencies wrong (e.g., a fresh object/array on every render) breaks the memoization or causes stale results.
+- `useMemo` vs `useCallback` vs `React.memo`: `useMemo` memoizes a **value**, `useCallback` memoizes a **function reference**, `React.memo` skips re-rendering a component when its **props** are referentially unchanged — they're complementary.
+- Mutating memoized arrays/objects in place defeats the purpose — always produce new references when the underlying data changes.
+- Measure with real profiling (not just console logs) before deciding an optimization actually helped.
+
+**Rapid-fire answers**
+
+| Question                                  | One-line Answer                                   |
+| ----------------------------------------- | ------------------------------------------------- |
+| Does `useMemo` stop component re-renders? | No, it only caches a computed value               |
+| `useMemo` vs `useCallback`?               | Value vs function reference                       |
+| Should you memoize every calculation?     | No, only proven expensive/identity-sensitive ones |
+| Is `useMemo` for side effects?            | No, use `useEffect`                               |
+| What breaks memoization?                  | Unstable/incorrect dependencies                   |

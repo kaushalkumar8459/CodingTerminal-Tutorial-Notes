@@ -7,6 +7,7 @@ estimatedMinutes: 180
 order: 49
 track: react
 ---
+
 # Day 49 [Advanced]: Code Review Session — From Finding Issues to Production-Ready Fixes
 
 ## Goal
@@ -71,14 +72,14 @@ Do not start with formatting preferences. Start with **risk**.
 
 ### Recommended priority
 
-| Priority | Review focus | Example |
-|---|---|---|
-| P0 | Security/data loss/outage risk | Client-only authorization for mutation |
-| P1 | Functional defect | Invalid route crashes the page |
-| P1 | Data/state correctness | Stale effect or incorrect dependency |
-| P1 | Serious UX/accessibility failure | Keyboard user cannot submit form |
-| P2 | Performance/maintainability | Unnecessary expensive work |
-| P3 | Style/preference | Naming or formatting suggestion |
+| Priority | Review focus                     | Example                                |
+| -------- | -------------------------------- | -------------------------------------- |
+| P0       | Security/data loss/outage risk   | Client-only authorization for mutation |
+| P1       | Functional defect                | Invalid route crashes the page         |
+| P1       | Data/state correctness           | Stale effect or incorrect dependency   |
+| P1       | Serious UX/accessibility failure | Keyboard user cannot submit form       |
+| P2       | Performance/maintainability      | Unnecessary expensive work             |
+| P3       | Style/preference                 | Naming or formatting suggestion        |
 
 Severity labels are team-dependent. The important principle is to make **impact and urgency explicit**.
 
@@ -205,9 +206,7 @@ Problem:
 const [filteredPosts, setFilteredPosts] = useState([]);
 
 useEffect(() => {
-  setFilteredPosts(
-    posts.filter((post) => post.title.includes(query))
-  );
+  setFilteredPosts(posts.filter((post) => post.title.includes(query)));
 }, [posts, query]);
 ```
 
@@ -217,7 +216,7 @@ Prefer:
 
 ```jsx
 const filteredPosts = posts.filter((post) =>
-  post.title.toLowerCase().includes(query.toLowerCase())
+  post.title.toLowerCase().includes(query.toLowerCase()),
 );
 ```
 
@@ -603,14 +602,14 @@ Also check that keyboard users can reach and operate the same functionality as p
 
 Review each async screen against this matrix:
 
-| State | Expected behavior |
-|---|---|
-| Loading | Explain that content is being loaded |
-| Success | Render expected data |
-| Empty | Explain that there is no data |
+| State     | Expected behavior                              |
+| --------- | ---------------------------------------------- |
+| Loading   | Explain that content is being loaded           |
+| Success   | Render expected data                           |
+| Empty     | Explain that there is no data                  |
 | Not found | Explain that requested resource does not exist |
-| Error | Explain failure and recovery option |
-| Forbidden | Explain lack of permission |
+| Error     | Explain failure and recovery option            |
+| Forbidden | Explain lack of permission                     |
 
 A common review comment is:
 
@@ -685,9 +684,11 @@ Loaded
 ### Good test
 
 ```jsx
-expect(screen.getByRole("heading", {
-  name: /post not found/i,
-})).toBeInTheDocument();
+expect(
+  screen.getByRole("heading", {
+    name: /post not found/i,
+  }),
+).toBeInTheDocument();
 ```
 
 This tests user-visible behavior.
@@ -708,8 +709,8 @@ function BlogPage({ posts, query, user }) {
   useEffect(() => {
     setFilteredPosts(
       posts.filter((post) =>
-        post.title.toLowerCase().includes(query.toLowerCase())
-      )
+        post.title.toLowerCase().includes(query.toLowerCase()),
+      ),
     );
   }, []);
 
@@ -723,7 +724,7 @@ function BlogPage({ posts, query, user }) {
     <>
       {loading && <p>Loading...</p>}
       {filteredPosts.map((post) => (
-        <div onClick={() => window.location.href = `/blog/${post.id}`}>
+        <div onClick={() => (window.location.href = `/blog/${post.id}`)}>
           {post.title}
           <button onClick={() => handleDelete(post.id)}>Delete</button>
         </div>
@@ -830,7 +831,7 @@ function BlogPage({ posts, query, onDelete }) {
   const normalizedQuery = query.trim().toLowerCase();
 
   const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(normalizedQuery)
+    post.title.toLowerCase().includes(normalizedQuery),
   );
 
   return (
@@ -842,10 +843,7 @@ function BlogPage({ posts, query, onDelete }) {
           {filteredPosts.map((post) => (
             <li key={post.id}>
               <Link to={`/blog/${post.id}`}>{post.title}</Link>
-              <button
-                type="button"
-                onClick={() => onDelete(post.id)}
-              >
+              <button type="button" onClick={() => onDelete(post.id)}>
                 Delete
               </button>
             </li>
@@ -1208,3 +1206,22 @@ You can:
 ## Next
 
 **Day 50 - Redux / Redux Toolkit Introduction and Global State Architecture**
+
+## Interview Notes (Quick Revision)
+
+- Structure review feedback as **Problem → Impact → Suggested direction** — avoid vague, personal, or purely style-based comments that tooling could catch instead.
+- Correctness is the **first gate** in a review — check it before discussing style, performance, or minor preferences.
+- Flag unsafe route parameter handling (unvalidated/untyped params used directly) as a correctness/security issue, not a nitpick.
+- Categorize issues by severity (blocking/P0/P1) so the author knows what must be fixed before merge vs what's optional.
+- Review across dimensions: correctness, hooks/state, routing/protected areas, security (client vs backend), performance (unnecessary memoization/splitting), accessibility, and test coverage.
+- Client-side UX protection (route guards, hidden UI) is never a substitute for backend security enforcement — call this out explicitly in reviews.
+
+**Rapid-fire answers**
+
+| Question                                 | One-line Answer                        |
+| ---------------------------------------- | -------------------------------------- |
+| Best format for a review comment?        | Problem → Impact → Suggested direction |
+| What's the first review gate?            | Correctness                            |
+| How should issues be prioritized?        | By severity (blocking vs minor)        |
+| Is a route guard enough security?        | No, backend must enforce it too        |
+| Should you flag unnecessary memoization? | Yes, it's a performance review point   |

@@ -7,7 +7,9 @@ estimatedMinutes: 30
 order: 59
 track: react
 ---
+
 ---
+
 title: Error Boundaries
 slug: day-059-error-boundaries
 dayLabel: Day 59
@@ -15,7 +17,9 @@ level: Advanced
 estimatedMinutes: 30
 order: 59
 track: react
+
 ---
+
 # Day 59 [Advanced]: Error Boundaries
 
 ## Goal
@@ -98,9 +102,11 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    return this.state.hasError
-      ? <p>Something went wrong.</p>
-      : this.props.children;
+    return this.state.hasError ? (
+      <p>Something went wrong.</p>
+    ) : (
+      this.props.children
+    );
   }
 }
 ```
@@ -431,3 +437,20 @@ Expected output:
 - You can design logging, fallback, and recovery as one resilience strategy
 - You are ready for capstone architecture planning in Day 60
 
+## Interview Notes (Quick Revision)
+
+- Error Boundaries catch errors thrown during **rendering, lifecycle methods, and constructors** of their child tree — they do NOT catch errors in event handlers, async code, or server-side rendering.
+- They're implemented as **class components** using `static getDerivedStateFromError` (fallback UI) and `componentDidCatch` (logging/observability).
+- Place boundaries at meaningful **feature boundaries** so one broken feature doesn't crash the entire app — not just one boundary at the root.
+- Provide a way for the user to **recover** (retry/reset), not just a static "something went wrong" message.
+- Be careful about what gets logged — avoid leaking sensitive user data in error reports.
+
+**Rapid-fire answers**
+
+| Question                                   | One-line Answer                                     |
+| ------------------------------------------ | --------------------------------------------------- |
+| What errors do Error Boundaries catch?     | Render/lifecycle/constructor errors in children     |
+| Do they catch event handler errors?        | No                                                  |
+| What class methods implement them?         | `getDerivedStateFromError` + `componentDidCatch`    |
+| Where should boundaries be placed?         | At meaningful feature boundaries, not just the root |
+| Should error UI include a recovery action? | Yes, retry/reset when possible                      |

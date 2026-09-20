@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 39
 track: react
 ---
+
 # Day 39 [Intermediate]: Theme Management
 
 ## Goal
@@ -158,13 +159,7 @@ The fallback also matters for SSR environments where `window` does not exist dur
 ## 6. Theme Provider
 
 ```jsx
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const ThemeContext = createContext(null);
 const THEMES = ["light", "dark", "system"];
@@ -185,19 +180,14 @@ function getInitialTheme() {
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(getInitialTheme);
 
-  const value = useMemo(
-    () => ({ theme, setTheme }),
-    [theme]
-  );
+  const value = useMemo(() => ({ theme, setTheme }), [theme]);
 
   useEffect(() => {
     window.localStorage.setItem("theme", theme);
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 
@@ -258,9 +248,8 @@ useEffect(() => {
   const media = window.matchMedia("(prefers-color-scheme: dark)");
 
   function applyTheme() {
-    const effectiveTheme = theme === "system"
-      ? (media.matches ? "dark" : "light")
-      : theme;
+    const effectiveTheme =
+      theme === "system" ? (media.matches ? "dark" : "light") : theme;
 
     document.documentElement.dataset.theme = effectiveTheme;
   }
@@ -310,9 +299,12 @@ Do not claim that `useEffect` alone guarantees first-paint correctness; it runs 
       ? saved
       : "system";
 
-    const effective = theme === "system"
-      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-      : theme;
+    const effective =
+      theme === "system"
+        ? matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+        : theme;
 
     document.documentElement.dataset.theme = effective;
   })();
@@ -413,14 +405,14 @@ ThemeProvider
 
 Keep these responsibilities distinct:
 
-| Responsibility | Best location |
-|---|---|
-| User preference | React state / Context |
-| Persistence | browser storage helper |
-| System preference | `matchMedia` |
-| DOM synchronization | effect / document initializer |
-| Visual colors | CSS variables |
-| Authorization/security | backend |
+| Responsibility         | Best location                 |
+| ---------------------- | ----------------------------- |
+| User preference        | React state / Context         |
+| Persistence            | browser storage helper        |
+| System preference      | `matchMedia`                  |
+| DOM synchronization    | effect / document initializer |
+| Visual colors          | CSS variables                 |
+| Authorization/security | backend                       |
 
 ## 15. SSR and Hydration Considerations
 
@@ -722,3 +714,22 @@ Requirements:
 You can now build a **persistent, accessible, system-aware theme architecture** with a clear separation between user preference, effective theme, DOM synchronization, and CSS presentation.
 
 **Next:** Day 40 — Authentication Context: UI auth state, protected UI, persistence boundaries, and the difference between authentication state and real authorization.
+
+## Interview Notes (Quick Revision)
+
+- Store the **theme preference** (e.g., `"light"`/`"dark"`/`"system"`) in state, not computed final colors — let CSS variables/tokens represent the actual visual values.
+- `"system"` is a **live preference**, not a frozen value — subscribe to `matchMedia` changes so the effective theme updates if the OS setting changes (and clean up the listener).
+- Apply the theme before first paint where possible to avoid a **flash of wrong theme** (FOUC-like issue).
+- Validate persisted theme values loaded from storage — don't blindly trust a stored string.
+- `localStorage` is client-controlled, convenient for **preferences**, not a security/credential store.
+- Memoize the provider's `value` object only with a real reason — not by default.
+
+**Rapid-fire answers**
+
+| Question                                         | One-line Answer                                 |
+| ------------------------------------------------ | ----------------------------------------------- |
+| Should you store final computed colors in state? | No, store the preference; let CSS handle colors |
+| Is "system" theme a fixed value?                 | No, it can change live with the OS setting      |
+| How to avoid a flash of wrong theme?             | Apply theme before/at first paint               |
+| Is localStorage secure?                          | No, it's client-controlled, not secure storage  |
+| Should you always memoize the context value?     | No, only with a concrete reason                 |

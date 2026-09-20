@@ -7,6 +7,7 @@ estimatedMinutes: 120
 order: 38
 track: react
 ---
+
 # Day 38 [Intermediate]: `useContext` in Components
 
 ## Goal
@@ -221,9 +222,7 @@ Suppose a provider supplies:
 
 ```jsx
 {
-  user,
-  theme,
-  cart
+  (user, theme, cart);
 }
 ```
 
@@ -261,10 +260,7 @@ That object is recreated whenever the provider renders.
 If appropriate, provider state/actions can be structured so that the value identity remains stable when its meaningful inputs have not changed:
 
 ```jsx
-const value = useMemo(
-  () => ({ user, login, logout }),
-  [user, login, logout]
-);
+const value = useMemo(() => ({ user, login, logout }), [user, login, logout]);
 ```
 
 However, do **not** add `useMemo` mechanically. Measure and consider the actual consumer/update boundary. Memoizing the provider value also does not make unrelated context properties selective.
@@ -342,16 +338,9 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  const value = useMemo(
-    () => ({ user, login, logout }),
-    [user]
-  );
+  const value = useMemo(() => ({ user, login, logout }), [user]);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
@@ -398,7 +387,7 @@ A consumer should normally be rendered with the provider it expects:
 render(
   <AuthProvider>
     <Navbar />
-  </AuthProvider>
+  </AuthProvider>,
 );
 ```
 
@@ -685,3 +674,22 @@ Requirements:
 You can now consume Context safely, build guarded consumer Hooks, reason about nested providers and provider value identity, test consumers, and recognize when Context should be split or replaced by a more selective state-management approach.
 
 **Next:** Day 39 — Production-style theme system with Context, persistence, accessibility, and scoped theming.
+
+## Interview Notes (Quick Revision)
+
+- Context is **read during render** — `useContext` just subscribes the component to the nearest matching Provider's current value.
+- Two independently created contexts (even same conceptual name) never share values — a Provider from one can't satisfy the other's consumer.
+- Destructuring only the fields you need from a context value does **not** create a selector — the component still re-renders on any value change.
+- Context is a UI-state mechanism, **not a security boundary** — hiding UI via context doesn't enforce real server-side authorization.
+- Never call context actions (setters/dispatchers) directly during render — only inside event handlers or effects.
+- Test consumers by wrapping them with their actual required Provider (or a test Provider), not by mocking the context internals loosely.
+
+**Rapid-fire answers**
+
+| Question                                    | One-line Answer                            |
+| ------------------------------------------- | ------------------------------------------ |
+| When is context value actually read?        | During render, via `useContext`            |
+| Does destructuring act like a selector?     | No, still re-renders on any context change |
+| Is context a security mechanism?            | No, only a UI-state mechanism              |
+| Can you call context actions during render? | No, only in handlers/effects               |
+| How should you test a context consumer?     | Wrap it in its real/test Provider          |

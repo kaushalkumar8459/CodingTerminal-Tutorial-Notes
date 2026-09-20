@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 23
 track: react
 ---
+
 # Day 23 [Intermediate]: Dependency Arrays, Closures & Effect Correctness
 
 ## Goal
@@ -690,3 +691,23 @@ Effects should be treated as reversible synchronization work. Setup must not dep
 You can now reason about dependency arrays instead of memorizing patterns. You understand stale closures, reference identity, functional updates, dependency completeness, effect loops, and the difference between fixing correctness and optimizing execution.
 
 **Next:** Day 24 — cleanup functions, cancellation, subscriptions, timers, and effect lifecycle in practical scenarios.
+
+## Interview Notes (Quick Revision)
+
+- The dependency array lists the **reactive values** an effect's synchronization actually depends on — it's not an arbitrary event filter.
+- Removing a dependency to "stop a loop" or silence a warning usually **hides a real design problem** instead of fixing it — figure out why the value changes first.
+- `[]` used everywhere often creates **stale closures** — the effect keeps referencing old values from its first render.
+- Object/function dependencies get a new reference on every render — this can cause an effect to re-run more than expected; decide if a fresh reference should matter or should be memoized deliberately.
+- Prefer a **functional state update** (`setX(prev => ...)`) to avoid needing to list state as a dependency just to read its current value.
+- Don't reach for `useMemo`/`useCallback` everywhere — only memoize when there's a real identity/performance need tied to a dependency.
+- Missing cleanup for an effect that sets up an ongoing subscription/timer/connection can cause accumulation across re-runs.
+
+**Rapid-fire answers**
+
+| Question                                                      | One-line Answer                                       |
+| ------------------------------------------------------------- | ----------------------------------------------------- |
+| What do effect dependencies represent?                        | The reactive values the synchronization actually uses |
+| Is removing a dependency a valid fix for a warning?           | Usually not — it hides the real issue                 |
+| How to avoid depending on current state?                      | Use a functional state update                         |
+| Why can an effect re-run unexpectedly with objects/functions? | New reference every render unless memoized            |
+| Should you memoize by default?                                | No, only for a proven identity/performance need       |

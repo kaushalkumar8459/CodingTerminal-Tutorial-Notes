@@ -7,6 +7,7 @@ estimatedMinutes: 150
 order: 40
 track: react
 ---
+
 # Day 40 [Intermediate]: Authentication Context
 
 ## Goal
@@ -185,16 +186,9 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  const value = useMemo(
-    () => ({ user, login, logout }),
-    [user]
-  );
+  const value = useMemo(() => ({ user, login, logout }), [user]);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
@@ -591,7 +585,7 @@ Example:
 render(
   <AuthProvider>
     <Navbar />
-  </AuthProvider>
+  </AuthProvider>,
 );
 ```
 
@@ -844,3 +838,23 @@ Requirements:
 You can now design an **auth-aware React application without confusing UI state with real security**. You understand session state, authentication vs authorization, role-aware rendering, persistence boundaries, restoration/loading states, cancellation, logout semantics, session expiration, and backend responsibility.
 
 **Next:** Day 41 — Routing fundamentals and connecting authentication state to navigation and protected routes.
+
+## Interview Notes (Quick Revision)
+
+- **Authentication** = confirming who the user is; **authorization** = confirming what they're allowed to do — different concerns, don't conflate them.
+- Hiding a UI element (like an admin button) with client-side auth state is **not real security** — the server/API must independently authorize every protected operation.
+- Never trust persisted role/user data from `localStorage` as the source of authorization truth — it's user-controlled storage.
+- Use an explicit `checking`/`loading` session state during initial session restoration to avoid flashing authenticated UI before it's confirmed.
+- Treat a `401` response as a signal that the session boundary needs updating (e.g., re-auth), not a generic network error.
+- Keep the auth context focused on session/user state — don't cram the entire API client/data-fetching layer into it.
+- Always validate and handle parse failures when reading persisted auth data from storage — it can be corrupted or tampered with.
+
+**Rapid-fire answers**
+
+| Question                             | One-line Answer                                              |
+| ------------------------------------ | ------------------------------------------------------------ |
+| Authentication vs authorization?     | Who you are vs what you're allowed to do                     |
+| Does hiding a button secure an API?  | No, the server must authorize independently                  |
+| Is persisted role data trustworthy?  | No, it's client-controlled                                   |
+| Why need a `checking` state on load? | To avoid flashing wrong auth UI before restoration completes |
+| What does a `401` typically mean?    | The session needs to be re-established                       |
