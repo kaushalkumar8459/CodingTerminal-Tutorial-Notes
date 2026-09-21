@@ -80,6 +80,7 @@ type CodeEditorProps = {
   storageKey: string;
   defaultLanguage?: SupportedLanguage;
   defaultValue?: string;
+  readOnly?: boolean;
 };
 
 // Runs untrusted JS/TS in a sandboxed, scriptable-only iframe and relays console output back via postMessage.
@@ -102,7 +103,7 @@ function buildSandboxHtml(code: string) {
   </script></body></html>`;
 }
 
-export function CodeEditor({ storageKey, defaultLanguage = "javascript", defaultValue = "" }: Readonly<CodeEditorProps>) {
+export function CodeEditor({ storageKey, defaultLanguage = "javascript", defaultValue = "", readOnly = false }: Readonly<CodeEditorProps>) {
   const [language, setLanguage] = useState<SupportedLanguage>(defaultLanguage);
   const [code, setCode] = useState(() => {
     try {
@@ -118,12 +119,13 @@ export function CodeEditor({ storageKey, defaultLanguage = "javascript", default
   const isRunnable = RUNNABLE_LANGUAGES.has(language);
 
   useEffect(() => {
+    if (readOnly) return;
     try {
       window.localStorage.setItem(storageKey, code);
     } catch {
       // ignore storage failures (private browsing, quota exceeded, etc.)
     }
-  }, [code, storageKey]);
+  }, [code, readOnly, storageKey]);
 
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
@@ -139,6 +141,7 @@ export function CodeEditor({ storageKey, defaultLanguage = "javascript", default
   }, []);
 
   const handleChange: OnChange = (value) => {
+    if (readOnly) return;
     setCode(value ?? "");
   };
 
@@ -173,7 +176,7 @@ export function CodeEditor({ storageKey, defaultLanguage = "javascript", default
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 bg-slate-900 px-3 py-2">
+      {!readOnly ? <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 bg-slate-900 px-3 py-2">
         <select
           value={language}
           onChange={(event) => setLanguage(event.target.value as SupportedLanguage)}
@@ -208,7 +211,7 @@ export function CodeEditor({ storageKey, defaultLanguage = "javascript", default
             <span className="text-[11px] text-slate-400">Run is available for JavaScript/TypeScript/Python only</span>
           )}
         </div>
-      </div>
+      </div> : null}
 
       <Editor
         height="320px"
@@ -216,10 +219,16 @@ export function CodeEditor({ storageKey, defaultLanguage = "javascript", default
         language={language}
         value={code}
         onChange={handleChange}
-        options={{ minimap: { enabled: false }, fontSize: 13, scrollBeyondLastLine: false }}
+        options={{
+          minimap: { enabled: false },
+          fontSize: 13,
+          scrollBeyondLastLine: false,
+          alwaysConsumeMouseWheel: false,
+          readOnly,
+        } as Parameters<typeof Editor>[0]["options"]}
       />
 
-      {isRunnable ? (
+      {!readOnly && isRunnable ? (
         <div className="border-t border-slate-800 bg-black">
           <p className="border-b border-slate-800 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
             Console Output

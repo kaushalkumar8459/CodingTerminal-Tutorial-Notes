@@ -1,5 +1,7 @@
 export const codingTracks = [
   { key: "javascript", label: "JavaScript" },
+  { key: "javascriptproblemsolving", label: "JS Problem Solving" },
+  { key: "javascriptrealinterview", label: "Real JS Interview" },
   { key: "java", label: "Java" },
   { key: "react", label: "React" },
   { key: "nodejs", label: "Node.js" },

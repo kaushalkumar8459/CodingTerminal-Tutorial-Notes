@@ -1322,6 +1322,105 @@ export const codingLessons: CodingLessonMeta[] = [
     "contentPath": "coding/JavaScript/day-119-mini-projects-pack.md",
     "hasSolution": true,
     "solutionPath": "coding/JavaScript/solutions/day-119-mini-projects-pack.md"
+  },
+  {
+    "track": "javascriptproblemsolving",
+    "slug": "day-003-javascript-interview-problem-solving",
+    "dayLabel": "Day 3",
+    "title": "JavaScript Interview Problem Solving",
+    "order": 3,
+    "fileName": "day-003-javascript-interview-problem-solving.md",
+    "contentPath": "coding/JavaScriptProblemSolving/day-003-javascript-interview-problem-solving.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-001-array-string-problems",
+    "dayLabel": "Day 1",
+    "title": "Array String Problems",
+    "order": 1,
+    "fileName": "day-001-array-string-problems.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-001-array-string-problems.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-002-output-and-language-questions",
+    "dayLabel": "Day 2",
+    "title": "Output And Language Questions",
+    "order": 2,
+    "fileName": "day-002-output-and-language-questions.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-002-output-and-language-questions.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-003-polyfills-and-core-apis",
+    "dayLabel": "Day 3",
+    "title": "Polyfills And Core Apis",
+    "order": 3,
+    "fileName": "day-003-polyfills-and-core-apis.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-003-polyfills-and-core-apis.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-004-practical-dom-async",
+    "dayLabel": "Day 4",
+    "title": "Practical Dom Async",
+    "order": 4,
+    "fileName": "day-004-practical-dom-async.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-004-practical-dom-async.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-005-company-style-challenges",
+    "dayLabel": "Day 5",
+    "title": "Company Style Challenges",
+    "order": 5,
+    "fileName": "day-005-company-style-challenges.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-005-company-style-challenges.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-006-100-plus-question-bank",
+    "dayLabel": "Day 6",
+    "title": "100 Plus Question Bank",
+    "order": 6,
+    "fileName": "day-006-100-plus-question-bank.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-006-100-plus-question-bank.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-007-coding-problem-bank-arrays-and-numbers",
+    "dayLabel": "Day 7",
+    "title": "JavaScript Interview Coding: Arrays and Numbers",
+    "order": 7,
+    "fileName": "day-007-coding-problem-bank-arrays-and-numbers.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-007-coding-problem-bank-arrays-and-numbers.md",
+    "hasSolution": false,
+    "solutionPath": null
+  },
+  {
+    "track": "javascriptrealinterview",
+    "slug": "day-008-coding-problem-bank-strings-and-objects",
+    "dayLabel": "Day 8",
+    "title": "JavaScript Interview Coding: Strings and Objects",
+    "order": 8,
+    "fileName": "day-008-coding-problem-bank-strings-and-objects.md",
+    "contentPath": "coding/JavaScriptRealInterview/day-008-coding-problem-bank-strings-and-objects.md",
+    "hasSolution": false,
+    "solutionPath": null
   }
 ];
 

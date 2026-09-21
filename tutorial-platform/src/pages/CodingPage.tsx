@@ -12,6 +12,7 @@ export function CodingPage() {
   const { track: routeTrack, slug } = useParams();
   const track = routeTrack && isCodingTrackKey(routeTrack) ? routeTrack : "javascript";
   const trackLabel = getCodingTrackLabel(track);
+  const isRealInterviewTrack = track === "javascriptrealinterview";
 
   const lessons = useMemo(() => getCodingLessonsByTrack(track), [track]);
   const lesson = slug ? getCodingLessonBySlug(track, slug) : undefined;
@@ -106,7 +107,7 @@ export function CodingPage() {
           {lesson.dayLabel}: {lesson.title}
         </h1>
 
-        <div className="mt-4 inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
+        {!isRealInterviewTrack ? <div className="mt-4 inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
           <button
             type="button"
             onClick={() => setViewMode("practice")}
@@ -127,7 +128,7 @@ export function CodingPage() {
           >
             ✅ Solution
           </button>
-        </div>
+        </div> : null}
       </header>
 
       <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.55)] sm:p-6">
@@ -138,7 +139,7 @@ export function CodingPage() {
         ) : error ? (
           <p className="text-sm text-rose-700">{error}</p>
         ) : (
-          <MarkdownLesson markdown={markdown} onHashLinkClick={() => {}} />
+          <MarkdownLesson markdown={markdown} onHashLinkClick={() => {}} useSolutionEditor={isRealInterviewTrack} />
         )}
       </div>
 
