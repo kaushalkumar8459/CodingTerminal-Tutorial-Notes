@@ -1,12 +1,17 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import React from "react";
+import rehypeRaw from "rehype-raw";
+import React, { lazy, Suspense } from "react";
+
+const SolutionCodeEditor = lazy(() => import("./CodeEditor"));
+const SolutionDetailsContext = React.createContext(false);
 
 type MarkdownLessonProps = {
   markdown: string;
   onHashLinkClick: (hash: string) => void;
+  useSolutionEditor?: boolean;
 };
-export function MarkdownLesson({ markdown, onHashLinkClick }: MarkdownLessonProps) {
+export function MarkdownLesson({ markdown, onHashLinkClick, useSolutionEditor = false }: MarkdownLessonProps) {
   const [copiedBlockId, setCopiedBlockId] = React.useState<string | null>(null);
   const copyFeedbackTimeoutRef = React.useRef<number | null>(null);
 
@@ -18,11 +23,15 @@ export function MarkdownLesson({ markdown, onHashLinkClick }: MarkdownLessonProp
     };
   }, []);
 
-  const getCodeText = (children: React.ReactNode) => {
+  const getCodeText = (children: React.ReactNode): string => {
     return React.Children.toArray(children)
-      .map((child) => (typeof child === "string" ? child : ""))
+      .map((child) => {
+        if (typeof child === "string") return child;
+        if (React.isValidElement<{ children?: React.ReactNode }>(child)) return getCodeText(child.props.children);
+        return "";
+      })
       .join("")
-      .replace(/\n$/, "");
+      .replace(/^\n|\n$/g, "");
   };
 
   const handleCopyCode = async (blockId: string, codeText: string) => {
@@ -74,7 +83,45 @@ export function MarkdownLesson({ markdown, onHashLinkClick }: MarkdownLessonProp
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]}
       components={{
+        details: ({ children }) => (
+          <SolutionDetailsContext.Provider value={true}>
+            <details className="mt-5 overflow-hidden rounded-2xl border border-cyan-200 bg-cyan-50/60">
+              {children}
+            </details>
+          </SolutionDetailsContext.Provider>
+        ),
+        summary: ({ children }) => (
+          <summary className="cursor-pointer list-none px-4 py-3 text-sm font-bold text-cyan-900 transition hover:bg-cyan-100">
+            {children}
+          </summary>
+        ),
+        pre: ({ children }) => {
+          const isInsideSolutionDetails = React.useContext(SolutionDetailsContext);
+          if (!useSolutionEditor || !isInsideSolutionDetails) {
+            return <pre>{children}</pre>;
+          }
+
+          const codeText = getCodeText(children);
+          const blockId = `solution:${codeText.length}:${codeText.slice(0, 30)}`;
+
+          return (
+            <Suspense fallback={<div className="m-4 h-20 rounded-2xl bg-slate-950 p-4 text-sm text-slate-400">Loading code editor...</div>}>
+              <div className="m-4 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
+                <div className="border-b border-slate-800 bg-slate-900 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
+                  Read-only solution
+                </div>
+                <SolutionCodeEditor
+                  storageKey={`solution:${blockId}`}
+                  defaultLanguage="javascript"
+                  defaultValue={codeText}
+                  readOnly
+                />
+              </div>
+            </Suspense>
+          );
+        },
         h1: ({ children }) => (
           <h1 className="mb-5 text-2xl font-bold leading-tight text-slate-950 sm:text-3xl md:mb-6 md:text-5xl">{children}</h1>
         ),
@@ -92,7 +139,7 @@ export function MarkdownLesson({ markdown, onHashLinkClick }: MarkdownLessonProp
             </h3>
           );
         },
-        p: ({ children }) => <p className="mt-3 break-words leading-7 text-slate-700 sm:mt-4 sm:leading-8">{children}</p>,
+        p: ({ children }) => <p className="mt-3 wrap-break-word leading-7 text-slate-700 sm:mt-4 sm:leading-8">{children}</p>,
         ul: ({ children }) => <ul className="mt-3 list-disc space-y-2 pl-5 text-slate-700 sm:mt-4 sm:pl-6">{children}</ul>,
         ol: ({ children }) => <ol className="mt-3 list-decimal space-y-2 pl-5 text-slate-700 sm:mt-4 sm:pl-6">{children}</ol>,
         li: ({ children }) => <li className="leading-7">{children}</li>,
@@ -112,7 +159,7 @@ export function MarkdownLesson({ markdown, onHashLinkClick }: MarkdownLessonProp
                   <button
                     type="button"
                     onClick={() => void handleCopyCode(blockId, codeText)}
-                    className="rounded-md border border-cyan-300/50 bg-cyan-400/10 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-cyan-100 transition hover:bg-cyan-400/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+                    className="rounded-md border border-cyan-300/50 bg-cyan-400/10 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-cyan-100 transition hover:bg-cyan-400/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
                     aria-label="Copy code block"
                   >
                     {isCopied ? "Copied" : "Copy"}

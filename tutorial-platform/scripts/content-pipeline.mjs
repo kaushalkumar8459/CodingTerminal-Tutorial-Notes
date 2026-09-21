@@ -10,7 +10,14 @@ const generatedTutorialsFile = path.join(
   "tutorials.ts",
 );
 const searchIndexFile = path.join(rootDir, "public", "search-index.json");
-const knownTracks = ["react", "nodejs", "python", "nextjs", "java"];
+const knownTracks = [
+  "react",
+  "nodejs",
+  "python",
+  "nextjs",
+  "java",
+  "javascript",
+];
 const lessonFilePattern =
   /^day-\d{3}(?:_\d+)?-(?!to-\d{3})(?!.*quality-audit-report).+\.md$/i;
 
