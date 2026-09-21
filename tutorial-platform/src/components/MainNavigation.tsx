@@ -9,12 +9,16 @@ type MainNavigationProps = Readonly<{
 }>;
 
 type TrackLink = {
-  key: TrackKey;
+  key: TrackKey | "coding";
   label: string;
   to: string;
 };
 
-function getTrackBadgeLabel(track: TrackKey) {
+function getTrackBadgeLabel(track: TrackKey | "coding") {
+  if (track === "coding") {
+    return "</>";
+  }
+
   if (track === "javascript") {
     return "JS";
   }
@@ -62,8 +66,16 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
       });
     }
 
+    links.push({
+      key: "coding",
+      label: "Coding",
+      to: "/coding/javascript",
+    });
+
     return links;
   }, [hashSuffix]);
+
+  const isOnCodingRoute = location.pathname.startsWith("/coding");
 
   if (trackLinks.length === 0) {
     return null;
@@ -77,7 +89,7 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
       <div className="overflow-hidden rounded-[18px] border border-slate-800 bg-slate-950">
         <div className="flex items-stretch gap-0 overflow-x-auto whitespace-nowrap">
           {trackLinks.map((track) => {
-            const isActive = track.key === currentTrack;
+            const isActive = track.key === "coding" ? isOnCodingRoute : !isOnCodingRoute && track.key === currentTrack;
 
             return (
               <Link
