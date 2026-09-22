@@ -83,5 +83,29 @@ Days 269–280
 ### Module 25 — Final Enterprise Project
 Days 281–300
 
+## Phase 5 — Interview
+
 ### Module 26 — Interview Preparation
 Days 301–320
+
+## Phase 6 — Angular AI & MCP
+
+### Module 27 — Angular AI & MCP
+Days 321–335
+
+Focus:
+- AI-assisted Angular development
+- Angular CLI MCP Server
+- Angular AI Tutor
+- Agent Skills and project AI instructions
+- MCP concepts and safe tool workflows
+- WebMCP fundamentals
+- Experimental WebMCP APIs in Angular
+- WebMCP + Signals and Dependency Injection
+- WebMCP + Signal Forms
+- AI-powered Angular applications
+- GenAI/AI SDK integration patterns
+- AI security, validation and tool authorization
+- AI-powered JobHub capstone
+
+**Stability note:** Angular CLI MCP is current Angular developer tooling. WebMCP support in Angular is experimental and the WebMCP specification is still evolving, so experimental APIs must be clearly separated from stable Angular fundamentals.
