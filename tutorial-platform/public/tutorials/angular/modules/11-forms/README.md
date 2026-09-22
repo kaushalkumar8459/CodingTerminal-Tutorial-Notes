@@ -32,7 +32,7 @@ Learn how Angular handles user input, validation, form state, submission, and re
 
 ## Dependency Flow
 
-user input → controls → validation → form state → reactive forms → typed forms → reusable validation → dynamic fields → arrays → cross-field rules → custom controls → UX → architecture → project
+user input → controls → validation → form state → reactive forms → typed forms → reusable validation → dynamic fields → arrays → cross-field rules → custom controls → UX → architecture → Signal Forms (experimental in Angular 21) → project
 
 ## Teaching Rules
 
@@ -44,6 +44,8 @@ user input → controls → validation → form state → reactive forms → typ
 - Do not introduce RxJS, HTTP, or external form/state libraries.
 - Keep business logic outside templates.
 - Teach ControlValueAccessor only after normal controls and reactive forms are understood.
+- Treat Signal Forms as an Angular 21 experimental topic, not the default stable forms API.
+- Keep stable Reactive Forms as the primary production-oriented forms path for Angular 21; introduce Signal Forms only after the core forms model is understood.
 
 ## Outcome
 
