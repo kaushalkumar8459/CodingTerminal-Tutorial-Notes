@@ -12,7 +12,7 @@ Understand the three primary Angular rendering modes and when hybrid rendering m
 
 **SSG / prerendering** generates HTML at build time.
 
-Angular's hybrid rendering lets different routes use different modes. citeturn0search2turn0search6
+Angular's hybrid rendering lets different routes use different modes.
 
 ## Decision Thinking
 
