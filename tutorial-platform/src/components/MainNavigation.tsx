@@ -27,6 +27,10 @@ function getTrackBadgeLabel(track: TrackKey) {
     return "R";
   }
 
+  if (track === "angular") {
+    return "A";
+  }
+
   if (track === "python") {
     return "Py";
   }
