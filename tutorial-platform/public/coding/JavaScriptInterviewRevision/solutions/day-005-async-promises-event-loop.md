@@ -1,43 +1,51 @@
-# Day 005 — Promises, Async/Await & Event Loop — Solutions
+# Day 005 — Async JavaScript & Event Loop — Detailed Revision Solutions
 
-## Revision Method
+## What to Master
 
-For every question:
+Use this file for active recall. Explain each concept before reading the implementation.
 
-1. Give the direct answer.
-2. Show a tiny JavaScript/TypeScript example when useful.
-3. Explain the runtime behavior.
-4. Mention an important edge case.
-5. State complexity for coding problems.
-
-## Practice Template
+## Executable Practice
 
 ```js
-function solve(input) {
-  // Clarify assumptions first.
-  // Implement the simplest correct approach.
-  // Optimize only when the constraint requires it.
-  return input;
+async function load() {
+  const response = await fetch("/api/data");
+  if (!response.ok) throw new Error("Request failed");
+  return response.json();
 }
+
+Promise.resolve().then(() => console.log("microtask"));
+console.log("sync");
+// sync prints before the microtask.
 ```
 
-## Self-Test
+## Interview Drill
 
-- Can you solve the coding drill without notes?
-- Can you explain the result before running the code?
-- Can you identify the likely bug from a failing example?
-- Can you explain the production use case?
+1. Define the concept in 30–60 seconds.
+2. Explain what happens at runtime.
+3. Write the smallest working example.
+4. Give one edge case.
+5. State time/space complexity when applicable.
+6. Give one production frontend use case.
+7. Explain one trade-off.
 
-## Interview Answer Pattern
+## Edge-Case Checklist
 
-**What:** concise definition.
+- Empty input
+- Boundary values
+- Duplicate data
+- Invalid input
+- Large data
+- Repeated/concurrent operations
 
-**How:** important runtime/internal behavior.
+## Testing Checklist
 
-**Example:** minimal working code.
+- [ ] Happy path
+- [ ] Boundary case
+- [ ] Failure case
+- [ ] Async/race case when applicable
+- [ ] Cleanup/lifecycle case when applicable
+- [ ] Accessibility/performance case for UI topics
 
-**Trade-off:** when not to use it.
+## Final Interview Habit
 
-**Follow-up:** one deeper question you can answer.
-
-> This file is a revision/practice solution guide; it does not claim that every exercise is an actual company interview question.
+Do not jump directly into code. First state **assumptions → approach → complexity → implementation → validation**.

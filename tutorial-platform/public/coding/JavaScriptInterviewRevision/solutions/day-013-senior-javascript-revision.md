@@ -1,43 +1,57 @@
-# Day 013 — Senior JavaScript & Frontend Scenarios — Solutions
+# Day 013 — Senior JavaScript — Detailed Revision Solutions
 
-## Revision Method
+## What to Master
 
-For every question:
+Use this file for active recall. Explain each concept before reading the implementation.
 
-1. Give the direct answer.
-2. Show a tiny JavaScript/TypeScript example when useful.
-3. Explain the runtime behavior.
-4. Mention an important edge case.
-5. State complexity for coding problems.
-
-## Practice Template
+## Executable Practice
 
 ```js
-function solve(input) {
-  // Clarify assumptions first.
-  // Implement the simplest correct approach.
-  // Optimize only when the constraint requires it.
-  return input;
+class LRUCache {
+  #map = new Map();
+  constructor(limit) { this.limit = limit; }
+  get(key) {
+    if (!this.#map.has(key)) return undefined;
+    const value = this.#map.get(key);
+    this.#map.delete(key); this.#map.set(key, value);
+    return value;
+  }
+  set(key, value) {
+    this.#map.delete(key); this.#map.set(key, value);
+    if (this.#map.size > this.limit) this.#map.delete(this.#map.keys().next().value);
+  }
 }
+// Senior revision: trade-offs, observability, scalability, accessibility and failure modes.
 ```
 
-## Self-Test
+## Interview Drill
 
-- Can you solve the coding drill without notes?
-- Can you explain the result before running the code?
-- Can you identify the likely bug from a failing example?
-- Can you explain the production use case?
+1. Define the concept in 30–60 seconds.
+2. Explain what happens at runtime.
+3. Write the smallest working example.
+4. Give one edge case.
+5. State time/space complexity when applicable.
+6. Give one production frontend use case.
+7. Explain one trade-off.
 
-## Interview Answer Pattern
+## Edge-Case Checklist
 
-**What:** concise definition.
+- Empty input
+- Boundary values
+- Duplicate data
+- Invalid input
+- Large data
+- Repeated/concurrent operations
 
-**How:** important runtime/internal behavior.
+## Testing Checklist
 
-**Example:** minimal working code.
+- [ ] Happy path
+- [ ] Boundary case
+- [ ] Failure case
+- [ ] Async/race case when applicable
+- [ ] Cleanup/lifecycle case when applicable
+- [ ] Accessibility/performance case for UI topics
 
-**Trade-off:** when not to use it.
+## Final Interview Habit
 
-**Follow-up:** one deeper question you can answer.
-
-> This file is a revision/practice solution guide; it does not claim that every exercise is an actual company interview question.
+Do not jump directly into code. First state **assumptions → approach → complexity → implementation → validation**.
