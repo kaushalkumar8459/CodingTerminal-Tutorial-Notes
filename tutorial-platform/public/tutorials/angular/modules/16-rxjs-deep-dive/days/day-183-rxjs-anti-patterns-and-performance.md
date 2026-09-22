@@ -28,6 +28,9 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+
 ## Mental Model
 Correct stream ownership and subscription behavior come before micro-optimization.
 
@@ -36,6 +39,8 @@ Review a poor job-search pipeline and remove duplicate work, races, leaks, and u
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

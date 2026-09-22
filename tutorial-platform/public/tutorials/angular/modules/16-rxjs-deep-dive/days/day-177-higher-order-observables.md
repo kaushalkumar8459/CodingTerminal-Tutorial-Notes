@@ -27,6 +27,9 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+
 ## Mental Model
 Outer value, inner Observable, flattening policy, final values.
 
@@ -35,6 +38,8 @@ Build user-to-details, search-to-results, and order-to-payment workflows.
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

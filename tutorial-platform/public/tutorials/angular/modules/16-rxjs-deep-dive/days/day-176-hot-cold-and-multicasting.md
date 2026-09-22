@@ -27,6 +27,9 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+
 ## Mental Model
 Ask whether subscribers create separate producer work or share one execution. Sharing is not automatically permanent caching.
 
@@ -35,6 +38,8 @@ Compare two subscriptions to a cold timer with a shared version.
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

@@ -27,6 +27,9 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+
 ## Mental Model
 User interaction becomes a stream, then timing and filtering control async work.
 
@@ -35,6 +38,8 @@ Build typeahead and autosave pipelines and justify the flattening strategy.
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

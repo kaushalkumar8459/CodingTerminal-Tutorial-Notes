@@ -28,6 +28,9 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+
 ## Mental Model
 Use timelines to reason about debounce, cancellation, queueing, and combination before writing tests.
 
@@ -36,6 +39,8 @@ Draw timelines for debounce, switchMap cancellation, concatMap queueing, and com
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

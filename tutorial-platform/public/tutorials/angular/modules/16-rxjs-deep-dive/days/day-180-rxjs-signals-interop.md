@@ -17,7 +17,9 @@ Bridge RxJS streams and Angular Signals with toSignal and toObservable.
 
 ## Concept
 Bridge RxJS streams and Angular Signals with toSignal and toObservable.
-\n## Angular Interop\nUse @angular/core/rxjs-interop. toSignal exposes the latest Observable value as a Signal and toObservable exposes a Signal as an Observable. Avoid repeatedly creating toSignal for the same Observable.
+
+## Angular Interop
+Use @angular/core/rxjs-interop. toSignal exposes the latest Observable value as a Signal and toObservable exposes a Signal as an Observable. Avoid repeatedly creating toSignal for the same Observable.
 
 ## Example
 ~~~ts
@@ -28,6 +30,11 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+### Angular interop
+Use @angular/core/rxjs-interop. toSignal exposes the latest Observable value as a Signal. toObservable exposes a Signal as an Observable. Avoid repeatedly creating toSignal for the same Observable.
+
 ## Mental Model
 Use RxJS for stream composition and Signals for synchronous Angular-facing state when that boundary is clearer.
 
@@ -36,6 +43,8 @@ Convert an API result Observable to a Signal, then convert a search Signal to an
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

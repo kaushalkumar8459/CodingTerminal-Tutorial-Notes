@@ -18,6 +18,11 @@ Understand Subject variants. Subject has no retained value, BehaviorSubject stor
 ## Concept
 Understand Subject variants. Subject has no retained value, BehaviorSubject stores a current value, and ReplaySubject replays configured history.
 
+Understand Subject variants and why they introduce an imperative producer into a reactive system.
+
+## Concept
+Understand Subject variants and why they introduce an imperative producer into a reactive system.
+
 ## Example
 ~~~ts
 const result$ = source$.pipe(
@@ -30,11 +35,19 @@ const result$ = source$.pipe(
 ## Mental Model
 A Subject introduces an imperative producer into a reactive system. Use it deliberately rather than replacing every Signal with one.
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+
+## Mental Model
+Subject has no retained value, BehaviorSubject stores a current value, ReplaySubject replays configured history.
+
 ## Exercise
 Create notification, current-selection, and recent-history examples.
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

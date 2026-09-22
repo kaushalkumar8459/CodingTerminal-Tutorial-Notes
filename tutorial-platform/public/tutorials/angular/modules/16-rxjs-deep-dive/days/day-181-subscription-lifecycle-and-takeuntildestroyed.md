@@ -17,7 +17,9 @@ Use takeUntilDestroyed for lifecycle-safe imperative subscriptions in Angular.
 
 ## Concept
 Use takeUntilDestroyed for lifecycle-safe imperative subscriptions in Angular.
-\n## Lifecycle\nAngular can infer the current DestroyRef inside an injection context. Pass DestroyRef explicitly when using takeUntilDestroyed outside that context.
+
+## Lifecycle
+Angular can infer the current DestroyRef inside an injection context. Pass DestroyRef explicitly when using takeUntilDestroyed outside that context.
 
 ## Example
 ~~~ts
@@ -28,6 +30,11 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+### Lifecycle
+Angular can infer the current DestroyRef inside an injection context. Pass DestroyRef explicitly when using takeUntilDestroyed outside that context.
+
 ## Mental Model
 Prefer declarative consumption when possible. When subscribing imperatively, make lifetime explicit.
 
@@ -36,6 +43,8 @@ Create a notification listener and verify it stops after component destruction.
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.

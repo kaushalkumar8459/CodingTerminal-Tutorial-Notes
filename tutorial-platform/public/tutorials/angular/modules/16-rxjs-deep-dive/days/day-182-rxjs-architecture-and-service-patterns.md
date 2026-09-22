@@ -28,6 +28,9 @@ const result$ = source$.pipe(
 );
 ~~~
 
+Adapt the example to the day's problem instead of copying it mechanically.
+
+
 ## Mental Model
 Source, transform, coordinate, expose. Prefer clear pipelines over hidden subscriptions.
 
@@ -36,6 +39,8 @@ Refactor nested subscriptions into typed API and feature services.
 
 ## Common Mistakes
 - Choosing an operator without defining required behavior.
+
+- Choosing an operator without defining the required behavior.
 - Creating nested subscriptions for dependent async work.
 - Ignoring subscription lifetime.
 - Using RxJS where simple synchronous state is clearer.
