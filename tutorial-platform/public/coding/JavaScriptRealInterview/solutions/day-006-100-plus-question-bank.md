@@ -1,44 +1,66 @@
-# Day 006 — 100+ Question Bank — Solution Notes
+# Day 006 — 100+ Question Bank — Detailed Solutions
 
-> **Source accuracy:** These are solution/practice notes for the corresponding interview topics. A generic problem is not presented as a confirmed company question unless the original roadmap explicitly documents it.
+> Original practice solutions for interview preparation. Company names in the filename identify the topic group; they do not mean every exercise below is a verified question from that company.
 
-## Solution Strategy
+## Problems Covered
 
-1. Clarify the requirement and expected input/output.
-2. Start with the simplest correct solution.
-3. Identify edge cases.
-4. Improve time and space complexity where useful.
-5. Explain the JavaScript language/browser behavior involved.
-6. For UI tasks, separate rendering, state, events, and side effects.
-7. Test normal, boundary, invalid, and repeated-action cases.
+flatten, groupBy and memoization
 
-## Reference Implementation Pattern
+## Executable JavaScript
 
 ```js
-function solve(input) {
-  if (input == null) {
-    return null;
+function flatten(values) {
+  const result = [], stack = [...values].reverse();
+  while (stack.length) {
+    const value = stack.pop();
+    if (Array.isArray(value)) {
+      for (let i = value.length - 1; i >= 0; i--) stack.push(value[i]);
+    } else result.push(value);
   }
+  return result;
+}
 
-  // Keep the transformation explicit and easy to test.
-  return input;
+function groupBy(items, key) {
+  return items.reduce((groups, item) => {
+    const value = item[key];
+    (groups[value] ??= []).push(item);
+    return groups;
+  }, {});
+}
+
+function memoize(fn) {
+  const cache = new Map();
+  return function (...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key);
+    const value = fn.apply(this, args);
+    cache.set(key, value);
+    return value;
+  };
 }
 ```
 
-## Interview Explanation
+## How to Explain It
 
-- State the approach before coding.
-- Explain why it works.
-- Give complexity.
-- Mention one alternative when it is relevant.
-- Discuss the edge cases you considered.
+- Start with the requirement and assumptions.
+- Explain the data structure or runtime behavior.
+- State time and space complexity.
+- Walk through one normal case and one edge case.
+- Mention a production trade-off or failure mode.
 
-## Validation Checklist
+## Edge Cases
 
-- [ ] Correctness
-- [ ] Edge cases
-- [ ] Time complexity
-- [ ] Space complexity
-- [ ] JavaScript-specific behavior
-- [ ] Browser/UI concerns when applicable
-- [ ] Clear interview explanation
+- Empty input
+- Single item
+- Duplicate values
+- Invalid input
+- Large input
+- Repeated calls or concurrent operations where applicable
+
+## Follow-Up Questions
+
+1. Can you improve the complexity?
+2. What changes for very large input?
+3. How would you test it?
+4. How would you handle cancellation or failure?
+5. What changes in a browser/UI implementation?

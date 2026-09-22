@@ -1,44 +1,49 @@
-# Day 011 — Adobe, Atlassian, PayPal & Stripe — Solution Pack
+# Day 011 — Adobe, Atlassian, PayPal & Stripe — Detailed Solutions
 
-> **Source accuracy:** These are solution/practice notes for the corresponding interview topics. A generic problem is not presented as a confirmed company question unless the original roadmap explicitly documents it.
+> Original practice solutions for interview preparation. Company names in the filename identify the topic group; they do not mean every exercise below is a verified question from that company.
 
-## Solution Strategy
+## Problems Covered
 
-1. Clarify the requirement and expected input/output.
-2. Start with the simplest correct solution.
-3. Identify edge cases.
-4. Improve time and space complexity where useful.
-5. Explain the JavaScript language/browser behavior involved.
-6. For UI tasks, separate rendering, state, events, and side effects.
-7. Test normal, boundary, invalid, and repeated-action cases.
+query builder and API debugging
 
-## Reference Implementation Pattern
+## Executable JavaScript
 
 ```js
-function solve(input) {
-  if (input == null) {
-    return null;
+function buildQuery(params) {
+  const search = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value == null) continue;
+    if (Array.isArray(value)) value.forEach(item => search.append(key, String(item)));
+    else search.set(key, String(value));
   }
-
-  // Keep the transformation explicit and easy to test.
-  return input;
+  return search.toString();
 }
+
+// Debug stale data by checking request order, cache keys, state updates,
+// cancellation, response timestamps, and invalidation rules.
 ```
 
-## Interview Explanation
+## How to Explain It
 
-- State the approach before coding.
-- Explain why it works.
-- Give complexity.
-- Mention one alternative when it is relevant.
-- Discuss the edge cases you considered.
+- Start with the requirement and assumptions.
+- Explain the data structure or runtime behavior.
+- State time and space complexity.
+- Walk through one normal case and one edge case.
+- Mention a production trade-off or failure mode.
 
-## Validation Checklist
+## Edge Cases
 
-- [ ] Correctness
-- [ ] Edge cases
-- [ ] Time complexity
-- [ ] Space complexity
-- [ ] JavaScript-specific behavior
-- [ ] Browser/UI concerns when applicable
-- [ ] Clear interview explanation
+- Empty input
+- Single item
+- Duplicate values
+- Invalid input
+- Large input
+- Repeated calls or concurrent operations where applicable
+
+## Follow-Up Questions
+
+1. Can you improve the complexity?
+2. What changes for very large input?
+3. How would you test it?
+4. How would you handle cancellation or failure?
+5. What changes in a browser/UI implementation?
