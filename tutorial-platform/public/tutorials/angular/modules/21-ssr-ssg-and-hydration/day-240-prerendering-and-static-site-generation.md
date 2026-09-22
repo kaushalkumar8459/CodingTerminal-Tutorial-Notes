@@ -6,7 +6,7 @@ Understand build-time generation and when SSG is a better fit than request-time 
 
 ## Concept
 
-Prerendering generates static HTML during the build. It is useful for stable public content such as documentation, marketing pages, and product catalogs. Angular server routing uses RenderMode.Prerender for this strategy. citeturn0search2turn0search6
+Prerendering generates static HTML during the build. It is useful for stable public content such as documentation, marketing pages, and product catalogs. Angular server routing uses RenderMode.Prerender for this strategy.
 
 ## Trade-offs
 
