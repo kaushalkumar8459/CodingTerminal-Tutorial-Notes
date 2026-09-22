@@ -11,13 +11,19 @@ youtubeVideos: []
 ---
 # Day 76 — Why Signals & Modern Reactivity?
 
+## Prerequisites
+
+- Days 1–75
+- Components, templates, services, and dependency injection
+- Basic lifecycle concepts
+
 ## Goal
 Understand the problem signals solve before learning the APIs.
 
 ## Concept
 A UI contains source state such as search text, selected job, filters, and loading state. Other values are derived from that state.
 
-A signal is a reactive wrapper around a value. Angular tracks where signals are read and can update affected consumers when their values change. citeturn0search1
+A signal is a reactive wrapper around a value. Angular tracks where signals are read and can update affected consumers when their values change. 
 
 ## Mental Model
 ```
@@ -51,3 +57,23 @@ Design a job dashboard and classify each value as source state or derived state.
 
 ## Outcome
 You can identify where signal-based reactivity belongs before choosing an API.
+
+
+## Real-World JobHub Scenario
+
+JobHub search contains source state such as search text and selected filters, derived state such as the filtered job list, and side effects such as analytics logging. The key interview skill is deciding which values should be source state and which should be derived.
+
+## Common Mistakes
+
+- Using `effect()` to calculate derived values that belong in `computed()`.
+- Making every piece of state global.
+- Treating `resource()` as a stable production requirement in Angular 21; it is experimental.
+- Introducing RxJS before stream semantics are actually needed.
+
+## Challenge
+
+Design the reactive state for a job filter panel. Identify writable state, derived state, and side effects before writing code.
+
+## Expected Outcome
+
+You can explain the problem Signals solve and choose between source state, derived state, and side effects.
