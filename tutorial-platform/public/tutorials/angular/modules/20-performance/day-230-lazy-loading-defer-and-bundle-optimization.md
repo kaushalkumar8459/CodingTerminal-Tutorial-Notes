@@ -1,35 +1,60 @@
 # Day 230 — Lazy Loading, @defer and Bundle Optimization
 
-## Goal
-Reduce initial JavaScript and work by loading features when users need them.
+## Learning Goal
+Choose the correct loading boundary for routes, secondary UI and heavy dependencies.
 
-## Concept
-Route-level lazy loading is useful for feature navigation. @defer is useful for secondary UI inside an already loaded application.
+## Prerequisites
+- Days 23–31: routing and lazy routes
+- Day 225: performance measurement
 
-~~~html
+## Three Loading Boundaries
+
+### Initial UI
+Load what is required to make the first screen useful.
+
+### Route-Level Lazy Loading
+Lazy-load features users do not need on the initial route.
+
+### @defer
+Defer secondary components inside an already loaded screen.
+
+```html
 @defer (on interaction) {
   <app-advanced-analytics />
 } @placeholder {
-  <button>Load analytics</button>
+  <button type="button">Load analytics</button>
 }
-~~~
+```
 
-Ask: what must load immediately, what can wait for the route, what can wait for interaction, and what can wait for visibility?
+## Triggers
+Common triggers include `idle`, `viewport`, `interaction`, `hover`, `immediate`, `timer`, and `when`.
+
+Choose based on user behavior.
+
+## Do Not Defer Critical Content
+Consider:
+- LCP
+- CLS
+- accessibility
+- interaction latency
+
+Use `@placeholder`, `@loading` and `@error` when they improve the experience.
 
 ## Exercise
-Split JobHub into critical dashboard UI, secondary analytics, and rarely used reporting. Choose the appropriate loading boundary for each.
+For JobHub classify search controls, job details, analytics and a heavy reporting library as initial, lazy-route or deferred work. Measure the network waterfall before and after.
 
 ## Common Mistakes
-- Deferring content users immediately need.
-- Creating excessive chunks.
-- Measuring source size instead of browser experience.
-- Ignoring request waterfalls.
+- Deferring everything.
+- Creating too many tiny chunks.
+- Deferring above-the-fold critical content.
+- Ignoring accessible loading states.
+- Optimizing source size without measuring browser behavior.
 
 ## Interview Questions
-1. What does route lazy loading solve?
-2. What does @defer solve?
-3. When should content not be deferred?
-4. How can code splitting increase latency?
+1. Route lazy loading vs `@defer`?
+2. What does `@defer` split?
+3. How can excessive code splitting hurt?
+4. When should content not be deferred?
 
-## Outcome
-You can choose loading boundaries based on user behavior.
+## Expected Outcome
+You can select loading boundaries based on user behavior and measured startup cost.
