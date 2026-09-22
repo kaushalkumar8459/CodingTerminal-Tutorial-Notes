@@ -1,73 +1,58 @@
----
-id: "angular-day-223"
-title: "Test Quality, Coverage, Debugging and CI"
-slug: "test-quality-coverage-debugging-and-ci"
-day: 223
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 223 — Test Quality, Coverage, Debugging and CI
 
-## Goal
+## Learning Goal
+Make the test suite maintainable and useful in development and CI.
 
-Learn meaningful coverage, debugging, flaky-test prevention, CI execution, test naming, test boundaries, and maintainable test suites.
+## Quality Rules
+A good test is deterministic, focused, readable, fast enough for normal development, and meaningful when it fails.
 
-## Concept
+## Coverage
+Coverage is a signal, not the definition of quality. Prioritize business-critical behavior, failure paths, security-sensitive flows and regression-prone features.
 
-Testing should verify **observable behavior and contracts**, not implementation details.
+## Debugging Workflow
+1. Read the failure.
+2. Identify whether setup, action or assertion failed.
+3. Reproduce the smallest case.
+4. Inspect state or rendered DOM.
+5. Check async completion and cleanup.
+6. Fix the product or test based on evidence.
 
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
+## Flaky Test Causes
+- arbitrary timeouts
+- shared mutable state
+- real network calls
+- order dependence
+- incomplete async cleanup
+- random dates/data
+- unstable selectors
 
-## Example
+## Regression Test
+If JobHub incorrectly displays Saved after a failed API request:
+1. reproduce the bug
+2. write a failing test
+3. fix the implementation
+4. keep the test
 
-```ts
-import {TestBed} from '@angular/core/testing';
+## CI Shape
 
-describe('Test Quality, Coverage, Debugging and CI', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
+~~~text
+install
+→ lint/typecheck
+→ unit tests
+→ coverage/report
+→ build
+~~~
 
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
-});
-```
-
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
-
-## Mental Model
-
-**Arrange → Act → Assert**
-
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+Use the repository's actual scripts rather than inventing commands.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
-
-## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+Introduce the failed-save bug and create the regression test before fixing it.
 
 ## Interview Questions
+1. Is 100% coverage required?
+2. What makes a test flaky?
+3. How should CI use tests?
+4. How would you investigate an intermittent failure?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can judge test quality, debug failures and integrate testing into a CI workflow.
