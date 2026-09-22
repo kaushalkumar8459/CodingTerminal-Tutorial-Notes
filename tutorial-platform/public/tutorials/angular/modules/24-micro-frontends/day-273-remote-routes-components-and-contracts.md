@@ -31,13 +31,22 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Version-Safe Remote Loading
 
-## Outcome
+The exact `loadRemoteModule` overloads and generated configuration can vary by Native Federation release. Treat the installed package's TypeScript types and current documentation as the source of truth.
 
-You can explain Remote Routes, Components and Contracts using explicit ownership, contracts, trade-offs, and production considerations.
+The architectural pattern remains stable:
+
+~~~ts
+{
+  path: 'candidate',
+  loadComponent: () =>
+    loadRemoteModule('candidate', './Component')
+      .then(m => m.AppComponent),
+}
+~~~
+
+For a remote-owned route tree, expose a routing contract and lazy-load it from the host. Keep the exposed name stable even if the remote's internal file structure changes.
+
+Do not expose arbitrary internal services, stores, or implementation files merely because federation makes them technically loadable.
