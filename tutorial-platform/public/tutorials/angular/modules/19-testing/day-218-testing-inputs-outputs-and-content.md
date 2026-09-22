@@ -1,73 +1,46 @@
----
-id: "angular-day-218"
-title: "Testing Inputs, Outputs and Content"
-slug: "testing-inputs-outputs-and-content"
-day: 218
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 218 — Testing Inputs, Outputs and Content
 
-## Goal
+## Learning Goal
+Test modern Angular component contracts using input(), output(), and content projection.
 
-Verify signal inputs, outputs, model bindings, content projection, and parent-child contracts without testing Angular internals.
+## Scenario
+A reusable JobCard receives a title, emits save, and projects help content.
 
-## Concept
+~~~ts
+@Component({
+  standalone: true,
+  template: '<article><h2>{{ title() }}</h2><button (click)="save.emit()">Save</button><ng-content /></article>',
+})
+export class JobCardComponent {
+  title = input.required<string>();
+  save = output<void>();
+}
+~~~
 
-Testing should verify **observable behavior and contracts**, not implementation details.
+## Input
+Set the public input, render, and assert the visible title.
 
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
+## Output
+Subscribe to the output, perform the user action, and assert that the parent-facing event occurred.
 
-## Example
+## Content Projection
+Use a small host component that projects realistic content. Assert that the content is visible in the composed card.
 
-```ts
-import {TestBed} from '@angular/core/testing';
-
-describe('Testing Inputs, Outputs and Content', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
-
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
-});
-```
-
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
-
-## Mental Model
-
-**Arrange → Act → Assert**
-
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+For model(), test the externally visible two-way contract when the feature uses it.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
+Build tests for a JobFilter with location input, selection output, and projected help text.
 
 ## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+- Reaching into private state.
+- Only asserting that an output exists.
+- Testing projection without a realistic host.
+- Falling back to legacy @Input/@Output in new examples.
 
 ## Interview Questions
+1. How do you test input()?
+2. What should an output test prove?
+3. Why is a host component useful for projection?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can test modern Angular component contracts as public APIs.
