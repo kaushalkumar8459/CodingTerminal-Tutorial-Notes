@@ -60,6 +60,10 @@ Document:
 - monitoring;
 - rollback plan.
 
+## SSR Async Work
+
+If the project introduces custom asynchronous work that Angular does not automatically track, evaluate whether `PendingTasks` is required so SSR does not serialize incomplete data.
+
 ## Final Review
 
 Answer:
