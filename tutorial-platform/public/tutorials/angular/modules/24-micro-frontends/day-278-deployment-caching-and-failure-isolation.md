@@ -31,13 +31,33 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Deployment Contract
 
-## Outcome
+Treat each remote as an independently deployable artifact with:
 
-You can explain Deployment, Caching and Failure Isolation using explicit ownership, contracts, trade-offs, and production considerations.
+- immutable/versioned assets where practical;
+- a compatible remote manifest;
+- cache-control appropriate for the asset type;
+- rollback to a known-compatible version;
+- health/error telemetry;
+- a host fallback.
+
+Do not deploy a host that requires a remote version that has already been deleted.
+
+## Failure Scenarios
+
+Test:
+
+- remote URL unavailable;
+- remote manifest invalid;
+- network timeout;
+- remote JavaScript failure;
+- incompatible shared dependency;
+- incompatible exposed contract.
+
+A micro frontend improves deployment independence only when the contracts and release process support that independence.
+
+## Native Federation Version Note
+
+The generated build/start/deployment artifacts are package-version-specific. Verify the installed Native Federation release's production startup instructions instead of copying an old `server.mjs`, `fstart.mjs`, or manifest workflow blindly.
