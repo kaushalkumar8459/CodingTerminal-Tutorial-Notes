@@ -36,6 +36,7 @@ source state → derived state → dependency tracking → side effects → temp
 - Use effect() only for genuine side effects.
 - Keep HTTP and httpResource() for the later HTTP module.
 - Use modern input(), output(), model(), viewChild(), and viewChildren().
+- Angular 21 note: resource() is experimental. Teach it as an advanced/experimental API and verify its status before production guidance.
 - Do not introduce RxJS, NgRx/SignalStore, or HTTP in this module.
 - Keep state ownership explicit.
 
