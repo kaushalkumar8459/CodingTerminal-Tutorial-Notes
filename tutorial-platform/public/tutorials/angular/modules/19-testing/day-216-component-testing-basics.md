@@ -1,73 +1,50 @@
----
-id: "angular-day-216"
-title: "Component Testing Basics"
-slug: "component-testing-basics"
-day: 216
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 216 — Component Testing Basics
 
-## Goal
+## Learning Goal
+Test a standalone JobCard through its rendered contract.
 
-Create standalone components in TestBed and verify component creation, templates, bindings, and basic rendering.
+## Scenario
+The card displays a title and Remote badge.
 
-## Concept
+~~~ts
+@Component({
+  standalone: true,
+  template: '<article><h2>{{ title }}</h2>@if (isRemote) { <span>Remote</span> }',
+})
+export class JobCardComponent {
+  title = 'Angular Developer';
+  isRemote = true;
+}
+~~~
 
-Testing should verify **observable behavior and contracts**, not implementation details.
+~~~ts
+fixture = TestBed.createComponent(JobCardComponent);
+fixture.detectChanges();
 
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
+expect(fixture.nativeElement.textContent).toContain('Angular Developer');
+expect(fixture.nativeElement.textContent).toContain('Remote');
+~~~
 
-## Example
+## Component Test Layers
+1. Creation — required dependencies are available.
+2. Rendering — correct UI appears for state.
+3. Interaction — user actions produce behavior.
+4. State transition — input/signal/form changes update the UI.
 
-```ts
-import {TestBed} from '@angular/core/testing';
-
-describe('Component Testing Basics', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
-
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
-});
-```
-
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
-
-## Mental Model
-
-**Arrange → Act → Assert**
-
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+Prefer importing the real standalone component. Replace only meaningful external dependencies.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
+Add a location field and test its rendered value.
 
 ## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+- Testing private methods instead of observable behavior.
+- Fragile selectors.
+- Unrelated assertions in one test.
 
 ## Interview Questions
+1. What should a component test prove?
+2. Why use ComponentFixture?
+3. Why are DOM assertions often more valuable than private method assertions?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can write a focused component test without coupling it to implementation details.
