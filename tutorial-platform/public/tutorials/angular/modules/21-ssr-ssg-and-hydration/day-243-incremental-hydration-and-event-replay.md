@@ -2,44 +2,65 @@
 
 ## Goal
 
-Understand advanced hydration for applications where the entire page does not need to become interactive immediately.
+Understand how Angular can delay hydration of deferred sections while preserving a usable server-rendered page.
 
 ## Incremental Hydration
 
-Incremental hydration works with @defer blocks so parts of an SSR application can remain dehydrated and become interactive according to their triggers. Current Angular hydration configuration enables incremental hydration by default. citeturn0search1turn0search4
+Incremental hydration builds on:
+
+- SSR;
+- hydration;
+- `@defer`;
+- hydration triggers;
+- event replay.
+
+Current Angular enables incremental hydration by default as part of `provideClientHydration()`. It can be disabled with `withNoIncrementalHydration()` when a project has a specific reason.
+
+A deferred block can use a `hydrate` trigger to control when its server-rendered content becomes hydrated on the client.
 
 ## Event Replay
 
-Event replay captures supported user events that occur before hydration completes and replays them after the relevant application code is ready. citeturn0search9
+A user can interact with visible server-rendered content before its client event listeners are ready.
 
-## Example Thinking
+Event replay captures supported events and replays them after the relevant code is hydrated.
 
-A public JobHub page might render:
+Incremental hydration enables event replay automatically. If incremental hydration is enabled, adding `withEventReplay()` separately is unnecessary.
 
-- job summary immediately;
-- reviews as deferred content;
-- advanced recommendations later.
+## Example
 
-The goal is not to defer everything. It is to keep important content available while delaying unnecessary interactivity.
+A JobHub job-detail page could:
+
+- render the job summary immediately;
+- defer recommendations;
+- defer a secondary analytics widget;
+- hydrate the recommendations only when the user reaches or interacts with that area.
+
+The important question is **what can safely remain non-interactive for a while?**
+
+## Important Distinction
+
+`@defer` is a code-loading/rendering primitive. Incremental hydration adds hydration timing to deferred content in an SSR application.
+
+Do not treat every `@defer` block as automatically appropriate for hydration deferral.
 
 ## Exercise
 
-Design a JobHub job-detail page with one immediately interactive region and two deferred regions. Explain the hydration triggers.
+Design three JobHub `@defer` regions and choose a hydration trigger for each. Explain why the primary job actions remain available.
 
 ## Common Mistakes
 
 - Deferring critical interactions.
-- Assuming every deferred component improves performance.
-- Forgetting that deferred content still needs correct server rendering.
-- Adding custom hydration configuration without understanding defaults.
+- Adding hydration triggers without understanding user interaction.
+- Assuming incremental hydration means "hydrate everything later."
+- Manually enabling event replay when the current incremental-hydration configuration already enables it.
 
 ## Interview Questions
 
 1. What is incremental hydration?
-2. How does @defer relate to hydration?
-3. What is event replay?
-4. Why might incremental hydration improve startup performance?
+2. How does `@defer` participate in incremental hydration?
+3. What problem does event replay solve?
+4. What is the current relationship between incremental hydration and event replay?
 
 ## Outcome
 
-You understand how SSR, @defer, hydration, and event replay fit together.
+You can explain and design incremental hydration without confusing it with ordinary lazy loading.
