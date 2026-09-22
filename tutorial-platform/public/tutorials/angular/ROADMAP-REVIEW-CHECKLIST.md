@@ -240,19 +240,19 @@
 - [ ] Accessibility testing
 
 ## Module 19 — Testing [!]
-- [!] Replace generic/template-like explanations with topic-specific tutorials
-- [ ] Vitest
-- [ ] TestBed
-- [ ] Service tests and dependency mocking
-- [ ] Component DOM/user interaction tests
-- [ ] Inputs/outputs/content projection
-- [ ] Signals/forms/async state
-- [ ] HTTP testing with provideHttpClientTesting() and HttpTestingController
-- [ ] Routing testing with modern utilities such as RouterTestingHarness
-- [ ] Directive/pipe/shared UI tests
-- [ ] Coverage/CI/debugging
-- [ ] Capstone tests
-- [!] Each day has a distinct realistic scenario
+- [x] Replace generic/template-like explanations with topic-specific tutorials
+- [x] Vitest
+- [x] TestBed
+- [x] Service tests and dependency mocking
+- [x] Component DOM/user interaction tests
+- [x] Inputs/outputs/content projection
+- [x] Signals/forms/async state
+- [x] HTTP testing with provideHttpClientTesting() and HttpTestingController
+- [x] Routing testing with modern utilities such as RouterTestingHarness
+- [x] Directive/pipe/shared UI tests
+- [x] Coverage/CI/debugging
+- [x] Capstone tests
+- [x] Each day has a distinct realistic scenario
 
 ## Module 20 — Performance [!]
 - [ ] Performance mental model
@@ -420,7 +420,7 @@ Every detailed day should eventually contain:
 2. [ ] Angular 21/version-sensitive API audit
 3. [x] Module 11 — Forms / Signal Forms
 4. [x] Module 18 — Angular Aria/version status
-5. [ ] Module 19 — Testing content rewrite
+5. [x] Module 19 — Testing content rewrite
 6. [ ] Module 20 — Performance/Zoneless correction
 7. [ ] Module 21 — SSR/Hydration correction
 8. [ ] Module 24 — Native Federation/version-sensitive examples
