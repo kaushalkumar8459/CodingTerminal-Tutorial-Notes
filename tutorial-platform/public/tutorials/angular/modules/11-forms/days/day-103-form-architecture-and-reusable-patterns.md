@@ -185,7 +185,7 @@ This boundary becomes especially important once HTTP and API integration are int
 
 Angular 21 introduced **Signal Forms as an experimental API**.
 
-That means Signal Forms belongs in the curriculum as an important modern Angular topic, but it must **not** be presented as the stable/default forms solution for an Angular 21 project. Angular's v21 roadmap explicitly lists Signal Forms under APIs available to experiment with. citeturn0search0turn0search1
+That means Signal Forms belongs in the curriculum as an important modern Angular topic, but it must **not** be presented as the stable/default forms solution for an Angular 21 project. Angular's v21 roadmap explicitly lists Signal Forms under APIs available to experiment with.
 
 For this Angular 21 curriculum:
 
@@ -234,7 +234,7 @@ And conceptually:
 <input type="email" [formField]="profileForm.email" />
 ```
 
-Because this API is experimental for Angular 21, treat this as an exploration example rather than the module's default production recommendation. citeturn0search2
+Because this API is experimental for Angular 21, treat this as an exploration example rather than the module's default production recommendation.
 
 ### Stable vs experimental decision
 
