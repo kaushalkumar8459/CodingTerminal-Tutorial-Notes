@@ -270,18 +270,18 @@
 - [x] Measurable before/after examples
 
 ## Module 21 — SSR, SSG & Hydration [!]
-- [ ] CSR vs SSR vs SSG
-- [ ] Angular SSR setup
-- [ ] Server routes/render modes
-- [ ] Server-compatible components
-- [ ] Prerendering
-- [ ] Hydration
-- [ ] Hydration mismatch debugging
-- [ ] Incremental hydration/event replay version awareness
-- [ ] Transfer cache/data loading
-- [ ] Caching/security boundaries
+- [x] CSR vs SSR vs SSG
+- [x] Angular SSR setup
+- [x] Server routes/render modes
+- [x] Server-compatible components
+- [x] Prerendering
+- [x] Hydration
+- [x] Hydration mismatch debugging
+- [x] Incremental hydration/event replay version awareness
+- [x] Transfer cache/data loading
+- [x] Caching/security boundaries
 - [!] Verify claims against exact Angular version
-- [ ] Explain hydration/rendering configuration constraints clearly
+- [x] Explain hydration/rendering configuration constraints clearly
 
 ## Module 22 — Security
 - [ ] XSS/sanitization/security contexts
@@ -422,7 +422,7 @@ Every detailed day should eventually contain:
 4. [x] Module 18 — Angular Aria/version status
 5. [x] Module 19 — Testing content rewrite
 6. [x] Module 20 — Performance/Zoneless correction
-7. [ ] Module 21 — SSR/Hydration correction
+7. [x] Module 21 — SSR/Hydration correction
 8. [ ] Module 24 — Native Federation/version-sensitive examples
 9. [ ] Module 26 — Interview content rewrite
 10. [ ] Cross-module duplication/dependency review
