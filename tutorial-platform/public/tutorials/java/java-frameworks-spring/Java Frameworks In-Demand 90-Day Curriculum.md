@@ -1,0 +1,96 @@
+# Java Frameworks In-Demand 90-Day Curriculum
+
+This curriculum focuses on the most in-demand Java framework stack for jobs, centered on Spring Boot and production backend development.
+
+## Day List
+
+- Day 001 [Beginner]: Java Framework Landscape and Why Spring Dominates
+- Day 002 [Beginner]: Spring Boot Setup Project Initialization and Build Tools
+- Day 003 [Beginner]: Spring Core Concepts IoC DI and Bean Lifecycle
+- Day 004 [Beginner]: Configuration with application properties and YAML
+- Day 005 [Beginner]: Creating REST API Basics with Spring MVC
+- Day 006 [Beginner]: Request Mapping Path Variables and Query Parameters
+- Day 007 [Beginner]: Request Body Response Entity and DTO Basics
+- Day 008 [Beginner]: Validation with Jakarta Validation Annotations
+- Day 009 [Beginner]: Global Exception Handling and Error Response Standards
+- Day 010 [Beginner]: Mini Project Simple CRUD REST Service
+- Day 011 [Beginner]: Spring Data JPA Basics and Repository Pattern
+- Day 012 [Beginner]: Hibernate Entity Mapping and Table Design
+- Day 013 [Beginner]: Primary Keys Generation Strategies and Auditing
+- Day 014 [Beginner]: Entity Relationships OneToOne OneToMany ManyToMany
+- Day 015 [Beginner]: Lazy vs Eager Loading and N Plus 1 Problem
+- Day 016 [Beginner]: JPQL and Derived Query Methods
+- Day 017 [Beginner]: Pagination Sorting and Filtering
+- Day 018 [Beginner]: Transactions and Propagation Basics
+- Day 019 [Beginner]: Flyway Database Migrations
+- Day 020 [Beginner]: Mini Project Product Catalog API with PostgreSQL
+- Day 021 [Intermediate]: Layered Architecture Controller Service Repository
+- Day 022 [Intermediate]: Mapping Strategies Manual vs MapStruct
+- Day 023 [Intermediate]: API Versioning and Backward Compatibility
+- Day 024 [Intermediate]: OpenAPI Swagger Documentation
+- Day 025 [Intermediate]: Spring Boot Profiles and Environment Strategy
+- Day 026 [Intermediate]: Logging Strategy with SLF4J and Logback
+- Day 027 [Intermediate]: Correlation IDs and Request Tracing
+- Day 028 [Intermediate]: Caching Basics with Spring Cache
+- Day 029 [Intermediate]: Redis Integration for Caching
+- Day 030 [Intermediate]: Mini Project Inventory API with Caching
+- Day 031 [Intermediate]: Spring Security Fundamentals
+- Day 032 [Intermediate]: Authentication with Username Password Flow
+- Day 033 [Intermediate]: Password Hashing and Account Safety Controls
+- Day 034 [Intermediate]: Authorization with Roles and Permissions
+- Day 035 [Intermediate]: JWT Authentication End to End
+- Day 036 [Intermediate]: Refresh Tokens Rotation and Revocation
+- Day 037 [Intermediate]: Method Security and Endpoint Security Rules
+- Day 038 [Intermediate]: OAuth2 Basics and Resource Server Setup
+- Day 039 [Intermediate]: CORS CSRF and Security Headers
+- Day 040 [Intermediate]: Mini Project Secure Auth Service
+- Day 041 [Intermediate]: Testing Fundamentals with JUnit 5
+- Day 042 [Intermediate]: Mocking with Mockito and Test Doubles
+- Day 043 [Intermediate]: Testing Controllers with MockMvc
+- Day 044 [Intermediate]: Data Layer Testing with Test Slices
+- Day 045 [Intermediate]: Integration Testing with Testcontainers
+- Day 046 [Intermediate]: Contract Testing Basics for API Stability
+- Day 047 [Intermediate]: Performance Testing Basics and Baselines
+- Day 048 [Intermediate]: Resilience Testing Timeout Retry Fallback
+- Day 049 [Intermediate]: Static Analysis and Quality Gates
+- Day 050 [Intermediate]: Mini Project Test Hardened Order API
+- Day 051 [Advanced]: Asynchronous Processing with @Async and Executors
+- Day 052 [Advanced]: Messaging Fundamentals Event Driven Design
+- Day 053 [Advanced]: RabbitMQ Integration with Spring AMQP
+- Day 054 [Advanced]: Kafka Producer Consumer with Spring Kafka
+- Day 055 [Advanced]: Event Versioning and Schema Evolution
+- Day 056 [Advanced]: Outbox Pattern for Reliable Event Publishing
+- Day 057 [Advanced]: Idempotency and Exactly Once Processing Patterns
+- Day 058 [Advanced]: Distributed Tracing for Event Flows
+- Day 059 [Advanced]: Saga Pattern Basics for Distributed Workflows
+- Day 060 [Advanced]: Mini Project Event Driven Checkout Workflow
+- Day 061 [Advanced]: Microservices Fundamentals and Service Boundaries
+- Day 062 [Advanced]: Inter Service Communication REST and gRPC Basics
+- Day 063 [Advanced]: Spring Cloud Config Server
+- Day 064 [Advanced]: Service Discovery with Eureka Alternatives Overview
+- Day 065 [Advanced]: API Gateway with Spring Cloud Gateway
+- Day 066 [Advanced]: Resilience4j Circuit Breaker Retry Bulkhead
+- Day 067 [Advanced]: Centralized Configuration Secrets and Vault Strategy
+- Day 068 [Advanced]: Distributed Logging and Observability Patterns
+- Day 069 [Advanced]: Rate Limiting and Traffic Shaping
+- Day 070 [Advanced]: Mini Project Microservice Suite with Gateway
+- Day 071 [Expert]: Dockerizing Spring Boot Applications Properly
+- Day 072 [Expert]: Container Security and Image Optimization
+- Day 073 [Expert]: Kubernetes Fundamentals for Spring Services
+- Day 074 [Expert]: K8s Deployments Services ConfigMaps Secrets
+- Day 075 [Expert]: Health Probes and Graceful Shutdown
+- Day 076 [Expert]: Autoscaling and Resource Tuning
+- Day 077 [Expert]: Ingress TLS and API Exposure Strategy
+- Day 078 [Expert]: Helm Basics and Release Management
+- Day 079 [Expert]: Progressive Delivery Blue Green and Canary
+- Day 080 [Expert]: Mini Project Cloud Deployable Microservices Stack
+- Day 081 [Expert]: Observability Stack Metrics Logs Traces
+- Day 082 [Expert]: Prometheus and Grafana Dashboarding
+- Day 083 [Expert]: OpenTelemetry Instrumentation in Spring Apps
+- Day 084 [Expert]: Alerting SLO Error Budget and Incident Basics
+- Day 085 [Expert]: JVM and GC Tuning for Spring Production
+- Day 086 [Expert]: SQL and Hibernate Performance Optimization
+- Day 087 [Expert]: API Performance and Caching Strategy at Scale
+- Day 088 [Expert]: Security Hardening OWASP for Spring APIs
+- Day 089 [Expert]: Compliance Auditing and Data Privacy Controls
+- Day 090 [Expert]: Final Capstone Enterprise Grade Spring Platform

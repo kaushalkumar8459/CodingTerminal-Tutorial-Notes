@@ -1,0 +1,106 @@
+﻿# React Complete 100-Day Curriculum
+
+This curriculum is organized from beginner to expert with theory, coding practice, mini projects, architecture depth, and production readiness.
+
+## Day List
+
+- Day 001: Introduction to React
+- Day 002: Environment and Project Structure
+- Day 003: JSX Fundamentals
+- Day 004: Components Basics
+- Day 005: Reusable Components
+- Day 006: Props Deep Dive
+- Day 007: Mini Project - Product Listing UI
+- Day 008: useState Introduction
+- Day 009: Managing Multiple States
+- Day 010: Object State Handling
+- Day 011: Array State Handling
+- Day 012: Event Handling
+- Day 013: Forms and Controlled Components
+- Day 014: Mini Project - Notes App
+- Day 015: Conditional Rendering
+- Day 016: List Rendering
+- Day 017: Keys and Reconciliation
+- Day 018: Dynamic Components
+- Day 019: Lifting State Up
+- Day 020: Parent-Child Communication
+- Day 021: Mini Project Todo App
+- Day 022: useEffect Basics
+- Day 023: Dependency Array
+- Day 024: Cleanup Functions
+- Day 025: API Calls with Fetch
+- Day 026: API Calls with Axios and Query Basics
+- Day 027: Loading Error and Empty States
+- Day 028: Mini Project Weather App
+- Day 029: useRef
+- Day 030: DOM Manipulation in React
+- Day 031: useMemo
+- Day 032: useCallback
+- Day 033: Custom Hooks Basics
+- Day 034: Reusable Logic Patterns
+- Day 035: Mini Project - Search and Filter App
+- Day 036: Context API Introduction
+- Day 037: createContext and Provider Setup
+- Day 038: useContext in Components
+- Day 039: Theme Management
+- Day 040: Authentication Context
+- Day 041: React Router Setup
+- Day 042: Routes and Navigation
+- Day 043: Route Parameters
+- Day 044: Nested Routes
+- Day 045: Protected Routes
+- Day 046: Lazy Loading Routes
+- Day 047: Code Splitting
+- Day 048: Mini Project - Blog App
+- Day 049: Code Review Session
+- Day 050: Redux Concepts
+- Day 051: Redux Toolkit Introduction
+- Day 052: Store Configuration
+- Day 053: createSlice Deep Dive
+- Day 054: Async Thunks
+- Day 055: RTK Query
+- Day 056: Mini Project - Shopping Cart
+- Day 057: React.memo
+- Day 058: Performance Optimization
+- Day 059: Error Boundaries
+- Day 060: Folder Structure and Best Practices
+- Day 061: React 18+ Rendering Model
+- Day 062: Suspense and Boundaries
+- Day 063: Concurrent Features
+- Day 064: TanStack Query Mutations
+- Day 065: Pagination and Infinite Query
+- Day 066: Advanced Forms with RHF + Zod
+- Day 067: Accessibility in React
+- Day 068: Profiling and Web Vitals
+- Day 069: Testing with React Testing Library
+- Day 070: Integration and E2E
+- Day 071: Error Monitoring
+- Day 072: Security Basics
+- Day 073: TypeScript Basics
+- Day 074: React + TypeScript
+- Day 075: Typed State Management
+- Day 076: Next.js Fundamentals
+- Day 077: SSR, SSG, ISR
+- Day 078: Styling Systems
+- Day 079: Frontend Architecture
+- Day 080: Capstone Review
+- Day 081: React DevTools Deep Dive
+- Day 082: useReducer for Complex State
+- Day 083: forwardRef and useImperativeHandle
+- Day 084: Memoization Pitfalls and Stale Closures
+- Day 085: Hydration and SSR Mismatch Debugging
+- Day 086: Authentication Beyond Basics
+- Day 087: API Contracts and Runtime Validation
+- Day 088: CI/CD for Frontend
+- Day 089: Release Management and SemVer
+- Day 090: Browser Compatibility Strategy
+- Day 091: Observability and Error Monitoring
+- Day 092: Web Performance Budgets
+- Day 093: Accessibility Audit Workflow
+- Day 094: Frontend Security Hardening
+- Day 095: State Strategy Design
+- Day 096: Design System Integration
+- Day 097: Large-Scale Module Architecture
+- Day 098: Micro Frontend Decision Framework
+- Day 099: Senior Machine Coding Simulation
+- Day 100: Portfolio and Interview Readiness

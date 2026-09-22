@@ -1,0 +1,105 @@
+﻿# Python Complete 99-Day Curriculum
+
+This curriculum is organized from beginner to expert with theory, practical tasks, scenarios, quizzes, and interview preparation.
+
+## Day List
+
+- Day 001 [Beginner]: Introduction to Python
+- Day 002 [Beginner]: Environment and Tooling Setup
+- Day 003 [Beginner]: Variables and Data Types
+- Day 004 [Beginner]: Input Output and Formatting
+- Day 005 [Beginner]: Operators and Expressions
+- Day 006 [Beginner]: Conditional Statements
+- Day 007 [Beginner]: Loops and Iteration
+- Day 008 [Beginner]: Functions Fundamentals
+- Day 009 [Beginner]: Mini Project CLI Calculator
+- Day 010 [Beginner]: Strings Deep Dive
+- Day 011 [Beginner]: Lists and Tuples
+- Day 012 [Beginner]: Dictionaries and Sets
+- Day 013 [Beginner]: Comprehensions
+- Day 014 [Beginner]: Error Handling Basics
+- Day 015 [Beginner]: File Handling
+- Day 016 [Beginner]: Modules and Packages
+- Day 017 [Beginner]: Virtual Environments and pip
+- Day 018 [Beginner]: Object Oriented Programming Basics
+- Day 019 [Beginner]: Classes and Objects
+- Day 020 [Beginner]: Inheritance and Polymorphism
+- Day 021 [Beginner]: Magic Methods and Dunder
+- Day 022 [Beginner]: Dataclasses and Typing
+- Day 023 [Beginner]: Iterators and Generators
+- Day 024 [Beginner]: Decorators Basics
+- Day 025 [Beginner]: Context Managers
+- Day 026 [Beginner]: Functional Tools Map Filter Reduce
+- Day 027 [Beginner]: Regular Expressions
+- Day 028 [Beginner]: Date and Time Handling
+- Day 029 [Beginner]: JSON and YAML Processing
+- Day 030 [Beginner]: Logging Fundamentals
+- Day 031 [Beginner]: Testing with pytest Basics
+- Day 032 [Beginner]: Parametrized Testing and Fixtures
+- Day 033 [Beginner]: Mocking and Patching
+- Day 034 [Beginner]: Debugging with pdb
+- Day 035 [Beginner]: Performance Profiling Basics
+- Day 036 [Intermediate]: Algorithmic Complexity in Python
+- Day 037 [Intermediate]: Recursion and Backtracking
+- Day 038 [Intermediate]: Sorting Searching Patterns
+- Day 039 [Intermediate]: Data Structures in Python
+- Day 040 [Intermediate]: Mini Project Text Analyzer
+- Day 041 [Intermediate]: Concurrency with threading
+- Day 042 [Intermediate]: Concurrency with multiprocessing
+- Day 043 [Intermediate]: Asyncio Fundamentals
+- Day 044 [Intermediate]: Async IO Patterns
+- Day 045 [Intermediate]: Networking with sockets
+- Day 046 [Intermediate]: HTTP Requests with requests
+- Day 047 [Intermediate]: Web Scraping with BeautifulSoup
+- Day 048 [Intermediate]: API Building with Flask Basics
+- Day 049 [Intermediate]: Flask Routing Templates
+- Day 050 [Intermediate]: Flask Forms and Validation
+- Day 051 [Intermediate]: Flask Database with SQLAlchemy
+- Day 052 [Intermediate]: Flask Authentication
+- Day 053 [Intermediate]: Flask Testing and Deployment
+- Day 054 [Intermediate]: FastAPI Fundamentals
+- Day 055 [Intermediate]: FastAPI Dependency Injection
+- Day 056 [Intermediate]: FastAPI Validation with Pydantic
+- Day 057 [Intermediate]: FastAPI Auth and Security
+- Day 058 [Intermediate]: FastAPI Async Database
+- Day 059 [Intermediate]: FastAPI Testing and Docs
+- Day 060 [Intermediate]: Mini Project REST API Service
+- Day 061 [Intermediate]: SQL Fundamentals for Python Developers
+- Day 062 [Intermediate]: PostgreSQL with psycopg
+- Day 063 [Intermediate]: ORM Patterns and Migrations
+- Day 064 [Intermediate]: Caching with Redis
+- Day 065 [Intermediate]: Task Queues with Celery
+- Day 066 [Intermediate]: Message Brokers and RabbitMQ
+- Day 067 [Intermediate]: Data Processing with pandas
+- Day 068 [Intermediate]: Numerical Computing with NumPy
+- Day 069 [Intermediate]: Data Visualization with Matplotlib
+- Day 070 [Intermediate]: Jupyter Notebook Workflow
+- Day 071 [Advanced]: ETL Pipeline Basics
+- Day 072 [Advanced]: Machine Learning with scikit-learn
+- Day 073 [Advanced]: Model Evaluation Basics
+- Day 074 [Advanced]: Feature Engineering Essentials
+- Day 075 [Advanced]: Packaging Python Projects
+- Day 076 [Advanced]: CLI Apps with argparse and click
+- Day 077 [Advanced]: Configuration Management
+- Day 078 [Advanced]: Secrets and Environment Strategy
+- Day 079 [Advanced]: Observability and Monitoring
+- Day 080 [Advanced]: CI CD for Python Projects
+- Day 081 [Advanced]: Docker for Python Apps
+- Day 082 [Advanced]: Kubernetes Basics for Python Services
+- Day 083 [Advanced]: Design Patterns in Python
+- Day 084 [Advanced]: Clean Architecture in Python
+- Day 085 [Advanced]: Domain Driven Design Introduction
+- Day 086 [Advanced]: Security Best Practices in Python
+- Day 087 [Advanced]: API Contract and Runtime Validation
+- Day 088 [Advanced]: Performance Tuning and C Extensions
+- Day 089 [Advanced]: Release Management and SemVer
+- Day 090 [Advanced]: Browser Automation with Playwright Python
+- Day 091 [Expert]: Distributed Systems Patterns
+- Day 092 [Expert]: Event Driven Architecture in Python
+- Day 093 [Expert]: Large Scale Codebase Refactoring
+- Day 094 [Expert]: Microservice Communication Patterns
+- Day 095 [Expert]: State Strategy for Backend Systems
+- Day 096 [Expert]: Senior System Design Simulation
+- Day 097 [Expert]: Large Scale Module Architecture
+- Day 098 [Expert]: Tech Lead Decision Framework
+- Day 099 [Expert]: Senior Machine Coding Simulation

@@ -1,0 +1,96 @@
+# Backend DevOps In-Depth 90-Day Curriculum
+
+This curriculum is focused on DevOps for backend job readiness, especially for Java and API based systems, covering deployment, automation, observability, reliability, security, and production operations.
+
+## Day List
+
+- Day 001 [Beginner]: DevOps Mindset for Backend Engineers
+- Day 002 [Beginner]: Linux Fundamentals Files Permissions Processes and Services
+- Day 003 [Beginner]: Shell Basics Navigation Pipes Variables and Scripts
+- Day 004 [Beginner]: Networking Basics Ports DNS HTTP TLS and Firewalls
+- Day 005 [Beginner]: Git Workflow Branching Pull Requests and Releases
+- Day 006 [Beginner]: Environment Variables Secrets and Config Basics
+- Day 007 [Beginner]: Build Artifacts JARs Docker Images and Registries
+- Day 008 [Beginner]: Intro to CI CD Pipelines and Deployment Flow
+- Day 009 [Beginner]: Packaging a Java App for Deployment
+- Day 010 [Beginner]: Mini Project Deploy a Simple Java Service Manually
+- Day 011 [Intermediate]: Docker Fundamentals Images Layers and Containers
+- Day 012 [Intermediate]: Writing Production Friendly Dockerfiles
+- Day 013 [Intermediate]: Docker Networking Volumes and Bind Mounts
+- Day 014 [Intermediate]: Docker Compose for Local Multi Service Setup
+- Day 015 [Intermediate]: Container Security Basics Users Base Images and Scanning
+- Day 016 [Intermediate]: Reverse Proxy with Nginx Basics
+- Day 017 [Intermediate]: TLS Certificates HTTPS and Secure Exposure
+- Day 018 [Intermediate]: Hosting Basics VM Cloud Instance and Service Managers
+- Day 019 [Intermediate]: Systemd Service Management and Process Recovery
+- Day 020 [Intermediate]: Mini Project Dockerized Java API with Reverse Proxy
+- Day 021 [Intermediate]: CI with GitHub Actions or Similar Pipeline Tool
+- Day 022 [Intermediate]: Build Test Lint Package Pipeline Stages
+- Day 023 [Intermediate]: Artifact Repositories and Versioning Strategy
+- Day 024 [Intermediate]: Deployment Strategies Rolling Blue Green Canary Basics
+- Day 025 [Intermediate]: Database Migration in Deployment Pipelines
+- Day 026 [Intermediate]: Secrets Management Vault Cloud Secret Stores Basics
+- Day 027 [Intermediate]: Infrastructure as Code Fundamentals
+- Day 028 [Intermediate]: Terraform Basics Providers State and Modules
+- Day 029 [Intermediate]: Terraform for Network Compute and Database Resources
+- Day 030 [Intermediate]: Mini Project Automated CI CD for Java Backend
+- Day 031 [Advanced]: Kubernetes Fundamentals Pods Deployments Services
+- Day 032 [Advanced]: ConfigMaps Secrets and Environment Injection
+- Day 033 [Advanced]: Ingress Controllers and External Exposure
+- Day 034 [Advanced]: Probes Readiness Liveness Startup and Graceful Shutdown
+- Day 035 [Advanced]: Resource Requests Limits and Right Sizing
+- Day 036 [Advanced]: Horizontal Pod Autoscaling and Scaling Signals
+- Day 037 [Advanced]: Persistent Volumes Stateful Workloads and Storage Basics
+- Day 038 [Advanced]: Helm Fundamentals and Chart Structure
+- Day 039 [Advanced]: Helm Values Environment Overrides and Release Strategy
+- Day 040 [Advanced]: Mini Project Deploy Java Backend to Kubernetes
+- Day 041 [Advanced]: Logging Foundations Application Infra and Access Logs
+- Day 042 [Advanced]: Centralized Logging with ELK or OpenSearch Concepts
+- Day 043 [Advanced]: Metrics Fundamentals Golden Signals and RED Method
+- Day 044 [Advanced]: Prometheus Fundamentals Scraping and Exporters
+- Day 045 [Advanced]: Grafana Dashboards Alerts and Visualization Strategy
+- Day 046 [Advanced]: Tracing Fundamentals Spans Context and Latency Breakdown
+- Day 047 [Advanced]: OpenTelemetry Basics for Backend Services
+- Day 048 [Advanced]: Alerting Incident Severity and Escalation Basics
+- Day 049 [Advanced]: SLO SLA SLI and Error Budget Thinking
+- Day 050 [Advanced]: Mini Project Observability for Production Like Service
+- Day 051 [Advanced]: Cloud Basics AWS Core Services for Backend Teams
+- Day 052 [Advanced]: Compute Options VM Containers Serverless Tradeoffs
+- Day 053 [Advanced]: Managed Databases Backups and Security Groups
+- Day 054 [Advanced]: Load Balancers Auto Scaling and Network Design
+- Day 055 [Advanced]: Object Storage CDN and Static Asset Delivery
+- Day 056 [Advanced]: Identity Access Management Least Privilege Basics
+- Day 057 [Advanced]: Cloud Cost Basics Tagging Budgets and Waste Control
+- Day 058 [Advanced]: Disaster Recovery and Backup Planning
+- Day 059 [Advanced]: Multi Environment Promotion Dev QA Stage Prod
+- Day 060 [Advanced]: Mini Project Cloud Hosted Java Platform Baseline
+- Day 061 [Expert]: Advanced Kubernetes Scheduling Networking and Policies
+- Day 062 [Expert]: GitOps Fundamentals and ArgoCD or Flux Concepts
+- Day 063 [Expert]: Progressive Delivery Service Mesh and Traffic Splitting
+- Day 064 [Expert]: Reliability Engineering Incident Response and Runbooks
+- Day 065 [Expert]: Capacity Planning Load Testing and Bottleneck Analysis
+- Day 066 [Expert]: Performance Tuning for JVM Services in Containers
+- Day 067 [Expert]: Security Hardening Supply Chain CVE and Dependency Strategy
+- Day 068 [Expert]: Container Runtime and Kubernetes Security Controls
+- Day 069 [Expert]: Compliance Logging Audit Trails and Retention
+- Day 070 [Expert]: Zero Downtime Release Engineering Patterns
+- Day 071 [Expert]: Database Operations Replication Failover and Maintenance Windows
+- Day 072 [Expert]: Queue and Broker Operations for Production Systems
+- Day 073 [Expert]: Backup Drills Restore Verification and Game Days
+- Day 074 [Expert]: Multi Region Deployment and Traffic Failover Strategy
+- Day 075 [Expert]: FinOps Cost Optimization at Architecture Level
+- Day 076 [Expert]: Platform Engineering Concepts for Backend Teams
+- Day 077 [Expert]: Developer Experience Tooling Templates and Standards
+- Day 078 [Expert]: Operational Excellence Review of a Java Service
+- Day 079 [Expert]: Production Readiness Review Checklist
+- Day 080 [Expert]: Capstone Part 1 Design Full Deployment Architecture
+- Day 081 [Expert]: Capstone Part 2 Build CI CD and IaC Assets
+- Day 082 [Expert]: Capstone Part 3 Deploy Service with Observability
+- Day 083 [Expert]: Capstone Part 4 Secure Service and Secrets Flow
+- Day 084 [Expert]: Capstone Part 5 Scale Test and Tune JVM plus Infra
+- Day 085 [Expert]: Mock Interview Round 1 DevOps Fundamentals
+- Day 086 [Expert]: Mock Interview Round 2 Kubernetes and Cloud
+- Day 087 [Expert]: Mock Interview Round 3 Incident and Reliability Scenario
+- Day 088 [Expert]: Final Revision of 30 Production Operations Patterns
+- Day 089 [Expert]: Full Production Simulation Failure Recovery Drill
+- Day 090 [Expert]: Final Job Ready DevOps Review for Backend Engineers

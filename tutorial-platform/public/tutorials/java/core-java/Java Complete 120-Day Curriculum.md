@@ -1,0 +1,132 @@
+# Java Complete 120-Day Curriculum (with 6 Alternative Topics)
+
+This curriculum is organized from beginner to expert with theory, coding practice, mini projects, revision checkpoints, and deep Java language plus JVM mastery.
+
+**Note**: At 6 specific days, you have options between two different topics (\_1 for original, \_2 for alternative). Choose based on your interests.
+
+## Day List
+
+- Day 001 [Beginner]: What is Java and Where It Is Used
+- Day 002 [Beginner]: Environment Setup JDK IDE and Project Structure
+- Day 003 [Beginner]: First Java Program and Compilation Flow
+- Day 004 [Beginner]: Variables Data Types and Type Casting
+- Day 005 [Beginner]: Operators and Expressions
+- Day 006 [Beginner]: Input Output with Scanner and Formatting
+- Day 007 [Beginner]: Conditional Statements if else switch
+- Day 008 [Beginner]: Loops for while do while
+- Day 009 [Beginner]: break continue and Nested Loops
+- Day 010 [Beginner]: Methods Basics Parameters and Return Types
+- Day 011 [Beginner]: Method Overloading and Scope Rules
+- Day 012 [Beginner]: Arrays One Dimensional
+- Day 013 [Beginner]: Arrays Two Dimensional
+- Day 014 [Beginner]: Strings Fundamentals and Immutability
+- Day 015 [Beginner]: StringBuilder StringBuffer and Common String Problems
+- **Day 016_1** [Beginner]: Introduction to OOP and Class Design
+- **Day 016_2** [Beginner]: Regular Expressions and Pattern Matching ✨ ALTERNATIVE
+- Day 017 [Beginner]: Constructors this and Object Lifecycle
+- Day 018 [Beginner]: Encapsulation and Access Modifiers
+- Day 019 [Beginner]: Inheritance Basics and Code Reuse
+- Day 020 [Beginner]: Polymorphism Method Overriding
+- Day 021 [Beginner]: Abstraction Abstract Class and Interface
+- Day 022 [Beginner]: Interface Design Best Practices
+- Day 023 [Beginner]: static final and Utility Class Patterns
+- Day 024 [Beginner]: Packages Imports and Code Organization
+- Day 025 [Beginner]: Exception Handling try catch finally
+- Day 026 [Beginner]: throw throws and Custom Exceptions
+- Day 027 [Beginner]: Java Memory Basics Stack Heap and References
+- Day 028 [Beginner]: Wrapper Classes Autoboxing and Unboxing
+- Day 029 [Beginner]: Enum and Date Time API Basics
+- Day 030 [Beginner]: Mini Project Student Management Console App
+- Day 031 [Intermediate]: Generics Basics Type Safety and Reusability
+- Day 032 [Intermediate]: Java Collections Framework Overview
+- Day 033 [Intermediate]: List Set and Queue Implementations
+- Day 034 [Intermediate]: Map Implementations HashMap LinkedHashMap TreeMap
+- Day 035 [Intermediate]: Comparable Comparator and Sorting Strategies
+- Day 036 [Intermediate]: Iterators and Enhanced for Loop Internals
+- Day 037 [Intermediate]: Functional Interfaces and Lambda Expressions
+- Day 038 [Intermediate]: Method References and Built-in Functional Interfaces
+- Day 039 [Intermediate]: Stream API Fundamentals
+- Day 040 [Intermediate]: Stream Intermediate and Terminal Operations
+- Day 041 [Intermediate]: Optional API and Null Safety Patterns
+- Day 042 [Intermediate]: File Handling with java.io and java.nio
+- Day 043 [Intermediate]: Serialization and Deserialization
+- Day 044 [Intermediate]: Multithreading Basics Thread Runnable and Lifecycle
+- Day 045 [Intermediate]: Synchronization Locks and Thread Safety
+- Day 046 [Intermediate]: Executor Framework and Thread Pools
+- Day 047 [Intermediate]: Concurrency Utilities Future Callable and CompletableFuture
+- Day 048 [Intermediate]: Producer Consumer and Concurrent Collections
+- Day 049 [Intermediate]: Reflection API and Annotations Basics
+- Day 050 [Intermediate]: Build Tools Maven Fundamentals
+- Day 051 [Intermediate]: Build Tools Gradle Fundamentals
+- Day 052 [Intermediate]: Logging with SLF4J and Logback
+- Day 053 [Intermediate]: Unit Testing with JUnit 5 Basics
+- Day 054 [Intermediate]: Mocking with Mockito Basics
+- Day 055 [Intermediate]: Test Design Patterns and Coverage Strategy
+- Day 056 [Intermediate]: JDBC Fundamentals and Database Connectivity
+- **Day 057_1** [Intermediate]: JDBC CRUD and PreparedStatement Best Practices
+- **Day 057_2** [Intermediate]: SQL Fundamentals and Database Design ✨ ALTERNATIVE
+- Day 058 [Intermediate]: Transactions in JDBC and Error Recovery
+- Day 059 [Intermediate]: Connection Pooling with HikariCP
+- Day 060 [Intermediate]: Mini Project JDBC Based Banking System
+- Day 063 [Advanced]: Java Modules JPMS and Modular Design
+- Day 064 [Advanced]: Class Loaders Delegation Model and Custom Loaders
+- Day 065 [Advanced]: Bytecode Fundamentals and javap Analysis
+- Day 066 [Advanced]: Annotation Processing and Compile Time Code Generation
+- Day 067 [Advanced]: Reflection Deep Dive and Performance Considerations
+- Day 068 [Advanced]: Records Sealed Classes and Pattern Matching
+- Day 069 [Advanced]: Advanced Generics Wildcards Bounds and Type Erasure
+- Day 070 [Advanced]: Functional Style in Java with Streams Best Practices
+- Day 071 [Advanced]: Collector Design and Custom Collectors
+- Day 072 [Advanced]: Optional Design Patterns and Null Safety Architecture
+- Day 073 [Advanced]: NIO Channels Buffers and Selectors
+- Day 074 [Advanced]: Memory Mapped Files Zero Copy and Foreign Function and Memory API Project Panama
+- Day 075 [Advanced]: Java Networking Sockets UDP TCP and Protocol Basics
+- Day 076 [Advanced]: HTTP Client API and Resilient Client Patterns
+- Day 077 [Advanced]: Secure Coding with Java Cryptography Architecture Basics
+- Day 078 [Advanced]: Keystores Certificates TLS and Secure Communication
+- Day 079 [Advanced]: Serialization Risks and Safe Serialization Strategies
+- Day 080 [Advanced]: Concurrency Deep Dive Locks Atomics and Volatile
+- Day 081 [Advanced]: java.util.concurrent Advanced Executors and Scheduling
+- Day 082 [Advanced]: CompletableFuture Composition and Error Recovery
+- Day 083 [Advanced]: Thread Dump Analysis and Deadlock Diagnostics
+- **Day 084_1** [Advanced]: Advanced Logging Strategy with SLF4J and Logback
+- **Day 084_2** [Advanced]: Debugging Techniques and Diagnostic Tools ✨ ALTERNATIVE
+- Day 085 [Advanced]: Benchmarking with JMH and Performance Methodology
+- Day 086 [Advanced]: Profiling CPU Memory and Allocation Hotspots
+- Day 087 [Advanced]: Garbage Collection Algorithms and Advanced JVM Command Line Tuning XX Flags and Xlog
+- Day 088 [Advanced]: Escape Analysis Inlining JIT Optimization Signals and Vector API SIMD Basics
+- Day 089 [Advanced]: Virtual Threads Structured Concurrency and Scoped Values Modern ThreadLocal Alternative
+- Day 090 [Advanced]: Mini Project High Throughput Concurrent Processing Engine
+- Day 091 [Expert]: JVM Internals Runtime Data Areas and Execution Engine
+- Day 092 [Expert]: Garbage Collector Deep Dive G1 ZGC Shenandoah Tradeoffs
+- Day 093 [Expert]: Metaspace Native Memory and Off Heap Diagnostics
+- Day 094 [Expert]: Java Flight Recorder and Mission Control Workflows
+- Day 095 [Expert]: Building and Packaging with jlink and jpackage
+- **Day 096_1** [Expert]: GraalVM Native Images and Startup Time Optimization
+- **Day 096_2** [Expert]: Docker Containerization and Deployment ✨ ALTERNATIVE
+- Day 097 [Expert]: Advanced Testing Property Based Mutation and Contract Tests
+- Day 098 [Expert]: Build Engineering with Maven and Gradle at Scale
+- Day 099 [Expert]: Dependency Management BOM Strategy and Reproducible Builds
+- Day 100 [Expert]: Java Security Hardening OWASP and Secret Handling
+- Day 101 [Expert]: Domain Modeling and Ubiquitous Language in Java
+- Day 102 [Expert]: Design Patterns Revisited with Modern Java Features
+- Day 103 [Expert]: Clean Architecture in Pure Java Applications
+- Day 104 [Expert]: Hexagonal Architecture Ports Adapters and Testability
+- Day 105 [Expert]: Event Driven Design in Core Java without Framework Coupling
+- Day 106 [Expert]: API Design Principles for Java Libraries and SDKs
+- **Day 107_1** [Expert]: Backward Compatibility Semantic Versioning and Deprecation Plans
+- **Day 107_2** [Expert]: REST API Design Principles and Best Practices ✨ ALTERNATIVE
+- Day 108 [Expert]: Multi Module Project Strategy and Internal Package Governance
+- Day 109 [Expert]: Code Quality Static Analysis and Refactoring at Scale
+- **Day 110_1** [Expert]: Legacy Java Modernization from Java 8 to Latest LTS
+- **Day 110_2** [Expert]: Configuration Management Patterns and Strategies ✨ ALTERNATIVE
+- Day 111 [Expert]: Internationalization Unicode and Locale Aware Design
+- Day 112 [Expert]: Date Time Edge Cases Time Zones and Clock Abstractions
+- Day 113 [Expert]: Robust Error Taxonomy and Failure Modeling in Java Systems
+- Day 114 [Expert]: Resilience Patterns Retries Timeouts Circuit Breakers in Plain Java
+- Day 115 [Expert]: Observability Foundations Metrics Traces and Structured Logs
+- Day 116 [Expert]: CLI Tooling in Java picocli and Distribution Patterns
+- Day 117 [Expert]: Data Processing Pipelines in Java Batch and Streaming Basics
+- Day 118 [Expert]: Advanced File Formats CSV JSON Parquet Integration Concepts
+- Day 119 [Expert]: Capstone Pure Java Enterprise Grade Application Implementation
+- Day 120 [Expert]: Capstone Review Hardening Documentation and Production Checklist

@@ -1,0 +1,415 @@
+﻿---
+title: React + TypeScript
+slug: day-074-react-typescript
+dayLabel: Day 74
+level: Advanced
+estimatedMinutes: 30
+order: 74
+track: react
+---
+
+# Day 74 [Advanced]: React + TypeScript
+
+## Goal
+
+Type React components end-to-end, including props, state, events, and hooks for production-grade reliability.
+
+## Prerequisites
+
+- Day 73 completed
+- Comfort with TypeScript basics and React component patterns
+
+## Explanation
+
+React + TypeScript improves UI contract safety by validating component props and internal state transitions at compile time. It is especially valuable at component boundaries, where incorrect props, event assumptions, and reusable abstractions can otherwise become runtime defects.
+
+TypeScript does not replace runtime validation. Data received from APIs, local storage, URL parameters, or users can still be malformed, so external data should be validated before it is treated as a trusted domain model.
+
+## Topic by Topic
+
+### Topic 1: Typed Props
+
+Theory:
+Props should be explicit contracts.
+
+Practical:
+Define component props interface.
+
+Code Example:
+
+```tsx
+type CardProps = {
+  title: string;
+  onOpen: () => void;
+};
+
+function Card({ title, onOpen }: CardProps) {
+  return <button onClick={onOpen}>{title}</button>;
+}
+```
+
+**Explanation:** Typed props turn a component API into an explicit contract, which reduces misuse and improves autocomplete.
+
+**Key Points:**
+
+- Type props for every reusable component.
+- Keep prop names and types intentional.
+- Catch missing or wrong props early.
+- Prefer narrow prop contracts over passing large unrelated objects.
+
+### Topic 2: Typed State and Setters
+
+Theory:
+State type inference is useful but explicit unions improve clarity.
+
+Practical:
+Type nullable and union state.
+
+Code Example:
+
+```tsx
+const [mode, setMode] = useState<"view" | "edit">("view");
+const [selectedId, setSelectedId] = useState<string | null>(null);
+```
+
+**Explanation:** Explicit state types are especially helpful for nullable values, unions, and complex feature modes.
+
+**Key Points:**
+
+- Let inference help when simple.
+- Add explicit types when state meaning matters.
+- Use unions to model allowed UI states.
+- Keep state transitions aligned with the actual domain states.
+
+### Topic 3: Typed Events
+
+Theory:
+Event generics prevent incorrect target access.
+
+Practical:
+Type form and input handlers.
+
+Code Example:
+
+```tsx
+const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  setName(e.target.value);
+
+const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+};
+```
+
+**Explanation:** Typed events tell TypeScript exactly which element triggered the handler, so field access stays safe.
+
+**Key Points:**
+
+- Type form and input events directly.
+- Avoid guessing event target shape.
+- Use React event generics consistently.
+- Type the event according to the actual element rather than using a broad event type.
+
+### Topic 4: Typed Custom Hooks
+
+Theory:
+Hooks should expose typed return contracts.
+
+Practical:
+Define hook return type for reusable logic.
+
+Code Example:
+
+```tsx
+type ToggleResult = {
+  enabled: boolean;
+  toggle: () => void;
+};
+
+function useToggle(initial = false): ToggleResult {
+  // implementation omitted
+  return { enabled: initial, toggle: () => {} };
+}
+```
+
+**Explanation:** Custom hooks are easier to reuse when their return shape is obvious and stable.
+
+**Key Points:**
+
+- Type hook parameters and return values.
+- Keep hook contracts small and predictable.
+- Improve consumer confidence with explicit signatures.
+- Expose only the state and actions consumers actually need.
+
+### Topic 5: Generic Components
+
+Theory:
+Generics support reusable typed UI abstractions.
+
+Practical:
+Build typed list component.
+
+Code Example:
+
+```tsx
+function List<T>({
+  items,
+  renderItem,
+}: {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+}) {
+  return <div>{items.map(renderItem)}</div>;
+}
+```
+
+**Explanation:** Generics let one component stay reusable without losing type safety for the specific data it renders.
+
+**Key Points:**
+
+- Use generics for reusable abstractions.
+- Preserve type information across props.
+- Avoid falling back to `any` in shared UI.
+- Keep generic APIs simple enough for consumers to understand.
+
+### Topic 6: Scalability Decisions for React + TypeScript
+
+Theory:
+As projects grow, architectural and typing decisions should optimize team velocity, change safety, and long-term consistency.
+
+Practical:
+Document one design decision for this topic with tradeoff notes so future contributors understand why it was chosen.
+
+Code Example:
+
+```tsx
+// types/user.ts
+export interface User {
+  id: string;
+  name: string;
+}
+
+// Keep domain types close to their domain and reuse them at module boundaries.
+```
+
+**Explanation:** Typed React systems grow better when conventions are shared. Architecture notes keep the team aligned on prop, hook, and model patterns.
+
+**Key Points:**
+
+- Document team typing patterns.
+- Note tradeoffs for strictness versus speed.
+- Keep React and TS conventions easy to follow.
+- Avoid creating one giant global type file that becomes a dependency hotspot.
+
+## Key Concepts
+
+- Typed props contracts
+- Stateful union safety
+- Event typing correctness
+- Hook return signatures
+- Generic reusable components
+- Runtime validation at external boundaries
+- Strict TypeScript integration
+- Scalable architecture thinking
+
+## Visual Concept Map
+
+```mermaid
+flowchart LR
+		A[Typed Props] --> B[Typed Component]
+		B --> C[Typed State + Events]
+		C --> D[Typed Hooks]
+		D --> E[Safer Feature Module]
+```
+
+## End-to-End Practical
+
+1. Select one feature built in plain JS React.
+2. Convert components to `.tsx`.
+3. Type props, events, and local state.
+4. Add typed custom hooks and utility helpers.
+5. Replace avoidable `any` usage with precise types or `unknown` where appropriate.
+6. Validate external data before mapping it into trusted application models.
+7. Ensure zero implicit-any warnings and run the type checker in CI.
+
+## Hands-on Coding
+
+### Example 1: Case - Typed Product Card Component
+
+Scenario:
+A marketplace card requires strict props to prevent rendering invalid product data.
+
+```tsx
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+};
+
+type ProductCardProps = {
+  product: Product;
+  onAdd: (id: string) => void;
+};
+
+function ProductCard({ product, onAdd }: ProductCardProps) {
+  return (
+    <div>
+      <h3>{product.name}</h3>
+      <p>{product.price}</p>
+      <button onClick={() => onAdd(product.id)}>Add</button>
+    </div>
+  );
+}
+```
+
+### Example 2: Case - Typed Form Event Handling
+
+Scenario:
+A profile edit form should update typed state safely.
+
+```tsx
+function ProfileEditor() {
+  const [name, setName] = React.useState<string>("");
+
+  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  return <input value={name} onChange={onNameChange} />;
+}
+```
+
+### Example 3: Case - Generic Table Component
+
+Scenario:
+A reporting feature needs one reusable table for different row types.
+
+```tsx
+type GenericTableProps<T> = {
+  rows: T[];
+  renderRow: (row: T, index: number) => React.ReactNode;
+};
+
+function GenericTable<T>({ rows, renderRow }: GenericTableProps<T>) {
+  return <div>{rows.map((row, i) => renderRow(row, i))}</div>;
+}
+```
+
+## Mini Exercise
+
+Scenario:
+You are converting an inventory management feature from JSX to TSX.
+
+Type all props, component state, event handlers, and one reusable generic list/table component. Also identify any external data boundary that needs runtime validation before the data is used by the typed components.
+
+Expected output:
+
+- Feature compiles with strict checks
+- Runtime prop mismatch risks are reduced
+- Shared UI abstraction supports multiple typed models
+- External input is validated separately from compile-time typing
+
+## Assessment Quiz
+
+### Quiz Questions
+
+1. Why explicitly type component props?
+2. What is a common benefit of event typing?
+3. True or False: Generics are only for backend code.
+4. Why type custom hook return values?
+5. What does an implicit any warning indicate?
+6. When should you use a union type for React state?
+7. True or False: TypeScript props automatically validate API data at runtime.
+8. When is a generic component a better choice than duplicating components for each model?
+
+### Quiz Answers
+
+1. Enforces clear component contracts.
+2. Prevents invalid event target usage and improves safe access to element-specific properties.
+3. False.
+4. It makes the hook's public contract clear and helps consumers use its output correctly.
+5. Missing type information that weakens compile-time safety.
+6. When the state has a finite, known set of valid modes or values.
+7. False. TypeScript types are compile-time constructs and do not validate arbitrary runtime data.
+8. When the UI behavior is shared while the data model varies and the generic API can preserve the required type information.
+
+## Task
+
+- Convert one complete feature to typed React
+- Add types for props/state/events/hooks
+- Replace avoidable `any` usage
+- Identify one runtime validation boundary
+- Complete mini exercise
+
+## Self Check
+
+- You can build strongly typed React components
+- You can design reusable typed abstractions
+- You understand compile-time typing versus runtime validation
+- You can choose appropriate types for props, state, events, and hooks
+- You can answer at least 6 out of 8 quiz questions correctly
+
+## Interview Questions and Answers
+
+### Beginner
+
+**Question:** What extension is commonly used for typed React components?
+
+**Answer:** `.tsx` for JSX with TypeScript.
+
+**Question:** Why type props?
+
+**Answer:** To prevent invalid data contracts between parent and child components.
+
+### Middle
+
+**Question:** How do you type an input change handler?
+
+**Answer:** Use `React.ChangeEvent<HTMLInputElement>`.
+
+**Question:** When should state union types be used?
+
+**Answer:** When state can be one of a finite set of modes.
+
+### Advanced
+
+**Question:** What is a key design advantage of generic UI components?
+
+**Answer:** Reusability across data models while preserving type safety.
+
+**Question:** How can teams enforce typed React quality at scale?
+
+**Answer:** Strict compiler rules, linting, and type checks in CI.
+
+**Question:** Why doesn't a TypeScript prop type validate an API response at runtime?
+
+**Answer:** TypeScript types are erased during compilation. Runtime data must be validated independently before it is trusted.
+
+**Question:** When should you avoid a generic component?
+
+**Answer:** When the abstraction is more complex than the repeated UI or when the generic API becomes difficult for consumers to understand. Duplication can sometimes be clearer than an overly generic component.
+
+## Day 74 Outcome
+
+- You can ship production-style typed React features
+- You can reduce integration bugs through compile-time contracts
+- You can design reusable generic components without sacrificing type safety
+- You understand the boundary between compile-time types and runtime validation
+- You are ready for typed global state in Day 75
+
+## Interview Notes (Quick Revision)
+
+- Type props explicitly (`interface Props { title: string; onSelect: (id: string) => void }`) rather than relying on inference for a component's public contract.
+- Type union-based state carefully (e.g., `{ status: "idle" } | { status: "success"; data: T }`) so each state variant only has the fields that make sense for it.
+- Type event handlers using React's built-in event types (`React.ChangeEvent<HTMLInputElement>`) instead of `any`.
+- Generic components (e.g., a reusable `<List<T>>`) let you keep strong typing while still being reusable across different data shapes.
+- Compile-time types don't validate real runtime data — still validate external API responses at the boundary.
+
+**Rapid-fire answers**
+
+| Question                                | One-line Answer                                    |
+| --------------------------------------- | -------------------------------------------------- |
+| How should component props be typed?    | An explicit `interface`/`type`, not just inference |
+| Why type union-based state per variant? | Each state shape only carries relevant fields      |
+| How to type a change event handler?     | `React.ChangeEvent<HTMLInputElement>`              |
+| What do generics enable for components? | Reusability across types without losing safety     |
+| Do prop types validate real API data?   | No, still validate at runtime                      |

@@ -1,0 +1,96 @@
+# SQL and Database Design In-Depth 90-Day Curriculum
+
+This curriculum is focused on SQL and database design for backend job readiness, from foundations to performance tuning, data modeling, transactions, scaling, and production database thinking.
+
+## Day List
+
+- Day 001 [Beginner]: Why SQL and Database Design Matter for Backend Roles
+- Day 002 [Beginner]: Relational Database Fundamentals Tables Rows Columns and Keys
+- Day 003 [Beginner]: Installing PostgreSQL and Setting Up Practice Environment
+- Day 004 [Beginner]: Basic SQL SELECT FROM WHERE ORDER BY
+- Day 005 [Beginner]: Filtering Operators LIKE IN BETWEEN IS NULL
+- Day 006 [Beginner]: Aggregate Functions COUNT SUM AVG MIN MAX
+- Day 007 [Beginner]: GROUP BY HAVING and Common Mistakes
+- Day 008 [Beginner]: Aliases Expressions and CASE Statements
+- Day 009 [Beginner]: INSERT UPDATE DELETE Basics
+- Day 010 [Beginner]: Constraints Primary Key Unique Not Null Check Default
+- Day 011 [Beginner]: Foreign Keys and Referential Integrity
+- Day 012 [Beginner]: One to One One to Many Many to Many Modeling
+- Day 013 [Beginner]: JOIN Basics Inner Left Right Full Cross
+- Day 014 [Beginner]: Self Join and Practical Relationship Queries
+- Day 015 [Beginner]: Subqueries and Correlated Subqueries
+- Day 016 [Beginner]: UNION UNION ALL INTERSECT and EXCEPT
+- Day 017 [Beginner]: Views and Their Use Cases
+- Day 018 [Beginner]: Data Types Numeric Text Boolean Date Time JSON
+- Day 019 [Beginner]: Normalization First Second Third Normal Form
+- Day 020 [Beginner]: Mini Project Basic Employee and Department Database
+- Day 021 [Intermediate]: Schema Design for Real Business Domains
+- Day 022 [Intermediate]: Denormalization and Tradeoffs
+- Day 023 [Intermediate]: Surrogate Keys vs Natural Keys
+- Day 024 [Intermediate]: Composite Keys and Junction Tables
+- Day 025 [Intermediate]: Index Fundamentals B Tree Hash and Use Cases
+- Day 026 [Intermediate]: How Query Planners Think at High Level
+- Day 027 [Intermediate]: Reading EXPLAIN and EXPLAIN ANALYZE
+- Day 028 [Intermediate]: Covering Indexes and Index Selectivity
+- Day 029 [Intermediate]: Common Query Anti Patterns
+- Day 030 [Intermediate]: SQL Problem Solving Session 1
+- Day 031 [Intermediate]: Window Functions Row Number Rank Dense Rank
+- Day 032 [Intermediate]: Lead Lag and Running Aggregates
+- Day 033 [Intermediate]: CTEs Recursive Queries and Hierarchical Data
+- Day 034 [Intermediate]: String Functions Date Functions and Data Cleanup Queries
+- Day 035 [Intermediate]: Transactions ACID and Commit Rollback Basics
+- Day 036 [Intermediate]: Isolation Levels Dirty Read Non Repeatable Read Phantom Read
+- Day 037 [Intermediate]: Locking Pessimistic vs Optimistic Control
+- Day 038 [Intermediate]: Deadlocks Detection Prevention and Resolution
+- Day 039 [Intermediate]: Stored Procedures Functions and Triggers Overview
+- Day 040 [Intermediate]: Mini Project Order and Inventory Database
+- Day 041 [Advanced]: Designing Databases for E Commerce Systems
+- Day 042 [Advanced]: Designing Databases for Booking and Scheduling Systems
+- Day 043 [Advanced]: Designing Databases for Payment and Ledger Systems
+- Day 044 [Advanced]: Audit Tables Soft Delete and Data History Patterns
+- Day 045 [Advanced]: Multi Tenant Database Design Strategies
+- Day 046 [Advanced]: Partitioning Basics Range Hash List and Tradeoffs
+- Day 047 [Advanced]: Replication Read Replicas and Failover Basics
+- Day 048 [Advanced]: Backup Restore PITR and Recovery Planning
+- Day 049 [Advanced]: Data Archival Retention and Compliance Thinking
+- Day 050 [Advanced]: SQL Problem Solving Session 2
+- Day 051 [Advanced]: Query Tuning Joins Sorting and Aggregation Optimization
+- Day 052 [Advanced]: Pagination Offset vs Keyset Pagination
+- Day 053 [Advanced]: Designing for High Write Systems
+- Day 054 [Advanced]: Designing for High Read Systems
+- Day 055 [Advanced]: Materialized Views and Precomputation Patterns
+- Day 056 [Advanced]: Connection Pooling and Database Resource Management
+- Day 057 [Advanced]: ORM Generated SQL Smells and Debugging Strategy
+- Day 058 [Advanced]: Migration Strategy Flyway Liquibase and Zero Downtime Changes
+- Day 059 [Advanced]: Data Consistency Between Services and Databases
+- Day 060 [Advanced]: Mini Project Analytics Friendly Reporting Schema
+- Day 061 [Expert]: PostgreSQL Internals Pages VACUUM MVCC Overview
+- Day 062 [Expert]: MVCC Deep Dive and Visibility Thinking
+- Day 063 [Expert]: WAL Replication and Recovery Concepts
+- Day 064 [Expert]: Advanced Indexing Partial Functional and Multicolumn Indexes
+- Day 065 [Expert]: JSONB Modeling and Querying in PostgreSQL
+- Day 066 [Expert]: Full Text Search Basics in PostgreSQL
+- Day 067 [Expert]: Time Series and Event Data Modeling Patterns
+- Day 068 [Expert]: CDC and Change Data Capture Pipeline Concepts
+- Day 069 [Expert]: OLTP vs OLAP and Warehouse Thinking
+- Day 070 [Expert]: Star Schema Snowflake Schema and Dimensional Modeling
+- Day 071 [Expert]: Data Governance Catalog Lineage and Ownership
+- Day 072 [Expert]: Security Roles Grants Row Level Security and Masking
+- Day 073 [Expert]: Secrets Rotation Encryption at Rest and In Transit
+- Day 074 [Expert]: Database Observability Metrics Slow Queries and Alerts
+- Day 075 [Expert]: Cost and Storage Optimization Strategy
+- Day 076 [Expert]: NoSQL Comparison When Not to Use SQL and Hybrid Design
+- Day 077 [Expert]: Redis as Cache Not Database and Consistency Concerns
+- Day 078 [Expert]: Event Sourcing Storage Models and Query Side Datastores
+- Day 079 [Expert]: Sharding Strategy Hot Keys and Rebalancing
+- Day 080 [Expert]: Global Data Design Regions Latency and Compliance
+- Day 081 [Expert]: Schema Review Drill User Identity and Access System
+- Day 082 [Expert]: Schema Review Drill Marketplace and Order Domain
+- Day 083 [Expert]: Schema Review Drill Payments and Ledger Domain
+- Day 084 [Expert]: Query Review Drill Top 25 Backend SQL Patterns
+- Day 085 [Expert]: Performance Review Drill Tuning a Slow Production Query
+- Day 086 [Expert]: Migration Review Drill Breaking vs Safe Schema Changes
+- Day 087 [Expert]: Mock Interview Round 1 SQL Fundamentals
+- Day 088 [Expert]: Mock Interview Round 2 Database Design
+- Day 089 [Expert]: Mock Interview Round 3 Performance and Scaling
+- Day 090 [Expert]: Final Capstone Database Architecture Review and Job Readiness

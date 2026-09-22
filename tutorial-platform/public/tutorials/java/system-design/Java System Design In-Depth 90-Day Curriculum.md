@@ -1,0 +1,96 @@
+# Java System Design In-Depth 90-Day Curriculum
+
+This curriculum is focused on system design for Java backend roles, from fundamentals to advanced distributed architecture, with strong emphasis on tradeoffs, scalability, reliability, and production decision making.
+
+## Day List
+
+- Day 001 [Beginner]: What System Design Means for Java Backend Engineers
+- Day 002 [Beginner]: Functional vs Non Functional Requirements
+- Day 003 [Beginner]: Capacity Estimation Basics Users Traffic Storage Bandwidth
+- Day 004 [Beginner]: Latency Throughput Availability and Consistency Basics
+- Day 005 [Beginner]: Monolith vs Distributed System Fundamentals
+- Day 006 [Beginner]: Client Server Architecture and Request Lifecycle
+- Day 007 [Beginner]: Load Balancers Reverse Proxies and API Gateways
+- Day 008 [Beginner]: Vertical vs Horizontal Scaling
+- Day 009 [Beginner]: Stateless vs Stateful Services
+- Day 010 [Beginner]: System Design of URL Shortener Part 1
+- Day 011 [Beginner]: Caching Fundamentals Cache Aside Write Through Write Back
+- Day 012 [Beginner]: CDN Basics Edge Caching and Static Content Delivery
+- Day 013 [Beginner]: Database Choice SQL vs NoSQL Tradeoffs
+- Day 014 [Beginner]: Replication Sharding Partitioning Basics
+- Day 015 [Beginner]: Indexing Concepts and Query Performance Thinking
+- Day 016 [Beginner]: Messaging Queues Pub Sub and Async Processing
+- Day 017 [Beginner]: Rate Limiting and Traffic Protection Basics
+- Day 018 [Beginner]: Idempotency Retries and Safe API Design
+- Day 019 [Beginner]: Observability Basics Logs Metrics and Traces
+- Day 020 [Beginner]: URL Shortener Part 2 Review and Tradeoff Defense
+- Day 021 [Intermediate]: Designing Authentication and Session Systems
+- Day 022 [Intermediate]: Designing Authorization RBAC ABAC and Multi Tenant Rules
+- Day 023 [Intermediate]: File Upload and Media Serving Architecture
+- Day 024 [Intermediate]: Notification System Email SMS Push Basics
+- Day 025 [Intermediate]: Search System Design Fundamentals
+- Day 026 [Intermediate]: Feed Timeline and Ranking System Basics
+- Day 027 [Intermediate]: Chat System Real Time Messaging Design
+- Day 028 [Intermediate]: Inventory and Order Management Fundamentals
+- Day 029 [Intermediate]: Payment Flow Basics and Failure Handling
+- Day 030 [Intermediate]: Designing a Rate Limiter End to End
+- Day 031 [Intermediate]: Database Transactions Isolation and Distributed Tradeoffs
+- Day 032 [Intermediate]: Consistency Models CAP PACELC and Real World Choices
+- Day 033 [Intermediate]: Event Driven Architecture Basics
+- Day 034 [Intermediate]: Saga Pattern and Distributed Transaction Thinking
+- Day 035 [Intermediate]: Outbox Pattern CDC and Event Reliability
+- Day 036 [Intermediate]: Leader Election and Coordination Basics
+- Day 037 [Intermediate]: Service Discovery and Configuration Strategy
+- Day 038 [Intermediate]: API Design Contracts Versioning and Backward Compatibility
+- Day 039 [Intermediate]: Designing for Read Heavy vs Write Heavy Systems
+- Day 040 [Intermediate]: Mini Design Review E Commerce Platform Core Services
+- Day 041 [Advanced]: Microservices Boundaries and Domain Decomposition
+- Day 042 [Advanced]: Clean Architecture and DDD in Service Design
+- Day 043 [Advanced]: CQRS and Event Sourcing Tradeoffs
+- Day 044 [Advanced]: Stream Processing and Event Pipelines
+- Day 045 [Advanced]: Real Time Collaboration System Design
+- Day 046 [Advanced]: Ride Sharing or Food Delivery Architecture
+- Day 047 [Advanced]: Video Streaming Platform Design Basics
+- Day 048 [Advanced]: Search Autocomplete and Ranking Architecture
+- Day 049 [Advanced]: Recommendation System High Level Design
+- Day 050 [Advanced]: API Gateway BFF and Edge Aggregation Patterns
+- Day 051 [Advanced]: Resilience Engineering Retries Circuit Breakers Bulkheads
+- Day 052 [Advanced]: Backpressure Queue Buildup and Load Shedding
+- Day 053 [Advanced]: Disaster Recovery Backups RTO RPO and Failover
+- Day 054 [Advanced]: Multi Region Architecture and Geo Routing
+- Day 055 [Advanced]: Data Migration and Backward Compatible Rollouts
+- Day 056 [Advanced]: Observability at Scale Cardinality Sampling and SLOs
+- Day 057 [Advanced]: Security Design Threat Modeling and Abuse Cases
+- Day 058 [Advanced]: Privacy Compliance and Data Lifecycle Design
+- Day 059 [Advanced]: Cost Optimization and Capacity Governance
+- Day 060 [Advanced]: Design Review Social Media Backend Case Study
+- Day 061 [Expert]: Designing an Enterprise SaaS Multi Tenant Platform
+- Day 062 [Expert]: Designing an Order Checkout and Payment Orchestration System
+- Day 063 [Expert]: Designing a Notification Platform at Scale
+- Day 064 [Expert]: Designing a Logging and Analytics Pipeline
+- Day 065 [Expert]: Designing an IoT Event Ingestion System
+- Day 066 [Expert]: Designing a High Throughput Fraud Detection Pipeline
+- Day 067 [Expert]: Designing a Workflow Orchestration Platform
+- Day 068 [Expert]: Designing a Job Queue and Scheduler Platform
+- Day 069 [Expert]: Designing a Feature Flag and Configuration Service
+- Day 070 [Expert]: Designing a Metrics Platform and Alerting Backend
+- Day 071 [Expert]: Low Level Design in System Context API Model Cache DB Flow
+- Day 072 [Expert]: Architecture Review Writing Assumptions Risks and Tradeoffs
+- Day 073 [Expert]: Handling Interview Ambiguity and Requirement Discovery
+- Day 074 [Expert]: Whiteboard Style Communication for Senior Design Rounds
+- Day 075 [Expert]: Java Specific Concerns Threads GC Pools and JVM Limits in Design
+- Day 076 [Expert]: Spring Ecosystem Mapping to Architecture Decisions
+- Day 077 [Expert]: Database Deep Tradeoff Review with Java Service Patterns
+- Day 078 [Expert]: Failure Postmortems and Incident Driven Design Improvements
+- Day 079 [Expert]: End to End Capstone Design Online Marketplace
+- Day 080 [Expert]: End to End Capstone Design Real Time Collaboration Suite
+- Day 081 [Expert]: End to End Capstone Design Video Processing Platform
+- Day 082 [Expert]: Mock Interview Round 1 Junior to Mid Level Design
+- Day 083 [Expert]: Mock Interview Round 2 Mid Level Backend Design
+- Day 084 [Expert]: Mock Interview Round 3 Senior Backend Design
+- Day 085 [Expert]: Tradeoff Defense Drill Scalability vs Complexity
+- Day 086 [Expert]: Tradeoff Defense Drill Consistency vs Availability
+- Day 087 [Expert]: Tradeoff Defense Drill Build vs Buy Decisions
+- Day 088 [Expert]: Final Revision of 25 Core System Design Templates
+- Day 089 [Expert]: Final Architecture Review Playbook for Interviews
+- Day 090 [Expert]: Full Length System Design Simulation and Feedback

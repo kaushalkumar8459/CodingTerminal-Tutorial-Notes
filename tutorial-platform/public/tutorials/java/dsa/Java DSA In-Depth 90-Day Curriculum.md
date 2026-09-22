@@ -1,0 +1,96 @@
+# Java DSA In-Depth 90-Day Curriculum
+
+This curriculum is focused on Data Structures and Algorithms in Java from beginner to advanced interview-level problem solving.
+
+## Day List
+
+- Day 001 [Beginner]: DSA Roadmap Big Picture and Java Setup for Problem Solving
+- Day 002 [Beginner]: Time and Space Complexity Basics
+- Day 003 [Beginner]: Asymptotic Analysis Big O Big Omega Big Theta
+- Day 004 [Beginner]: Java Input Output Fast I O Patterns for Coding Rounds
+- Day 005 [Beginner]: Arrays Fundamentals Traversal and Basic Operations
+- Day 006 [Beginner]: Strings Fundamentals and Character Handling in Java
+- Day 007 [Beginner]: Basic Recursion Concepts and Call Stack
+- Day 008 [Beginner]: Searching Linear Search and Binary Search Basics
+- Day 009 [Beginner]: Sorting Basics Bubble Selection Insertion
+- Day 010 [Beginner]: Prefix Sum Difference Array and Range Query Basics
+- Day 011 [Beginner]: Two Pointers Pattern Introduction
+- Day 012 [Beginner]: Sliding Window Fixed Size Pattern
+- Day 013 [Beginner]: Sliding Window Variable Size Pattern
+- Day 014 [Beginner]: Hashing with HashMap and HashSet
+- Day 015 [Beginner]: Problem Solving Session Arrays and Strings Set 1
+- Day 016 [Beginner]: Problem Solving Session Arrays and Strings Set 2
+- Day 017 [Beginner]: Matrix Basics Traversal and Common Patterns
+- Day 018 [Beginner]: Kadane Algorithm and Subarray Problems
+- Day 019 [Beginner]: Greedy Basics with Simple Interval Problems
+- Day 020 [Beginner]: Revision and Timed Mock Test 1
+- Day 021 [Intermediate]: Linked List Fundamentals Singly Linked List
+- Day 022 [Intermediate]: Doubly Linked List and Circular Linked List
+- Day 023 [Intermediate]: Fast Slow Pointer Pattern
+- Day 024 [Intermediate]: Stack Fundamentals and Monotonic Stack Intro
+- Day 025 [Intermediate]: Queue Fundamentals and Deque
+- Day 026 [Intermediate]: Parentheses Expression and Stack Based Problems
+- Day 027 [Intermediate]: Binary Search Advanced Variants
+- Day 028 [Intermediate]: Binary Search on Answer Pattern
+- Day 029 [Intermediate]: Recursion Advanced Patterns and Choices
+- Day 030 [Intermediate]: Backtracking Fundamentals
+- Day 031 [Intermediate]: Subsets Combinations and Permutations
+- Day 032 [Intermediate]: N Queens Sudoku and Constraint Backtracking
+- Day 033 [Intermediate]: Bit Manipulation Basics and Tricks
+- Day 034 [Intermediate]: Bitmasking for Subset and State Problems
+- Day 035 [Intermediate]: Math for DSA GCD LCM Prime and Sieve
+- Day 036 [Intermediate]: Modular Arithmetic and Fast Exponentiation
+- Day 037 [Intermediate]: Custom Comparator and Sorting in Java
+- Day 038 [Intermediate]: PriorityQueue Heaps Basics
+- Day 039 [Intermediate]: Heap Based Top K and Merge Problems
+- Day 040 [Intermediate]: Revision and Timed Mock Test 2
+- Day 041 [Intermediate]: Binary Tree Fundamentals Traversals and Views
+- Day 042 [Intermediate]: Recursive and Iterative Tree Traversal Patterns
+- Day 043 [Intermediate]: Binary Search Tree Fundamentals
+- Day 044 [Intermediate]: Lowest Common Ancestor and Path Problems
+- Day 045 [Intermediate]: Tree Diameter Height Balance and Depth Problems
+- Day 046 [Intermediate]: Advanced Tree Patterns Tree DP Intro
+- Day 047 [Intermediate]: Trie Data Structure Fundamentals
+- Day 048 [Intermediate]: Trie Problems Prefix and Dictionary Use Cases
+- Day 049 [Intermediate]: Disjoint Set Union Union Find Basics
+- Day 050 [Intermediate]: Graph Fundamentals Representation and Traversal
+- Day 051 [Advanced]: BFS in Graphs Shortest Path in Unweighted Graph
+- Day 052 [Advanced]: DFS in Graphs Connected Components and Cycles
+- Day 053 [Advanced]: Topological Sort Kahn and DFS Methods
+- Day 054 [Advanced]: Shortest Path Dijkstra Algorithm
+- Day 055 [Advanced]: Bellman Ford and Negative Cycle Detection
+- Day 056 [Advanced]: Floyd Warshall and All Pairs Shortest Path
+- Day 057 [Advanced]: Minimum Spanning Tree Kruskal and Prim
+- Day 058 [Advanced]: Bridges Articulation Points SCC Intro
+- Day 059 [Advanced]: Grid Graph Problems Multi Source BFS
+- Day 060 [Advanced]: Revision and Timed Mock Test 3
+- Day 061 [Advanced]: Dynamic Programming Fundamentals State Transition
+- Day 062 [Advanced]: 1D DP Climbing Stairs House Robber Variants
+- Day 063 [Advanced]: 2D DP Grid Paths and Matrix DP
+- Day 064 [Advanced]: Knapsack Family 0 1 and Unbounded
+- Day 065 [Advanced]: Longest Common Subsequence and String DP
+- Day 066 [Advanced]: LIS and Patience Sorting Insight
+- Day 067 [Advanced]: Partition DP and Interval DP Basics
+- Day 068 [Advanced]: Digit DP and Bitmask DP Introduction
+- Day 069 [Advanced]: DP Optimization Prefix Suffix and Space Compression
+- Day 070 [Advanced]: Greedy Advanced Scheduling and Exchange Arguments
+- Day 071 [Advanced]: Interval Problems and Line Sweep Technique
+- Day 072 [Advanced]: Segment Tree Fundamentals
+- Day 073 [Advanced]: Segment Tree with Lazy Propagation
+- Day 074 [Advanced]: Fenwick Tree Binary Indexed Tree
+- Day 075 [Advanced]: Sparse Table and Range Query Strategies
+- Day 076 [Advanced]: Advanced String Algorithms KMP and Z Algorithm
+- Day 077 [Advanced]: Rolling Hash and Rabin Karp
+- Day 078 [Advanced]: Palindrome Algorithms Manacher Basics
+- Day 079 [Advanced]: Computational Geometry Basics for Interviews
+- Day 080 [Advanced]: Revision and Timed Mock Test 4
+- Day 081 [Expert]: Mixed Pattern Problems Set 1
+- Day 082 [Expert]: Mixed Pattern Problems Set 2
+- Day 083 [Expert]: Mixed Pattern Problems Set 3
+- Day 084 [Expert]: Hard Graph and DP Problems Set
+- Day 085 [Expert]: Company Style Online Assessment Simulation 1
+- Day 086 [Expert]: Company Style Online Assessment Simulation 2
+- Day 087 [Expert]: Whiteboard Interview Simulation with Java
+- Day 088 [Expert]: Communicating Approach Edge Cases and Complexity
+- Day 089 [Expert]: Final 100 Problem Revision Strategy
+- Day 090 [Expert]: Full Length Interview Mock and Performance Review
