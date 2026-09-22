@@ -1,60 +1,84 @@
 # Day 235 — Mini Project: High-Performance JobHub Dashboard
 
-## Goal
-Apply the complete performance workflow to a realistic Angular feature.
+## Learning Goal
+Diagnose and improve a realistic JobHub dashboard using measurement rather than arbitrary optimization rules.
 
-## Project
-Optimize a JobHub dashboard containing job search, filters, saved jobs, company logos, analytics, large result lists, and authenticated user state.
+## Prerequisites
+- Days 225–234
+- JobHub from Days 130–145
 
-## Requirements
+## Scenario
+The dashboard contains search, filters, a large result list, saved jobs, company images, authenticated state, analytics and reporting UI.
+
+Users report slow initial loading and lag while changing filters.
+
+## Phase 1 — Baseline
+Create one repeatable scenario:
+1. open the dashboard in a fresh session
+2. search for a common keyword
+3. render a large result set
+4. open analytics
+5. change filters repeatedly
+
+Record initial load, LCP, search interaction, list update, analytics open, request count and major chunks.
+
+## Phase 2 — Diagnose
+Use:
+- Network panel
+- Performance panel
+- Angular DevTools Profiler
+
+Classify each issue as loading, rendering, network, asset, interaction or architecture.
+
+## Phase 3 — Optimize
 
 ### Rendering
-- signal-driven local state;
-- focused component boundaries;
-- stable @for track identities;
-- no expensive template calculations.
+- signal-driven local state
+- focused component boundaries
+- stable `@for (...; track job.id)`
+- no expensive template calculations
 
 ### Loading
-- lazy-load secondary routes;
-- use @defer for appropriate secondary dashboard sections;
-- keep the initial critical UI small.
+- lazy routes
+- `@defer` for appropriate secondary UI
 
 ### Assets
-- optimize job/company images;
-- use NgOptimizedImage where appropriate;
-- load only required font variants.
+- `NgOptimizedImage` where appropriate
+- correct dimensions
+- only required font variants
 
 ### Network
-- identify duplicate requests;
-- reduce unnecessary response data;
-- avoid request waterfalls where possible;
-- apply an appropriate caching strategy.
+- remove duplicate requests
+- avoid unnecessary sequential requests
+- reduce oversized responses
+- use suitable caching
 
-### Measurement
-Record a baseline before optimization and repeat the same scenario after each major change.
+### Zoneless
+Ensure application state reaches Angular through supported notification paths. Do not add ZoneJS merely to hide a missing state notification.
 
-Create a report:
+## Phase 4 — Verify
+Repeat the **same scenario**:
 
-~~~text
-Problem:
-Evidence:
-Change:
+```text
+Optimization:
 Before:
 After:
+Evidence:
 Trade-off:
-~~~
+```
+
+Reject changes that do not provide meaningful benefit or damage UX, accessibility or maintainability.
 
 ## Final Review
-1. Which bottleneck was actually measured?
-2. Which optimization produced the largest meaningful improvement?
-3. Which optimization was rejected because it was unnecessary?
-4. What trade-offs were introduced?
-5. How would you monitor this feature after deployment?
+1. What was the actual bottleneck?
+2. What evidence identified it?
+3. Which change produced the measurable improvement?
+4. Which optimization was rejected?
+5. What trade-off was introduced?
+6. How would you monitor this after deployment?
 
 ## Interview Walkthrough
-Explain the project in this order:
+**symptom → measurement → root cause → optimization → verification → trade-off**
 
-symptom → measurement → root cause → optimization → verification → trade-off
-
-## Outcome
-You can diagnose and improve Angular performance using evidence rather than applying optimization patterns blindly.
+## Expected Outcome
+You can diagnose, optimize and defend Angular performance decisions using measurable evidence.
