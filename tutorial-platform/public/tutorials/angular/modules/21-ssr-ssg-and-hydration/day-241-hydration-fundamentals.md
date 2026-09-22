@@ -6,7 +6,7 @@ Understand how Angular turns server-rendered HTML into an interactive client app
 
 ## Concept
 
-Hydration restores the application on the client while reusing server-rendered DOM where possible. This avoids destroying and recreating the DOM and can improve Core Web Vitals. citeturn0search0
+Hydration restores the application on the client while reusing server-rendered DOM where possible. This avoids destroying and recreating the DOM and can improve Core Web Vitals.
 
 Basic setup:
 
@@ -18,7 +18,7 @@ bootstrapApplication(AppComponent, {
 });
 ~~~
 
-Angular's hydration setup also supports HTTP transfer caching and other hydration features. citeturn0search4
+Angular's hydration setup also supports HTTP transfer caching and other hydration features.
 
 ## Mental Model
 
