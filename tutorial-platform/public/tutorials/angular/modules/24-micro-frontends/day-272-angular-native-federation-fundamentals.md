@@ -31,13 +31,37 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Angular 21 + Native Federation Version Note
 
-## Outcome
+Native Federation is provided by the third-party `@angular-architects/native-federation` package; it is not an Angular framework API. Pin and test a package version compatible with the Angular version used by the workspace rather than copying an unpinned command from an old tutorial.
 
-You can explain Angular Native Federation Fundamentals using explicit ownership, contracts, trade-offs, and production considerations.
+For this curriculum, Angular 21 is the baseline. Verify the package's current compatibility matrix/release notes before installing.
+
+A typical Angular setup uses the package's schematic, for example:
+
+~~~bash
+ng add @angular-architects/native-federation --project shell --type dynamic-host
+~~~
+
+and a remote:
+
+~~~bash
+ng add @angular-architects/native-federation --project candidate --type remote
+~~~
+
+The exact generated configuration belongs to the installed package version. Teach the architecture first; do not assume every generated filename or option is permanent.
+
+Native Federation uses browser-native ES modules/import maps and integrates with Angular's CLI/build tooling. It is distinct from webpack Module Federation, although the architectural mental model is similar.
+
+## Version-Safe Rule
+
+Always verify:
+
+- Angular version;
+- Native Federation package version;
+- Node version;
+- generated CLI/build configuration;
+- shared dependency compatibility.
+
+Do not copy configuration from a Native Federation article written for another major version without checking its release documentation.
