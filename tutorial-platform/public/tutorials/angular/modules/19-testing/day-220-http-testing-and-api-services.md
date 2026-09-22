@@ -1,73 +1,69 @@
----
-id: "angular-day-220"
-title: "HTTP Testing and API Services"
-slug: "http-testing-and-api-services"
-day: 220
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 220 — HTTP Testing and API Services
 
-## Goal
+## Learning Goal
+Test an Angular API service without making a real network request.
 
-Use provideHttpClientTesting and HttpTestingController to assert requests, parameters, headers, responses, failures, and unexpected calls.
+## Modern Setup
+Use provideHttpClientTesting() and HttpTestingController.
 
-## Concept
+If HTTP features such as interceptors are configured, provideHttpClient(...) before provideHttpClientTesting().
 
-Testing should verify **observable behavior and contracts**, not implementation details.
-
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
-
-## Example
-
-```ts
-import {TestBed} from '@angular/core/testing';
-
-describe('HTTP Testing and API Services', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
-
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
+~~~ts
+TestBed.configureTestingModule({
+  providers: [
+    provideHttpClient(),
+    provideHttpClientTesting(),
+    JobApiService,
+  ],
 });
-```
 
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
+const http = TestBed.inject(HttpTestingController);
+~~~
 
-## Mental Model
+## Scenario
 
-**Arrange → Act → Assert**
+~~~ts
+service.search('angular').subscribe(jobs => {
+  expect(jobs).toHaveLength(1);
+});
 
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+const request = http.expectOne('/api/jobs?keyword=angular');
+expect(request.request.method).toBe('GET');
+
+request.flush([
+  { id: 1, title: 'Angular Developer' },
+]);
+~~~
+
+## Cleanup
+
+~~~ts
+afterEach(() => {
+  TestBed.inject(HttpTestingController).verify();
+});
+~~~
+
+## Test These Behaviors
+- query parameters
+- headers
+- request bodies
+- empty responses
+- 401/403/404/500 behavior
+- interceptor behavior when relevant
+- multiple intentional requests with match()
+
+httpResource() uses the HttpClient testing infrastructure too; its maturity is version-sensitive and should match the tutorial's Angular version.
+
+HttpClientTestingModule is deprecated in current Angular documentation. Prefer provider-based setup.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
-
-## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+Test successful, empty and failed JobHub searches.
 
 ## Interview Questions
+1. Why should unit tests avoid real APIs?
+2. What does HttpTestingController do?
+3. Why does provider order matter?
+4. How do you verify there are no outstanding requests?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can test typed HTTP services with deterministic requests and responses.
