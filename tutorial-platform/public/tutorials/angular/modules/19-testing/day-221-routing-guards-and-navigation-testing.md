@@ -1,73 +1,55 @@
----
-id: "angular-day-221"
-title: "Routing, Guards and Navigation Testing"
-slug: "routing-guards-and-navigation-testing"
-day: 221
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 221 — Routing, Guards and Navigation Testing
 
-## Goal
+## Learning Goal
+Test real route configuration, parameters, guards and navigation.
 
-Use provideRouter and RouterTestingHarness to verify routes, parameters, guards, redirects, and navigation outcomes.
+## Use RouterTestingHarness
+RouterTestingHarness reduces boilerplate and tests routed components with a real router configuration.
 
-## Concept
-
-Testing should verify **observable behavior and contracts**, not implementation details.
-
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
-
-## Example
-
-```ts
-import {TestBed} from '@angular/core/testing';
-
-describe('Routing, Guards and Navigation Testing', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
-
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
+~~~ts
+TestBed.configureTestingModule({
+  providers: [
+    provideRouter([
+      { path: 'jobs/:id', component: JobDetailsComponent },
+    ]),
+  ],
 });
-```
 
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
+const harness = await RouterTestingHarness.create();
+const component = await harness.navigateByUrl('/jobs/42', JobDetailsComponent);
 
-## Mental Model
+expect(component.id()).toBe(42);
+~~~
 
-**Arrange → Act → Assert**
+## Route Parameters
+Navigate to a realistic URL and assert the routed component receives the expected parameter.
 
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+## Guards
+For an authentication guard:
+1. configure unauthenticated state
+2. navigate to the protected recruiter route
+3. assert the login redirect
+4. configure authenticated state
+5. assert the protected component appears
+
+## Query Parameters
+Test a URL such as /jobs?location=Delhi&remote=true and verify the filter state.
+
+## Do Not Mock Router by Default
+Real route configuration catches integration problems that a fake Router can hide. Use focused mocks only when a specific dependency boundary requires them.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
+Test Job details, missing IDs, recruiter protection and query parameters.
 
 ## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+- Mocking Router instead of testing navigation.
+- Testing only a guard function and not its navigation result.
+- Ignoring asynchronous navigation.
 
 ## Interview Questions
+1. Why use RouterTestingHarness?
+2. How do you test a route guard?
+3. What is the difference between a guard unit test and a navigation test?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can test real Angular navigation behavior with modern routing test utilities.
