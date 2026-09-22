@@ -1,31 +1,64 @@
 # Day 233 — Profiling, Angular DevTools and Performance Diagnostics
 
-## Goal
-Measure runtime performance before changing code.
+## Learning Goal
+Measure Angular performance and prove whether an optimization helped.
+
+## Prerequisites
+- Days 225–232
+
+## Rule
+**Measure → change one important variable → measure again.**
 
 ## Angular DevTools
-Angular DevTools includes a Profiler that records Angular execution activity and helps identify components consuming rendering time.
+Angular DevTools provides component inspection and a Profiler for understanding Angular execution and rendering activity.
 
-## Workflow
-reproduce → record → identify hotspot → change one thing → record again
+Use a development build for DevTools profiling.
 
 ## Browser Tools
-Inspect long tasks, scripting, rendering, painting, network timing, LCP, and layout shifts.
+Use browser tooling to investigate:
+- long tasks
+- JavaScript execution
+- rendering/painting
+- layout
+- network waterfalls
+- LCP
+- CLS
+- interaction responsiveness
+
+Angular profiling and browser profiling answer different questions.
+
+## Investigation Scenario
+JobHub search becomes slow with 2,000 results.
+
+Record:
+
+```text
+Dataset:
+User action:
+Interaction duration:
+Angular hotspot:
+Browser hotspot:
+Change:
+After duration:
+Trade-off:
+```
+
+Possible causes include too many DOM nodes, unstable list identity, expensive template work, network delay or third-party work. Do not assume the cause before profiling.
 
 ## Exercise
-Profile JobHub before and after changing a deliberately expensive list item. Record interaction duration, rendered item count, major hotspot, and the measured improvement.
+Create a reproducible large-list scenario and profile it before and after one optimization.
 
 ## Common Mistakes
-- Treating development profiling as production truth.
-- Changing multiple variables at once.
-- Assuming the slowest-looking component is always the root cause.
-- Using unrepresentative benchmarks.
+- Profiling only a tiny dataset.
+- Changing multiple variables simultaneously.
+- Treating development timings as production measurements.
+- Assuming the slowest component is always the root cause.
 
 ## Interview Questions
-1. What does Angular DevTools Profiler show?
-2. Why measure before optimizing?
+1. What does Angular DevTools Profiler provide?
+2. Why use browser and Angular profiling together?
 3. What is a long task?
-4. How do browser and Angular profiling complement each other?
+4. How do you prove an optimization worked?
 
-## Outcome
-You can perform a repeatable performance investigation.
+## Expected Outcome
+You can perform a repeatable performance investigation and communicate evidence clearly.
