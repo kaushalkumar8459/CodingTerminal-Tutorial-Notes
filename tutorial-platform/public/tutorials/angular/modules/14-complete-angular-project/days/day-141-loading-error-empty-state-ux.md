@@ -1,13 +1,13 @@
 ---
-id="angular-day-141"
-title="Loading, Error and Empty-State UX"
-slug="day-141-loading-error-empty-state-ux"
-dayLabel="Day 141"
-level=Advanced
-estimatedMinutes=75
-order=141
-track=angular
-youtubeVideos=[]
+id: "angular-day-141"
+title: "Loading, Error and Empty-State UX"
+slug: "day-141-loading-error-empty-state-ux"
+dayLabel: "Day 141"
+level: Advanced
+estimatedMinutes: 75
+order: 141
+track: angular
+youtubeVideos: []
 ---
 # Day 141 — Loading, Error and Empty-State UX
 

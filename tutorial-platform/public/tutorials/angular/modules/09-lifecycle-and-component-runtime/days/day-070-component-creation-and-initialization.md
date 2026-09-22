@@ -1,6 +1,6 @@
 ---
 title: Component Creation and Initialization
-slug: component-creation-and-initialization
+slug: day-070-component-creation-and-initialization
 dayLabel: Day 70
 level: Intermediate
 estimatedMinutes: 70

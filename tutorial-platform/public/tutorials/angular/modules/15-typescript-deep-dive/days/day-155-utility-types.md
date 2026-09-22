@@ -1,13 +1,13 @@
 ---
-id="angular-day-155"
-title="Utility Types"
-slug="day-155-utility-types"
-dayLabel="Day 155"
-level=Intermediate
-estimatedMinutes=90
-order=155
-track=angular
-youtubeVideos=[]
+id: "angular-day-155"
+title: "Utility Types"
+slug: "day-155-utility-types"
+dayLabel: "Day 155"
+level: Intermediate
+estimatedMinutes: 90
+order: 155
+track: angular
+youtubeVideos: []
 ---
 # Day 155 — Utility Types
 

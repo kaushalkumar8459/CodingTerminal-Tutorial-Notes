@@ -1,7 +1,7 @@
 ---
-id="angular-day-077"
-title="signal() — Writable Reactive State"
-slug="day-077-signal-writable-reactive-state"
+id: "angular-day-077"
+title: "signal() — Writable Reactive State"
+slug: "day-077-signal-writable-reactive-state"
 dayLabel: Day 77
 level: Beginner
 estimatedMinutes: 60
@@ -31,7 +31,7 @@ export class CounterComponent {
 }
 ```
 
-Read a signal by calling it: count(). Writable signals provide set() and update(). citeturn0search1
+Read a signal by calling it: count(). Writable signals provide set() and update().
 
 ## Objects and Arrays
 Signals can hold complex values. Prefer immutable updates:

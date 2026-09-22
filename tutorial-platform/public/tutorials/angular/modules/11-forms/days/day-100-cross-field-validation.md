@@ -1,7 +1,7 @@
 ---
-id="angular-day-100"
-title="Cross-Field Validation"
-slug="day-100-cross-field-validation"
+id: "angular-day-100"
+title: "Cross-Field Validation"
+slug: "day-100-cross-field-validation"
 dayLabel: Day 100
 level: Intermediate
 estimatedMinutes: 90

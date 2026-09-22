@@ -1,7 +1,7 @@
 ---
-id="angular-day-088"
-title="Signal Patterns, Anti-Patterns & Reactive UI States"
-slug="day-088-signal-patterns-antipatterns-reactive-ui-states"
+id: "angular-day-088"
+title: "Signal Patterns, Anti-Patterns & Reactive UI States"
+slug: "day-088-signal-patterns-antipatterns-reactive-ui-states"
 dayLabel: Day 88
 level: Intermediate
 estimatedMinutes: 90

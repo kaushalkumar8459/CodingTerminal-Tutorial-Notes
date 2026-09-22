@@ -1,13 +1,13 @@
 ---
-id="angular-day-132"
-title="Design System and Reusable UI"
-slug="day-132-design-system-and-reusable-ui"
-dayLabel="Day 132"
-level=Intermediate
-estimatedMinutes=90
-order=132
-track=angular
-youtubeVideos=[]
+id: "angular-day-132"
+title: "Design System and Reusable UI"
+slug: "day-132-design-system-and-reusable-ui"
+dayLabel: "Day 132"
+level: Intermediate
+estimatedMinutes: 90
+order: 132
+track: angular
+youtubeVideos: []
 ---
 # Day 132 — Design System and Reusable UI
 

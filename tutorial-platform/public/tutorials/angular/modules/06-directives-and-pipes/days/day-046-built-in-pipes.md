@@ -1,5 +1,5 @@
-id="d6d06"
 ---
+id: "d6d06"
 title: Built-in Pipes
 slug: day-046-built-in-pipes
 dayLabel: Day 46

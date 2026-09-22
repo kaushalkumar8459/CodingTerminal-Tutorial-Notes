@@ -1,7 +1,7 @@
 ---
 id: "angular-day-203"
 title: "CDK Overlay Fundamentals"
-slug: "cdk-overlay-fundamentals"
+slug: day-203-cdk-overlay-fundamentals
 day: 203
 module: 18
 track: "angular"

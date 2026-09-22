@@ -25,4 +25,4 @@ Learn Angular security from the browser boundary through HTTP, authentication, C
 - Day 253 — Dependency, Supply-Chain and Production Security
 - Day 254 — Mini Project — Security-Hardened JobHub
 
-Angular treats template-bound values as untrusted by default and sanitizes/escapes values in relevant DOM contexts. CSP and Trusted Types provide additional browser-level protection. citeturn0search0
+Angular treats template-bound values as untrusted by default and sanitizes/escapes values in relevant DOM contexts. CSP and Trusted Types provide additional browser-level protection.

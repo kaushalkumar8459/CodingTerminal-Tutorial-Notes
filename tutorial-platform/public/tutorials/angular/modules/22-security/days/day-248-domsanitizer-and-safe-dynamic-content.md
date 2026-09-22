@@ -6,7 +6,7 @@ Use DomSanitizer correctly and understand why bypass APIs are security-sensitive
 
 ## Concept
 
-DomSanitizer can sanitize values for appropriate contexts. Angular also provides bypassSecurityTrust... APIs, but these explicitly tell Angular to trust a value and can introduce XSS if attacker-controlled data reaches them. citeturn0search1
+DomSanitizer can sanitize values for appropriate contexts. Angular also provides bypassSecurityTrust... APIs, but these explicitly tell Angular to trust a value and can introduce XSS if attacker-controlled data reaches them.
 
 ## Rule
 

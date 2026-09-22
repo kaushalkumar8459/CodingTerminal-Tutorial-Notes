@@ -1,13 +1,13 @@
 ---
-id="angular-day-200"
-title="Mini Project - JobHub State Management"
-slug="mini-project-jobhub-state-management"
-dayLabel="Day 200"
-level=Advanced
-estimatedMinutes=120
-order=200
-track=angular
-youtubeVideos=[]
+id: "angular-day-200"
+title: "Mini Project - JobHub State Management"
+slug: day-200-mini-project-jobhub-state-management
+dayLabel: "Day 200"
+level: Advanced
+estimatedMinutes: 120
+order: 200
+track: angular
+youtubeVideos: []
 ---
 
 # Day 200 - Mini Project - JobHub State Management

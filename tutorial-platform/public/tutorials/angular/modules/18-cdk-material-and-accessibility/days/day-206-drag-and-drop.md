@@ -1,7 +1,7 @@
 ---
 id: "angular-day-206"
 title: "Drag and Drop"
-slug: "drag-and-drop"
+slug: day-206-drag-and-drop
 day: 206
 module: 18
 track: "angular"

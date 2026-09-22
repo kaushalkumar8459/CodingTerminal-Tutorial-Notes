@@ -1,13 +1,13 @@
 ---
-id="angular-day-134"
-title="Authentication and Authorization Integration"
-slug="day-134-authentication-and-authorization-integration"
-dayLabel="Day 134"
-level=Intermediate
-estimatedMinutes=90
-order=134
-track=angular
-youtubeVideos=[]
+id: "angular-day-134"
+title: "Authentication and Authorization Integration"
+slug: "day-134-authentication-and-authorization-integration"
+dayLabel: "Day 134"
+level: Intermediate
+estimatedMinutes: 90
+order: 134
+track: angular
+youtubeVideos: []
 ---
 # Day 134 — Authentication and Authorization Integration
 

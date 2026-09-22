@@ -1,5 +1,5 @@
-id="d6d09"
 ---
+id: "d6d09"
 title: Mini Project — Smart Product Catalog
 slug: day-049-smart-product-catalog
 dayLabel: Day 49

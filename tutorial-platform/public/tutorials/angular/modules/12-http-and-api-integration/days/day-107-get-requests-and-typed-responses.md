@@ -1,13 +1,13 @@
 ---
-id="angular-day-107"
-title="GET Requests and Typed Responses"
-slug="day-107-get-requests-and-typed-responses"
-dayLabel="Day 107"
-level=Beginner
-estimatedMinutes=75
-order=107
-track=angular
-youtubeVideos=[]
+id: "angular-day-107"
+title: "GET Requests and Typed Responses"
+slug: "day-107-get-requests-and-typed-responses"
+dayLabel: "Day 107"
+level: Beginner
+estimatedMinutes: 75
+order: 107
+track: angular
+youtubeVideos: []
 ---
 # Day 107 — GET Requests and Typed Responses
 

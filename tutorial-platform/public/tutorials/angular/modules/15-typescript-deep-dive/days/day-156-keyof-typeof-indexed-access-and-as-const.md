@@ -1,13 +1,13 @@
 ---
-id="angular-day-156"
-title="keyof, typeof, Indexed Access and as const"
-slug="day-156-keyof-typeof-indexed-access-and-as-const"
-dayLabel="Day 156"
-level=Advanced
-estimatedMinutes=90
-order=156
-track=angular
-youtubeVideos=[]
+id: "angular-day-156"
+title: "keyof, typeof, Indexed Access and as const"
+slug: "day-156-keyof-typeof-indexed-access-and-as-const"
+dayLabel: "Day 156"
+level: Advanced
+estimatedMinutes: 90
+order: 156
+track: angular
+youtubeVideos: []
 ---
 # Day 156 — keyof, typeof, Indexed Access and as const
 

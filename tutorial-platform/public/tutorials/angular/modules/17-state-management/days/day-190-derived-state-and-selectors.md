@@ -1,13 +1,13 @@
 ---
-id="angular-day-190"
-title="Derived State and Selectors"
-slug="derived-state-and-selectors"
-dayLabel="Day 190"
-level=Advanced
-estimatedMinutes=90
-order=190
-track=angular
-youtubeVideos=[]
+id: "angular-day-190"
+title: "Derived State and Selectors"
+slug: day-190-derived-state-and-selectors
+dayLabel: "Day 190"
+level: Advanced
+estimatedMinutes: 90
+order: 190
+track: angular
+youtubeVideos: []
 ---
 
 # Day 190 - Derived State and Selectors

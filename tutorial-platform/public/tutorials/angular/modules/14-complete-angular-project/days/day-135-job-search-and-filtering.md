@@ -1,13 +1,13 @@
 ---
-id="angular-day-135"
-title="Job Search and Filtering"
-slug="day-135-job-search-and-filtering"
-dayLabel="Day 135"
-level=Intermediate
-estimatedMinutes=90
-order=135
-track=angular
-youtubeVideos=[]
+id: "angular-day-135"
+title: "Job Search and Filtering"
+slug: "day-135-job-search-and-filtering"
+dayLabel: "Day 135"
+level: Intermediate
+estimatedMinutes: 90
+order: 135
+track: angular
+youtubeVideos: []
 ---
 # Day 135 — Job Search and Filtering
 

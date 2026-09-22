@@ -1,13 +1,13 @@
 ---
-id="angular-day-184"
-title="Testing RxJS and Marble Thinking"
-slug="testing-rxjs-and-marble-thinking"
-dayLabel="Day 184"
-level=Advanced
-estimatedMinutes=90
-order=184
-track=angular
-youtubeVideos=[]
+id: "angular-day-184"
+title: "Testing RxJS and Marble Thinking"
+slug: day-184-testing-rxjs-and-marble-thinking
+dayLabel: "Day 184"
+level: Advanced
+estimatedMinutes: 90
+order: 184
+track: angular
+youtubeVideos: []
 ---
 
 # Day 184 - Testing RxJS and Marble Thinking

@@ -1,7 +1,7 @@
 ---
 id: "angular-day-210"
 title: "Accessible Forms, Navigation and Interactive Components"
-slug: "accessible-forms-navigation-and-interactive-components"
+slug: day-210-accessible-forms-navigation-and-interactive-components
 day: 210
 module: 18
 track: "angular"

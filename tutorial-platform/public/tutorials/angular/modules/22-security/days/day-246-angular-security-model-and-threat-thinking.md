@@ -16,7 +16,7 @@ Angular security has multiple layers:
 - server-side validation;
 - dependency and deployment security.
 
-Angular specifically documents built-in protections for XSS, XSRF, and XSSI, while authentication and authorization remain application-level concerns. citeturn0search0
+Angular specifically documents built-in protections for XSS, XSRF, and XSSI, while authentication and authorization remain application-level concerns.
 
 ## Threat Thinking
 

@@ -1,13 +1,13 @@
 ---
-id="angular-day-162"
-title="unknown, never and Exhaustive Error Handling"
-slug="day-162-unknown-never-and-exhaustive-error-handling"
-dayLabel="Day 162"
-level=Advanced
-estimatedMinutes=90
-order=162
-track=angular
-youtubeVideos=[]
+id: "angular-day-162"
+title: "unknown, never and Exhaustive Error Handling"
+slug: "day-162-unknown-never-and-exhaustive-error-handling"
+dayLabel: "Day 162"
+level: Advanced
+estimatedMinutes: 90
+order: 162
+track: angular
+youtubeVideos: []
 ---
 # Day 162 — unknown, never and Exhaustive Error Handling
 

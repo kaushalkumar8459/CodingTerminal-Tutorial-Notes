@@ -1,7 +1,7 @@
 ---
-id="angular-day-093"
-title="Form Groups and Form State"
-slug="day-093-form-groups-and-form-state"
+id: "angular-day-093"
+title: "Form Groups and Form State"
+slug: "day-093-form-groups-and-form-state"
 dayLabel: Day 93
 level: Beginner
 estimatedMinutes: 60

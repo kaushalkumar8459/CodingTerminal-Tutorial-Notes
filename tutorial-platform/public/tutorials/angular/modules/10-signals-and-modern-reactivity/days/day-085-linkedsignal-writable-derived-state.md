@@ -1,7 +1,7 @@
 ---
-id="angular-day-085"
-title="linkedSignal() — Writable Derived State"
-slug="day-085-linkedsignal-writable-derived-state"
+id: "angular-day-085"
+title: "linkedSignal() — Writable Derived State"
+slug: "day-085-linkedsignal-writable-derived-state"
 dayLabel: Day 85
 level: Intermediate
 estimatedMinutes: 75
@@ -17,7 +17,7 @@ Handle state that depends on another signal but must also be manually writable.
 ## Problem
 Suppose available shipping options change. The selected option should follow a valid default when the options change, but the user must also be able to select another option.
 
-linkedSignal() is designed for this dependent writable state. citeturn0search3
+linkedSignal() is designed for this dependent writable state.
 
 ## Example
 ```ts
@@ -50,4 +50,4 @@ Create a Job Location Selector where selected location follows available locatio
 3. Why is an effect not the preferred synchronization mechanism?
 
 ## Outcome
-You can model dependent writable state correctly. citeturn0search3
+You can model dependent writable state correctly.

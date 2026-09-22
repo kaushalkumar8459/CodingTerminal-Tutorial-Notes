@@ -2,7 +2,16 @@ import { Link, useLocation } from "react-router-dom";
 import { getTutorialsByTrack } from "../data/tutorials";
 
 type JavaScriptSubNavigationProps = {
-  active?: "tutorial" | "problem-solving" | "coding" | "interview" | "real-interview";
+  active?:
+    | "tutorial"
+    | "problem-solving"
+    | "coding"
+    | "interview"
+    | "real-interview"
+    | "browser"
+    | "interview-revision"
+    | "machine-coding"
+    | "typescript";
 };
 
 export function JavaScriptSubNavigation({ active }: Readonly<JavaScriptSubNavigationProps>) {
@@ -13,6 +22,14 @@ export function JavaScriptSubNavigation({ active }: Readonly<JavaScriptSubNaviga
       ? "real-interview"
       : location.pathname.startsWith("/coding/javascriptproblemsolving")
           ? "problem-solving"
+      : location.pathname.startsWith("/coding/javascriptbrowser")
+          ? "browser"
+      : location.pathname.startsWith("/coding/javascriptinterviewrevision")
+          ? "interview-revision"
+      : location.pathname.startsWith("/coding/javascriptmachinecoding")
+          ? "machine-coding"
+      : location.pathname.startsWith("/coding/typescript")
+          ? "typescript"
       : location.pathname.startsWith("/coding/javascript")
           ? "coding"
           : /\/javascript\/tutorial\/day-02[5-7]-/.test(location.pathname)
@@ -33,6 +50,10 @@ export function JavaScriptSubNavigation({ active }: Readonly<JavaScriptSubNaviga
     },
     { key: "coding", label: "Coding Practice", to: "/coding/javascript" },
     { key: "real-interview", label: "Real Interview Coding", to: "/coding/javascriptrealinterview" },
+    { key: "browser", label: "Browser & DOM", to: "/coding/javascriptbrowser" },
+    { key: "interview-revision", label: "Interview Revision", to: "/coding/javascriptinterviewrevision" },
+    { key: "machine-coding", label: "Machine Coding", to: "/coding/javascriptmachinecoding" },
+    { key: "typescript", label: "TypeScript", to: "/coding/typescript" },
   ] as const;
 
   return (

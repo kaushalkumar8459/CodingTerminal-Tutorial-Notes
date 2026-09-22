@@ -1,7 +1,7 @@
 ---
-id="angular-day-099"
-title="FormArray and Repeating Fields"
-slug="day-099-formarray-repeating-fields"
+id: "angular-day-099"
+title: "FormArray and Repeating Fields"
+slug: "day-099-formarray-repeating-fields"
 dayLabel: Day 99
 level: Intermediate
 estimatedMinutes: 90

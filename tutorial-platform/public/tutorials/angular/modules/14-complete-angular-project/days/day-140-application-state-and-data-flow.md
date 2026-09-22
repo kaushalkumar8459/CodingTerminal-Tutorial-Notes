@@ -1,13 +1,13 @@
 ---
-id="angular-day-140"
-title="Application State and Data Flow"
-slug="day-140-application-state-and-data-flow"
-dayLabel="Day 140"
-level=Advanced
-estimatedMinutes=90
-order=140
-track=angular
-youtubeVideos=[]
+id: "angular-day-140"
+title: "Application State and Data Flow"
+slug: "day-140-application-state-and-data-flow"
+dayLabel: "Day 140"
+level: Advanced
+estimatedMinutes: 90
+order: 140
+track: angular
+youtubeVideos: []
 ---
 # Day 140 — Application State and Data Flow
 

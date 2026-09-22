@@ -1,13 +1,13 @@
 ---
-id="angular-day-115"
-title="HTTP Error Handling and Retry Strategy"
-slug="day-115-http-error-handling-and-retry"
-dayLabel="Day 115"
-level=Intermediate
-estimatedMinutes=90
-order=115
-track=angular
-youtubeVideos=[]
+id: "angular-day-115"
+title: "HTTP Error Handling and Retry Strategy"
+slug: "day-115-http-error-handling-and-retry"
+dayLabel: "Day 115"
+level: Intermediate
+estimatedMinutes: 90
+order: 115
+track: angular
+youtubeVideos: []
 ---
 # Day 115 — HTTP Error Handling and Retry Strategy
 

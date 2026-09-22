@@ -1,7 +1,7 @@
 ---
 id: "angular-day-202"
 title: "CDK Layout and Responsive Utilities"
-slug: "cdk-layout-and-responsive-utilities"
+slug: day-202-cdk-layout-and-responsive-utilities
 day: 202
 module: 18
 track: "angular"

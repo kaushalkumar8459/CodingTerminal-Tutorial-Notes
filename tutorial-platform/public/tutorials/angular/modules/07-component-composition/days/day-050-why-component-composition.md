@@ -1,5 +1,5 @@
-id="cc7d1"
 ---
+id: "cc7d1"
 title: Why Component Composition
 slug: day-050-why-component-composition
 dayLabel: Day 50

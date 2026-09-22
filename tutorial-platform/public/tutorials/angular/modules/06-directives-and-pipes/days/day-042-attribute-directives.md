@@ -1,5 +1,5 @@
-id="d6d02"
 ---
+id: "d6d02"
 title: Attribute Directives
 slug: day-042-attribute-directives
 dayLabel: Day 42

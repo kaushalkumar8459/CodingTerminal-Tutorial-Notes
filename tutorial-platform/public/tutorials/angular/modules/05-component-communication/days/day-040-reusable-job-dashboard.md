@@ -1,5 +1,5 @@
-id="c5d09"
 ---
+id: "c5d09"
 title: Mini Project — Reusable Job Dashboard
 slug: day-040-reusable-job-dashboard
 dayLabel: Day 40

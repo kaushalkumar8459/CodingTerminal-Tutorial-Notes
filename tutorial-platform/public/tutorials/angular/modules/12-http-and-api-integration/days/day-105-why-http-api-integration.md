@@ -1,13 +1,13 @@
 ---
-id="angular-day-105"
-title="Why HTTP & API Integration?"
-slug="day-105-why-http-api-integration"
-dayLabel="Day 105"
-level=Beginner
-estimatedMinutes=60
-order=105
-track=angular
-youtubeVideos=[]
+id: "angular-day-105"
+title: "Why HTTP & API Integration?"
+slug: "day-105-why-http-api-integration"
+dayLabel: "Day 105"
+level: Beginner
+estimatedMinutes: 60
+order: 105
+track: angular
+youtubeVideos: []
 ---
 # Day 105 — Why HTTP & API Integration?
 

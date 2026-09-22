@@ -1,5 +1,5 @@
-id="c5m01"
 ---
+id: "c5m01"
 title: Component Communication
 slug: component-communication
 level: Beginner

@@ -1,10 +1,10 @@
 ---
-id="angular-module-12"
-title="HTTP & API Integration"
-slug="http-and-api-integration"
-level=Beginner
-order=12
-track=angular
+id: "angular-module-12"
+title: "HTTP & API Integration"
+slug: "http-and-api-integration"
+level: Beginner
+order: 12
+track: angular
 ---
 # Module 12 — HTTP & API Integration
 

@@ -1,13 +1,13 @@
 ---
-id="angular-day-142"
-title="Accessibility and Responsive UX"
-slug="day-142-accessibility-and-responsive-ux"
-dayLabel="Day 142"
-level=Advanced
-estimatedMinutes=90
-order=142
-track=angular
-youtubeVideos=[]
+id: "angular-day-142"
+title: "Accessibility and Responsive UX"
+slug: "day-142-accessibility-and-responsive-ux"
+dayLabel: "Day 142"
+level: Advanced
+estimatedMinutes: 90
+order: 142
+track: angular
+youtubeVideos: []
 ---
 # Day 142 — Accessibility and Responsive UX
 

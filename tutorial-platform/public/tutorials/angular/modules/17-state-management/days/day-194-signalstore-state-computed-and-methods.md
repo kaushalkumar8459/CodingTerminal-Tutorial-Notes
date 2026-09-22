@@ -1,13 +1,13 @@
 ---
-id="angular-day-194"
-title="SignalStore State, Computed and Methods"
-slug="signalstore-state-computed-and-methods"
-dayLabel="Day 194"
-level=Advanced
-estimatedMinutes=90
-order=194
-track=angular
-youtubeVideos=[]
+id: "angular-day-194"
+title: "SignalStore State, Computed and Methods"
+slug: day-194-signalstore-state-computed-and-methods
+dayLabel: "Day 194"
+level: Advanced
+estimatedMinutes: 90
+order: 194
+track: angular
+youtubeVideos: []
 ---
 
 # Day 194 - SignalStore State, Computed and Methods

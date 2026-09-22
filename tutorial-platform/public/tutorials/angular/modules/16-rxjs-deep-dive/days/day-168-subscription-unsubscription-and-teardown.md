@@ -1,13 +1,13 @@
 ---
-id="angular-day-168"
-title="Subscription, Unsubscription and Teardown"
-slug="subscription-unsubscription-and-teardown"
-dayLabel="Day 168"
-level=Beginner
-estimatedMinutes=75
-order=168
-track=angular
-youtubeVideos=[]
+id: "angular-day-168"
+title: "Subscription, Unsubscription and Teardown"
+slug: day-168-subscription-unsubscription-and-teardown
+dayLabel: "Day 168"
+level: Beginner
+estimatedMinutes: 75
+order: 168
+track: angular
+youtubeVideos: []
 ---
 
 # Day 168 - Subscription, Unsubscription and Teardown

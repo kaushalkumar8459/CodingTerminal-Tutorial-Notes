@@ -1,13 +1,13 @@
 ---
-id="angular-day-139"
-title="Admin and Permission Management"
-slug="day-139-admin-and-permission-management"
-dayLabel="Day 139"
-level=Advanced
-estimatedMinutes=90
-order=139
-track=angular
-youtubeVideos=[]
+id: "angular-day-139"
+title: "Admin and Permission Management"
+slug: "day-139-admin-and-permission-management"
+dayLabel: "Day 139"
+level: Advanced
+estimatedMinutes: 90
+order: 139
+track: angular
+youtubeVideos: []
 ---
 # Day 139 — Admin and Permission Management
 

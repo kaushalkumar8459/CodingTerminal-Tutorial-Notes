@@ -1,13 +1,13 @@
 ---
-id="angular-day-145"
-title="Final Project Demo and Interview Walkthrough"
-slug="day-145-final-project-demo-and-interview-walkthrough"
-dayLabel="Day 145"
-level=Advanced
-estimatedMinutes=120
-order=145
-track=angular
-youtubeVideos=[]
+id: "angular-day-145"
+title: "Final Project Demo and Interview Walkthrough"
+slug: "day-145-final-project-demo-and-interview-walkthrough"
+dayLabel: "Day 145"
+level: Advanced
+estimatedMinutes: 120
+order: 145
+track: angular
+youtubeVideos: []
 ---
 # Day 145 — Final Project Demo and Interview Walkthrough
 

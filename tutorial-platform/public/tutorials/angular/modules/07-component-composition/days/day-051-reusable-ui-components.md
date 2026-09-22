@@ -1,5 +1,5 @@
-id="cc7d2"
 ---
+id: "cc7d2"
 title: Reusable UI Components
 slug: day-051-reusable-ui-components
 dayLabel: Day 51

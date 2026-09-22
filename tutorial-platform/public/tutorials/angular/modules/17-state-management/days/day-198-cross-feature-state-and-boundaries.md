@@ -1,13 +1,13 @@
 ---
-id="angular-day-198"
-title="Cross-Feature State and Boundaries"
-slug="cross-feature-state-and-boundaries"
-dayLabel="Day 198"
-level=Advanced
-estimatedMinutes=90
-order=198
-track=angular
-youtubeVideos=[]
+id: "angular-day-198"
+title: "Cross-Feature State and Boundaries"
+slug: day-198-cross-feature-state-and-boundaries
+dayLabel: "Day 198"
+level: Advanced
+estimatedMinutes: 90
+order: 198
+track: angular
+youtubeVideos: []
 ---
 
 # Day 198 - Cross-Feature State and Boundaries

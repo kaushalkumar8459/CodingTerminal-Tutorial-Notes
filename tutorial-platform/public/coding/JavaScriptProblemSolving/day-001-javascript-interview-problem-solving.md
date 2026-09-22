@@ -1,4 +1,4 @@
-# Day 003 — JavaScript Interview Problem Solving
+# Day 001 — JavaScript Interview Problem Solving
 
 This questions-only set focuses on reasoning about JavaScript behavior, functions, objects, closures, asynchronous code, and browser problems. Predict the result first, then explain why.
 

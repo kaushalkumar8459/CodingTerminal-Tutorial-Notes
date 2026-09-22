@@ -1,13 +1,13 @@
 ---
-id="angular-day-179"
-title="RxJS with Forms and User Events"
-slug="rxjs-with-forms-and-events"
-dayLabel="Day 179"
-level=Intermediate
-estimatedMinutes=90
-order=179
-track=angular
-youtubeVideos=[]
+id: "angular-day-179"
+title: "RxJS with Forms and User Events"
+slug: day-179-rxjs-with-forms-and-events
+dayLabel: "Day 179"
+level: Intermediate
+estimatedMinutes: 90
+order: 179
+track: angular
+youtubeVideos: []
 ---
 
 # Day 179 - RxJS with Forms and User Events

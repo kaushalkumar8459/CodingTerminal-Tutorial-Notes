@@ -1,13 +1,13 @@
 ---
-id="angular-day-119"
-title="Mini Project — Job Search API Dashboard"
-slug="day-119-job-search-api-dashboard"
-dayLabel="Day 119"
-level=Intermediate
-estimatedMinutes=120
-order=119
-track=angular
-youtubeVideos=[]
+id: "angular-day-119"
+title: "Mini Project — Job Search API Dashboard"
+slug: "day-119-job-search-api-dashboard"
+dayLabel: "Day 119"
+level: Intermediate
+estimatedMinutes: 120
+order: 119
+track: angular
+youtubeVideos: []
 ---
 # Day 119 — Mini Project: Job Search API Dashboard
 

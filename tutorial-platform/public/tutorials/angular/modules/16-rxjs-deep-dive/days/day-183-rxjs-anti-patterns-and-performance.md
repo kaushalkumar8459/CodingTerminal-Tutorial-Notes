@@ -1,13 +1,13 @@
 ---
-id="angular-day-183"
-title="RxJS Anti-Patterns and Performance"
-slug="rxjs-anti-patterns-and-performance"
-dayLabel="Day 183"
-level=Advanced
-estimatedMinutes=90
-order=183
-track=angular
-youtubeVideos=[]
+id: "angular-day-183"
+title: "RxJS Anti-Patterns and Performance"
+slug: day-183-rxjs-anti-patterns-and-performance
+dayLabel: "Day 183"
+level: Advanced
+estimatedMinutes: 90
+order: 183
+track: angular
+youtubeVideos: []
 ---
 
 # Day 183 - RxJS Anti-Patterns and Performance

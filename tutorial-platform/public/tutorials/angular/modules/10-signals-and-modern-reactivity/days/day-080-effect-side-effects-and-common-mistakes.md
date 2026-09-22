@@ -1,7 +1,7 @@
 ---
-id="angular-day-080"
-title="effect() — Side Effects and Common Mistakes"
-slug="day-080-effect-side-effects-and-common-mistakes"
+id: "angular-day-080"
+title: "effect() — Side Effects and Common Mistakes"
+slug: "day-080-effect-side-effects-and-common-mistakes"
 dayLabel: Day 80
 level: Intermediate
 estimatedMinutes: 75
@@ -25,7 +25,7 @@ constructor() {
 }
 ```
 
-Effects run when the signals they read change and are intended for synchronization with imperative or non-signal APIs. citeturn0search0
+Effects run when the signals they read change and are intended for synchronization with imperative or non-signal APIs.
 
 ## Do Not Do This
 ```ts
@@ -40,10 +40,10 @@ Prefer computed():
 readonly total = computed(() => this.price() * this.quantity());
 ```
 
-Angular recommends computed() for derived values and linkedSignal() for writable derived state; effects should be used when a side effect is actually required. citeturn0search0
+Angular recommends computed() for derived values and linkedSignal() for writable derived state; effects should be used when a side effect is actually required.
 
 ## Cleanup
-Effects can register cleanup logic with onCleanup. Angular also cleans up component-associated effects when the component is destroyed. citeturn0search0
+Effects can register cleanup logic with onCleanup. Angular also cleans up component-associated effects when the component is destroyed.
 
 ## Exercise
 Persist a theme preference to localStorage with one justified effect.

@@ -1,10 +1,10 @@
 ---
-id="angular-module-11"
-title="Angular Forms"
-slug="angular-forms"
-level=Beginner
-order=11
-track=angular
+id: "angular-module-11"
+title: "Angular Forms"
+slug: "angular-forms"
+level: Beginner
+order: 11
+track: angular
 ---
 # Module 11 — Forms
 

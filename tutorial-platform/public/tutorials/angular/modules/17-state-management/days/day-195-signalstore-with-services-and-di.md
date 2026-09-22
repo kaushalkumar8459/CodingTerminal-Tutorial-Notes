@@ -1,13 +1,13 @@
 ---
-id="angular-day-195"
-title="SignalStore with Services and DI"
-slug="signalstore-with-services-and-di"
-dayLabel="Day 195"
-level=Advanced
-estimatedMinutes=90
-order=195
-track=angular
-youtubeVideos=[]
+id: "angular-day-195"
+title: "SignalStore with Services and DI"
+slug: day-195-signalstore-with-services-and-di
+dayLabel: "Day 195"
+level: Advanced
+estimatedMinutes: 90
+order: 195
+track: angular
+youtubeVideos: []
 ---
 
 # Day 195 - SignalStore with Services and DI

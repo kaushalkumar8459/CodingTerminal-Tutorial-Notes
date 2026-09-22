@@ -1,5 +1,5 @@
-id="cc7d8"
 ---
+id: "cc7d8"
 title: Mini Project — Reusable Admin UI Kit
 slug: day-057-reusable-admin-ui-kit
 dayLabel: Day 57

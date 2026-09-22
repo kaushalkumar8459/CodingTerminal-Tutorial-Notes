@@ -1,13 +1,13 @@
 ---
-id="angular-day-116"
-title="httpResource() and Signal-Based HTTP State"
-slug="day-116-httpresource-signal-based-http-state"
-dayLabel="Day 116"
-level=Advanced
-estimatedMinutes=90
-order=116
-track=angular
-youtubeVideos=[]
+id: "angular-day-116"
+title: "httpResource() and Signal-Based HTTP State"
+slug: "day-116-httpresource-signal-based-http-state"
+dayLabel: "Day 116"
+level: Advanced
+estimatedMinutes: 90
+order: 116
+track: angular
+youtubeVideos: []
 ---
 # Day 116 — httpResource() and Signal-Based HTTP State
 

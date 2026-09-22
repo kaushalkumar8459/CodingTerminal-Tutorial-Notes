@@ -1,10 +1,10 @@
 ---
-id="angular-module-14"
-title="Complete Angular Project"
-slug="complete-angular-project"
-level=Intermediate
-order=14
-track=angular
+id: "angular-module-14"
+title: "Complete Angular Project"
+slug: "complete-angular-project"
+level: Intermediate
+order: 14
+track: angular
 ---
 # Module 14 — Complete Angular Project
 

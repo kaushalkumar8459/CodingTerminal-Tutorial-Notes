@@ -1,13 +1,13 @@
 ---
-id="angular-day-192"
-title="Feature State and Facade Patterns"
-slug="feature-state-and-facade-patterns"
-dayLabel="Day 192"
-level=Advanced
-estimatedMinutes=90
-order=192
-track=angular
-youtubeVideos=[]
+id: "angular-day-192"
+title: "Feature State and Facade Patterns"
+slug: day-192-feature-state-and-facade-patterns
+dayLabel: "Day 192"
+level: Advanced
+estimatedMinutes: 90
+order: 192
+track: angular
+youtubeVideos: []
 ---
 
 # Day 192 - Feature State and Facade Patterns

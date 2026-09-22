@@ -1,5 +1,5 @@
-id="c5d08"
 ---
+id: "c5d08"
 title: Component Communication Patterns and Boundaries
 slug: day-039-component-communication-patterns-and-boundaries
 dayLabel: Day 39

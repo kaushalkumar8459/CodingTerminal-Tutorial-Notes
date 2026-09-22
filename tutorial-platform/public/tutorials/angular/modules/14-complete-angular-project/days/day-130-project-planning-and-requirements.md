@@ -1,13 +1,13 @@
 ---
-id="angular-day-130"
-title="Project Planning and Requirements"
-slug="day-130-project-planning-and-requirements"
-dayLabel="Day 130"
-level=Intermediate
-estimatedMinutes=90
-order=130
-track=angular
-youtubeVideos=[]
+id: "angular-day-130"
+title: "Project Planning and Requirements"
+slug: "day-130-project-planning-and-requirements"
+dayLabel: "Day 130"
+level: Intermediate
+estimatedMinutes: 90
+order: 130
+track: angular
+youtubeVideos: []
 ---
 # Day 130 — Project Planning and Requirements
 

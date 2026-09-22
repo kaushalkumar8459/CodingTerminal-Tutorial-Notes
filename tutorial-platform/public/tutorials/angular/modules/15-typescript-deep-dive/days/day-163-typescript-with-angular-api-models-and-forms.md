@@ -1,13 +1,13 @@
 ---
-id="angular-day-163"
-title="TypeScript with Angular API Models and Forms"
-slug="day-163-typescript-with-angular-api-models-and-forms"
-dayLabel="Day 163"
-level=Advanced
-estimatedMinutes=90
-order=163
-track=angular
-youtubeVideos=[]
+id: "angular-day-163"
+title: "TypeScript with Angular API Models and Forms"
+slug: "day-163-typescript-with-angular-api-models-and-forms"
+dayLabel: "Day 163"
+level: Advanced
+estimatedMinutes: 90
+order: 163
+track: angular
+youtubeVideos: []
 ---
 # Day 163 — TypeScript with Angular API Models and Forms
 

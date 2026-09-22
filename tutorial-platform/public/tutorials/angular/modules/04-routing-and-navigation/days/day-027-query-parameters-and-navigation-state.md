@@ -1,5 +1,5 @@
-id="r4n06"
 ---
+id: "r4n06"
 title: Query Parameters and Navigation State
 slug: day-027-query-parameters-and-navigation-state
 dayLabel: Day 27

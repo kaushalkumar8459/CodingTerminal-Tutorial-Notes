@@ -1,7 +1,7 @@
 ---
-id="angular-day-086"
-title="resource() — Async Resource State"
-slug="day-086-resource-async-state"
+id: "angular-day-086"
+title: "resource() — Async Resource State"
+slug: "day-086-resource-async-state"
 dayLabel: Day 86
 level: Advanced
 estimatedMinutes: 90
@@ -16,10 +16,10 @@ Understand asynchronous state inside Angular's signal-based model without introd
 
 ## Angular 21 Status
 
-In the Angular 21 roadmap, `resource()` is listed under APIs available to experiment with. Treat it as experimental rather than a stable production recommendation. API details may change in later Angular releases. citeturn1search2
+In the Angular 21 roadmap, `resource()` is listed under APIs available to experiment with. Treat it as experimental rather than a stable production recommendation. API details may change in later Angular releases.
 
 ## Why Resource?
-signal(), computed(), and other signal APIs are synchronous. resource() connects asynchronous operations to signal-based state. citeturn0search2
+signal(), computed(), and other signal APIs are synchronous. resource() connects asynchronous operations to signal-based state.
 
 ## Basic Shape
 ```ts
@@ -38,12 +38,12 @@ readonly userResource = resource({
 });
 ```
 
-The params computation is reactive. When its signal dependencies change, Angular can run the loader for the new parameters. citeturn0search2
+The params computation is reactive. When its signal dependencies change, Angular can run the loader for the new parameters.
 
 ## Important Boundary
 Do not introduce HttpClient here. This lesson uses a local Promise-based loader so the learner understands reactive parameters, loading, resolved state, and errors first.
 
-httpResource() is built on HttpClient and belongs after HTTP fundamentals. citeturn0search6
+httpResource() is built on HttpClient and belongs after HTTP fundamentals.
 
 ## Exercise
 Build a User Preview with:

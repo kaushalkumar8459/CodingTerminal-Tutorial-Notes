@@ -8,7 +8,7 @@ Understand XSS and Angular's sanitization model.
 
 Cross-site scripting occurs when attacker-controlled content is interpreted as executable content in the application's origin.
 
-Angular treats values as untrusted by default and sanitizes or escapes values inserted through templates. Security depends on the context: HTML, Style, URL, and Resource URL have different risks. citeturn0search0turn0search4
+Angular treats values as untrusted by default and sanitizes or escapes values inserted through templates. Security depends on the context: HTML, Style, URL, and Resource URL have different risks.
 
 ## Example
 

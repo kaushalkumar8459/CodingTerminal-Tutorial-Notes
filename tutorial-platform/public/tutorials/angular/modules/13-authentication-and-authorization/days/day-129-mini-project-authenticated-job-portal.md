@@ -10,10 +10,10 @@ Build a small JobHub authentication foundation. Public pages include Home and Lo
 Acceptance checklist: session bootstrap has a checking state; protected routes redirect; role-aware navigation works; UI permission checks do not replace backend authorization; logout clears authentication and sensitive state; 401 and 403 differ; credentials are not logged; authentication logic is not duplicated.
 
 ## Common Mistakes
-Interview challenge: explain why each responsibility belongs in AuthService, guard, interceptor, feature service and backend. Then explain what an attacker could still do after modifying the Angular application in the browser.
+Common mistakes: duplicating authentication logic across features; trusting frontend permission checks as security; forgetting to clear sensitive state on logout; treating guards as API protection.
 
 ## Interview Questions
-Outcome: a complete authentication and authorization foundation ready for the larger JobHub project.
+Interview challenge: explain why each responsibility belongs in AuthService, guard, interceptor, feature service and backend. Then explain what an attacker could still do after modifying the Angular application in the browser.
 
 ## Outcome
-You can apply this concept in a realistic Angular application without confusing client-side UX with backend security.
+You have built a complete authentication and authorization foundation ready for the larger JobHub project. You can apply this concept in a realistic Angular application without confusing client-side UX with backend security.

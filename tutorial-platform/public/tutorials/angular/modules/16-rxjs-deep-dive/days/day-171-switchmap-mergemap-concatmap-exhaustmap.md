@@ -1,13 +1,13 @@
 ---
-id="angular-day-171"
-title="Flattening: switchMap, mergeMap, concatMap and exhaustMap"
-slug="switchmap-mergemap-concatmap-exhaustmap"
-dayLabel="Day 171"
-level=Intermediate
-estimatedMinutes=90
-order=171
-track=angular
-youtubeVideos=[]
+id: "angular-day-171"
+title: "Flattening: switchMap, mergeMap, concatMap and exhaustMap"
+slug: day-171-switchmap-mergemap-concatmap-exhaustmap
+dayLabel: "Day 171"
+level: Intermediate
+estimatedMinutes: 90
+order: 171
+track: angular
+youtubeVideos: []
 ---
 
 # Day 171 - Flattening: switchMap, mergeMap, concatMap and exhaustMap

@@ -122,7 +122,15 @@ function CodingLayout() {
           </p>
 
           <MainNavigation currentTrack="javascript" />
-          {track === "javascript" || track === "javascriptproblemsolving" || track === "javascriptrealinterview" ? <JavaScriptSubNavigation /> : null}
+          {track === "javascript" ||
+          track === "javascriptproblemsolving" ||
+          track === "javascriptrealinterview" ||
+          track === "javascriptbrowser" ||
+          track === "javascriptinterviewrevision" ||
+          track === "javascriptmachinecoding" ||
+          track === "typescript" ? (
+            <JavaScriptSubNavigation />
+          ) : null}
         </header>
 
         <div className="grid gap-4 sm:gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">

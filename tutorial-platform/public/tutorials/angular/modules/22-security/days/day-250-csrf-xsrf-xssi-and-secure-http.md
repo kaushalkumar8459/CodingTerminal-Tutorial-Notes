@@ -6,7 +6,7 @@ Understand common HTTP-level web attacks and Angular's client-side support.
 
 ## CSRF/XSRF
 
-CSRF tricks a user's browser into sending an unwanted authenticated request. Angular HttpClient provides XSRF configuration support, but the primary mitigation must be implemented correctly on the server. citeturn0search0
+CSRF tricks a user's browser into sending an unwanted authenticated request. Angular HttpClient provides XSRF configuration support, but the primary mitigation must be implemented correctly on the server.
 
 ## Example
 
@@ -23,7 +23,7 @@ Use names that match the server contract.
 
 ## XSSI
 
-Angular HttpClient recognizes the conventional XSSI JSON prefix and removes it before parsing. citeturn0search0
+Angular HttpClient recognizes the conventional XSSI JSON prefix and removes it before parsing.
 
 ## Exercise
 

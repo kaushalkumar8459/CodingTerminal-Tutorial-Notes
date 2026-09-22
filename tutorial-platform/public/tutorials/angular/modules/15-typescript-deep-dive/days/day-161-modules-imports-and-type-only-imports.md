@@ -1,13 +1,13 @@
 ---
-id="angular-day-161"
-title="Modules, Imports and Type-Only Imports"
-slug="day-161-modules-imports-and-type-only-imports"
-dayLabel="Day 161"
-level=Intermediate
-estimatedMinutes=75
-order=161
-track=angular
-youtubeVideos=[]
+id: "angular-day-161"
+title: "Modules, Imports and Type-Only Imports"
+slug: "day-161-modules-imports-and-type-only-imports"
+dayLabel: "Day 161"
+level: Intermediate
+estimatedMinutes: 75
+order: 161
+track: angular
+youtubeVideos: []
 ---
 # Day 161 — Modules, Imports and Type-Only Imports
 

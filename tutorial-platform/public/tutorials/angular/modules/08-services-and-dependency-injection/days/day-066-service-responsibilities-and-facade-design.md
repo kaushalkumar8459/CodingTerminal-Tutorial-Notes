@@ -1,6 +1,6 @@
 ---
 title: Service Responsibilities and Facade Design
-slug: service-responsibilities-and-facade-design
+slug: day-066-service-responsibilities-and-facade-design
 dayLabel: Day 66
 level: Intermediate
 estimatedMinutes: 75

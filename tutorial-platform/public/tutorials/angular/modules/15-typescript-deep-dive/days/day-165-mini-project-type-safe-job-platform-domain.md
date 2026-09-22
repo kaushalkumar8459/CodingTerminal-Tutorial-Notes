@@ -1,13 +1,13 @@
 ---
-id="angular-day-165"
-title="Mini Project — Type-Safe Job Platform Domain"
-slug="day-165-mini-project-type-safe-job-platform-domain"
-dayLabel="Day 165"
-level=Advanced
-estimatedMinutes=120
-order=165
-track=angular
-youtubeVideos=[]
+id: "angular-day-165"
+title: "Mini Project — Type-Safe Job Platform Domain"
+slug: "day-165-mini-project-type-safe-job-platform-domain"
+dayLabel: "Day 165"
+level: Advanced
+estimatedMinutes: 120
+order: 165
+track: angular
+youtubeVideos: []
 ---
 # Day 165 — Mini Project: Type-Safe Job Platform Domain
 

@@ -1,7 +1,7 @@
 ---
-id="angular-day-076"
-title="Why Signals & Modern Reactivity?"
-slug="day-076-why-signals-and-modern-reactivity"
+id: "angular-day-076"
+title: "Why Signals & Modern Reactivity?"
+slug: "day-076-why-signals-and-modern-reactivity"
 dayLabel: Day 76
 level: Beginner
 estimatedMinutes: 60

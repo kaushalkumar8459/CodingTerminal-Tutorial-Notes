@@ -1,13 +1,13 @@
 ---
-id="angular-day-191"
-title="Async State and Request Lifecycles"
-slug="async-state-and-request-lifecycles"
-dayLabel="Day 191"
-level=Advanced
-estimatedMinutes=90
-order=191
-track=angular
-youtubeVideos=[]
+id: "angular-day-191"
+title: "Async State and Request Lifecycles"
+slug: day-191-async-state-and-request-lifecycles
+dayLabel: "Day 191"
+level: Advanced
+estimatedMinutes: 90
+order: 191
+track: angular
+youtubeVideos: []
 ---
 
 # Day 191 - Async State and Request Lifecycles

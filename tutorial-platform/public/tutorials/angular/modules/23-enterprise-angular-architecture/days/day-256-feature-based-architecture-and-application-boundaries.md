@@ -13,7 +13,7 @@ Learn to organize a large Angular application around features instead of technic
 
 ## Angular guidance
 
-Angular's style guide recommends organizing code by feature areas and grouping closely related files together. It discourages broad folders organized only by type, such as components, directives, and services. citeturn0search0
+Angular's style guide recommends organizing code by feature areas and grouping closely related files together. It discourages broad folders organized only by type, such as components, directives, and services.
 
 ## Feature-first example
 

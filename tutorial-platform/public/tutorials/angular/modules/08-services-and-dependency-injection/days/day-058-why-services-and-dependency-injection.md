@@ -1,6 +1,6 @@
 ---
 title: Why Services & Dependency Injection?
-slug: why-services-and-dependency-injection
+slug: day-058-why-services-and-dependency-injection
 dayLabel: Day 58
 level: Beginner
 estimatedMinutes: 60

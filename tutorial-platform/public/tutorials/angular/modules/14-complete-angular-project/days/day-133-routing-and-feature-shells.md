@@ -1,13 +1,13 @@
 ---
-id="angular-day-133"
-title="Routing and Feature Shells"
-slug="day-133-routing-and-feature-shells"
-dayLabel="Day 133"
-level=Intermediate
-estimatedMinutes=90
-order=133
-track=angular
-youtubeVideos=[]
+id: "angular-day-133"
+title: "Routing and Feature Shells"
+slug: "day-133-routing-and-feature-shells"
+dayLabel: "Day 133"
+level: Intermediate
+estimatedMinutes: 90
+order: 133
+track: angular
+youtubeVideos: []
 ---
 # Day 133 — Routing and Feature Shells
 
@@ -27,7 +27,7 @@ Turn the project feature map into a real navigation architecture.
     └── users
 ```
 
-Use route-level lazy loading for larger feature areas. Angular routing supports lazy-loaded components and route trees. citeturn0search2turn0search8
+Use route-level lazy loading for larger feature areas. Angular routing supports lazy-loaded components and route trees.
 
 ## Shells
 The authenticated shell owns shared navigation and an outlet for protected features.

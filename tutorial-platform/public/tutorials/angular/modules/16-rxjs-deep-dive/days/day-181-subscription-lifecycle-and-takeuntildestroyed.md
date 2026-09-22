@@ -1,13 +1,13 @@
 ---
-id="angular-day-181"
-title="Subscription Lifecycle with takeUntilDestroyed"
-slug="subscription-lifecycle-and-takeuntildestroyed"
-dayLabel="Day 181"
-level=Advanced
-estimatedMinutes=75
-order=181
-track=angular
-youtubeVideos=[]
+id: "angular-day-181"
+title: "Subscription Lifecycle with takeUntilDestroyed"
+slug: day-181-subscription-lifecycle-and-takeuntildestroyed
+dayLabel: "Day 181"
+level: Advanced
+estimatedMinutes: 75
+order: 181
+track: angular
+youtubeVideos: []
 ---
 
 # Day 181 - Subscription Lifecycle with takeUntilDestroyed

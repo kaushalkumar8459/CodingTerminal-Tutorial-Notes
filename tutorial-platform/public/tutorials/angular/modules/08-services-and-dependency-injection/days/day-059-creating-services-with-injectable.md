@@ -1,6 +1,6 @@
 ---
 title: Creating Services with @Injectable
-slug: creating-services-with-injectable
+slug: day-059-creating-services-with-injectable
 dayLabel: Day 59
 level: Beginner
 estimatedMinutes: 60

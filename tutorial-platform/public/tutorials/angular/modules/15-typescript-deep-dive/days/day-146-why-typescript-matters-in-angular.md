@@ -1,13 +1,13 @@
 ---
-id="angular-day-146"
-title="Why TypeScript Matters in Angular"
-slug="day-146-why-typescript-matters-in-angular"
-dayLabel="Day 146"
-level=Beginner
-estimatedMinutes=60
-order=146
-track=angular
-youtubeVideos=[]
+id: "angular-day-146"
+title: "Why TypeScript Matters in Angular"
+slug: "day-146-why-typescript-matters-in-angular"
+dayLabel: "Day 146"
+level: Beginner
+estimatedMinutes: 60
+order: 146
+track: angular
+youtubeVideos: []
 ---
 # Day 146 — Why TypeScript Matters in Angular
 

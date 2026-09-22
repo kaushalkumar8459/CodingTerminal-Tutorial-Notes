@@ -1,5 +1,5 @@
-id="cc7m1"
 ---
+id: "cc7m1"
 title: Component Composition
 slug: component-composition
 level: Intermediate

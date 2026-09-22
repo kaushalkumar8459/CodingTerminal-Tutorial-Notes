@@ -1,7 +1,7 @@
 ---
 id: "angular-day-212"
 title: "Mini Project — Accessible Admin Workspace"
-slug: "mini-project-accessible-admin-workspace"
+slug: day-212-mini-project-accessible-admin-workspace
 day: 212
 module: 18
 track: "angular"

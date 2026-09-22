@@ -1,7 +1,7 @@
 ---
-id="angular-day-089"
-title="Mini Project — Reactive Job Dashboard"
-slug="day-089-reactive-job-dashboard"
+id: "angular-day-089"
+title: "Mini Project — Reactive Job Dashboard"
+slug: "day-089-reactive-job-dashboard"
 dayLabel: Day 89
 level: Intermediate
 estimatedMinutes: 120

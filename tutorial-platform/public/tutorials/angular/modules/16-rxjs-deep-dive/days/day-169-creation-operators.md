@@ -1,13 +1,13 @@
 ---
-id="angular-day-169"
-title="Creation Operators"
-slug="creation-operators"
-dayLabel="Day 169"
-level=Beginner
-estimatedMinutes=75
-order=169
-track=angular
-youtubeVideos=[]
+id: "angular-day-169"
+title: "Creation Operators"
+slug: day-169-creation-operators
+dayLabel: "Day 169"
+level: Beginner
+estimatedMinutes: 75
+order: 169
+track: angular
+youtubeVideos: []
 ---
 
 # Day 169 - Creation Operators

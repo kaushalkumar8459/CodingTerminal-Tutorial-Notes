@@ -1,7 +1,7 @@
 ---
-id="angular-day-081"
-title="Signals in Component Templates"
-slug="day-081-signals-in-component-templates"
+id: "angular-day-081"
+title: "Signals in Component Templates"
+slug: "day-081-signals-in-component-templates"
 dayLabel: Day 81
 level: Beginner
 estimatedMinutes: 60
@@ -49,7 +49,7 @@ Signals work naturally with the modern control flow learned in Module 3.
 Prefer computed() for filtered or derived collections.
 
 ## OnPush
-Angular tracks signal reads in OnPush templates and can mark affected components when signal values change. citeturn0search1
+Angular tracks signal reads in OnPush templates and can mark affected components when signal values change.
 
 ## Exercise
 Build a notification panel with unread count, open/closed state, notification list, computed unread notifications, and empty state.

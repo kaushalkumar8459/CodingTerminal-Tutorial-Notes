@@ -1,6 +1,6 @@
 ---
 title: Mini Project — Component Lifecycle Monitor
-slug: mini-project-component-lifecycle-monitor
+slug: day-075-mini-project-component-lifecycle-monitor
 dayLabel: Day 75
 level: Advanced
 estimatedMinutes: 120

@@ -1,13 +1,13 @@
 ---
-id="angular-day-199"
-title="State Management Anti-Patterns and Performance"
-slug="state-management-anti-patterns-and-performance"
-dayLabel="Day 199"
-level=Advanced
-estimatedMinutes=90
-order=199
-track=angular
-youtubeVideos=[]
+id: "angular-day-199"
+title: "State Management Anti-Patterns and Performance"
+slug: day-199-state-management-anti-patterns-and-performance
+dayLabel: "Day 199"
+level: Advanced
+estimatedMinutes: 90
+order: 199
+track: angular
+youtubeVideos: []
 ---
 
 # Day 199 - State Management Anti-Patterns and Performance

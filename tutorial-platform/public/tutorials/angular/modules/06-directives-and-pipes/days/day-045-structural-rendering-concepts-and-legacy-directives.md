@@ -1,5 +1,5 @@
-id="d6d05"
 ---
+id: "d6d05"
 title: Structural Rendering Concepts and Legacy Directives
 slug: day-045-structural-rendering-concepts-and-legacy-directives
 dayLabel: Day 45

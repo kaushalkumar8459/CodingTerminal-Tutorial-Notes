@@ -1,13 +1,13 @@
 ---
-id="angular-day-113"
-title="HTTP Interceptors"
-slug="day-113-http-interceptors"
-dayLabel="Day 113"
-level=Intermediate
-estimatedMinutes=90
-order=113
-track=angular
-youtubeVideos=[]
+id: "angular-day-113"
+title: "HTTP Interceptors"
+slug: "day-113-http-interceptors"
+dayLabel: "Day 113"
+level: Intermediate
+estimatedMinutes: 90
+order: 113
+track: angular
+youtubeVideos: []
 ---
 # Day 113 — HTTP Interceptors
 

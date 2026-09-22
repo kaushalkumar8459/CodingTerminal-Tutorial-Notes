@@ -1,7 +1,7 @@
 ---
 id: "angular-day-204"
 title: "Dialogs, Menus and Popovers with Overlay"
-slug: "dialogs-menus-and-popovers-with-overlay"
+slug: day-204-dialogs-menus-and-popovers-with-overlay
 day: 204
 module: 18
 track: "angular"

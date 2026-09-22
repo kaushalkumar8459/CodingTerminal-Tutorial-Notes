@@ -1,7 +1,7 @@
 ---
-id="angular-day-102"
-title="Form UX: Errors, Dirty, Touched, Pending & Submission"
-slug="day-102-form-ux-errors-dirty-touched-pending-submission"
+id: "angular-day-102"
+title: "Form UX: Errors, Dirty, Touched, Pending & Submission"
+slug: "day-102-form-ux-errors-dirty-touched-pending-submission"
 dayLabel: Day 102
 level: Intermediate
 estimatedMinutes: 75

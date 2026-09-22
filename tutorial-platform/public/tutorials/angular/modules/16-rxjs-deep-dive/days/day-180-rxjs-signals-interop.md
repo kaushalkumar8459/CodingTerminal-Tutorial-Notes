@@ -1,13 +1,13 @@
 ---
-id="angular-day-180"
-title="RxJS + Signals Interop: toSignal and toObservable"
-slug="rxjs-signals-interop"
-dayLabel="Day 180"
-level=Advanced
-estimatedMinutes=90
-order=180
-track=angular
-youtubeVideos=[]
+id: "angular-day-180"
+title: "RxJS + Signals Interop: toSignal and toObservable"
+slug: day-180-rxjs-signals-interop
+dayLabel: "Day 180"
+level: Advanced
+estimatedMinutes: 90
+order: 180
+track: angular
+youtubeVideos: []
 ---
 
 # Day 180 - RxJS + Signals Interop: toSignal and toObservable

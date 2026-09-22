@@ -1,5 +1,5 @@
-id="cc7d4"
 ---
+id: "cc7d4"
 title: Template Fragments and Dynamic UI Composition
 slug: day-053-template-fragments-and-dynamic-ui-composition
 dayLabel: Day 53

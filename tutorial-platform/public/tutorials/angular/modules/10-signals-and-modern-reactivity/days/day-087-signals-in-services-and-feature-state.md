@@ -1,7 +1,7 @@
 ---
-id="angular-day-087"
-title="Signals in Services and Feature State"
-slug="day-087-signals-in-services-and-feature-state"
+id: "angular-day-087"
+title: "Signals in Services and Feature State"
+slug: "day-087-signals-in-services-and-feature-state"
 dayLabel: Day 87
 level: Intermediate
 estimatedMinutes: 75

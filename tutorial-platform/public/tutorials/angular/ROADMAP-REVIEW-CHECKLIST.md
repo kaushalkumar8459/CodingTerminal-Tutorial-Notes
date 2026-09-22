@@ -19,7 +19,7 @@
 - [x] Verify module day ranges match roadmap.md.
 - [x] Verify every module README sequence matches its day files.
 - [~] Verify prerequisites are taught before first use. Initial structure is sound; detailed content dependency audit remains.
-- [ ] Verify beginner → intermediate → advanced → enterprise progression.
+- [~] Verify beginner → intermediate → advanced → enterprise progression. Level ordering within modules 01–18 is sound (Beginner→Intermediate→Advanced per module) after fixing corrupted frontmatter; modules 19–27 tag whole days as Advanced (no per-day granularity), which is acceptable at that stage but not yet reviewed for correctness. Found and fixed: (1) 115 day files (Modules 10–17, days 76–200) plus 8 module READMEs had invalid `key=value` frontmatter instead of YAML `key: value`; (2) 39 files across Modules 04–07 had a stray `id="..."` line before the opening `---`, which breaks frontmatter parsing entirely; (3) day-037 had a duplicated `dayLabel` key; (4) day-048 was missing `level` entirely and had `dayLabel: Intermediate`; (5) day-189 had `level: 90` (duplicated from estimatedMinutes) and a slug missing the day-prefix. All fixed.
 - [ ] Verify Pure Angular remains separated from later ecosystem topics.
 - [ ] Verify every topic is introduced because the learner has a practical reason to use it.
 - [ ] Verify repeated topics increase in depth instead of duplicating earlier lessons.

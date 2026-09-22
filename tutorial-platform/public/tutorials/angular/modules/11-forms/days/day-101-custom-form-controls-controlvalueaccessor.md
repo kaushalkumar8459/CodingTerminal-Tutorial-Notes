@@ -1,7 +1,7 @@
 ---
-id="angular-day-101"
-title="Custom Form Controls and ControlValueAccessor"
-slug="day-101-custom-form-controls-controlvalueaccessor"
+id: "angular-day-101"
+title: "Custom Form Controls and ControlValueAccessor"
+slug: "day-101-custom-form-controls-controlvalueaccessor"
 dayLabel: Day 101
 level: Advanced
 estimatedMinutes: 90

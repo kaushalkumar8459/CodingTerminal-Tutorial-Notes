@@ -1,13 +1,13 @@
 ---
-id="angular-day-152"
-title="Narrowing and Type Guards"
-slug="day-152-narrowing-and-type-guards"
-dayLabel="Day 152"
-level=Intermediate
-estimatedMinutes=75
-order=152
-track=angular
-youtubeVideos=[]
+id: "angular-day-152"
+title: "Narrowing and Type Guards"
+slug: "day-152-narrowing-and-type-guards"
+dayLabel: "Day 152"
+level: Intermediate
+estimatedMinutes: 75
+order: 152
+track: angular
+youtubeVideos: []
 ---
 # Day 152 — Narrowing and Type Guards
 

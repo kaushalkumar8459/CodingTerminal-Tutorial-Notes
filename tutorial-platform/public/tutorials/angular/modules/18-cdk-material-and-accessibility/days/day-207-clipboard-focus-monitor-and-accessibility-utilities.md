@@ -1,7 +1,7 @@
 ---
 id: "angular-day-207"
 title: "Clipboard, Focus Monitor and Accessibility Utilities"
-slug: "clipboard-focus-monitor-and-accessibility-utilities"
+slug: day-207-clipboard-focus-monitor-and-accessibility-utilities
 day: 207
 module: 18
 track: "angular"

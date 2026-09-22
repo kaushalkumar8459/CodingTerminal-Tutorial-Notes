@@ -1,7 +1,7 @@
 ---
-id="angular-day-092"
-title="Form Controls and Validation"
-slug="day-092-form-controls-and-validation"
+id: "angular-day-092"
+title: "Form Controls and Validation"
+slug: "day-092-form-controls-and-validation"
 dayLabel: Day 92
 level: Beginner
 estimatedMinutes: 75

@@ -1,6 +1,6 @@
 ---
 title: Modern Lifecycle Utilities and Render Callbacks
-slug: modern-lifecycle-utilities-and-render-callbacks
+slug: day-074-modern-lifecycle-utilities-and-render-callbacks
 dayLabel: Day 74
 level: Advanced
 estimatedMinutes: 80

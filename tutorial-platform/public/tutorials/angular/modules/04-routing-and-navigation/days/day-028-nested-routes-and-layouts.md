@@ -1,5 +1,5 @@
-id="r4n07"
 ---
+id: "r4n07"
 title: Nested Routes and Layouts
 slug: day-028-nested-routes-and-layouts
 dayLabel: Day 28

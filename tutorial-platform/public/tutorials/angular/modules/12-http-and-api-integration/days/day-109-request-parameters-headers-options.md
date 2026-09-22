@@ -1,13 +1,13 @@
 ---
-id="angular-day-109"
-title="Request Parameters, Headers and Options"
-slug="day-109-request-parameters-headers-options"
-dayLabel="Day 109"
-level=Intermediate
-estimatedMinutes=75
-order=109
-track=angular
-youtubeVideos=[]
+id: "angular-day-109"
+title: "Request Parameters, Headers and Options"
+slug: "day-109-request-parameters-headers-options"
+dayLabel: "Day 109"
+level: Intermediate
+estimatedMinutes: 75
+order: 109
+track: angular
+youtubeVideos: []
 ---
 # Day 109 — Request Parameters, Headers and Options
 

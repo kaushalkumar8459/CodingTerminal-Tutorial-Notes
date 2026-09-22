@@ -1,13 +1,13 @@
 ---
-id="angular-day-117"
-title="API Configuration and Environment-Safe URLs"
-slug="day-117-api-configuration-and-environment-safe-urls"
-dayLabel="Day 117"
-level=Intermediate
-estimatedMinutes=75
-order=117
-track=angular
-youtubeVideos=[]
+id: "angular-day-117"
+title: "API Configuration and Environment-Safe URLs"
+slug: "day-117-api-configuration-and-environment-safe-urls"
+dayLabel: "Day 117"
+level: Intermediate
+estimatedMinutes: 75
+order: 117
+track: angular
+youtubeVideos: []
 ---
 # Day 117 — API Configuration and Environment-Safe URLs
 

@@ -1,7 +1,7 @@
 ---
 id: "angular-day-208"
 title: "Angular Material Fundamentals and Theming"
-slug: "angular-material-fundamentals-and-theming"
+slug: day-208-angular-material-fundamentals-and-theming
 day: 208
 module: 18
 track: "angular"

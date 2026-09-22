@@ -1,5 +1,5 @@
-id="c5d04"
 ---
+id: "c5d04"
 title: Two-Way Component Communication with model()
 slug: day-035-two-way-component-communication-with-model
 dayLabel: Day 35

@@ -1,13 +1,13 @@
 ---
-id="angular-day-159"
-title="Template Literal Types"
-slug="day-159-template-literal-types"
-dayLabel="Day 159"
-level=Advanced
-estimatedMinutes=90
-order=159
-track=angular
-youtubeVideos=[]
+id: "angular-day-159"
+title: "Template Literal Types"
+slug: "day-159-template-literal-types"
+dayLabel: "Day 159"
+level: Advanced
+estimatedMinutes: 90
+order: 159
+track: angular
+youtubeVideos: []
 ---
 # Day 159 — Template Literal Types
 

@@ -1,7 +1,7 @@
 ---
 id: "angular-day-211"
 title: "Accessibility Testing and Angular Aria"
-slug: "accessibility-testing-and-angular-aria"
+slug: day-211-accessibility-testing-and-angular-aria
 day: 211
 module: 18
 track: "angular"

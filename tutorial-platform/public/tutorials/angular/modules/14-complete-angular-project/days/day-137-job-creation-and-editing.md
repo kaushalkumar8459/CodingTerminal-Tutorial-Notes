@@ -1,13 +1,13 @@
 ---
-id="angular-day-137"
-title="Job Creation and Editing"
-slug="day-137-job-creation-and-editing"
-dayLabel="Day 137"
-level=Intermediate
-estimatedMinutes=90
-order=137
-track=angular
-youtubeVideos=[]
+id: "angular-day-137"
+title: "Job Creation and Editing"
+slug: "day-137-job-creation-and-editing"
+dayLabel: "Day 137"
+level: Intermediate
+estimatedMinutes: 90
+order: 137
+track: angular
+youtubeVideos: []
 ---
 # Day 137 — Job Creation and Editing
 

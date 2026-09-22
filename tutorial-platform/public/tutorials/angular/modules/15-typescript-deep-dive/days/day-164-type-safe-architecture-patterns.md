@@ -1,13 +1,13 @@
 ---
-id="angular-day-164"
-title="Type-Safe Architecture Patterns"
-slug="day-164-type-safe-architecture-patterns"
-dayLabel="Day 164"
-level=Advanced
-estimatedMinutes=120
-order=164
-track=angular
-youtubeVideos=[]
+id: "angular-day-164"
+title: "Type-Safe Architecture Patterns"
+slug: "day-164-type-safe-architecture-patterns"
+dayLabel: "Day 164"
+level: Advanced
+estimatedMinutes: 120
+order: 164
+track: angular
+youtubeVideos: []
 ---
 # Day 164 — Type-Safe Architecture Patterns
 

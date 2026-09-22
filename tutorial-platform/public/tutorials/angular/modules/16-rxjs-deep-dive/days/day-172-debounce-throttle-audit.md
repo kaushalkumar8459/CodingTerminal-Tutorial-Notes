@@ -1,13 +1,13 @@
 ---
-id="angular-day-172"
-title="Time-Based Operators"
-slug="debounce-throttle-audit"
-dayLabel="Day 172"
-level=Intermediate
-estimatedMinutes=75
-order=172
-track=angular
-youtubeVideos=[]
+id: "angular-day-172"
+title: "Time-Based Operators"
+slug: day-172-debounce-throttle-audit
+dayLabel: "Day 172"
+level: Intermediate
+estimatedMinutes: 75
+order: 172
+track: angular
+youtubeVideos: []
 ---
 
 # Day 172 - Time-Based Operators

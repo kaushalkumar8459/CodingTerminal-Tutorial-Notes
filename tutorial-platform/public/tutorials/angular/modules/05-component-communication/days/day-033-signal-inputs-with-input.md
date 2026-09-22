@@ -1,5 +1,5 @@
-id="c5d02"
 ---
+id: "c5d02"
 title: Signal Inputs with input()
 slug: day-033-signal-inputs-with-input
 dayLabel: Day 33

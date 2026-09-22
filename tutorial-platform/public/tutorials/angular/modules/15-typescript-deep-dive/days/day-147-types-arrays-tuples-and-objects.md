@@ -1,13 +1,13 @@
 ---
-id="angular-day-147"
-title="Types, Arrays, Tuples and Objects"
-slug="day-147-types-arrays-tuples-and-objects"
-dayLabel="Day 147"
-level=Beginner
-estimatedMinutes=75
-order=147
-track=angular
-youtubeVideos=[]
+id: "angular-day-147"
+title: "Types, Arrays, Tuples and Objects"
+slug: "day-147-types-arrays-tuples-and-objects"
+dayLabel: "Day 147"
+level: Beginner
+estimatedMinutes: 75
+order: 147
+track: angular
+youtubeVideos: []
 ---
 # Day 147 — Types, Arrays, Tuples and Objects
 

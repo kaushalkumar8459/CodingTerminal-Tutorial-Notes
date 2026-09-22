@@ -1,7 +1,7 @@
 ---
-id="angular-day-091"
-title="Template-Driven Forms Fundamentals"
-slug="day-091-template-driven-forms-fundamentals"
+id: "angular-day-091"
+title: "Template-Driven Forms Fundamentals"
+slug: "day-091-template-driven-forms-fundamentals"
 dayLabel: Day 91
 level: Beginner
 estimatedMinutes: 75

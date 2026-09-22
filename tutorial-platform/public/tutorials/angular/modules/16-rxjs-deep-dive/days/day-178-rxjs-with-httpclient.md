@@ -1,13 +1,13 @@
 ---
-id="angular-day-178"
-title="RxJS with Angular HttpClient"
-slug="rxjs-with-httpclient"
-dayLabel="Day 178"
-level=Intermediate
-estimatedMinutes=90
-order=178
-track=angular
-youtubeVideos=[]
+id: "angular-day-178"
+title: "RxJS with Angular HttpClient"
+slug: day-178-rxjs-with-httpclient
+dayLabel: "Day 178"
+level: Intermediate
+estimatedMinutes: 90
+order: 178
+track: angular
+youtubeVideos: []
 ---
 
 # Day 178 - RxJS with Angular HttpClient

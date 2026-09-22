@@ -1,6 +1,6 @@
 ---
 title: Provider Recipes: useValue, useFactory, useClass and useExisting
-slug: provider-recipes
+slug: day-065-provider-recipes
 dayLabel: Day 65
 level: Intermediate
 estimatedMinutes: 80
