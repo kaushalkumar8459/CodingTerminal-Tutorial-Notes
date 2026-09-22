@@ -31,13 +31,26 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Runtime Manifest Pattern
 
-## Outcome
+A dynamic host can keep remote locations in runtime configuration so the same build can be promoted across environments.
 
-You can explain Runtime Configuration and Environment-Aware Remote Loading using explicit ownership, contracts, trade-offs, and production considerations.
+Conceptually:
+
+~~~json
+{
+  "candidate": "https://example.com/candidate/remoteEntry.json",
+  "recruiter": "https://example.com/recruiter/remoteEntry.json"
+}
+~~~
+
+The exact manifest filename and loading API depend on the installed Native Federation release.
+
+Treat this configuration as public browser configuration. Remote URLs are **not secrets**.
+
+Validate remote configuration before loading it and define a user-visible fallback when a remote is unavailable.
+
+## Angular 21 / Package-Version Rule
+
+Do not hard-code a Native Federation configuration format from a different major version. Generate or inspect the configuration for the installed package, then adapt the runtime configuration to that generated contract.
