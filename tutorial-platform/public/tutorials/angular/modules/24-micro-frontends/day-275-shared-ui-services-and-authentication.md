@@ -31,13 +31,24 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Shared Platform Boundary
 
-## Outcome
+Prefer sharing **contracts and platform capabilities** over sharing mutable business state.
 
-You can explain Shared UI, Services and Authentication using explicit ownership, contracts, trade-offs, and production considerations.
+Good candidates:
+
+- design-system components;
+- authentication/session contract;
+- permission contract;
+- telemetry;
+- notifications;
+- runtime configuration.
+
+Avoid creating a global "everything service" consumed by every remote.
+
+Authentication is also not a security boundary. A remote must not rely only on host-provided UI state for authorization. Backend authorization remains authoritative.
+
+## Version Note
+
+If the host and remote share Angular services or libraries, verify that the installed Native Federation version supports the intended sharing model and that the shared packages are compatible. Do not assume an example from an older major release remains configuration-compatible.
