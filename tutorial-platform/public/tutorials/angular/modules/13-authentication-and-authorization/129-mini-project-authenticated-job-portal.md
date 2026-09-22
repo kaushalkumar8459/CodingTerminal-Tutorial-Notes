@@ -1,0 +1,1 @@
+Mini Project — Authenticated Job Portal
