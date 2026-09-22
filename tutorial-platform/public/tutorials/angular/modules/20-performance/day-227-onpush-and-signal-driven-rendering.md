@@ -1,38 +1,60 @@
 # Day 227 — OnPush and Signal-Driven Rendering
 
-## Goal
-Learn how OnPush-compatible components and signals help Angular avoid unnecessary rendering work.
+## Learning Goal
+Understand OnPush as a rendering-boundary tool and signals as precise state notifications.
 
-## Concept
-OnPush-compatible components allow Angular to skip unchanged subtrees. A signal read by a template provides a precise notification when that state changes.
+## Prerequisites
+- Days 76–89: Signals
+- Day 226: rendering cost
 
-~~~ts
+## Angular 21 Context
+For Angular 21:
+- **Zoneless is the default.**
+- `OnPush` is **not required** for zoneless.
+- `OnPush` remains important for existing applications, libraries and interview knowledge.
+- Angular recommends OnPush as a step toward zoneless-compatible components.
+
+Do not teach OnPush as the single modern Angular performance solution.
+
+## Example
+
+```ts
 @Component({
   selector: 'app-job-card',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: '<h3>{{ job().title }}</h3>'
+  template: '<h3>{{ job().title }}</h3>',
 })
 export class JobCardComponent {
   readonly job = input.required<Job>();
 }
-~~~
+```
 
-Prefer small state → signal → computed value → template over hidden mutation and broad manual refreshes.
+A signal read by a template gives Angular a precise notification when that state changes.
+
+## Boundary Thinking
+Good component boundaries clarify:
+- local vs shared state
+- which view depends on which signal
+- which subtree can remain unchanged
+- where expensive work belongs
+
+Avoid mutating shared input objects in place. Update the owning state immutably.
 
 ## Exercise
-Convert a JobHub list item's local UI state to signals and keep its component boundary focused.
+Measure a JobHub list before and after introducing focused component boundaries and appropriate OnPush/signal-driven state. Keep only changes that show benefit or satisfy a compatibility requirement.
 
 ## Common Mistakes
-- Mutating input objects in place.
-- Treating OnPush as a magic performance switch.
-- Creating signals without a reason.
+- Treating OnPush as a magic switch.
+- Adding signals without a state problem.
+- Mutating shared objects.
 - Manually forcing change detection unnecessarily.
 
 ## Interview Questions
 1. What does OnPush change?
-2. How do signals help rendering?
-3. When can a subtree be skipped?
-4. Why does immutability help boundaries?
+2. Is OnPush required for zoneless Angular?
+3. How do signals notify Angular?
+4. Why do component boundaries matter?
 
-## Outcome
-You can design predictable rendering boundaries.
+## Expected Outcome
+You can explain OnPush accurately without confusing it with the Angular 21 zoneless model.
