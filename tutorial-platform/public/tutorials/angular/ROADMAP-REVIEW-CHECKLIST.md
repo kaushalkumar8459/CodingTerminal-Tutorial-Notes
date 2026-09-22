@@ -146,8 +146,8 @@
 - [ ] ControlValueAccessor
 - [ ] Form UX
 - [ ] Form architecture
-- [!] Add or properly position current Angular Signal Forms with version/status notes
-- [ ] Recheck numbering if content is inserted or merged
+- [x] Add or properly position current Angular Signal Forms with version/status notes
+- [x] Recheck numbering after merging Signal Forms guidance into Day 103; Days 90–104 remain unchanged
 
 ## Module 12 — HTTP & API Integration
 - [ ] HttpClient/provideHttpClient
@@ -418,7 +418,7 @@ Every detailed day should eventually contain:
 # Execution Order
 1. [ ] Global roadmap/numbering/prerequisite audit
 2. [ ] Angular 21/version-sensitive API audit
-3. [ ] Module 11 — Forms / Signal Forms
+3. [x] Module 11 — Forms / Signal Forms
 4. [ ] Module 18 — Angular Aria/version status
 5. [ ] Module 19 — Testing content rewrite
 6. [ ] Module 20 — Performance/Zoneless correction
