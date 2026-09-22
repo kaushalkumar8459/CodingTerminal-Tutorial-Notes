@@ -255,19 +255,19 @@
 - [x] Each day has a distinct realistic scenario
 
 ## Module 20 — Performance [!]
-- [ ] Performance mental model
-- [ ] Rendering/change-detection cost
-- [ ] Signal-driven rendering
-- [ ] OnPush as compatibility/interview knowledge, not the whole modern story
-- [ ] Angular 21 zoneless model
-- [ ] @for track
-- [ ] Lazy routes/@defer
-- [ ] Bundle optimization
-- [ ] Images/fonts/assets
-- [ ] Network/cache performance
-- [ ] Angular DevTools/browser profiling
-- [ ] Performance architecture/anti-patterns
-- [ ] Measurable before/after examples
+- [x] Performance mental model
+- [x] Rendering/change-detection cost
+- [x] Signal-driven rendering
+- [x] OnPush as compatibility/interview knowledge, not the whole modern story
+- [x] Angular 21 zoneless model
+- [x] @for track
+- [x] Lazy routes/@defer
+- [x] Bundle optimization
+- [x] Images/fonts/assets
+- [x] Network/cache performance
+- [x] Angular DevTools/browser profiling
+- [x] Performance architecture/anti-patterns
+- [x] Measurable before/after examples
 
 ## Module 21 — SSR, SSG & Hydration [!]
 - [ ] CSR vs SSR vs SSG
@@ -421,7 +421,7 @@ Every detailed day should eventually contain:
 3. [x] Module 11 — Forms / Signal Forms
 4. [x] Module 18 — Angular Aria/version status
 5. [x] Module 19 — Testing content rewrite
-6. [ ] Module 20 — Performance/Zoneless correction
+6. [x] Module 20 — Performance/Zoneless correction
 7. [ ] Module 21 — SSR/Hydration correction
 8. [ ] Module 24 — Native Federation/version-sensitive examples
 9. [ ] Module 26 — Interview content rewrite
