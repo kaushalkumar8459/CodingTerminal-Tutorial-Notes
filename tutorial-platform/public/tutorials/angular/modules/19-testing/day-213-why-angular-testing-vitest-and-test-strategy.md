@@ -1,73 +1,48 @@
----
-id: "angular-day-213"
-title: "Why Angular Testing, Vitest and Test Strategy"
-slug: "why-angular-testing-vitest-and-test-strategy"
-day: 213
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 213 — Why Angular Testing, Vitest and Test Strategy
 
-## Goal
+## Learning Goal
+Understand Angular testing levels and create the first meaningful Vitest tests.
 
-Build a testing mindset: test observable behavior, keep tests focused, and use Vitest as the primary runner for modern Angular CLI projects.
+## Scenario
+JobHub needs confidence that salary filtering works without Angular or a browser.
 
-## Concept
+~~~ts
+import { describe, expect, it } from 'vitest';
 
-Testing should verify **observable behavior and contracts**, not implementation details.
-
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
-
-## Example
-
-```ts
-import {TestBed} from '@angular/core/testing';
-
-describe('Why Angular Testing, Vitest and Test Strategy', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
-
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
+describe('salary filter', () => {
+  it('keeps jobs that meet the minimum salary', () => {
+    const jobs = [
+      { title: 'Angular Developer', salary: 90000 },
+      { title: 'Intern', salary: 30000 },
+    ];
+    const result = jobs.filter(job => job.salary >= 60000);
+    expect(result).toHaveLength(1);
+    expect(result[0].title).toBe('Angular Developer');
   });
 });
-```
+~~~
 
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
+## Choose the Smallest Useful Test
+- Pure function: plain Vitest.
+- Service with Angular DI: TestBed.
+- Component: rendered DOM and public interaction.
+- HTTP: HttpTestingController.
+- Routing: RouterTestingHarness.
+- Real browser behavior: browser/E2E testing.
 
-## Mental Model
-
-**Arrange → Act → Assert**
-
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+## Strategy
+Test business-critical behavior, failure paths, security-sensitive flows and reusable contracts. Do not chase coverage percentage without meaningful assertions.
 
 ## Exercise
+Add tests for empty results and invalid salary input.
 
-Add focused tests to the JobHub feature related to today's topic.
-
-## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+## Challenge
+Identify three JobHub behaviors worth testing and one implementation detail that should not be tested.
 
 ## Interview Questions
+1. Why does Angular use Vitest in new CLI projects?
+2. When is a plain unit test better than TestBed?
+3. What does behavior-focused testing mean?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can choose an appropriate Angular test level before writing the test.
