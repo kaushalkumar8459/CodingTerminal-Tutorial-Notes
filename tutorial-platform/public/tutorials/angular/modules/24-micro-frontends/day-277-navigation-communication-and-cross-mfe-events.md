@@ -31,13 +31,19 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Communication Hierarchy
 
-## Outcome
+Use the smallest contract that solves the problem:
 
-You can explain Navigation, Communication and Cross-MFE Events using explicit ownership, contracts, trade-offs, and production considerations.
+1. URL/path/query parameters for navigable state;
+2. component inputs/outputs when the relationship is direct;
+3. typed custom events for explicit cross-MFE notifications;
+4. shared platform services for truly cross-application concerns;
+5. shared state only when ownership is genuinely application-wide.
+
+Avoid making every remote subscribe to every other remote.
+
+## Version Note
+
+Native Federation does not remove Angular routing or browser communication rules. The exact helper APIs for loading a remote can change between package releases; keep communication contracts independent from those implementation details.
