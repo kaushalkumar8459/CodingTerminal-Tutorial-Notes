@@ -236,7 +236,7 @@
 - [ ] Material fundamentals/theming
 - [ ] Accessible forms/navigation
 - [ ] Angular Aria
-- [!] Mark Angular Aria according to exact Angular version; do not present preview APIs as stable
+- [x] Mark Angular Aria according to exact Angular version; Angular 21 = Developer Preview, Angular 22 = stable
 - [ ] Accessibility testing
 
 ## Module 19 — Testing [!]
@@ -419,7 +419,7 @@ Every detailed day should eventually contain:
 1. [ ] Global roadmap/numbering/prerequisite audit
 2. [ ] Angular 21/version-sensitive API audit
 3. [x] Module 11 — Forms / Signal Forms
-4. [ ] Module 18 — Angular Aria/version status
+4. [x] Module 18 — Angular Aria/version status
 5. [ ] Module 19 — Testing content rewrite
 6. [ ] Module 20 — Performance/Zoneless correction
 7. [ ] Module 21 — SSR/Hydration correction
