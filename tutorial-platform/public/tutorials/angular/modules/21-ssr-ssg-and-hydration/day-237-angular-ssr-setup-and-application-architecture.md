@@ -18,7 +18,7 @@ An existing application can add Angular SSR with:
 ng add @angular/ssr
 ~~~
 
-Angular's current SSR tooling is provided through @angular/ssr. citeturn0search2
+Angular's current SSR tooling is provided through @angular/ssr.
 
 ## Architecture
 
@@ -54,3 +54,8 @@ Take the JobHub project and identify code that assumes a browser exists during i
 ## Outcome
 
 You understand the architecture introduced by SSR.
+
+
+## Angular 21 Version Note
+
+Use the current `@angular/ssr` workflow. Do not teach the older `@nguniversal/express-engine` setup as the primary Angular 21 path.
