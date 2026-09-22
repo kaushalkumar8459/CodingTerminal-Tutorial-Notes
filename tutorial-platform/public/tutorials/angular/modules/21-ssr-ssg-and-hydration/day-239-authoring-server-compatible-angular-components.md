@@ -21,7 +21,7 @@ Avoid executing these APIs during server rendering.
 
 ## Better Pattern
 
-Use Angular lifecycle/platform-specific mechanisms for browser-only work. Angular's SSR guidance recommends platform-specific providers and warns against using browser/server checks directly in templates when they cause different server and client DOM. citeturn0search2
+Use Angular lifecycle/platform-specific mechanisms for browser-only work. Angular's SSR guidance recommends platform-specific providers and warns against using browser/server checks directly in templates when they cause different server and client DOM.
 
 ## Example
 
