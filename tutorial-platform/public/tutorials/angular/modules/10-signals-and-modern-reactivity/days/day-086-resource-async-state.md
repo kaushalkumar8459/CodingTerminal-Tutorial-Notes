@@ -14,6 +14,10 @@ youtubeVideos: []
 ## Goal
 Understand asynchronous state inside Angular's signal-based model without introducing HttpClient yet.
 
+## Angular 21 Status
+
+In the Angular 21 roadmap, `resource()` is listed under APIs available to experiment with. Treat it as experimental rather than a stable production recommendation. API details may change in later Angular releases. citeturn1search2
+
 ## Why Resource?
 signal(), computed(), and other signal APIs are synchronous. resource() connects asynchronous operations to signal-based state. citeturn0search2
 
