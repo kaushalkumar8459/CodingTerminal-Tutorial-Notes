@@ -31,3 +31,15 @@ Starting with components before defining boundaries; putting all state in a glob
 
 ## Outcome
 You have a written architecture and implementation backlog for the final JobHub project.
+
+## Prerequisites
+
+Complete Days 1–280. This capstone assumes the learner already knows Angular fundamentals, Signals, forms, HTTP, RxJS, state management, testing, performance, SSR/hydration, security, enterprise architecture, and Micro Frontends.
+
+## Acceptance Criteria
+
+Before implementation begins, the team can explain each major technology choice in terms of a concrete requirement, identify ownership boundaries, and describe how Candidate, Recruiter, and Admin workflows are separated.
+
+## Challenge
+
+For every major technology in the architecture, answer: **What concrete requirement makes this technology necessary?** If there is no clear answer, do not add the technology merely for demonstration.
