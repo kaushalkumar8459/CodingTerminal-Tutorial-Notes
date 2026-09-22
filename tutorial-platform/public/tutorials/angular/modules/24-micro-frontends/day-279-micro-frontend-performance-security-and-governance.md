@@ -31,13 +31,43 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Performance Measurement
 
-## Outcome
+Measure:
 
-You can explain Micro Frontend Performance, Security and Governance using explicit ownership, contracts, trade-offs, and production considerations.
+- initial host JavaScript;
+- manifest/import-map work;
+- remote network requests;
+- remote execution time;
+- duplicated dependencies;
+- route transition latency;
+- cache hit/miss behavior.
+
+Do not assume federation automatically improves performance. Runtime composition can add network and startup overhead.
+
+## Security
+
+A remote is not a trust boundary. Treat remote code as application code with the same security consequences as host code.
+
+Review:
+
+- CSP;
+- authentication and authorization;
+- dependency/supply-chain risk;
+- remote integrity and deployment controls;
+- sensitive runtime configuration;
+- observability and incident response.
+
+## Governance
+
+Define:
+
+- ownership per remote;
+- supported Angular/package versions;
+- contract compatibility policy;
+- release/rollback policy;
+- deprecation policy;
+- performance budgets.
+
+Native Federation version changes should be treated as platform changes and validated across all host/remotes.
