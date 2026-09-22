@@ -426,7 +426,7 @@ Every detailed day should eventually contain:
 8. [x] Module 24 — Native Federation/version-sensitive examples
 9. [x] Module 26 — Interview content rewrite
 10. [ ] Cross-module duplication/dependency review
-11. [ ] Tutorial quality/template review
+11. [x] Tutorial quality/template review
 12. [ ] Final validation and publishing check
 
 # Continuation Rule
