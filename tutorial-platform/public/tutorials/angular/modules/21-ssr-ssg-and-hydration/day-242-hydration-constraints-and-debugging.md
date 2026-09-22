@@ -6,7 +6,7 @@ Diagnose hydration mismatches systematically.
 
 ## Core Rule
 
-The server-generated DOM structure must match the client-generated structure. Angular warns that direct DOM manipulation and server/client rendering differences can cause hydration errors. citeturn0search0
+The server-generated DOM structure must match the client-generated structure. Angular warns that direct DOM manipulation and server/client rendering differences can cause hydration errors.
 
 Common causes:
 
