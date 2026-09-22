@@ -310,19 +310,19 @@
 - [ ] Do not prescribe one folder structure as universally correct
 
 ## Module 24 — Micro Frontends
-- [ ] Why/when MFE
-- [ ] Modular app vs multi-app vs runtime MFE
-- [ ] Host/remote responsibilities
-- [ ] Native Federation concepts
-- [ ] Remote routes/components/contracts
-- [ ] Shared dependency strategy
-- [ ] Shared UI/auth/platform contracts
-- [ ] Runtime remote configuration
-- [ ] Cross-MFE communication
-- [ ] Deployment/caching/failure isolation
-- [ ] Performance/security/governance
-- [ ] Distributed-monolith warning
-- [ ] Verify Native Federation examples against exact package/version
+- [x] Why/when MFE
+- [x] Modular app vs multi-app vs runtime MFE
+- [x] Host/remote responsibilities
+- [x] Native Federation concepts
+- [x] Remote routes/components/contracts
+- [x] Shared dependency strategy
+- [x] Shared UI/auth/platform contracts
+- [x] Runtime remote configuration
+- [x] Cross-MFE communication
+- [x] Deployment/caching/failure isolation
+- [x] Performance/security/governance
+- [x] Distributed-monolith warning
+- [x] Verify Native Federation examples against exact package/version
 
 ## Module 25 — Final Enterprise Project
 - [ ] Every major previous topic is integrated for a reason
@@ -423,7 +423,7 @@ Every detailed day should eventually contain:
 5. [x] Module 19 — Testing content rewrite
 6. [x] Module 20 — Performance/Zoneless correction
 7. [x] Module 21 — SSR/Hydration correction
-8. [ ] Module 24 — Native Federation/version-sensitive examples
+8. [x] Module 24 — Native Federation/version-sensitive examples
 9. [ ] Module 26 — Interview content rewrite
 10. [ ] Cross-module duplication/dependency review
 11. [ ] Tutorial quality/template review
