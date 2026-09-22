@@ -1,73 +1,51 @@
----
-id: "angular-day-219"
-title: "Testing Signals, Forms and Async State"
-slug: "testing-signals-forms-and-async-state"
-day: 219
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 219 — Testing Signals, Forms and Async State
 
-## Goal
+## Learning Goal
+Test signal state, form validation and asynchronous UI deterministically.
 
-Test signal-driven UI, forms, async state, loading/error transitions, and stabilization without brittle timing assumptions.
+## Signals
 
-## Concept
+~~~ts
+count = signal(0);
+doubleCount = computed(() => this.count() * 2);
 
-Testing should verify **observable behavior and contracts**, not implementation details.
+expect(component.doubleCount()).toBe(0);
+component.count.set(3);
+expect(component.doubleCount()).toBe(6);
+~~~
 
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
+When the signal drives the UI, also test the rendered result.
 
-## Example
+## Forms
+For a JobHub application form, test required fields, invalid-to-valid transitions, cross-field rules, submit state and submitted values.
 
-```ts
-import {TestBed} from '@angular/core/testing';
+Assert the application's contract instead of duplicating Angular's validator implementation.
 
-describe('Testing Signals, Forms and Async State', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
+## Async State
+Model meaningful states explicitly:
 
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
-});
-```
+**idle → loading → success**
 
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
+**idle → loading → error**
 
-## Mental Model
+Test each transition and wait for real completion rather than sleeping.
 
-**Arrange → Act → Assert**
-
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+## effect()
+Do not treat effect() as a replacement for computed(). Test an effect through its externally visible side effect when that side effect is part of the feature contract.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
+Test a filter form for empty, valid, success and error states.
 
 ## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+- Testing scheduling instead of behavior.
+- Arbitrary waits.
+- Forgetting error UI.
+- Using effect() where derived state should be computed.
 
 ## Interview Questions
+1. How do you test a signal?
+2. What should an async UI test verify?
+3. When should a signal be tested through the DOM?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can test modern reactive Angular state without race-prone tests.
