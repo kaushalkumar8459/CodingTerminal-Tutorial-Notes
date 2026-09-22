@@ -24,7 +24,7 @@ export const serverRoutes: ServerRoute[] = [
 ];
 ~~~
 
-This allows one application to use multiple rendering strategies. citeturn0search2
+This allows one application to use multiple rendering strategies.
 
 ## Exercise
 
