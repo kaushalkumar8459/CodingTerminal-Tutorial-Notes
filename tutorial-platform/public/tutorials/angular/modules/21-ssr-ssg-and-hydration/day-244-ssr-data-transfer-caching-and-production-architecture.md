@@ -6,7 +6,7 @@ Prevent duplicate data fetching and unsafe server-side caching.
 
 ## HTTP Transfer Cache
 
-Angular can cache eligible HttpClient responses during SSR and reuse them during hydration to avoid unnecessary browser requests. By default, eligible GET and HEAD requests can participate in transfer caching, while requests involving authorization or certain cache-control conditions are excluded. citeturn0search2
+Angular can cache eligible HttpClient responses during SSR and reuse them during hydration to avoid unnecessary browser requests. By default, eligible GET and HEAD requests can participate in transfer caching, while requests involving authorization or certain cache-control conditions are excluded.
 
 ## Security Boundary
 
@@ -22,7 +22,7 @@ Never expose one user's server-rendered data to another user through an incorrec
 
 ## Resource Data
 
-Angular resources can also transfer server-resolved data to the browser when configured with a stable resource id, but user-specific resource data requires careful cache design because serialized data becomes part of the HTML. citeturn0search10
+Angular resources can also transfer server-resolved data to the browser when configured with a stable resource id, but user-specific resource data requires careful cache design because serialized data becomes part of the HTML.
 
 ## Exercise
 
