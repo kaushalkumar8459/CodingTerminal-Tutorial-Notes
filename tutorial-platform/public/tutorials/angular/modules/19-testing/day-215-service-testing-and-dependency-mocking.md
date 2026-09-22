@@ -1,73 +1,52 @@
----
-id: "angular-day-215"
-title: "Service Testing and Dependency Mocking"
-slug: "service-testing-and-dependency-mocking"
-day: 215
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 215 — Service Testing and Dependency Mocking
 
-## Goal
+## Learning Goal
+Test business logic in a service while controlling an injected dependency.
 
-Test business logic in services while replacing dependencies with focused test doubles and avoiding unnecessary implementation coupling.
+## Scenario
+SavedJobsService uses StorageService. A duplicate job ID must not be saved twice.
 
-## Concept
+~~~ts
+const storageFake = {
+  read: () => [10],
+  write: vi.fn(),
+};
 
-Testing should verify **observable behavior and contracts**, not implementation details.
-
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
-
-## Example
-
-```ts
-import {TestBed} from '@angular/core/testing';
-
-describe('Service Testing and Dependency Mocking', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
-
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
+TestBed.configureTestingModule({
+  providers: [
+    SavedJobsService,
+    { provide: StorageService, useValue: storageFake },
+  ],
 });
-```
 
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
+const service = TestBed.inject(SavedJobsService);
+service.add(20);
 
-## Mental Model
+expect(storageFake.write).toHaveBeenCalledWith([10, 20]);
+~~~
 
-**Arrange → Act → Assert**
+## Fake vs Spy
+- Fake: a small working replacement.
+- Spy: records calls or controls a result.
+- Mock: a broader test-controlled replacement.
 
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+Use the simplest test double that communicates intent. Lightweight collaborators can remain real.
+
+## DI Scope
+If a dependency is provided at component or route scope, configure or retrieve it from the correct injector. Root scope and component scope are different contracts.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
+Test adding a new job, ignoring a duplicate, and preserving existing IDs.
 
 ## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+- Mocking every dependency automatically.
+- Creating giant unused mock objects.
+- Using real network or browser storage in a unit test.
 
 ## Interview Questions
+1. When would you choose a fake over a spy?
+2. Why does dependency injection help testing?
+3. Should every service dependency be mocked?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can isolate business logic without creating brittle mock-heavy tests.
