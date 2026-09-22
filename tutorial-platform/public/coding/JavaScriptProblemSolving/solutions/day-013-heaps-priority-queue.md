@@ -1,13 +1,13 @@
-# Day 023 — Performance & Optimization — Detailed Solution
+# Day 013 — Heaps & Priority Queue — Detailed Solution
 
 ## What to Build
 
-Avoid repeated work with memoization and windowed rendering.
+Top K can be solved with a size-K min-heap; JavaScript has no built-in heap, so implement one or use a sorted bounded structure.
 
 ## Core Implementation / Algorithm
 
 ```js
-// Measure first. Reduce renders, batch DOM work, virtualize large lists, and schedule visual work with requestAnimationFrame.
+// Maintain a size-k min-heap; push, bubble-up, pop-min, bubble-down.
 ```
 
 ## Complexity

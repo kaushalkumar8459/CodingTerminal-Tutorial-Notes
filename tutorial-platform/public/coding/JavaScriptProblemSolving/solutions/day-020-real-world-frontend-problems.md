@@ -1,13 +1,13 @@
-# Day 023 — Performance & Optimization — Detailed Solution
+# Day 020 — Real-World Frontend — Detailed Solution
 
 ## What to Build
 
-Avoid repeated work with memoization and windowed rendering.
+Prevent stale search responses.
 
 ## Core Implementation / Algorithm
 
 ```js
-// Measure first. Reduce renders, batch DOM work, virtualize large lists, and schedule visual work with requestAnimationFrame.
+let latest=0;async function safeSearch(query,load){const id=++latest;const data=await load(query);return id===latest?data:null;}
 ```
 
 ## Complexity

@@ -1,71 +1,40 @@
-# Solutions — Day 008: Stacks, Queues & Monotonic Structures
+# Day 008 — Stack & Queue — Detailed Solution
 
-These are solution approaches rather than copy-paste answers. Implement them in JavaScript and verify with tests.
+## What to Build
 
-1. **Implement a stack** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Valid parentheses.
 
-2. **Implement a queue** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Core Implementation / Algorithm
 
-3. **Implement a queue using two stacks** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+```js
+function valid(s){const st=[],pair={")":"(","]":"[","}":"{"};for(const c of s){if("([{".includes(c))st.push(c);else if(st.pop()!==pair[c])return false;}return st.length===0;}
+```
 
-4. **Implement a stack using two queues** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Complexity
 
-5. **Reverse a string using a stack** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Validate balanced brackets** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Edge Cases
 
-7. **Min stack** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Max stack** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Interview Explanation
 
-9. **Evaluate postfix expression** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Convert infix to postfix** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Extension
 
-11. **Evaluate an infix expression** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Decode a nested string** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-13. **Remove adjacent duplicates** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-14. **Remove K adjacent duplicates** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-15. **Next greater element** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-16. **Next smaller element** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-17. **Daily temperatures** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-18. **Stock span problem** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-19. **Largest rectangle in histogram** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-20. **Maximal rectangle in a matrix** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-21. **Simplify a Unix path** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-22. **Browser back-forward history** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-23. **Undo-redo using two stacks** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-24. **Circular queue** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-25. **Deque implementation** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-26. **Generate binary numbers using a queue** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-27. **First non-repeating character in a stream** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-28. **Sliding-window maximum with deque** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-29. **Asteroid collision simulation** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-30. **Parentheses score** — Use the standard stack queue technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-## Review checklist
-
-- Correctness on empty, single-item, duplicate, boundary, and large inputs.
-- Time complexity and auxiliary space.
-- Mutation versus non-mutating behavior.
-- Why the chosen data structure fits the problem.
-- How the solution changes under tighter memory or latency constraints.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

@@ -1,13 +1,13 @@
-# Day 023 — Performance & Optimization — Detailed Solution
+# Day 019 — Async, Browser & DOM — Detailed Solution
 
 ## What to Build
 
-Avoid repeated work with memoization and windowed rendering.
+Debounce with cleanup.
 
 ## Core Implementation / Algorithm
 
 ```js
-// Measure first. Reduce renders, batch DOM work, virtualize large lists, and schedule visual work with requestAnimationFrame.
+function debounce(fn,delay){let id;const wrapped=function(...args){clearTimeout(id);id=setTimeout(()=>fn.apply(this,args),delay);};wrapped.cancel=()=>clearTimeout(id);return wrapped;}
 ```
 
 ## Complexity

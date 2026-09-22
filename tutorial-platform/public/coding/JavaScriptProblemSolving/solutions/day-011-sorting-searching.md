@@ -1,71 +1,40 @@
-# Solutions — Day 011: Sorting & Searching Algorithms
+# Day 011 — Sorting & Searching — Detailed Solution
 
-These are solution approaches rather than copy-paste answers. Implement them in JavaScript and verify with tests.
+## What to Build
 
-1. **Bubble sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Merge sort.
 
-2. **Selection sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Core Implementation / Algorithm
 
-3. **Insertion sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+```js
+function mergeSort(a){if(a.length<2)return a;const m=Math.floor(a.length/2);const l=mergeSort(a.slice(0,m)),r=mergeSort(a.slice(m));const out=[];while(l.length&&r.length)out.push(l[0]<=r[0]?l.shift():r.shift());return out.concat(l,r);}
+```
 
-4. **Merge sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Complexity
 
-5. **Quick sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Heap sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Edge Cases
 
-7. **Counting sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Radix sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Interview Explanation
 
-9. **Bucket sort** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Stable sorting of records** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Extension
 
-11. **Sort by multiple keys** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Sort nearly sorted data** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-13. **Find kth smallest with quickselect** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-14. **Find kth largest with quickselect** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-15. **Median using quickselect** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-16. **Merge sorted arrays** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-17. **Merge sorted linked lists** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-18. **External-style chunk sorting** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-19. **Custom comparator sorting** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-20. **Sort 0s, 1s and 2s** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-21. **Sort an array by frequency** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-22. **Sort characters by frequency** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-23. **Largest number from numeric strings** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-24. **Meeting rooms scheduling** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-25. **Minimum meeting rooms** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-26. **Interval scheduling** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-27. **Inversion count** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-28. **Count smaller elements after self** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-29. **Sort a stack** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-30. **Verify whether an array is a valid sorting output** — Use the standard sorting searching technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-## Review checklist
-
-- Correctness on empty, single-item, duplicate, boundary, and large inputs.
-- Time complexity and auxiliary space.
-- Mutation versus non-mutating behavior.
-- Why the chosen data structure fits the problem.
-- How the solution changes under tighter memory or latency constraints.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

@@ -1,46 +1,40 @@
-# Solutions — Day 015: Greedy Algorithms
+# Day 015 — Greedy — Detailed Solution
 
-Use this as a solution guide and implement/test each challenge yourself.
+## What to Build
 
-1. **Activity selection** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+Activity selection after sorting by finish time.
 
-2. **Minimum platforms** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Core Implementation / Algorithm
 
-3. **Fractional knapsack** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+```js
+function maxActivities(items){items=[...items].sort((a,b)=>a.end-b.end);let end=-Infinity,count=0;for(const x of items){if(x.start>=end){count++;end=x.end;}}return count;}
+```
 
-4. **Assign cookies** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Complexity
 
-5. **Jump game** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Minimum jumps** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Edge Cases
 
-7. **Gas station** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Candy distribution** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Interview Explanation
 
-9. **Lemonade change** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Partition labels** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Extension
 
-11. **Merge intervals** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Erase overlaps** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-13. **Meeting scheduling** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-14. **Job sequencing** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-15. **Minimum arrows** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-16. **Canonical coin change** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-17. **Huffman coding** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-18. **Connect ropes** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-19. **Task scheduling** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-20. **Maximum units** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-## Interview review
-State Big-O, auxiliary space, mutation behavior, and at least one alternative approach.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

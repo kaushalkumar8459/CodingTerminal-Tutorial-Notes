@@ -1,46 +1,40 @@
-# Solutions — Day 014: Graphs, BFS, DFS & Connectivity
+# Day 014 — Graphs — Detailed Solution
 
-Use this as a solution guide and implement/test each challenge yourself.
+## What to Build
 
-1. **Adjacency list** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+BFS traversal.
 
-2. **Adjacency matrix** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Core Implementation / Algorithm
 
-3. **DFS** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+```js
+function bfs(graph,start){const q=[start],seen=new Set([start]),out=[];for(let i=0;i<q.length;i++){const v=q[i];out.push(v);for(const n of graph[v]??[]){if(!seen.has(n)){seen.add(n);q.push(n);}}}return out;}
+```
 
-4. **BFS** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Complexity
 
-5. **Connected components** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Undirected cycle detection** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Edge Cases
 
-7. **Directed cycle detection** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Topological sort DFS** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Interview Explanation
 
-9. **Topological sort indegree** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Course schedule** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Extension
 
-11. **Course ordering** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Unweighted shortest path** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-13. **Grid shortest path** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-14. **Number of islands** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-15. **Flood fill** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-16. **Rotten oranges** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-17. **Clone graph** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-18. **Bipartite graph** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-19. **Dijkstra** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-20. **Minimum spanning tree** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-## Interview review
-State Big-O, auxiliary space, mutation behavior, and at least one alternative approach.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

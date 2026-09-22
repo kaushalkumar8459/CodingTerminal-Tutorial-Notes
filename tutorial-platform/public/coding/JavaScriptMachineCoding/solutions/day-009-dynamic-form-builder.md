@@ -1,13 +1,13 @@
-# Day 023 — Performance & Optimization — Detailed Solution
+# Day 009 — Dynamic Form Builder — Detailed Solution
 
 ## What to Build
 
-Avoid repeated work with memoization and windowed rendering.
+Schema-driven fields and validation.
 
 ## Core Implementation / Algorithm
 
 ```js
-// Measure first. Reduce renders, batch DOM work, virtualize large lists, and schedule visual work with requestAnimationFrame.
+const schema=[{name:"email",required:true},{name:"age",required:false}];
 ```
 
 ## Complexity

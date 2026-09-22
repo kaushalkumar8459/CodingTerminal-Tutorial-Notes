@@ -1,13 +1,13 @@
-# Day 023 — Performance & Optimization — Detailed Solution
+# Day 001 — Interview Reasoning — Detailed Solution
 
 ## What to Build
 
-Avoid repeated work with memoization and windowed rendering.
+Clarify constraints → baseline → invariant → complexity → edge cases.
 
 ## Core Implementation / Algorithm
 
 ```js
-// Measure first. Reduce renders, batch DOM work, virtualize large lists, and schedule visual work with requestAnimationFrame.
+function solve(input) { return input; }
 ```
 
 ## Complexity

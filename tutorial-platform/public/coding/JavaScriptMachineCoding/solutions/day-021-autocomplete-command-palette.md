@@ -1,52 +1,40 @@
-# Day 021 — Command Palette — Solution Guide
+# Day 021 — Command Palette — Detailed Solution
 
-## Approach
+## What to Build
 
-Start with the smallest working implementation for **Command Palette**, then add production concerns incrementally.
+Search, keyboard navigation and commands.
 
-### State Model
+## Core Implementation / Algorithm
 
-Use a small explicit state model such as:
+```js
+function filterCommands(commands,q){return commands.filter(x=>x.label.toLowerCase().includes(q.toLowerCase()));}
+```
 
-- idle
-- loading
-- success
-- error
+## Complexity
 
-Keep source state minimal. Derive counts, totals, filtered collections, labels, and other display values instead of duplicating them.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-### Responsibilities
+## Edge Cases
 
-- **UI:** rendering and user interaction.
-- **State:** feature state and transitions.
-- **Domain logic:** pure transformations and validation.
-- **Side effects:** network, timers, storage, and browser APIs.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-### Edge Cases
+## Interview Explanation
 
-Consider empty data, invalid input, rapid repeated actions, slow or failed requests, cleanup, keyboard interaction, screen readers, duplicate data, and stale responses.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-### Interview Review
+## Extension
 
-Explain:
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-1. Requirements you clarified.
-2. State model.
-3. Component boundaries.
-4. Async and side-effect handling.
-5. Accessibility decisions.
-6. Performance trade-offs.
-7. Testing strategy.
-
-## Practice
-
-Implement the challenge without copying the guide. Add one new requirement afterward and refactor without breaking existing behavior.
-
-## Self-Check
-
-- [ ] Happy path works
-- [ ] Edge cases work
-- [ ] State is not unnecessarily duplicated
-- [ ] Cleanup is handled
-- [ ] Critical behavior is tested
-- [ ] I can explain the design in an interview
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

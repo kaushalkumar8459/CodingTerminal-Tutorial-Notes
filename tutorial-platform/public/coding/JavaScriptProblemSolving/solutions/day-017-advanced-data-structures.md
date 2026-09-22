@@ -1,46 +1,40 @@
-# Solutions — Day 017: Advanced Data Structures
+# Day 017 — Advanced Data Structures — Detailed Solution
 
-Use this as a solution guide and implement/test each challenge yourself.
+## What to Build
 
-1. **Trie** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+Union-Find with path compression.
 
-2. **Trie autocomplete** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Core Implementation / Algorithm
 
-3. **Trie wildcard search** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+```js
+class DSU{constructor(n){this.p=Array.from({length:n},(_,i)=>i);this.rank=Array(n).fill(0);}find(x){if(this.p[x]!==x)this.p[x]=this.find(this.p[x]);return this.p[x];}union(a,b){a=this.find(a);b=this.find(b);if(a===b)return false;if(this.rank[a]<this.rank[b])[a,b]=[b,a];this.p[b]=a;if(this.rank[a]===this.rank[b])this.rank[a]++;return true;}}
+```
 
-4. **Doubly linked list** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Complexity
 
-5. **LRU cache** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **LFU cache** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Edge Cases
 
-7. **Circular buffer** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Deque** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Interview Explanation
 
-9. **Union-Find** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Path compression** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Extension
 
-11. **Union by rank** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Binary heap** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-13. **Priority queue** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-14. **Segment tree** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-15. **Fenwick tree** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-16. **Bloom filter** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-17. **TTL cache** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-18. **Bounded memoization** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-19. **Dependency graph** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-20. **Data-structure trade-offs** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-## Interview review
-State Big-O, auxiliary space, mutation behavior, and at least one alternative approach.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

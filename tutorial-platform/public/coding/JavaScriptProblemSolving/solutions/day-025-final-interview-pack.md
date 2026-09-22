@@ -1,47 +1,40 @@
-# Solutions — Day 025: Final Interview Challenge Pack
+# Day 025 — Final Interview Pack — Detailed Solution
 
-These are solution-design guides. The candidate should write the implementation and defend the trade-offs.
+## What to Build
 
-1. **Reverse string three ways** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+Timed mixed set: arrays, async, browser, machine coding and system design.
 
-2. **Duplicate detection trade-offs** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Core Implementation / Algorithm
 
-3. **Two Sum three approaches** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+```js
+// Solve without notes. Record time, complexity, bugs, and follow-up answers.
+```
 
-4. **Longest substring without repeats** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Complexity
 
-5. **Minimum window substring** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Maximum subarray** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Edge Cases
 
-7. **Product except self** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Merge intervals** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Interview Explanation
 
-9. **Top K frequent** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **LRU cache** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Extension
 
-11. **Linked-list cycle** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Merge K lists** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-13. **Rotated binary search** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-14. **Kth largest heap** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-15. **Tree serialization** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-16. **Lowest common ancestor** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-17. **Number of islands** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-18. **Course schedule** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-19. **Dijkstra** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-20. **Coin change** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-## Senior review
-
-A strong solution should discuss maintainability, observability, cancellation/error handling where relevant, memory growth, concurrency, and how the design behaves at scale.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

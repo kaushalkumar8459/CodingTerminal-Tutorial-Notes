@@ -1,13 +1,13 @@
-# Day 023 — Performance & Optimization — Detailed Solution
+# Day 024 — 7–10 Year Experience — Detailed Solution
 
 ## What to Build
 
-Avoid repeated work with memoization and windowed rendering.
+Explain trade-offs and failure modes.
 
 ## Core Implementation / Algorithm
 
 ```js
-// Measure first. Reduce renders, batch DOM work, virtualize large lists, and schedule visual work with requestAnimationFrame.
+// Senior answer: constraints -> options -> trade-offs -> decision -> observability -> rollback.
 ```
 
 ## Complexity

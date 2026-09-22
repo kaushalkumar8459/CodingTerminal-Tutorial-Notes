@@ -1,47 +1,40 @@
-# Solutions — Day 021: Senior-Level JavaScript Challenges
+# Day 021 — Senior JavaScript — Detailed Solution
 
-These are solution-design guides. The candidate should write the implementation and defend the trade-offs.
+## What to Build
 
-1. **Reusable cache** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+Concurrency limiter.
 
-2. **Concurrency limiter** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Core Implementation / Algorithm
 
-3. **Priority task scheduler** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+```js
+async function mapLimit(items,limit,worker){const out=new Array(items.length);let next=0;async function run(){while(true){const i=next++;if(i>=items.length)return;out[i]=await worker(items[i],i);}}await Promise.all(Array.from({length:Math.min(limit,items.length)},run));return out;}
+```
 
-4. **Retry policy** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Complexity
 
-5. **Circuit breaker** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Bulkhead** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Edge Cases
 
-7. **Request deduplication** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **SWR cache** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Interview Explanation
 
-9. **Namespaced event bus** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Plugin system** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Extension
 
-11. **Middleware pipeline** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Command pattern with undo** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-13. **State machine** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-14. **Workflow executor** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-15. **Dependency resolver** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-16. **DAG task executor** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-17. **Reactive signal primitive** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-18. **Computed cache** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-19. **Batched update scheduler** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-20. **Resilient API client** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-## Senior review
-
-A strong solution should discuss maintainability, observability, cancellation/error handling where relevant, memory growth, concurrency, and how the design behaves at scale.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

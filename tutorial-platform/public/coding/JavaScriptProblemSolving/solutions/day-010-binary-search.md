@@ -1,71 +1,40 @@
-# Solutions — Day 010: Binary Search & Search-on-Answer
+# Day 010 — Binary Search — Detailed Solution
 
-These are solution approaches rather than copy-paste answers. Implement them in JavaScript and verify with tests.
+## What to Build
 
-1. **Classic binary search** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Classic binary search.
 
-2. **Find first occurrence** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Core Implementation / Algorithm
 
-3. **Find last occurrence** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+```js
+function binarySearch(a,target){let l=0,r=a.length-1;while(l<=r){const m=l+Math.floor((r-l)/2);if(a[m]===target)return m;a[m]<target?l=m+1:r=m-1;}return -1;}
+```
 
-4. **Count occurrences in a sorted array** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Complexity
 
-5. **Search insert position** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Find floor and ceiling** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Edge Cases
 
-7. **Integer square root** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Find a peak element** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Interview Explanation
 
-9. **Find minimum in rotated sorted array** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Search rotated sorted array** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Extension
 
-11. **Search rotated array with duplicates** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Find rotation count** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-13. **Find minimum speed to finish work** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-14. **Capacity to ship packages in D days** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-15. **Allocate books among students** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-16. **Split array to minimize largest sum** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-17. **Aggressive cows placement** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-18. **Kth missing positive number** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-19. **Search a 2D matrix** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-20. **Search a row-and-column sorted matrix** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-21. **Median of two sorted arrays** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-22. **Kth element of two sorted arrays** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-23. **Find single element in sorted pairs** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-24. **Find duplicate using binary search** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-25. **Find local minimum** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-26. **Find smallest feasible value** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-27. **Find maximum feasible value** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-28. **Binary search over timestamps** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-29. **Find first bad version** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-30. **Range query with binary search** — Use the standard binary search technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-## Review checklist
-
-- Correctness on empty, single-item, duplicate, boundary, and large inputs.
-- Time complexity and auxiliary space.
-- Mutation versus non-mutating behavior.
-- Why the chosen data structure fits the problem.
-- How the solution changes under tighter memory or latency constraints.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

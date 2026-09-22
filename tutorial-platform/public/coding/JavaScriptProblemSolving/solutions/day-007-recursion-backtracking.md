@@ -1,71 +1,40 @@
-# Solutions — Day 007: Recursion & Backtracking
+# Day 007 — Recursion & Backtracking — Detailed Solution
 
-These are solution approaches rather than copy-paste answers. Implement them in JavaScript and verify with tests.
+## What to Build
 
-1. **Recursive countdown** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Generate subsets.
 
-2. **Recursive sum from 1 to N** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Core Implementation / Algorithm
 
-3. **Recursive factorial** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+```js
+function subsets(nums){const out=[];function dfs(i,path){if(i===nums.length){out.push([...path]);return;}dfs(i+1,path);path.push(nums[i]);dfs(i+1,path);path.pop();}dfs(0,[]);return out;}
+```
 
-4. **Recursive Fibonacci** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Complexity
 
-5. **Recursive power** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Recursive GCD** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Edge Cases
 
-7. **Recursive array sum** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Recursive string reverse** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Interview Explanation
 
-9. **Recursive palindrome check** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Recursive binary search** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+## Extension
 
-11. **Flatten a nested array recursively** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **Generate all subsets** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-13. **Generate all permutations** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-14. **Generate unique permutations** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-15. **Generate combinations of K values** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-16. **Generate combinations summing to target** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-17. **Generate valid parentheses** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-18. **Solve a maze** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-19. **N-Queens** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-20. **Sudoku solver** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-21. **Word search in a grid** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-22. **Phone keypad letter combinations** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-23. **Restore valid IP addresses** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-24. **Partition a string into palindromes** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-25. **Generate all binary strings without consecutive ones** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-26. **Generate all balanced bracket sequences** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-27. **Find paths through a matrix** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-28. **Subset sum using backtracking** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-29. **Combination sum with reusable values** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-30. **Combination sum without duplicate results** — Use the standard recursion backtracking technique appropriate to the problem. State the invariant, handle empty/boundary input, and target the best practical complexity. When multiple approaches exist, compare brute force with the optimized approach.
-
-## Review checklist
-
-- Correctness on empty, single-item, duplicate, boundary, and large inputs.
-- Time complexity and auxiliary space.
-- Mutation versus non-mutating behavior.
-- Why the chosen data structure fits the problem.
-- How the solution changes under tighter memory or latency constraints.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

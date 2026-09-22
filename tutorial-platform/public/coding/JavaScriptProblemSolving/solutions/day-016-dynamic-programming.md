@@ -1,46 +1,40 @@
-# Solutions — Day 016: Dynamic Programming
+# Day 016 — Dynamic Programming — Detailed Solution
 
-Use this as a solution guide and implement/test each challenge yourself.
+## What to Build
 
-1. **Climbing stairs** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+House robber with O(1) space.
 
-2. **Min cost stairs** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Core Implementation / Algorithm
 
-3. **House robber** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+```js
+function rob(nums){let prev2=0,prev1=0;for(const n of nums){const cur=Math.max(prev1,prev2+n);prev2=prev1;prev1=cur;}return prev1;}
+```
 
-4. **Circular robber** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Complexity
 
-5. **Coin change minimum** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **Coin change ways** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Edge Cases
 
-7. **0/1 knapsack** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Unbounded knapsack** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Interview Explanation
 
-9. **Subset sum** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Equal partition** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+## Extension
 
-11. **Target sum** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **LIS** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-13. **LCS** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-14. **Longest common substring** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-15. **Edit distance** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-16. **Longest palindromic subsequence** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-17. **Word break** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-18. **Decode ways** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-19. **Unique paths** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-20. **Stock trading DP** — Choose the data structure or algorithm that matches the constraint. Establish the invariant, handle empty/boundary input, implement the baseline approach, then improve time or space when justified. Test duplicates, invalid input, and large input.
-
-## Interview review
-State Big-O, auxiliary space, mutation behavior, and at least one alternative approach.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.

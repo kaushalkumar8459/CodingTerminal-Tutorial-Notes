@@ -1,47 +1,40 @@
-# Solutions — Day 022: Frontend System-Design-Style Problems
+# Day 022 — Frontend System Design — Detailed Solution
 
-These are solution-design guides. The candidate should write the implementation and defend the trade-offs.
+## What to Build
 
-1. **Autocomplete architecture** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+Design autocomplete: debounce, cancellation, cache, keyboard navigation and states.
 
-2. **Infinite-scroll feed** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Core Implementation / Algorithm
 
-3. **Real-time notifications** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+```js
+// State: query, suggestions, loading, error, activeIndex. Use debounce + AbortController + cache.
+```
 
-4. **Chat state model** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Complexity
 
-5. **Collaborative document state** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+State the time and space complexity of the chosen implementation. For UI tasks, also discuss render cost, network cost, and memory growth.
 
-6. **File-upload manager** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Edge Cases
 
-7. **Video upload pipeline** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+- Empty or missing input
+- Duplicate data
+- Rapid repeated interaction
+- Slow/failing async work
+- Cleanup/lifecycle
+- Keyboard and accessibility behavior
+- Large datasets
 
-8. **Dashboard data layer** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Interview Explanation
 
-9. **Reusable data-table architecture** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+1. Clarify requirements and constraints.
+2. Identify source vs derived state.
+3. Implement the simplest correct path.
+4. Explain complexity and trade-offs.
+5. Test boundary and failure cases.
+6. Explain how the design changes at production scale.
 
-10. **Client-side search** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+## Extension
 
-11. **Offline web app** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
+Add one requirement without rewriting the entire feature. Explain what changed and why.
 
-12. **API caching** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-13. **Multi-tab synchronization** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-14. **Browser job queue** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-15. **Feature flags** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-16. **RBAC navigation** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-17. **Micro-frontend communication** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-18. **Shared MFE state** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-19. **Route data prefetching** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-20. **Telemetry batching** — Start by clarifying constraints and correctness requirements. Give a simple baseline, identify its bottleneck, then select the appropriate data structure, algorithm, async primitive, or architecture. Explain invariants, failure handling, complexity, and tests.
-
-## Senior review
-
-A strong solution should discuss maintainability, observability, cancellation/error handling where relevant, memory growth, concurrency, and how the design behaves at scale.
+> This is original interview practice material. Company names elsewhere in the curriculum should not be interpreted as claims that this exact exercise was asked by that company.
