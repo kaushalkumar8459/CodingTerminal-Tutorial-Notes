@@ -1,73 +1,64 @@
----
-id: "angular-day-224"
-title: "Mini Project — JobHub Test Suite"
-slug: "mini-project-jobhub-test-suite"
-day: 224
-module: 19
-track: "angular"
-level: "Intermediate"
----
+# Day 224 — Mini Project: JobHub Test Suite
 
-# Day 224 — Mini Project — JobHub Test Suite
+## Project Goal
+Build a focused test suite for the JobHub application from Days 130–145.
 
-## Goal
+This is a behavior and regression exercise, not a coverage contest.
 
-Apply the complete strategy to JobHub: services, components, forms, HTTP, routing, guards, signals, and shared UI.
+## Test Scope
 
-## Concept
+### Pure Logic
+Test salary filtering, sorting and status rules with plain Vitest where Angular is unnecessary.
 
-Testing should verify **observable behavior and contracts**, not implementation details.
+### Services
+Test saved-job rules, profile business rules and dependency injection with TestBed when DI matters.
 
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
+### Components
+Test loading, empty, error and success UI; user actions; signal rendering; and form validation.
 
-## Example
+### Component Contracts
+Test input(), output(), model() where used, and content projection.
 
-```ts
-import {TestBed} from '@angular/core/testing';
+### HTTP
+Use provideHttpClientTesting() and HttpTestingController. Test success, empty response and server failure.
 
-describe('Mini Project — JobHub Test Suite', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
+### Routing
+Use RouterTestingHarness. Test job details, route parameters, recruiter protection, login redirect and query parameters.
 
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
-});
-```
+### Reusable UI
+Test directives, pipes and shared components at the smallest useful level. Use component harnesses when a supported harness exists.
 
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
+### SignalStore
+If JobHub uses SignalStore, test public state, methods, derived state and async success/error state. Do not test private implementation details.
 
-## Mental Model
+## Test Matrix
 
-**Arrange → Act → Assert**
+| Area | Behavior |
+|---|---|
+| Search | keyword and location return matching jobs |
+| Saved jobs | duplicate save is ignored |
+| Details | route ID loads the correct job |
+| Auth | unauthenticated recruiter is redirected |
+| Form | invalid application cannot submit |
+| HTTP | server failure produces error UI |
+| Shared UI | Save button emits the expected action |
+| State | loading → success is represented correctly |
 
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+## Capstone Flow
+Pick one feature and test:
 
-## Exercise
+**user action → component state → service/store → HTTP boundary → response → rendered UI**
 
-Add focused tests to the JobHub feature related to today's topic.
+Keep the suite deterministic. Do not call real external services.
 
-## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+## Final Challenge
+Add a regression test for a bug you intentionally introduce, then fix the bug without weakening the test.
 
 ## Interview Questions
+1. Where would you mock in a feature using signals, SignalStore, HttpClient and routing?
+2. Where would you keep real Angular wiring?
+3. How would you investigate a flaky JobHub test?
+4. Which tests would you keep if CI became too slow?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+By Day 224, you can build and maintain Angular tests with Vitest, TestBed, HTTP testing, RouterTestingHarness, component interaction tests, reactive-state tests and reusable-component tests.
