@@ -1,32 +1,66 @@
 # Day 228 — Zoneless Angular and Event/Async Scheduling
 
-## Goal
-Understand the modern Angular zoneless scheduling model.
+## Learning Goal
+Understand how Angular 21 schedules change detection without relying on ZoneJS.
 
-## Angular 21+ Context
-Zoneless change detection is the default in Angular v21+. Angular uses framework-level notifications such as signal updates, component input updates, and bound listeners to schedule synchronization instead of relying on ZoneJS to observe broad asynchronous activity.
+## Prerequisites
+- Days 76–89: Signals
+- Day 226: rendering
+- Day 227: OnPush
 
-## Mental Model
-Zone-based: browser activity → ZoneJS → Angular checks
+## Angular 21+ Baseline
+**Zoneless change detection is the default in Angular v21+.**
 
-Zoneless: Angular-relevant notification → Angular schedules synchronization
+A new Angular 21 application normally does not need `provideZonelessChangeDetection()`. The provider remains useful for explicit configuration and for matching a zoneless production environment in TestBed.
 
-OnPush is recommended for zoneless-compatible application components. Avoid using NgZone stability events as a generic synchronization mechanism in zoneless applications.
+## Zone-Based vs Zoneless
+
+**Zone-based:** browser/async activity → ZoneJS → Angular synchronization
+
+**Zoneless:** Angular-relevant notification → Angular schedules synchronization
+
+Important notifications include:
+- updating a signal read by a template
+- setting a component input
+- bound host/template listeners
+- `ChangeDetectorRef.markForCheck()`
+- attaching a marked view
+
+## State Must Be Angular-Visible
+
+```ts
+readonly isLoading = signal(false);
+
+loadJobs(): void {
+  this.isLoading.set(true);
+}
+```
+
+Do not assume an arbitrary asynchronous callback refreshes unrelated template state.
+
+## NgZone Stability APIs
+Do not build new zoneless logic around:
+- `NgZone.onMicrotaskEmpty`
+- `NgZone.onUnstable`
+- `NgZone.onStable`
+- `NgZone.isStable`
+
+For render-timing needs, `afterNextRender` or `afterEveryRender` may be more appropriate.
+
+## OnPush Clarification
+OnPush is recommended for zoneless compatibility, but it is not mandatory.
+
+## Testing
+For tests intended to closely match a zoneless application, TestBed can use `provideZonelessChangeDetection()`. Existing tests do not need a blind rewrite merely to remove every `detectChanges()`.
 
 ## Exercise
-Inspect JobHub for code that depends on zone stability or broad application-wide refreshes.
-
-## Common Mistakes
-- Assuming every async operation updates arbitrary state.
-- Using zone-stability events as generic synchronization.
-- Removing ZoneJS from legacy code without checking dependencies.
-- Assuming zoneless automatically fixes expensive rendering.
+Audit JobHub for zone-stability subscriptions, manual global refreshes, missing Angular state notifications and unnecessary change-detection calls.
 
 ## Interview Questions
-1. What is zoneless Angular?
-2. Is it the default in Angular 21+?
-3. What notifications can schedule synchronization?
-4. Why is OnPush useful for zoneless compatibility?
+1. Is zoneless default in Angular 21?
+2. What schedules synchronization?
+3. Is OnPush required?
+4. What should replace generic NgZone stability logic?
 
-## Outcome
-You understand the scheduling model behind modern Angular rendering.
+## Expected Outcome
+You can explain Angular 21's zoneless scheduling model and identify outdated ZoneJS assumptions.
