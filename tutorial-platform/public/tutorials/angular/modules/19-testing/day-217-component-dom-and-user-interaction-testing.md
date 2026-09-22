@@ -1,73 +1,45 @@
----
-id: "angular-day-217"
-title: "Component DOM and User Interaction Testing"
-slug: "component-dom-and-user-interaction-testing"
-day: 217
-module: 19
-track: "angular"
-level: "Intermediate"
----
-
 # Day 217 — Component DOM and User Interaction Testing
 
-## Goal
+## Learning Goal
+Test the interaction a real user performs.
 
-Test the DOM and user behavior rather than only class internals: clicks, inputs, rendered states, and interaction outcomes.
+## Scenario
+A JobHub favorite button changes from Save job to Saved.
 
-## Concept
+~~~ts
+const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
 
-Testing should verify **observable behavior and contracts**, not implementation details.
+expect(button.textContent).toContain('Save job');
 
-Modern Angular CLI projects use **Vitest** as the default unit-test runner. Angular testing utilities such as TestBed and ComponentFixture provide the Angular test environment.
+button.click();
+fixture.detectChanges();
 
-## Example
+expect(button.textContent).toContain('Saved');
+~~~
 
-```ts
-import {TestBed} from '@angular/core/testing';
+The important flow is **user action → state change → visible result**.
 
-describe('Component DOM and User Interaction Testing', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    });
-  });
+## Interaction Rules
+Use the semantic event a user would trigger: click, input, change, submit or keyboard interaction when it is part of the feature contract.
 
-  it('should verify observable behavior', () => {
-    expect(true).toBe(true);
-  });
-});
-```
+Do not call component methods directly when the test is supposed to prove the UI interaction.
 
-Adapt the setup to the feature being tested rather than creating one huge global test configuration.
-
-## Mental Model
-
-**Arrange → Act → Assert**
-
-- Arrange the smallest useful test environment.
-- Act through the public API or user interaction.
-- Assert the observable result.
+## Async UI
+Wait for the actual completion condition. Do not add arbitrary setTimeout delays.
 
 ## Exercise
-
-Add focused tests to the JobHub feature related to today's topic.
+Test a JobHub search box: enter a keyword, submit, and verify the results message.
 
 ## Common Mistakes
-
-- Testing private implementation details
-- Over-mocking Angular itself
-- Sharing mutable state between tests
-- Writing tests that pass only because timing happens to work
-- Using `any` to silence type errors
+- Calling component methods instead of simulating user behavior.
+- Arbitrary timeouts.
+- Fragile CSS ancestry.
+- Testing styling with no behavioral contract.
 
 ## Interview Questions
+1. Why test the DOM interaction?
+2. How would you test a button that navigates?
+3. How do you handle asynchronous UI?
 
-1. What is the purpose of TestBed?
-2. What should a unit test verify?
-3. When should a dependency be mocked?
-4. Why can implementation-detail tests become brittle?
-
-## Outcome
-
-You can apply today's testing technique to a real Angular feature without coupling the test suite to unnecessary implementation details.
+## Expected Outcome
+You can write interaction tests that represent realistic user behavior.
