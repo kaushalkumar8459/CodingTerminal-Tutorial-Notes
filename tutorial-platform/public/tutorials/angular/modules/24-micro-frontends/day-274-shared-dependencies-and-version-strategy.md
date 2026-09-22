@@ -31,13 +31,23 @@ Apply today's concept to JobHub. Document the host/remote boundary, dependency d
 - Treating the remote boundary as a security boundary.
 - Ignoring deployment, caching, rollback, or performance.
 
-## Interview Questions
 
-1. Why would you choose micro frontends instead of a modular monolith?
-2. What belongs in a host versus a remote?
-3. How should cross-MFE communication be designed?
-4. What are the major performance and deployment risks?
+## Native Federation Dependency Sharing
 
-## Outcome
+Shared dependencies are a runtime compatibility decision, not simply a bundle-size optimization.
 
-You can explain Shared Dependencies and Version Strategy using explicit ownership, contracts, trade-offs, and production considerations.
+For Angular applications, commonly shared platform dependencies may include Angular packages and other libraries that must behave as singletons. The exact configuration syntax is package-version-specific.
+
+A useful policy is:
+
+1. share only dependencies that benefit from sharing;
+2. keep Angular package versions compatible across host/remotes;
+3. test singleton behavior for libraries that maintain registries or global state;
+4. avoid sharing feature-specific business libraries unless there is a deliberate contract;
+5. review dependency upgrades as a platform change.
+
+Do not blindly use `shareAll()` forever. It can be convenient for learning, but production architectures should understand what is actually being shared.
+
+## Angular 21 Rule
+
+Do not assume an older `strictVersion`, `requiredVersion`, or sharing option has identical behavior in every Native Federation release. Verify the generated configuration and package documentation for the installed version.
