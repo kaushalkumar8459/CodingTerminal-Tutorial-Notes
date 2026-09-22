@@ -427,7 +427,7 @@ Every detailed day should eventually contain:
 9. [x] Module 26 — Interview content rewrite
 10. [ ] Cross-module duplication/dependency review
 11. [x] Tutorial quality/template review
-12. [ ] Final validation and publishing check
+12. [x] Final validation and publishing check
 
 # Continuation Rule
 
