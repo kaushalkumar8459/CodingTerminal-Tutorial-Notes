@@ -3,6 +3,7 @@ export const tracks = [
   { key: "java", label: "Java" },
   { key: "react", label: "React" },
   { key: "angular", label: "Angular" },
+  { key: "angularinterview", label: "Angular Interview", hidden: true },
   { key: "nodejs", label: "Node.js" },
   { key: "python", label: "Python" },
   { key: "nextjs", label: "Next.js" },

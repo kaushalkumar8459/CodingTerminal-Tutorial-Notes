@@ -53,6 +53,10 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
     const links: TrackLink[] = [];
 
     for (const track of tracks) {
+      if ("hidden" in track && track.hidden) {
+        continue;
+      }
+
       const firstLesson = getTutorialsByTrack(track.key)[0];
 
       if (!firstLesson) {

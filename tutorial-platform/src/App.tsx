@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { MainNavigation } from "./components/MainNavigation";
 import { JavaScriptSubNavigation } from "./components/JavaScriptSubNavigation";
+import { AngularSubNavigation } from "./components/AngularSubNavigation";
 import { CodingNav } from "./components/CodingNav";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { TopProgressBar } from "./components/TopProgressBar";
@@ -49,8 +50,9 @@ function TutorialLayout() {
             Follow a beginner-friendly path with clear explanations, coding examples, mini exercises, and progress-focused lesson pages.
           </p>
 
-          <MainNavigation currentTrack={track} />
+          <MainNavigation currentTrack={track === "angularinterview" ? "angular" : track} />
           {track === "javascript" ? <JavaScriptSubNavigation /> : null}
+          {track === "angular" || track === "angularinterview" ? <AngularSubNavigation /> : null}
         </header>
 
         <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">

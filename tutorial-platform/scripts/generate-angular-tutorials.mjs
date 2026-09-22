@@ -130,8 +130,10 @@ async function buildEntries() {
 async function updateTutorialsFile(entries) {
   let content = await fs.readFile(tutorialsFile, "utf8");
 
-  // Remove any existing angular entries for idempotency.
+  // Remove any existing angular entries/chunk/spread for idempotency.
   content = content.replace(/ {2}\{\n {4}track: "angular",[\s\S]*?\n {2}\},\n/g, "");
+  content = content.replace(/const tutorialsChunkAngular: TutorialMeta\[\] = \[[\s\S]*?\n\];\n\n/, "");
+  content = content.replace(/ {2}\.\.\.tutorialsChunkAngular,\n/, "");
 
   const entryBlocks = entries
     .map((entry) => {
@@ -152,7 +154,12 @@ async function updateTutorialsFile(entries) {
     })
     .join("\n");
 
-  content = content.replace(/\n\];/, `\n${entryBlocks}\n];`);
+  const chunkDeclaration = `const tutorialsChunkAngular: TutorialMeta[] = [\n${entryBlocks}\n];\n\n`;
+  const exportMarker = "export const tutorials: TutorialMeta[] = [\n";
+  content = content.replace(
+    exportMarker,
+    `${chunkDeclaration}${exportMarker}  ...tutorialsChunkAngular,\n`,
+  );
 
   if (!/angular: \[\] as TutorialMeta\[\],/.test(content)) {
     content = content.replace(
@@ -186,6 +193,11 @@ async function updateSearchIndex(entries) {
   await fs.writeFile(searchIndexFile, `${JSON.stringify(merged)}\n`, "utf8");
 }
 
+// NOTE: tutorials.ts is split into tutorialsChunkN consts because a single huge
+// object-literal array trips TypeScript's TS2590 (union type too complex) once
+// entry count gets into the thousands. If this script or the interview one
+// pushes the total high enough to hit that again, re-chunk the objects array
+// into ~150-entry const arrays spread into the final `tutorials` export.
 async function main() {
   const entries = await buildEntries();
   await updateTutorialsFile(entries);
