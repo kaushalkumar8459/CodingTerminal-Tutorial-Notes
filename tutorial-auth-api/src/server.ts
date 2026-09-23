@@ -10,7 +10,11 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { synthesizeSpeech } from "./tts.js";
-import { JOB_SOURCES, type JobListing, type JobSourceResult } from "./jobSources.js";
+import {
+  JOB_SOURCES,
+  type JobListing,
+  type JobSourceResult,
+} from "./jobSources.js";
 
 const runtimeMode =
   process.env.NODE_ENV === "production" ? "production" : "development";
@@ -142,8 +146,12 @@ app.get("/jobs/sources", (_req, res) => {
 });
 
 app.get("/jobs", async (req: Request, res: Response) => {
-  const query = String(req.query.query ?? "").trim().slice(0, 100);
-  const location = String(req.query.location ?? "").trim().slice(0, 100);
+  const query = String(req.query.query ?? "")
+    .trim()
+    .slice(0, 100);
+  const location = String(req.query.location ?? "")
+    .trim()
+    .slice(0, 100);
   const experienceLevel = String(req.query.experienceLevel ?? "any").trim();
   const page = Math.min(Math.max(Number(req.query.page) || 1, 1), 20);
 
@@ -174,7 +182,12 @@ app.get("/jobs", async (req: Request, res: Response) => {
     const fetchedResults: JobSourceResult[] = settled.map((result, index) => {
       const source = activeSources[index];
       if (result.status === "fulfilled") {
-        return { id: source.id, name: source.name, status: "ok", count: result.value.length };
+        return {
+          id: source.id,
+          name: source.name,
+          status: "ok",
+          count: result.value.length,
+        };
       }
       console.error(`Job source "${source.id}" fetch failed:`, result.reason);
       return {
@@ -186,11 +199,15 @@ app.get("/jobs", async (req: Request, res: Response) => {
       };
     });
 
-    jobs = settled.flatMap((result) => (result.status === "fulfilled" ? result.value : []));
+    jobs = settled.flatMap((result) =>
+      result.status === "fulfilled" ? result.value : [],
+    );
     sourceResults = [...fetchedResults, ...skippedResults];
 
     // Don't cache transient provider failures — only a fully successful fetch is worth remembering.
-    const hadFailure = fetchedResults.some((result) => result.status === "error");
+    const hadFailure = fetchedResults.some(
+      (result) => result.status === "error",
+    );
     if (!hadFailure) {
       jobSearchCache.set(cacheKey, {
         expiresAt: Date.now() + JOB_CACHE_TTL_MS,
@@ -233,7 +250,8 @@ app.post(
     if (!apiKey) {
       return res.status(503).json({
         ok: false,
-        message: "Configure GEMINI_API_KEY on the server to use AI search parsing.",
+        message:
+          "Configure GEMINI_API_KEY on the server to use AI search parsing.",
       });
     }
 
@@ -293,9 +311,14 @@ app.post(
       return res.json({
         ok: true,
         criteria: {
-          query: typeof parsed.query === "string" ? parsed.query.trim().slice(0, 100) : "",
+          query:
+            typeof parsed.query === "string"
+              ? parsed.query.trim().slice(0, 100)
+              : "",
           location:
-            typeof parsed.location === "string" ? parsed.location.trim().slice(0, 100) : "",
+            typeof parsed.location === "string"
+              ? parsed.location.trim().slice(0, 100)
+              : "",
           experienceLevel,
         },
       });

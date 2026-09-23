@@ -25,7 +25,11 @@ export type JobSourceInfo = {
 
 export type JobSourceDefinition = JobSourceInfo & {
   isConfigured: () => boolean;
-  fetchJobs: (query: string, location: string, page: number) => Promise<JobListing[]>;
+  fetchJobs: (
+    query: string,
+    location: string,
+    page: number,
+  ) => Promise<JobListing[]>;
 };
 
 export type JobSourceResult = {
@@ -36,17 +40,27 @@ export type JobSourceResult = {
   message?: string;
 };
 
-
-export function classifyExperienceLevel(title: string, description: string): JobExperienceLevel {
+export function classifyExperienceLevel(
+  title: string,
+  description: string,
+): JobExperienceLevel {
   const text = `${title} ${description}`.toLowerCase();
 
-  if (/\b(intern|internship|fresher|graduate trainee|entry.level|no experience)\b/.test(text)) {
+  if (
+    /\b(intern|internship|fresher|graduate trainee|entry.level|no experience)\b/.test(
+      text,
+    )
+  ) {
     return "fresher";
   }
   if (/\b(junior|jr\.?|associate)\b/.test(text)) {
     return "junior";
   }
-  if (/\b(senior|sr\.?|lead|principal|staff|architect|manager|head of)\b/.test(text)) {
+  if (
+    /\b(senior|sr\.?|lead|principal|staff|architect|manager|head of)\b/.test(
+      text,
+    )
+  ) {
     return "senior";
   }
   return "mid";
@@ -58,7 +72,9 @@ const adzunaSource: JobSourceDefinition = {
   homepageUrl: "https://www.adzuna.in",
   requiresApiKey: true,
   isConfigured: () =>
-    Boolean(process.env.ADZUNA_APP_ID?.trim() && process.env.ADZUNA_APP_KEY?.trim()),
+    Boolean(
+      process.env.ADZUNA_APP_ID?.trim() && process.env.ADZUNA_APP_KEY?.trim(),
+    ),
   fetchJobs: async (query, location, page) => {
     const appId = process.env.ADZUNA_APP_ID?.trim();
     const appKey = process.env.ADZUNA_APP_KEY?.trim();
@@ -157,7 +173,8 @@ const arbeitnowSource: JobSourceDefinition = {
           title.toLowerCase().includes(queryLower) ||
           description.toLowerCase().includes(queryLower);
         const matchesLocation =
-          !locationLower || (item.location ?? "").toLowerCase().includes(locationLower);
+          !locationLower ||
+          (item.location ?? "").toLowerCase().includes(locationLower);
         return matchesQuery && matchesLocation;
       })
       .slice(0, 30)
@@ -169,7 +186,9 @@ const arbeitnowSource: JobSourceDefinition = {
           title,
           company: item.company_name ?? "Unknown company",
           location: item.location || "Remote",
-          postedAt: item.created_at ? new Date(item.created_at * 1000).toISOString() : null,
+          postedAt: item.created_at
+            ? new Date(item.created_at * 1000).toISOString()
+            : null,
           source: "arbeitnow",
           applyUrl: item.url ?? "https://arbeitnow.com",
           description,
@@ -214,8 +233,14 @@ const remotiveSource: JobSourceDefinition = {
     return (payload.jobs ?? [])
       .filter((item) => {
         if (!locationLower) return true;
-        const jobLocation = (item.candidate_required_location ?? "").toLowerCase();
-        return jobLocation.includes(locationLower) || jobLocation.includes("worldwide") || jobLocation.includes("anywhere");
+        const jobLocation = (
+          item.candidate_required_location ?? ""
+        ).toLowerCase();
+        return (
+          jobLocation.includes(locationLower) ||
+          jobLocation.includes("worldwide") ||
+          jobLocation.includes("anywhere")
+        );
       })
       .slice(0, 30)
       .map((item) => {
@@ -280,30 +305,34 @@ const jobicySource: JobSourceDefinition = {
           title.toLowerCase().includes(queryLower) ||
           description.toLowerCase().includes(queryLower);
         const matchesLocation =
-          !locationLower || (item.jobGeo ?? "").toLowerCase().includes(locationLower);
+          !locationLower ||
+          (item.jobGeo ?? "").toLowerCase().includes(locationLower);
         return matchesQuery && matchesLocation;
       })
       .slice(0, 30)
       .map((item) => {
-      const title = item.jobTitle ?? "Untitled role";
-      const description = item.jobDescription ?? "";
-      return {
-        id: `jobicy-${item.id ?? crypto.randomUUID()}`,
-        title,
-        company: item.companyName ?? "Unknown company",
-        location: item.jobGeo || "Remote",
-        postedAt: item.pubDate ?? null,
-        source: "jobicy",
-        applyUrl: item.url ?? "https://jobicy.com",
-        description,
-        experienceLevel: classifyExperienceLevel(`${title} ${item.jobLevel ?? ""}`, description),
-        salary:
-          item.annualSalaryMin && item.annualSalaryMax
-            ? `${item.annualSalaryMin.toLocaleString()} - ${item.annualSalaryMax.toLocaleString()}`
-            : null,
-        remote: true,
-      };
-    });
+        const title = item.jobTitle ?? "Untitled role";
+        const description = item.jobDescription ?? "";
+        return {
+          id: `jobicy-${item.id ?? crypto.randomUUID()}`,
+          title,
+          company: item.companyName ?? "Unknown company",
+          location: item.jobGeo || "Remote",
+          postedAt: item.pubDate ?? null,
+          source: "jobicy",
+          applyUrl: item.url ?? "https://jobicy.com",
+          description,
+          experienceLevel: classifyExperienceLevel(
+            `${title} ${item.jobLevel ?? ""}`,
+            description,
+          ),
+          salary:
+            item.annualSalaryMin && item.annualSalaryMax
+              ? `${item.annualSalaryMin.toLocaleString()} - ${item.annualSalaryMax.toLocaleString()}`
+              : null,
+          remote: true,
+        };
+      });
   },
 };
 
