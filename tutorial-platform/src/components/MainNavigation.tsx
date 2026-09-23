@@ -139,6 +139,12 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
             >
               YouTube Details
             </Link>
+            <Link
+              to="/tools/jobs"
+              className="block px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-cyan-50 hover:text-slate-950"
+            >
+              Job Search
+            </Link>
           </div>
         </details>
 

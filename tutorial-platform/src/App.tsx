@@ -12,6 +12,7 @@ import { getCodingLessonsByTrack } from "./data/codingLessons";
 import { getCodingTrackLabel, isCodingTrackKey } from "./data/codingTracks";
 import { AdminPage } from "./pages/AdminPage";
 import { CodingPage } from "./pages/CodingPage";
+import { JobsPage } from "./pages/JobsPage";
 import { LoginPage } from "./pages/LoginPage";
 import { TextToSpeechPage } from "./pages/TextToSpeechPage";
 import { TutorialPage } from "./pages/TutorialPage";
@@ -148,6 +149,7 @@ function App() {
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="/tools/text-to-speech" element={<TextToSpeechPage />} />
       <Route path="/tools/youtube-details" element={<YouTubeDetailsPage />} />
+      <Route path="/tools/jobs" element={<JobsPage />} />
       <Route
         path="/admin"
         element={
