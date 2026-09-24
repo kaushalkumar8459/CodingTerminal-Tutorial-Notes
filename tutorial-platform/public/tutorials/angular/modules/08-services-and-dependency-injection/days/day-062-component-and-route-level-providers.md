@@ -1,6 +1,6 @@
 ---
 title: Component and Route-Level Providers
-slug: component-and-route-level-providers
+slug: day-062-component-and-route-level-providers
 dayLabel: Day 62
 level: Intermediate
 estimatedMinutes: 70

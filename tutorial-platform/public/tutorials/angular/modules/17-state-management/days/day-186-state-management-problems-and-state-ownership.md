@@ -1,13 +1,13 @@
 ---
-id="angular-day-186"
-title="State Management Problems and State Ownership"
-slug="state-management-problems-and-state-ownership"
-dayLabel="Day 186"
-level=Intermediate
-estimatedMinutes=75
-order=186
-track=angular
-youtubeVideos=[]
+id: "angular-day-186"
+title: "State Management Problems and State Ownership"
+slug: day-186-state-management-problems-and-state-ownership
+dayLabel: "Day 186"
+level: Intermediate
+estimatedMinutes: 75
+order: 186
+track: angular
+youtubeVideos: []
 ---
 
 # Day 186 - State Management Problems and State Ownership

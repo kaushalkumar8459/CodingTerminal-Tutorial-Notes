@@ -1,13 +1,13 @@
 ---
-id="angular-day-197"
-title="SignalStore Async Workflows"
-slug="signalstore-async-workflows"
-dayLabel="Day 197"
-level=Advanced
-estimatedMinutes=90
-order=197
-track=angular
-youtubeVideos=[]
+id: "angular-day-197"
+title: "SignalStore Async Workflows"
+slug: day-197-signalstore-async-workflows
+dayLabel: "Day 197"
+level: Advanced
+estimatedMinutes: 90
+order: 197
+track: angular
+youtubeVideos: []
 ---
 
 # Day 197 - SignalStore Async Workflows

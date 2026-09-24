@@ -1,13 +1,13 @@
 ---
-id="angular-day-175"
-title="Subjects: Subject, BehaviorSubject and ReplaySubject"
-slug="subjects"
-dayLabel="Day 175"
-level=Intermediate
-estimatedMinutes=90
-order=175
-track=angular
-youtubeVideos=[]
+id: "angular-day-175"
+title: "Subjects: Subject, BehaviorSubject and ReplaySubject"
+slug: day-175-subjects
+dayLabel: "Day 175"
+level: Intermediate
+estimatedMinutes: 90
+order: 175
+track: angular
+youtubeVideos: []
 ---
 
 # Day 175 - Subjects: Subject, BehaviorSubject and ReplaySubject

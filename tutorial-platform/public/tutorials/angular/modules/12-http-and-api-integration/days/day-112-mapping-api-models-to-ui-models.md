@@ -1,13 +1,13 @@
 ---
-id="angular-day-112"
-title="Mapping API Models to UI Models"
-slug="day-112-mapping-api-models-to-ui-models"
-dayLabel="Day 112"
-level=Intermediate
-estimatedMinutes=75
-order=112
-track=angular
-youtubeVideos=[]
+id: "angular-day-112"
+title: "Mapping API Models to UI Models"
+slug: "day-112-mapping-api-models-to-ui-models"
+dayLabel: "Day 112"
+level: Intermediate
+estimatedMinutes: 75
+order: 112
+track: angular
+youtubeVideos: []
 ---
 # Day 112 — Mapping API Models to UI Models
 

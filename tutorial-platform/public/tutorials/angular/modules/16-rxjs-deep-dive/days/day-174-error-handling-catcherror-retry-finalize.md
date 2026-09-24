@@ -1,13 +1,13 @@
 ---
-id="angular-day-174"
-title="Error Handling: catchError, retry and finalize"
-slug="error-handling-catcherror-retry-finalize"
-dayLabel="Day 174"
-level=Intermediate
-estimatedMinutes=90
-order=174
-track=angular
-youtubeVideos=[]
+id: "angular-day-174"
+title: "Error Handling: catchError, retry and finalize"
+slug: day-174-error-handling-catcherror-retry-finalize
+dayLabel: "Day 174"
+level: Intermediate
+estimatedMinutes: 90
+order: 174
+track: angular
+youtubeVideos: []
 ---
 
 # Day 174 - Error Handling: catchError, retry and finalize

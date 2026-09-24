@@ -1,7 +1,7 @@
 ---
-id="angular-day-078"
-title="computed() — Derived State"
-slug="day-078-computed-derived-state"
+id: "angular-day-078"
+title: "computed() — Derived State"
+slug: "day-078-computed-derived-state"
 dayLabel: Day 78
 level: Beginner
 estimatedMinutes: 60
@@ -21,7 +21,7 @@ readonly quantity = signal(2);
 readonly total = computed(() => this.price() * this.quantity());
 ```
 
-computed() creates a read-only signal derived from other signals. It is lazy and memoized, and Angular tracks its dependencies. citeturn0search1
+computed() creates a read-only signal derived from other signals. It is lazy and memoized, and Angular tracks its dependencies.
 
 ## Filtering
 ```ts

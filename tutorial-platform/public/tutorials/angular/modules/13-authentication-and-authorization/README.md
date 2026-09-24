@@ -1,10 +1,10 @@
 ---
-id="angular-module-13"
-title="Authentication & Authorization"
-slug="authentication-and-authorization"
-level=Beginner
-order=13
-track=angular
+id: "angular-module-13"
+title: "Authentication & Authorization"
+slug: "authentication-and-authorization"
+level: Beginner
+order: 13
+track: angular
 ---
 # Module 13 — Authentication & Authorization
 
@@ -27,7 +27,7 @@ Build a secure-minded Angular authentication experience: login, logout, session 
 Identity → auth architecture → auth state → route guards → permissions → HTTP credentials → storage/security → expiry → app shell → project
 
 ## Critical Security Boundary
-Angular can improve navigation and user experience with guards and permission checks, but backend authorization remains authoritative. Client-side JavaScript can be modified by the user. citeturn0search0
+Angular can improve navigation and user experience with guards and permission checks, but backend authorization remains authoritative. Client-side JavaScript can be modified by the user.
 
 ## Teaching Rules
 - Authentication and authorization are taught separately.

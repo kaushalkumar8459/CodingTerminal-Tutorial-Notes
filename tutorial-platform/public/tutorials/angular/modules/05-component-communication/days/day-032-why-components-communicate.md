@@ -1,5 +1,5 @@
-id="c5d01"
 ---
+id: "c5d01"
 title: Why Components Communicate
 slug: day-032-why-components-communicate
 dayLabel: Day 32

@@ -1,13 +1,13 @@
 ---
-id="angular-day-173"
-title="Combination: combineLatest, forkJoin and zip"
-slug="combine-latest-forkjoin-zip"
-dayLabel="Day 173"
-level=Intermediate
-estimatedMinutes=90
-order=173
-track=angular
-youtubeVideos=[]
+id: "angular-day-173"
+title: "Combination: combineLatest, forkJoin and zip"
+slug: day-173-combine-latest-forkjoin-zip
+dayLabel: "Day 173"
+level: Intermediate
+estimatedMinutes: 90
+order: 173
+track: angular
+youtubeVideos: []
 ---
 
 # Day 173 - Combination: combineLatest, forkJoin and zip

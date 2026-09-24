@@ -1,10 +1,10 @@
 ---
-id="angular-module-15"
-title="TypeScript Deep Dive"
-slug="typescript-deep-dive"
-level=Intermediate
-order=15
-track=angular
+id: "angular-module-15"
+title: "TypeScript Deep Dive"
+slug: "typescript-deep-dive"
+level: Intermediate
+order: 15
+track: angular
 ---
 # Module 15 — TypeScript Deep Dive
 

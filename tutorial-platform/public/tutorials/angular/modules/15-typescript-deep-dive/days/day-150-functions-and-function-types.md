@@ -1,13 +1,13 @@
 ---
-id="angular-day-150"
-title="Functions and Function Types"
-slug="day-150-functions-and-function-types"
-dayLabel="Day 150"
-level=Beginner
-estimatedMinutes=75
-order=150
-track=angular
-youtubeVideos=[]
+id: "angular-day-150"
+title: "Functions and Function Types"
+slug: "day-150-functions-and-function-types"
+dayLabel: "Day 150"
+level: Beginner
+estimatedMinutes: 75
+order: 150
+track: angular
+youtubeVideos: []
 ---
 # Day 150 — Functions and Function Types
 

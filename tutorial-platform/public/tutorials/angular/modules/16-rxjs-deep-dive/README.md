@@ -1,10 +1,10 @@
 ---
-id="angular-module-16"
-title="RxJS Deep Dive"
-slug="rxjs-deep-dive"
-level=Intermediate
-order=16
-track=angular
+id: "angular-module-16"
+title: "RxJS Deep Dive"
+slug: "rxjs-deep-dive"
+level: Intermediate
+order: 16
+track: angular
 ---
 
 # Module 16 - RxJS Deep Dive

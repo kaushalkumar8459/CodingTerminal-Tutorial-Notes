@@ -1,7 +1,7 @@
 ---
-id="angular-day-082"
-title="Signal Inputs with input()"
-slug="day-082-signal-inputs-with-input"
+id: "angular-day-082"
+title: "Signal Inputs with input()"
+slug: "day-082-signal-inputs-with-input"
 dayLabel: Day 82
 level: Intermediate
 estimatedMinutes: 60

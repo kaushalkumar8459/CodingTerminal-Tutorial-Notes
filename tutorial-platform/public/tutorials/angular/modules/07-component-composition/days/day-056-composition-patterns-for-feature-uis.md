@@ -1,5 +1,5 @@
-id="cc7d7"
 ---
+id: "cc7d7"
 title: Composition Patterns for Feature UIs
 slug: day-056-composition-patterns-for-feature-uis
 dayLabel: Day 56

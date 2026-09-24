@@ -1,13 +1,13 @@
 ---
-id="angular-day-170"
-title="Operators: map, filter and tap"
-slug="map-filter-and-tap"
-dayLabel="Day 170"
-level=Beginner
-estimatedMinutes=75
-order=170
-track=angular
-youtubeVideos=[]
+id: "angular-day-170"
+title: "Operators: map, filter and tap"
+slug: day-170-map-filter-and-tap
+dayLabel: "Day 170"
+level: Beginner
+estimatedMinutes: 75
+order: 170
+track: angular
+youtubeVideos: []
 ---
 
 # Day 170 - Operators: map, filter and tap

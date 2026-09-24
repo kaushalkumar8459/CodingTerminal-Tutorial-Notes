@@ -1,13 +1,13 @@
 ---
-id="angular-day-118"
-title="API Architecture and Data Access Patterns"
-slug="day-118-api-architecture-and-data-access-patterns"
-dayLabel="Day 118"
-level=Advanced
-estimatedMinutes=90
-order=118
-track=angular
-youtubeVideos=[]
+id: "angular-day-118"
+title: "API Architecture and Data Access Patterns"
+slug: "day-118-api-architecture-and-data-access-patterns"
+dayLabel: "Day 118"
+level: Advanced
+estimatedMinutes: 90
+order: 118
+track: angular
+youtubeVideos: []
 ---
 # Day 118 — API Architecture and Data Access Patterns
 

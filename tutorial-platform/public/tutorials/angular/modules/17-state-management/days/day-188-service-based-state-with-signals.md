@@ -1,13 +1,13 @@
 ---
-id="angular-day-188"
-title="Service-Based State with Signals"
-slug="service-based-state-with-signals"
-dayLabel="Day 188"
-level=Intermediate
-estimatedMinutes=90
-order=188
-track=angular
-youtubeVideos=[]
+id: "angular-day-188"
+title: "Service-Based State with Signals"
+slug: day-188-service-based-state-with-signals
+dayLabel: "Day 188"
+level: Intermediate
+estimatedMinutes: 90
+order: 188
+track: angular
+youtubeVideos: []
 ---
 
 # Day 188 - Service-Based State with Signals

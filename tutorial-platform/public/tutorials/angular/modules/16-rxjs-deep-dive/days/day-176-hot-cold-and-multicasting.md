@@ -1,13 +1,13 @@
 ---
-id="angular-day-176"
-title="Hot, Cold and Multicasted Observables"
-slug="hot-cold-and-multicasting"
-dayLabel="Day 176"
-level=Intermediate
-estimatedMinutes=90
-order=176
-track=angular
-youtubeVideos=[]
+id: "angular-day-176"
+title: "Hot, Cold and Multicasted Observables"
+slug: day-176-hot-cold-and-multicasting
+dayLabel: "Day 176"
+level: Intermediate
+estimatedMinutes: 90
+order: 176
+track: angular
+youtubeVideos: []
 ---
 
 # Day 176 - Hot, Cold and Multicasted Observables

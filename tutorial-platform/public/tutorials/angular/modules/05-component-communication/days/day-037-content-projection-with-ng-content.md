@@ -1,8 +1,7 @@
-id="c5d06"
 ---
+id: "c5d06"
 title: Content Projection with ng-content
 slug: day-037-content-projection-with-ng-content
-dayLabel: day-037-content-projection-with-ng-content
 dayLabel: Day 37
 level: Intermediate
 estimatedMinutes: 90

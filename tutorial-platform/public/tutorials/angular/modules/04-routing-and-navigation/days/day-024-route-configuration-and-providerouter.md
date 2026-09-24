@@ -1,5 +1,5 @@
-id="r4n03"
 ---
+id: "r4n03"
 title: Route Configuration and provideRouter
 slug: day-024-route-configuration-and-providerouter
 dayLabel: Day 24

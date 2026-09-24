@@ -1,13 +1,13 @@
 ---
-id="angular-day-154"
-title="Generic Constraints and Defaults"
-slug="day-154-generic-constraints-and-defaults"
-dayLabel="Day 154"
-level=Intermediate
-estimatedMinutes=75
-order=154
-track=angular
-youtubeVideos=[]
+id: "angular-day-154"
+title: "Generic Constraints and Defaults"
+slug: "day-154-generic-constraints-and-defaults"
+dayLabel: "Day 154"
+level: Intermediate
+estimatedMinutes: 75
+order: 154
+track: angular
+youtubeVideos: []
 ---
 # Day 154 — Generic Constraints and Defaults
 

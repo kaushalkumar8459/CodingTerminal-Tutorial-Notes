@@ -1,13 +1,13 @@
 ---
-id="angular-day-151"
-title="Union, Literal and Intersection Types"
-slug="day-151-union-literal-and-intersection-types"
-dayLabel="Day 151"
-level=Intermediate
-estimatedMinutes=75
-order=151
-track=angular
-youtubeVideos=[]
+id: "angular-day-151"
+title: "Union, Literal and Intersection Types"
+slug: "day-151-union-literal-and-intersection-types"
+dayLabel: "Day 151"
+level: Intermediate
+estimatedMinutes: 75
+order: 151
+track: angular
+youtubeVideos: []
 ---
 # Day 151 — Union, Literal and Intersection Types
 

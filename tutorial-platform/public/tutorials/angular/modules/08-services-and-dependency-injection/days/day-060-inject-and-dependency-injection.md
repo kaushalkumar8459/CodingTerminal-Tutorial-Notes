@@ -1,6 +1,6 @@
 ---
 title: inject() and Dependency Injection
-slug: inject-and-dependency-injection
+slug: day-060-inject-and-dependency-injection
 dayLabel: Day 60
 level: Beginner
 estimatedMinutes: 60

@@ -1,6 +1,6 @@
 ---
 title: AfterViewInit and AfterViewChecked
-slug: afterviewinit-and-afterviewchecked
+slug: day-072-afterviewinit-and-afterviewchecked
 dayLabel: Day 72
 level: Intermediate
 estimatedMinutes: 75

@@ -1,13 +1,13 @@
 ---
-id="angular-day-185"
-title="Mini Project - Reactive Job Search Dashboard"
-slug="mini-project-reactive-job-search-dashboard"
-dayLabel="Day 185"
-level=Advanced
-estimatedMinutes=120
-order=185
-track=angular
-youtubeVideos=[]
+id: "angular-day-185"
+title: "Mini Project - Reactive Job Search Dashboard"
+slug: day-185-mini-project-reactive-job-search-dashboard
+dayLabel: "Day 185"
+level: Advanced
+estimatedMinutes: 120
+order: 185
+track: angular
+youtubeVideos: []
 ---
 
 # Day 185 - Mini Project - Reactive Job Search Dashboard

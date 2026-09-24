@@ -1,7 +1,7 @@
 ---
-id="angular-day-097"
-title="Validators and Custom Validation"
-slug="day-097-validators-and-custom-validation"
+id: "angular-day-097"
+title: "Validators and Custom Validation"
+slug: "day-097-validators-and-custom-validation"
 dayLabel: Day 97
 level: Intermediate
 estimatedMinutes: 90

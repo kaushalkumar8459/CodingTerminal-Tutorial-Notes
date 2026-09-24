@@ -1,7 +1,7 @@
 ---
 id: "angular-day-201"
 title: "Why Angular CDK, Material and Accessibility?"
-slug: "why-angular-cdk-material-and-accessibility"
+slug: day-201-why-angular-cdk-material-and-accessibility
 day: 201
 module: 18
 track: "angular"

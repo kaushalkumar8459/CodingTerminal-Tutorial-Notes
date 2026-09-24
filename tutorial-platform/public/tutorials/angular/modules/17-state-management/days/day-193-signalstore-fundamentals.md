@@ -1,13 +1,13 @@
 ---
-id="angular-day-193"
-title="SignalStore Fundamentals"
-slug="signalstore-fundamentals"
-dayLabel="Day 193"
-level=Advanced
-estimatedMinutes=90
-order=193
-track=angular
-youtubeVideos=[]
+id: "angular-day-193"
+title: "SignalStore Fundamentals"
+slug: day-193-signalstore-fundamentals
+dayLabel: "Day 193"
+level: Advanced
+estimatedMinutes: 90
+order: 193
+track: angular
+youtubeVideos: []
 ---
 
 # Day 193 - SignalStore Fundamentals

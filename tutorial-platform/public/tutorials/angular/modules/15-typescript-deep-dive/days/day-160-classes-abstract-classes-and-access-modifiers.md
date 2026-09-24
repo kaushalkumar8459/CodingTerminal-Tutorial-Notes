@@ -1,13 +1,13 @@
 ---
-id="angular-day-160"
-title="Classes, Abstract Classes and Access Modifiers"
-slug="day-160-classes-abstract-classes-and-access-modifiers"
-dayLabel="Day 160"
-level=Intermediate
-estimatedMinutes=90
-order=160
-track=angular
-youtubeVideos=[]
+id: "angular-day-160"
+title: "Classes, Abstract Classes and Access Modifiers"
+slug: "day-160-classes-abstract-classes-and-access-modifiers"
+dayLabel: "Day 160"
+level: Intermediate
+estimatedMinutes: 90
+order: 160
+track: angular
+youtubeVideos: []
 ---
 # Day 160 — Classes, Abstract Classes and Access Modifiers
 

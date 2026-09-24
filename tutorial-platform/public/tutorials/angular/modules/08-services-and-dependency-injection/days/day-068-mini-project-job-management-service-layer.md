@@ -1,6 +1,6 @@
 ---
 title: Mini Project — Job Management Service Layer
-slug: mini-project-job-management-service-layer
+slug: day-068-mini-project-job-management-service-layer
 dayLabel: Day 68
 level: Advanced
 estimatedMinutes: 120

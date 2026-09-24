@@ -1,5 +1,5 @@
-id="d6d01"
 ---
+id: "d6d01"
 title: Why Directives and Pipes
 slug: day-041-why-directives-and-pipes
 dayLabel: Day 41

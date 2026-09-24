@@ -1,6 +1,6 @@
 ---
 title: Service-Owned Signal State
-slug: service-owned-signal-state
+slug: day-063-service-owned-signal-state
 dayLabel: Day 63
 level: Intermediate
 estimatedMinutes: 75

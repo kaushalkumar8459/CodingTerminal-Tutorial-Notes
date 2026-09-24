@@ -1,5 +1,5 @@
-id="d6d07"
 ---
+id: "d6d07"
 title: Custom Pipes
 slug: day-047-custom-pipes
 dayLabel: Day 47

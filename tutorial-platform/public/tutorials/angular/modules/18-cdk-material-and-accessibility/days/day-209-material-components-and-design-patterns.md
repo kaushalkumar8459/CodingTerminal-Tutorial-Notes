@@ -1,7 +1,7 @@
 ---
 id: "angular-day-209"
 title: "Material Components and Design Patterns"
-slug: "material-components-and-design-patterns"
+slug: day-209-material-components-and-design-patterns
 day: 209
 module: 18
 track: "angular"

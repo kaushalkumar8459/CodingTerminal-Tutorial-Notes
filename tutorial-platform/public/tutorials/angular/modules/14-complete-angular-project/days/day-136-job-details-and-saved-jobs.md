@@ -1,13 +1,13 @@
 ---
-id="angular-day-136"
-title="Job Details and Saved Jobs"
-slug="day-136-job-details-and-saved-jobs"
-dayLabel="Day 136"
-level=Intermediate
-estimatedMinutes=90
-order=136
-track=angular
-youtubeVideos=[]
+id: "angular-day-136"
+title: "Job Details and Saved Jobs"
+slug: "day-136-job-details-and-saved-jobs"
+dayLabel: "Day 136"
+level: Intermediate
+estimatedMinutes: 90
+order: 136
+track: angular
+youtubeVideos: []
 ---
 # Day 136 — Job Details and Saved Jobs
 

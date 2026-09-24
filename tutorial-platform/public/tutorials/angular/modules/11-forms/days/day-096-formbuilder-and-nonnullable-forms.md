@@ -1,7 +1,7 @@
 ---
-id="angular-day-096"
-title="FormBuilder and Non-Nullable Forms"
-slug="day-096-formbuilder-and-nonnullable-forms"
+id: "angular-day-096"
+title: "FormBuilder and Non-Nullable Forms"
+slug: "day-096-formbuilder-and-nonnullable-forms"
 dayLabel: Day 96
 level: Intermediate
 estimatedMinutes: 75

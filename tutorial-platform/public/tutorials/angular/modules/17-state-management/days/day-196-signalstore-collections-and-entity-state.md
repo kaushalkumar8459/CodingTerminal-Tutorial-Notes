@@ -1,13 +1,13 @@
 ---
-id="angular-day-196"
-title="SignalStore for Collections and Entity-Like State"
-slug="signalstore-collections-and-entity-state"
-dayLabel="Day 196"
-level=Advanced
-estimatedMinutes=90
-order=196
-track=angular
-youtubeVideos=[]
+id: "angular-day-196"
+title: "SignalStore for Collections and Entity-Like State"
+slug: day-196-signalstore-collections-and-entity-state
+dayLabel: "Day 196"
+level: Advanced
+estimatedMinutes: 90
+order: 196
+track: angular
+youtubeVideos: []
 ---
 
 # Day 196 - SignalStore for Collections and Entity-Like State

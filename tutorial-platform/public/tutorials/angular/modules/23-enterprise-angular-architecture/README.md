@@ -17,7 +17,7 @@ track: angular
 
 Move from building working Angular applications to designing Angular applications that remain understandable, testable, deployable, and maintainable as teams, features, and business domains grow.
 
-Angular's current style guidance recommends organizing code around feature areas and grouping closely related files rather than creating broad technical folders such as components or services. citeturn0search0
+Angular's current style guidance recommends organizing code around feature areas and grouping closely related files rather than creating broad technical folders such as components or services.
 
 ## Learning sequence
 
@@ -54,7 +54,7 @@ Angular's current style guidance recommends organizing code around feature areas
 
 There is no single folder structure that is correct for every enterprise Angular application. This module teaches architectural reasoning, not one mandatory directory tree.
 
-Angular DI supports application, route, component, and directive provider scopes, making dependency boundaries an architectural tool as well as a framework feature. citeturn0search1turn0search5
+Angular DI supports application, route, component, and directive provider scopes, making dependency boundaries an architectural tool as well as a framework feature.
 
 ## Capstone
 

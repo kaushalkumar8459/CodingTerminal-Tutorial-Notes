@@ -1,13 +1,13 @@
 ---
-id="angular-day-138"
-title="User Profile and Preferences"
-slug="day-138-user-profile-and-preferences"
-dayLabel="Day 138"
-level=Intermediate
-estimatedMinutes=90
-order=138
-track=angular
-youtubeVideos=[]
+id: "angular-day-138"
+title: "User Profile and Preferences"
+slug: "day-138-user-profile-and-preferences"
+dayLabel: "Day 138"
+level: Intermediate
+estimatedMinutes: 90
+order: 138
+track: angular
+youtubeVideos: []
 ---
 # Day 138 — User Profile and Preferences
 

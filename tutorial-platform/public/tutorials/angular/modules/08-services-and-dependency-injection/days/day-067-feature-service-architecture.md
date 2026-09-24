@@ -1,6 +1,6 @@
 ---
 title: Feature Service Architecture
-slug: feature-service-architecture
+slug: day-067-feature-service-architecture
 dayLabel: Day 67
 level: Advanced
 estimatedMinutes: 80

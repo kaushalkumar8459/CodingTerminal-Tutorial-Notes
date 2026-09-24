@@ -1,5 +1,5 @@
-id="r4n09"
 ---
+id: "r4n09"
 title: Lazy Loading and Route-Level Code Splitting
 slug: day-030-lazy-loading-and-route-level-code-splitting
 dayLabel: Day 30

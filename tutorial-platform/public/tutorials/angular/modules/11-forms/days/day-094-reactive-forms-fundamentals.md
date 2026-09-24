@@ -1,7 +1,7 @@
 ---
-id="angular-day-094"
-title="Reactive Forms Fundamentals"
-slug="day-094-reactive-forms-fundamentals"
+id: "angular-day-094"
+title: "Reactive Forms Fundamentals"
+slug: "day-094-reactive-forms-fundamentals"
 dayLabel: Day 94
 level: Intermediate
 estimatedMinutes: 75

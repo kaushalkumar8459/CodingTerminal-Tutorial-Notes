@@ -1,6 +1,6 @@
 ---
 title: ngOnChanges and Input Changes
-slug: ngonchanges-and-input-changes
+slug: day-071-ngonchanges-and-input-changes
 dayLabel: Day 71
 level: Intermediate
 estimatedMinutes: 75

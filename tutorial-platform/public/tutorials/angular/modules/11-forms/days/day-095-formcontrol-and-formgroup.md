@@ -1,7 +1,7 @@
 ---
-id="angular-day-095"
-title="FormControl and FormGroup"
-slug="day-095-formcontrol-and-formgroup"
+id: "angular-day-095"
+title: "FormControl and FormGroup"
+slug: "day-095-formcontrol-and-formgroup"
 dayLabel: Day 95
 level: Intermediate
 estimatedMinutes: 75

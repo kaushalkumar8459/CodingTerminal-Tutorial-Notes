@@ -1,13 +1,13 @@
 ---
-id="angular-day-149"
-title="Interfaces and Type Aliases"
-slug="day-149-interfaces-and-type-aliases"
-dayLabel="Day 149"
-level=Beginner
-estimatedMinutes=75
-order=149
-track=angular
-youtubeVideos=[]
+id: "angular-day-149"
+title: "Interfaces and Type Aliases"
+slug: "day-149-interfaces-and-type-aliases"
+dayLabel: "Day 149"
+level: Beginner
+estimatedMinutes: 75
+order: 149
+track: angular
+youtubeVideos: []
 ---
 # Day 149 — Interfaces and Type Aliases
 

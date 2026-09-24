@@ -1,13 +1,13 @@
 ---
-id="angular-day-167"
-title="Observable Fundamentals"
-slug="observable-fundamentals"
-dayLabel="Day 167"
-level=Beginner
-estimatedMinutes=75
-order=167
-track=angular
-youtubeVideos=[]
+id: "angular-day-167"
+title: "Observable Fundamentals"
+slug: day-167-observable-fundamentals
+dayLabel: "Day 167"
+level: Beginner
+estimatedMinutes: 75
+order: 167
+track: angular
+youtubeVideos: []
 ---
 
 # Day 167 - Observable Fundamentals

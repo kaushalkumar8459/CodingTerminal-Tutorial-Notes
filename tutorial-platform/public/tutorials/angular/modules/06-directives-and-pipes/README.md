@@ -1,5 +1,5 @@
-id="d6m01"
 ---
+id: "d6m01"
 title: Directives & Pipes
 slug: directives-and-pipes
 level: Beginner

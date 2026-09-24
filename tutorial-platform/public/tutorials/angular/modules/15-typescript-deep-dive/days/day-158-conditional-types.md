@@ -1,13 +1,13 @@
 ---
-id="angular-day-158"
-title="Conditional Types"
-slug="day-158-conditional-types"
-dayLabel="Day 158"
-level=Advanced
-estimatedMinutes=90
-order=158
-track=angular
-youtubeVideos=[]
+id: "angular-day-158"
+title: "Conditional Types"
+slug: "day-158-conditional-types"
+dayLabel: "Day 158"
+level: Advanced
+estimatedMinutes: 90
+order: 158
+track: angular
+youtubeVideos: []
 ---
 # Day 158 — Conditional Types
 

@@ -1,7 +1,7 @@
 ---
 id: "angular-day-205"
 title: "CDK Portal and Dynamic Content"
-slug: "cdk-portal-and-dynamic-content"
+slug: day-205-cdk-portal-and-dynamic-content
 day: 205
 module: 18
 track: "angular"

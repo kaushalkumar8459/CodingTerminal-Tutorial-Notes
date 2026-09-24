@@ -1,5 +1,5 @@
-id="cc7d5"
 ---
+id: "cc7d5"
 title: Dynamic Component Rendering
 slug: day-054-dynamic-component-rendering
 dayLabel: Day 54

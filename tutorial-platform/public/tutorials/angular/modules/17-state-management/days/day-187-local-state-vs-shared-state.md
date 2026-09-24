@@ -1,13 +1,13 @@
 ---
-id="angular-day-187"
-title="Local State vs Shared State"
-slug="local-state-vs-shared-state"
-dayLabel="Day 187"
-level=Intermediate
-estimatedMinutes=75
-order=187
-track=angular
-youtubeVideos=[]
+id: "angular-day-187"
+title: "Local State vs Shared State"
+slug: day-187-local-state-vs-shared-state
+dayLabel: "Day 187"
+level: Intermediate
+estimatedMinutes: 75
+order: 187
+track: angular
+youtubeVideos: []
 ---
 
 # Day 187 - Local State vs Shared State

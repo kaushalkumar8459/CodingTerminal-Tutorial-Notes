@@ -1,7 +1,7 @@
 ---
-id="angular-day-103"
-title="Form Architecture and Reusable Patterns"
-slug="day-103-form-architecture-and-reusable-patterns"
+id: "angular-day-103"
+title: "Form Architecture and Reusable Patterns"
+slug: "day-103-form-architecture-and-reusable-patterns"
 dayLabel: Day 103
 level: Advanced
 estimatedMinutes: 90

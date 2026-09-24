@@ -1,5 +1,5 @@
-id="cc7d6"
 ---
+id: "cc7d6"
 title: Component Contracts and Reusability
 slug: day-055-component-contracts-and-reusability
 dayLabel: Day 55

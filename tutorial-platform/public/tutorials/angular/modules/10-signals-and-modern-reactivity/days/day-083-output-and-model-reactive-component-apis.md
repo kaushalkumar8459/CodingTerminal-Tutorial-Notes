@@ -1,7 +1,7 @@
 ---
-id="angular-day-083"
-title="output() and model() for Reactive Component APIs"
-slug="day-083-output-and-model-reactive-component-apis"
+id: "angular-day-083"
+title: "output() and model() for Reactive Component APIs"
+slug: "day-083-output-and-model-reactive-component-apis"
 dayLabel: Day 83
 level: Intermediate
 estimatedMinutes: 75

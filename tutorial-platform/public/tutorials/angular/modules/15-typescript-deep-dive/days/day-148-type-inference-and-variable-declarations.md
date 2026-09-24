@@ -1,13 +1,13 @@
 ---
-id="angular-day-148"
-title="Type Inference and Variable Declarations"
-slug="day-148-type-inference-and-variable-declarations"
-dayLabel="Day 148"
-level=Beginner
-estimatedMinutes=60
-order=148
-track=angular
-youtubeVideos=[]
+id: "angular-day-148"
+title: "Type Inference and Variable Declarations"
+slug: "day-148-type-inference-and-variable-declarations"
+dayLabel: "Day 148"
+level: Beginner
+estimatedMinutes: 60
+order: 148
+track: angular
+youtubeVideos: []
 ---
 # Day 148 — Type Inference and Variable Declarations
 

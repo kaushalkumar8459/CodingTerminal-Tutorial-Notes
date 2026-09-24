@@ -1,13 +1,13 @@
 ---
-id="angular-day-144"
-title="Refactoring, Code Quality and Performance Review"
-slug="day-144-refactoring-code-quality-and-performance-review"
-dayLabel="Day 144"
-level=Advanced
-estimatedMinutes=120
-order=144
-track=angular
-youtubeVideos=[]
+id: "angular-day-144"
+title: "Refactoring, Code Quality and Performance Review"
+slug: "day-144-refactoring-code-quality-and-performance-review"
+dayLabel: "Day 144"
+level: Advanced
+estimatedMinutes: 120
+order: 144
+track: angular
+youtubeVideos: []
 ---
 # Day 144 — Refactoring, Code Quality and Performance Review
 
@@ -57,7 +57,7 @@ Inspect:
 - image/asset sizes
 - unnecessary component rendering
 
-Angular provides lazy-loading and defer mechanisms that can reduce initial JavaScript work when applied to appropriate features. citeturn0search9
+Angular provides lazy-loading and defer mechanisms that can reduce initial JavaScript work when applied to appropriate features.
 
 ## Exercise
 Create a refactoring backlog and complete the highest-value items.

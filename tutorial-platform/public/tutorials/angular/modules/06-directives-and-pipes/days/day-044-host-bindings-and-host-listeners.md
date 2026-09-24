@@ -1,5 +1,5 @@
-id="d6d04"
 ---
+id: "d6d04"
 title: Host Bindings and Host Listeners
 slug: day-044-host-bindings-and-host-listeners
 dayLabel: Day 44

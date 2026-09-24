@@ -1,8 +1,9 @@
-id="d6d08"
 ---
+id: "d6d08"
 title: Directive and Pipe Design Patterns
 slug: day-048-directive-and-pipe-design-patterns
-dayLabel: Intermediate
+dayLabel: Day 48
+level: Intermediate
 estimatedMinutes: 90
 order: 48
 track: angular

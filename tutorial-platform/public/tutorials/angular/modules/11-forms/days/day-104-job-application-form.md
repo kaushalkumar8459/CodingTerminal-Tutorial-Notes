@@ -1,13 +1,13 @@
 ---
-id="angular-day-104"
-title="Mini Project — Job Application Form"
-slug="day-104-job-application-form"
+id: "angular-day-104"
+title: "Mini Project — Job Application Form"
+slug: "day-104-job-application-form"
 dayLabel: Day 104
-level=Intermediate
-estimatedMinutes=120
-order=104
-track=angular
-youtubeVideos=[]
+level: Intermediate
+estimatedMinutes: 120
+order: 104
+track: angular
+youtubeVideos: []
 ---
 # Day 104 — Mini Project: Job Application Form
 

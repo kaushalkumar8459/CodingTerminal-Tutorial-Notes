@@ -1,13 +1,13 @@
 ---
-id="angular-day-114"
-title="Authentication Headers and Request Context"
-slug="day-114-authentication-headers-and-request-context"
-dayLabel="Day 114"
-level=Intermediate
-estimatedMinutes=75
-order=114
-track=angular
-youtubeVideos=[]
+id: "angular-day-114"
+title: "Authentication Headers and Request Context"
+slug: "day-114-authentication-headers-and-request-context"
+dayLabel: "Day 114"
+level: Intermediate
+estimatedMinutes: 75
+order: 114
+track: angular
+youtubeVideos: []
 ---
 # Day 114 — Authentication Headers and Request Context
 

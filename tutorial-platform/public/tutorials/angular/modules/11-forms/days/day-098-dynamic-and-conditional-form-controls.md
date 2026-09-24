@@ -1,7 +1,7 @@
 ---
-id="angular-day-098"
-title="Dynamic and Conditional Form Controls"
-slug="day-098-dynamic-and-conditional-form-controls"
+id: "angular-day-098"
+title: "Dynamic and Conditional Form Controls"
+slug: "day-098-dynamic-and-conditional-form-controls"
 dayLabel: Day 98
 level: Intermediate
 estimatedMinutes: 90

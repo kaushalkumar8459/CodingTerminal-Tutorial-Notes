@@ -1,6 +1,6 @@
 ---
 title: OnDestroy and Cleanup
-slug: ondestroy-and-cleanup
+slug: day-073-ondestroy-and-cleanup
 dayLabel: Day 73
 level: Intermediate
 estimatedMinutes: 70

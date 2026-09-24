@@ -1,13 +1,13 @@
 ---
-id="angular-day-189"
-title="State Modeling and Immutable Updates"
-slug="state-modeling-and-immutable-updates"
-dayLabel="Day 189"
-level=90
-estimatedMinutes=90
-order=189
-track=angular
-youtubeVideos=[]
+id: "angular-day-189"
+title: "State Modeling and Immutable Updates"
+slug: "day-189-state-modeling-and-immutable-updates"
+dayLabel: "Day 189"
+level: Intermediate
+estimatedMinutes: 90
+order: 189
+track: angular
+youtubeVideos: []
 ---
 
 # Day 189 - State Modeling and Immutable Updates

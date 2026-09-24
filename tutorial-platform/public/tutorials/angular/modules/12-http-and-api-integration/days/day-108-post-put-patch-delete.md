@@ -1,13 +1,13 @@
 ---
-id="angular-day-108"
-title="POST, PUT, PATCH and DELETE"
-slug="day-108-post-put-patch-delete"
-dayLabel="Day 108"
-level=Beginner
-estimatedMinutes=75
-order=108
-track=angular
-youtubeVideos=[]
+id: "angular-day-108"
+title: "POST, PUT, PATCH and DELETE"
+slug: "day-108-post-put-patch-delete"
+dayLabel: "Day 108"
+level: Beginner
+estimatedMinutes: 75
+order: 108
+track: angular
+youtubeVideos: []
 ---
 # Day 108 — POST, PUT, PATCH and DELETE
 

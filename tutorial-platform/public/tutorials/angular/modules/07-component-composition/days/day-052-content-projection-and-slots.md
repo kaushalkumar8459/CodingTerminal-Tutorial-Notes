@@ -1,5 +1,5 @@
-id="cc7d3"
 ---
+id: "cc7d3"
 title: Content Projection and Slots in Real Components
 slug: day-052-content-projection-and-slots
 dayLabel: Day 52

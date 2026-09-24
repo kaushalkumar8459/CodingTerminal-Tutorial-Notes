@@ -1,5 +1,5 @@
-id="r4n04"
 ---
+id: "r4n04"
 title: RouterLink, RouterLinkActive and Programmatic Navigation
 slug: day-025-routerlink-routerlinkactive-programmatic-navigation
 dayLabel: Day 25

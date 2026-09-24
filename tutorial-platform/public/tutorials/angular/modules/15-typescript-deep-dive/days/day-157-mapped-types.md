@@ -1,13 +1,13 @@
 ---
-id="angular-day-157"
-title="Mapped Types"
-slug="day-157-mapped-types"
-dayLabel="Day 157"
-level=Advanced
-estimatedMinutes=90
-order=157
-track=angular
-youtubeVideos=[]
+id: "angular-day-157"
+title: "Mapped Types"
+slug: "day-157-mapped-types"
+dayLabel: "Day 157"
+level: Advanced
+estimatedMinutes: 90
+order: 157
+track: angular
+youtubeVideos: []
 ---
 # Day 157 — Mapped Types
 

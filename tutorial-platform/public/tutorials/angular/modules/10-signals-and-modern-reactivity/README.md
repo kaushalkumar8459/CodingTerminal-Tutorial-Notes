@@ -1,10 +1,10 @@
 ---
-id="angular-module-10"
-title="Signals & Modern Reactivity"
-slug="signals-and-modern-reactivity"
-level=Beginner
-order=10
-track=angular
+id: "angular-module-10"
+title: "Signals & Modern Reactivity"
+slug: "signals-and-modern-reactivity"
+level: Beginner
+order: 10
+track: angular
 ---
 # Module 10 — Signals & Modern Reactivity
 

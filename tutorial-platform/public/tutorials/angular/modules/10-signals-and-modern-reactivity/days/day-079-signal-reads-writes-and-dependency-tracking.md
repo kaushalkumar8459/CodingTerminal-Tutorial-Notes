@@ -1,7 +1,7 @@
 ---
-id="angular-day-079"
-title="Signal Reads, Writes & Dependency Tracking"
-slug="day-079-signal-reads-writes-and-dependency-tracking"
+id: "angular-day-079"
+title: "Signal Reads, Writes & Dependency Tracking"
+slug: "day-079-signal-reads-writes-and-dependency-tracking"
 dayLabel: Day 79
 level: Beginner
 estimatedMinutes: 60
@@ -15,7 +15,7 @@ youtubeVideos: []
 Understand how Angular builds the reactive dependency graph.
 
 ## Producer and Consumer
-Reading a signal inside a reactive context establishes a dependency. Computed functions, effects, and component template rendering are examples of reactive contexts. citeturn0search1
+Reading a signal inside a reactive context establishes a dependency. Computed functions, effects, and component template rendering are examples of reactive contexts.
 
 ```
 jobs + search
@@ -38,10 +38,10 @@ readonly message = computed(() => {
 });
 ```
 
-Dependencies can change depending on which signals are actually read during the computation. citeturn0search1
+Dependencies can change depending on which signals are actually read during the computation.
 
 ## OnPush
-When an OnPush component reads a signal in its template, Angular tracks the signal as a dependency of that component. citeturn0search1
+When an OnPush component reads a signal in its template, Angular tracks the signal as a dependency of that component.
 
 ## Debugging Checklist
 1. Is the signal read with ()?

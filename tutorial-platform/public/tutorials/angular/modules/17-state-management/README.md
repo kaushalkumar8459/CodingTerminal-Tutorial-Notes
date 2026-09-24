@@ -1,10 +1,10 @@
 ---
-id="angular-module-17"
-title="State Management"
-slug="state-management"
-level=Advanced
-order=17
-track=angular
+id: "angular-module-17"
+title: "State Management"
+slug: "state-management"
+level: Advanced
+order: 17
+track: angular
 ---
 
 # Module 17 - State Management

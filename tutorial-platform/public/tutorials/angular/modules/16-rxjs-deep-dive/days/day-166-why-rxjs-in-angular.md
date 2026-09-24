@@ -1,13 +1,13 @@
 ---
-id="angular-day-166"
-title="Why RxJS in Angular?"
-slug="why-rxjs-in-angular"
-dayLabel="Day 166"
-level=Beginner
-estimatedMinutes=60
-order=166
-track=angular
-youtubeVideos=[]
+id: "angular-day-166"
+title: "Why RxJS in Angular?"
+slug: day-166-why-rxjs-in-angular
+dayLabel: "Day 166"
+level: Beginner
+estimatedMinutes: 60
+order: 166
+track: angular
+youtubeVideos: []
 ---
 
 # Day 166 - Why RxJS in Angular?

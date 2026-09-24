@@ -1,5 +1,5 @@
-id="c5d03"
 ---
+id: "c5d03"
 title: Outputs with output()
 slug: day-034-outputs-with-output
 dayLabel: Day 34

@@ -1,6 +1,6 @@
 ---
 title: Provider Scope and Service Lifetimes
-slug: provider-scope-and-service-lifetimes
+slug: day-061-provider-scope-and-service-lifetimes
 dayLabel: Day 61
 level: Intermediate
 estimatedMinutes: 70

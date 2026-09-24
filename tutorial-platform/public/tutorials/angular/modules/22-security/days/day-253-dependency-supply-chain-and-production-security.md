@@ -17,7 +17,7 @@ Review:
 - postinstall scripts;
 - third-party browser libraries.
 
-Keep Angular libraries current because security fixes are delivered through releases. citeturn0search0
+Keep Angular libraries current because security fixes are delivered through releases.
 
 ## Production Security
 

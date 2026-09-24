@@ -25,7 +25,7 @@ export const routes: Routes = [
 ];
 ~~~
 
-Lazy routes can split feature code into separate chunks that are loaded when needed. Angular also supports route-level providers, which can scope dependencies to a feature route. citeturn0search10turn0search1
+Lazy routes can split feature code into separate chunks that are loaded when needed. Angular also supports route-level providers, which can scope dependencies to a feature route.
 
 ## Why this matters
 

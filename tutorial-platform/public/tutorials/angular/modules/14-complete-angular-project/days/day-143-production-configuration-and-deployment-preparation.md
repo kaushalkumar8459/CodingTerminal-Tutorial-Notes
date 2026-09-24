@@ -1,13 +1,13 @@
 ---
-id="angular-day-143"
-title="Production Configuration and Deployment Preparation"
-slug="day-143-production-configuration-and-deployment-preparation"
-dayLabel="Day 143"
-level=Advanced
-estimatedMinutes=90
-order=143
-track=angular
-youtubeVideos=[]
+id: "angular-day-143"
+title: "Production Configuration and Deployment Preparation"
+slug: "day-143-production-configuration-and-deployment-preparation"
+dayLabel: "Day 143"
+level: Advanced
+estimatedMinutes: 90
+order: 143
+track: angular
+youtubeVideos: []
 ---
 # Day 143 — Production Configuration and Deployment Preparation
 

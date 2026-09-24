@@ -1,13 +1,13 @@
 ---
-id="angular-day-153"
-title="Generics Fundamentals"
-slug="day-153-generics-fundamentals"
-dayLabel="Day 153"
-level=Intermediate
-estimatedMinutes=90
-order=153
-track=angular
-youtubeVideos=[]
+id: "angular-day-153"
+title: "Generics Fundamentals"
+slug: "day-153-generics-fundamentals"
+dayLabel: "Day 153"
+level: Intermediate
+estimatedMinutes: 90
+order: 153
+track: angular
+youtubeVideos: []
 ---
 # Day 153 — Generics Fundamentals
 

@@ -1,13 +1,13 @@
 ---
-id="angular-day-131"
-title="Application Architecture and Folder Structure"
-slug="day-131-application-architecture-and-folder-structure"
-dayLabel="Day 131"
-level=Intermediate
-estimatedMinutes=90
-order=131
-track=angular
-youtubeVideos=[]
+id: "angular-day-131"
+title: "Application Architecture and Folder Structure"
+slug: "day-131-application-architecture-and-folder-structure"
+dayLabel: "Day 131"
+level: Intermediate
+estimatedMinutes: 90
+order: 131
+track: angular
+youtubeVideos: []
 ---
 # Day 131 — Application Architecture and Folder Structure
 

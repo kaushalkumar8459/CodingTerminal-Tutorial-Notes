@@ -1,13 +1,13 @@
 ---
-id="angular-day-177"
-title="Higher-Order Observables and Flattening Strategies"
-slug="higher-order-observables"
-dayLabel="Day 177"
-level=Intermediate
-estimatedMinutes=90
-order=177
-track=angular
-youtubeVideos=[]
+id: "angular-day-177"
+title: "Higher-Order Observables and Flattening Strategies"
+slug: day-177-higher-order-observables
+dayLabel: "Day 177"
+level: Intermediate
+estimatedMinutes: 90
+order: 177
+track: angular
+youtubeVideos: []
 ---
 
 # Day 177 - Higher-Order Observables and Flattening Strategies

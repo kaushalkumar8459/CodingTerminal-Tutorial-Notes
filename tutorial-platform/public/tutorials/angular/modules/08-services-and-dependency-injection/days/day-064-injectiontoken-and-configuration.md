@@ -1,6 +1,6 @@
 ---
 title: InjectionToken and Configuration
-slug: injectiontoken-and-configuration
+slug: day-064-injectiontoken-and-configuration
 dayLabel: Day 64
 level: Intermediate
 estimatedMinutes: 70

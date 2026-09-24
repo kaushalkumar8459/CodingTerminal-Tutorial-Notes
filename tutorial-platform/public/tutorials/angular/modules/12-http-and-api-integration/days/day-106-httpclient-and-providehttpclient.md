@@ -1,13 +1,13 @@
 ---
-id="angular-day-106"
-title="HttpClient and provideHttpClient"
-slug="day-106-httpclient-and-providehttpclient"
-dayLabel="Day 106"
-level=Beginner
-estimatedMinutes=75
-order=106
-track=angular
-youtubeVideos=[]
+id: "angular-day-106"
+title: "HttpClient and provideHttpClient"
+slug: "day-106-httpclient-and-providehttpclient"
+dayLabel: "Day 106"
+level: Beginner
+estimatedMinutes: 75
+order: 106
+track: angular
+youtubeVideos: []
 ---
 # Day 106 — HttpClient and provideHttpClient
 

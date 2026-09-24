@@ -1,7 +1,7 @@
 ---
-id="angular-day-084"
-title="Signal Queries with viewChild() and viewChildren()"
-slug="day-084-signal-queries-viewchild-viewchildren"
+id: "angular-day-084"
+title: "Signal Queries with viewChild() and viewChildren()"
+slug: "day-084-signal-queries-viewchild-viewchildren"
 dayLabel: Day 84
 level: Intermediate
 estimatedMinutes: 75

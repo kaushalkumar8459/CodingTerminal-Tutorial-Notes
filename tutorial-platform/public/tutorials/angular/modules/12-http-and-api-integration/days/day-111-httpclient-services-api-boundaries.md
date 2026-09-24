@@ -1,13 +1,13 @@
 ---
-id="angular-day-111"
-title="HttpClient Services and API Boundaries"
-slug="day-111-httpclient-services-api-boundaries"
-dayLabel="Day 111"
-level=Intermediate
-estimatedMinutes=75
-order=111
-track=angular
-youtubeVideos=[]
+id: "angular-day-111"
+title: "HttpClient Services and API Boundaries"
+slug: "day-111-httpclient-services-api-boundaries"
+dayLabel: "Day 111"
+level: Intermediate
+estimatedMinutes: 75
+order: 111
+track: angular
+youtubeVideos: []
 ---
 # Day 111 — HttpClient Services and API Boundaries
 

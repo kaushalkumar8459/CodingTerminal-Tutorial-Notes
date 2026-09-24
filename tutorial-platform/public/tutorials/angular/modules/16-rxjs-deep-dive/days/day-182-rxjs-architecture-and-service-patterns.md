@@ -1,13 +1,13 @@
 ---
-id="angular-day-182"
-title="RxJS Architecture and Service Patterns"
-slug="rxjs-architecture-and-service-patterns"
-dayLabel="Day 182"
-level=Advanced
-estimatedMinutes=90
-order=182
-track=angular
-youtubeVideos=[]
+id: "angular-day-182"
+title: "RxJS Architecture and Service Patterns"
+slug: day-182-rxjs-architecture-and-service-patterns
+dayLabel: "Day 182"
+level: Advanced
+estimatedMinutes: 90
+order: 182
+track: angular
+youtubeVideos: []
 ---
 
 # Day 182 - RxJS Architecture and Service Patterns

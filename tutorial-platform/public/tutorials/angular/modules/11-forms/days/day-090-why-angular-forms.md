@@ -1,7 +1,7 @@
 ---
-id="angular-day-090"
-title="Why Angular Forms?"
-slug="day-090-why-angular-forms"
+id: "angular-day-090"
+title: "Why Angular Forms?"
+slug: "day-090-why-angular-forms"
 dayLabel: Day 90
 level: Beginner
 estimatedMinutes: 60

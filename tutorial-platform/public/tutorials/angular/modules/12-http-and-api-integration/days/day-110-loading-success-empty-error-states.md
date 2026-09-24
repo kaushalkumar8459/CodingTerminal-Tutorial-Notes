@@ -1,13 +1,13 @@
 ---
-id="angular-day-110"
-title="Loading, Success, Empty and Error States"
-slug="day-110-loading-success-empty-error-states"
-dayLabel="Day 110"
-level=Intermediate
-estimatedMinutes=75
-order=110
-track=angular
-youtubeVideos=[]
+id: "angular-day-110"
+title: "Loading, Success, Empty and Error States"
+slug: "day-110-loading-success-empty-error-states"
+dayLabel: "Day 110"
+level: Intermediate
+estimatedMinutes: 75
+order: 110
+track: angular
+youtubeVideos: []
 ---
 # Day 110 — Loading, Success, Empty and Error States
 

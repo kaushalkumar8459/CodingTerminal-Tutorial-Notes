@@ -1,5 +1,5 @@
-id="c5d07"
 ---
+id: "c5d07"
 title: View Queries with viewChild and viewChildren
 slug: day-038-view-queries-with-viewchild-and-viewchildren
 dayLabel: Day 38

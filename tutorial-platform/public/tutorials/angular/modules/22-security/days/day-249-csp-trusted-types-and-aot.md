@@ -6,17 +6,17 @@ Add browser-level defense against classes of injection attacks.
 
 ## Content Security Policy
 
-CSP limits which resources and execution paths a page can use. Angular recommends CSP as an additional XSS defense. citeturn0search0
+CSP limits which resources and execution paths a page can use. Angular recommends CSP as an additional XSS defense.
 
 A production policy must be designed for the application's actual resources rather than copied blindly.
 
 ## Trusted Types
 
-Trusted Types can require dangerous DOM sinks to receive approved trusted values. Angular documents Angular-specific Trusted Types policies for its runtime and bundler. citeturn0search0
+Trusted Types can require dangerous DOM sinks to receive approved trusted values. Angular documents Angular-specific Trusted Types policies for its runtime and bundler.
 
 ## AOT
 
-Angular recommends the AOT compiler for production. Dynamically constructing Angular templates from user input is a security anti-pattern because templates are executable code. citeturn0search0
+Angular recommends the AOT compiler for production. Dynamically constructing Angular templates from user input is a security anti-pattern because templates are executable code.
 
 ## Exercise
 

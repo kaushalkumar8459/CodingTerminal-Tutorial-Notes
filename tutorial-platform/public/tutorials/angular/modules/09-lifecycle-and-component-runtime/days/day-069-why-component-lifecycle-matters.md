@@ -1,6 +1,6 @@
 ---
 title: Why Component Lifecycle Matters
-slug: why-component-lifecycle-matters
+slug: day-069-why-component-lifecycle-matters
 dayLabel: Day 69
 level: Intermediate
 estimatedMinutes: 60
