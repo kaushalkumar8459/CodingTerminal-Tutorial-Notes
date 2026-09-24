@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import cors from "cors";
 import express, {
   type NextFunction,
@@ -9,12 +8,9 @@ import helmet from "helmet";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { appConfig } from "./config.js";
+import { findLessonByTrackAndSlug, upsertLesson } from "./contentDb.js";
 import { synthesizeSpeech } from "./tts.js";
-
-const runtimeMode =
-  process.env.NODE_ENV === "production" ? "production" : "development";
-dotenv.config({ path: `.env.${runtimeMode}` });
-dotenv.config();
 
 type UserRole = "admin" | "user";
 
@@ -30,8 +26,18 @@ type LoginBody = {
 };
 
 type SaveTutorialBody = {
+  track?: string;
+  slug?: string;
+  title?: string;
+  dayLabel?: string;
+  level?: string;
+  estimatedMinutes?: number;
+  order?: number;
+  moduleNumber?: number;
+  moduleSlug?: string;
   contentPath?: string;
   rawContent?: string;
+  youtubeVideos?: Array<{ title: string; url: string; description?: string }>;
 };
 
 type TtsBody = {
@@ -54,19 +60,19 @@ type VideoSuggestionsBody = {
 };
 
 const app = express();
-const port = Number(process.env.PORT ?? 4001);
-const frontendOrigin = process.env.FRONTEND_ORIGIN ?? "http://localhost:5173";
-const jwtSecret = process.env.JWT_SECRET ?? "replace-me-in-production";
+const port = appConfig.port;
+const frontendOrigin = appConfig.frontendOrigin;
+const jwtSecret = appConfig.jwtSecret;
 
 const credentialBook: Record<UserRole, { username: string; password: string }> =
   {
     admin: {
-      username: (process.env.ADMIN_USERNAME ?? "admin").trim().toLowerCase(),
-      password: process.env.ADMIN_PASSWORD ?? "admin123",
+      username: appConfig.auth.adminUsername,
+      password: appConfig.auth.adminPassword,
     },
     user: {
-      username: (process.env.USER_USERNAME ?? "user").trim().toLowerCase(),
-      password: process.env.USER_PASSWORD ?? "user123",
+      username: appConfig.auth.userUsername,
+      password: appConfig.auth.userPassword,
     },
   };
 
@@ -406,16 +412,43 @@ function isSafeContentPath(contentPath: string) {
   return true;
 }
 
+app.get("/api/lessons", async (req: Request, res: Response) => {
+  const track = String(req.query.track ?? "").trim();
+  const slug = String(req.query.slug ?? "").trim();
+
+  if (!track) {
+    return res.status(400).json({ ok: false, message: "track is required." });
+  }
+
+  try {
+    if (slug) {
+      const lesson = await findLessonByTrackAndSlug(track, slug);
+      return res.json({ ok: true, lesson: lesson ?? null });
+    }
+
+    const lessons = await (
+      await import("./contentDb.js")
+    ).findLessonsByTrack(track);
+
+    return res.json({ ok: true, lessons });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ ok: false, message: "Failed to load lessons." });
+  }
+});
+
 app.post(
-  "/tutorials/save",
+  "/api/lessons/save",
   async (req: Request<unknown, unknown, SaveTutorialBody>, res: Response) => {
     const contentPath = req.body.contentPath?.trim() ?? "";
     const rawContent = req.body.rawContent ?? "";
+    const track = String(req.body.track ?? "").trim();
+    const slug = String(req.body.slug ?? "").trim();
 
-    if (!contentPath || !rawContent) {
+    if (!contentPath || !rawContent || !track || !slug) {
       return res.status(400).json({
         ok: false,
-        message: "contentPath and rawContent are required.",
+        message: "track, slug, contentPath and rawContent are required.",
       });
     }
 
@@ -426,34 +459,34 @@ app.post(
     }
 
     try {
-      const publicRoot = path.resolve(
-        process.cwd(),
-        "..",
-        "tutorial-platform",
-        "public",
-      );
-      const targetPath = path.resolve(publicRoot, contentPath);
-
-      if (!targetPath.startsWith(publicRoot)) {
-        return res.status(400).json({
-          ok: false,
-          message: "Resolved path is outside allowed directory.",
-        });
-      }
-
-      await mkdir(path.dirname(targetPath), { recursive: true });
-      await writeFile(targetPath, rawContent, "utf8");
+      const saved = await upsertLesson({
+        track,
+        slug,
+        title: String(req.body.title ?? slug),
+        dayLabel: String(req.body.dayLabel ?? ""),
+        level: (String(req.body.level ?? "Beginner") as any) || "Beginner",
+        estimatedMinutes: Number(req.body.estimatedMinutes ?? 30),
+        order: Number(req.body.order ?? 1),
+        moduleNumber: Number(req.body.moduleNumber ?? 1),
+        moduleSlug: String(req.body.moduleSlug ?? "module-1"),
+        contentPath,
+        body: rawContent,
+        youtubeVideos: Array.isArray(req.body.youtubeVideos)
+          ? req.body.youtubeVideos
+          : [],
+      });
 
       return res.json({
         ok: true,
         message: `Saved ${contentPath}`,
         savedPath: contentPath,
+        db: saved,
       });
     } catch (error) {
       console.error(error);
       return res
         .status(500)
-        .json({ ok: false, message: "Failed to write tutorial file." });
+        .json({ ok: false, message: "Failed to save tutorial to database." });
     }
   },
 );
