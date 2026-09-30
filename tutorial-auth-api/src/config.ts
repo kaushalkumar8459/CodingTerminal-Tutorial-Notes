@@ -20,10 +20,38 @@ export const appConfig = {
   database: {
     uri: process.env.MONGODB_URI?.trim() ?? "",
     dbName: process.env.MONGODB_DB_NAME?.trim() || "tutorial_platform",
+    dnsServers: (process.env.MONGODB_DNS_SERVERS?.trim() || "1.1.1.1,8.8.8.8")
+      .split(",")
+      .map((server) => server.trim())
+      .filter(Boolean),
+    collectionPrefix: process.env.MONGODB_COLLECTION_PREFIX?.trim() || "codingterminallearning",
     collections: {
-      lessons: process.env.MONGODB_LESSONS_COLLECTION?.trim() || "lessons",
-      modules: process.env.MONGODB_MODULES_COLLECTION?.trim() || "modules",
-      tracks: process.env.MONGODB_TRACKS_COLLECTION?.trim() || "tracks",
+      lessons: process.env.MONGODB_LESSONS_COLLECTION?.trim() || "codingterminallearning_lessons",
+      modules: process.env.MONGODB_MODULES_COLLECTION?.trim() || "codingterminallearning_modules",
+      tracks: process.env.MONGODB_TRACKS_COLLECTION?.trim() || "codingterminallearning_tracks",
     },
   },
 } as const;
+
+// Base language ids, ordered longest/most-specific first so variant tracks
+// (e.g. "javascriptmachinecoding", "angularinterview") resolve correctly.
+const KNOWN_LANGUAGES = [
+  "typescript",
+  "javascript",
+  "angular",
+  "nextjs",
+  "nodejs",
+  "python",
+  "react",
+  "java",
+] as const;
+
+export function resolveLanguageFromTrack(track: string): string {
+  const normalized = track.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const match = KNOWN_LANGUAGES.find((language) => normalized.startsWith(language));
+  return match ?? (normalized || "general");
+}
+
+export function getLessonCollectionName(): string {
+  return appConfig.database.collections.lessons;
+}

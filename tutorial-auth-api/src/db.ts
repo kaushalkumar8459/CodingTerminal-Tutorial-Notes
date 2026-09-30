@@ -1,7 +1,12 @@
+import { setServers } from "node:dns";
 import { MongoClient, type Db } from "mongodb";
 import { appConfig } from "./config.js";
 
-const { uri, dbName } = appConfig.database;
+const { uri, dbName, dnsServers } = appConfig.database;
+
+if (uri.startsWith("mongodb+srv://")) {
+  setServers(dnsServers);
+}
 
 let client: MongoClient | null = null;
 let db: Db | null = null;

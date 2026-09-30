@@ -401,7 +401,9 @@ app.get("/auth/validate", (req, res) => {
 });
 
 function isSafeContentPath(contentPath: string) {
-  if (!contentPath.startsWith("tutorials/") || !contentPath.endsWith(".md")) {
+  const hasKnownPrefix = contentPath.startsWith("tutorials/") || contentPath.startsWith("coding/");
+
+  if (!hasKnownPrefix || !contentPath.endsWith(".md")) {
     return false;
   }
 
@@ -467,8 +469,8 @@ app.post(
         level: (String(req.body.level ?? "Beginner") as any) || "Beginner",
         estimatedMinutes: Number(req.body.estimatedMinutes ?? 30),
         order: Number(req.body.order ?? 1),
-        moduleNumber: Number(req.body.moduleNumber ?? 1),
-        moduleSlug: String(req.body.moduleSlug ?? "module-1"),
+        moduleNumber: Number(req.body.moduleNumber ?? 0),
+        moduleSlug: String(req.body.moduleSlug ?? "module-0"),
         contentPath,
         body: rawContent,
         youtubeVideos: Array.isArray(req.body.youtubeVideos)

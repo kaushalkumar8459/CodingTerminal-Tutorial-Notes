@@ -1,11 +1,12 @@
 import { ObjectId } from "mongodb";
 import { getDatabase } from "./db.js";
-import { appConfig } from "./config.js";
+import { getLessonCollectionName, resolveLanguageFromTrack } from "./config.js";
 
 export type LessonLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
 export type TutorialLessonDocument = {
   _id?: ObjectId;
+  language: string;
   track: string;
   slug: string;
   title: string;
@@ -17,16 +18,15 @@ export type TutorialLessonDocument = {
   moduleSlug: string;
   contentPath: string;
   body: string;
+  solutionBody?: string;
   youtubeVideos: Array<{ title: string; url: string; description?: string }>;
   createdAt: Date;
   updatedAt: Date;
 };
 
-const lessonCollectionName = appConfig.database.collections.lessons;
-
 export async function findLessonByTrackAndSlug(track: string, slug: string) {
   const db = await getDatabase();
-  const collection = db.collection<TutorialLessonDocument>(lessonCollectionName);
+  const collection = db.collection<TutorialLessonDocument>(getLessonCollectionName());
 
   return collection.findOne({
     track,
@@ -36,7 +36,7 @@ export async function findLessonByTrackAndSlug(track: string, slug: string) {
 
 export async function findLessonsByTrack(track: string) {
   const db = await getDatabase();
-  const collection = db.collection<TutorialLessonDocument>(lessonCollectionName);
+  const collection = db.collection<TutorialLessonDocument>(getLessonCollectionName());
 
   return collection
     .find({ track })
@@ -46,10 +46,16 @@ export async function findLessonsByTrack(track: string) {
 
 export async function upsertLesson(lesson: Partial<TutorialLessonDocument>) {
   const db = await getDatabase();
-  const collection = db.collection<TutorialLessonDocument>(lessonCollectionName);
+
+  if (!lesson.track) {
+    throw new Error("track is required to resolve the lesson language.");
+  }
+
+  const collection = db.collection<TutorialLessonDocument>(getLessonCollectionName());
 
   const payload = {
     ...lesson,
+    language: lesson.language ?? resolveLanguageFromTrack(lesson.track),
     updatedAt: new Date(),
     ...(lesson.createdAt ? {} : { createdAt: new Date() }),
   };
