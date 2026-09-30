@@ -5,7 +5,7 @@ import { MarkdownLesson } from "../components/MarkdownLesson";
 import { TableOfContents } from "../components/TableOfContents";
 import { getTutorialBySlug, getTutorialsByTrack } from "../data/tutorials";
 import { getTrackLabel, isTrackKey } from "../data/tracks";
-import { parseFrontmatter, parseYouTubeVideosField } from "../services/contentAdmin";
+import { loadTutorialDocument } from "../services/contentAdmin";
 import type { TutorialVideo } from "../types/tutorial";
 import { extractTableOfContents, slugifyHeading, stripLeadingH1 } from "../utils/markdown";
 
@@ -311,18 +311,11 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
           return;
         }
 
-        const response = await fetch(`/${tutorial.contentPath}`, { cache: "no-store" });
-
-        if (!response.ok) {
-          throw new Error(`Unable to load ${tutorial.fileName}`);
-        }
-
-        const content = await response.text();
+        const document = await loadTutorialDocument(tutorial);
 
         if (isMounted) {
-          const { frontmatter, body } = parseFrontmatter(content);
-          const normalizedContent = stripLeadingH1(body);
-          const youtubeVideos = parseYouTubeVideosField(frontmatter.youtubeVideos);
+          const normalizedContent = stripLeadingH1(document.body);
+          const youtubeVideos = document.youtubeVideos;
 
           lessonMarkdownCache.set(tutorial.contentPath, {
             markdown: normalizedContent,

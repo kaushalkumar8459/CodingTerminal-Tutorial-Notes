@@ -4,6 +4,7 @@ import { MarkdownLesson } from "../components/MarkdownLesson";
 import { PracticeEditor } from "../components/PracticeEditor";
 import { getCodingLessonBySlug, getCodingLessonsByTrack } from "../data/codingLessons";
 import { getCodingTrackLabel, isCodingTrackKey } from "../data/codingTracks";
+import { loadCodingLessonMarkdown } from "../services/contentAdmin";
 
 const markdownCache = new Map<string, string>();
 type ViewMode = "practice" | "solution";
@@ -60,12 +61,13 @@ export function CodingPage() {
           return;
         }
 
-        const response = await fetch(`/${activePath}`, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error(`Unable to load ${activePath}`);
-        }
-
-        const content = await response.text();
+        const content = await loadCodingLessonMarkdown(
+          {
+            track,
+            slug: lesson.slug,
+          },
+          viewMode,
+        );
         if (isMounted) {
           markdownCache.set(activePath, content);
           setMarkdown(content);

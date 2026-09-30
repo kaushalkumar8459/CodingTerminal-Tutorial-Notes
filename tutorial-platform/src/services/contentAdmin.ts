@@ -21,19 +21,30 @@ type SaveTutorialResult = {
 
 const contentApiBaseUrl =
   import.meta.env.VITE_CONTENT_API_BASE_URL?.trim() ?? "";
+const LESSON_DOCUMENT_CACHE_TTL_MS = 5 * 60 * 1000;
+const lessonDocumentCache = new Map<
+  string,
+  { expiresAt: number; document: TutorialDocument }
+>();
+
+export function clearLessonDocumentCache() {
+  lessonDocumentCache.clear();
+}
 
 export function parseFrontmatter(markdown: string) {
-  if (!markdown.startsWith("---")) {
-    return { frontmatter: {} as Record<string, string>, body: markdown };
+  const normalizedMarkdown = markdown.replace(/^\uFEFF/, "");
+
+  if (!normalizedMarkdown.startsWith("---")) {
+    return { frontmatter: {} as Record<string, string>, body: normalizedMarkdown };
   }
 
-  const endIndex = markdown.indexOf("\n---", 3);
+  const endIndex = normalizedMarkdown.indexOf("\n---", 3);
   if (endIndex === -1) {
-    return { frontmatter: {} as Record<string, string>, body: markdown };
+    return { frontmatter: {} as Record<string, string>, body: normalizedMarkdown };
   }
 
-  const rawFrontmatter = markdown.slice(3, endIndex).trim();
-  const body = markdown.slice(endIndex + 4).replace(/^\r?\n/, "");
+  const rawFrontmatter = normalizedMarkdown.slice(3, endIndex).trim();
+  const body = normalizedMarkdown.slice(endIndex + 4).replace(/^\r?\n/, "");
   const frontmatter: Record<string, string> = {};
 
   for (const line of rawFrontmatter.split(/\r?\n/)) {
@@ -137,32 +148,98 @@ function buildFrontmatter(document: TutorialDocument) {
 export async function loadTutorialDocument(
   tutorial: TutorialMeta,
 ): Promise<TutorialDocument> {
-  const response = await fetch(`/${tutorial.contentPath}`, {
-    cache: "no-store",
-  });
+  const cacheKey = `${tutorial.track}::${tutorial.slug}`;
+  const cachedEntry = lessonDocumentCache.get(cacheKey);
 
-  if (!response.ok) {
-    throw new Error(`Unable to load ${tutorial.contentPath}`);
+  if (cachedEntry && cachedEntry.expiresAt > Date.now()) {
+    return cachedEntry.document;
   }
 
-  const rawContent = await response.text();
-  const { frontmatter, body } = parseFrontmatter(rawContent);
+  if (cachedEntry) {
+    lessonDocumentCache.delete(cacheKey);
+  }
 
-  return {
-    title: frontmatter.title ?? tutorial.title,
-    slug: frontmatter.slug ?? tutorial.slug,
-    dayLabel: frontmatter.dayLabel ?? tutorial.dayLabel,
-    level: (frontmatter.level as TutorialMeta["level"]) ?? tutorial.level,
+  if (!contentApiBaseUrl) {
+    throw new Error("VITE_CONTENT_API_BASE_URL is not configured.");
+  }
+
+  const apiUrl = `${contentApiBaseUrl}/api/lessons?track=${encodeURIComponent(tutorial.track)}&slug=${encodeURIComponent(tutorial.slug)}`;
+  const response = await fetch(apiUrl, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error(`Content API returned HTTP ${response.status} for ${tutorial.slug}.`);
+  }
+
+  const payload = (await response.json()) as {
+    lesson?: Partial<TutorialDocument> & { body?: string } | null;
+  };
+  const lesson = payload.lesson;
+
+  if (!lesson?.body) {
+    throw new Error(`No backend content found for ${tutorial.track}/${tutorial.slug}.`);
+  }
+
+  const { frontmatter, body } = parseFrontmatter(lesson.body);
+
+  const document: TutorialDocument = {
+    title: frontmatter.title ?? lesson.title ?? tutorial.title,
+    slug: frontmatter.slug ?? lesson.slug ?? tutorial.slug,
+    dayLabel: frontmatter.dayLabel ?? lesson.dayLabel ?? tutorial.dayLabel,
+    level:
+      (frontmatter.level as TutorialMeta["level"]) ??
+      (lesson.level as TutorialMeta["level"]) ??
+      tutorial.level,
     estimatedMinutes: Number(
-      frontmatter.estimatedMinutes ?? tutorial.estimatedMinutes,
+      frontmatter.estimatedMinutes ??
+        lesson.estimatedMinutes ??
+        tutorial.estimatedMinutes,
     ),
-    order: Number(frontmatter.order ?? tutorial.order),
-    track: (frontmatter.track as TutorialMeta["track"]) ?? tutorial.track,
+    order: Number(frontmatter.order ?? lesson.order ?? tutorial.order),
+    track:
+      (frontmatter.track as TutorialMeta["track"]) ??
+      (lesson.track as TutorialMeta["track"]) ??
+      tutorial.track,
     body,
-    contentPath: tutorial.contentPath,
-    fileName: tutorial.fileName,
+    contentPath: lesson.contentPath ?? tutorial.contentPath,
+    fileName: lesson.fileName ?? tutorial.fileName,
     youtubeVideos: parseYouTubeVideosField(frontmatter.youtubeVideos),
   };
+
+  lessonDocumentCache.set(cacheKey, {
+    expiresAt: Date.now() + LESSON_DOCUMENT_CACHE_TTL_MS,
+    document,
+  });
+
+  return document;
+}
+
+export async function loadCodingLessonMarkdown(
+  lesson: { track: string; slug: string },
+  mode: "practice" | "solution",
+): Promise<string> {
+  if (!contentApiBaseUrl) {
+    throw new Error("VITE_CONTENT_API_BASE_URL is not configured.");
+  }
+
+  const apiUrl = `${contentApiBaseUrl}/api/lessons?track=${encodeURIComponent(lesson.track)}&slug=${encodeURIComponent(lesson.slug)}`;
+  const response = await fetch(apiUrl, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error(`Content API returned HTTP ${response.status} for ${lesson.slug}.`);
+  }
+
+  const payload = (await response.json()) as {
+    lesson?: { body?: string; solutionBody?: string } | null;
+  };
+  const markdown = mode === "solution"
+    ? payload.lesson?.solutionBody
+    : payload.lesson?.body;
+
+  if (!markdown?.trim()) {
+    throw new Error(`No ${mode} content found in the backend for ${lesson.slug}.`);
+  }
+
+  return markdown;
 }
 
 export async function saveTutorialDocument(
@@ -177,14 +254,24 @@ export async function saveTutorialDocument(
   }
 
   try {
-    const response = await fetch(`${contentApiBaseUrl}/tutorials/save`, {
+    const response = await fetch(`${contentApiBaseUrl}/api/lessons/save`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        ...document,
+        track: document.track,
+        slug: document.slug,
+        title: document.title,
+        dayLabel: document.dayLabel,
+        level: document.level,
+        estimatedMinutes: document.estimatedMinutes,
+        order: document.order,
+        moduleNumber: 1,
+        moduleSlug: "module-1",
+        contentPath: document.contentPath,
         rawContent: buildFrontmatter(document),
+        youtubeVideos: document.youtubeVideos,
       }),
     });
 
@@ -195,6 +282,8 @@ export async function saveTutorialDocument(
         message: errorText || "Save failed on the content backend.",
       };
     }
+
+    clearLessonDocumentCache();
 
     return {
       ok: true,
