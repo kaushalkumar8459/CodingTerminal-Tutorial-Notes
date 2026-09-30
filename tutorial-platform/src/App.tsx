@@ -13,6 +13,7 @@ import { getCodingLessonsByTrack } from "./data/codingLessons";
 import { getCodingTrackLabel, isCodingTrackKey } from "./data/codingTracks";
 import { AdminPage } from "./pages/AdminPage";
 import { CodingPage } from "./pages/CodingPage";
+import { DatabaseExplorerPage } from "./pages/DatabaseExplorerPage";
 import { LoginPage } from "./pages/LoginPage";
 import { TextToSpeechPage } from "./pages/TextToSpeechPage";
 import { TutorialPage } from "./pages/TutorialPage";
@@ -163,6 +164,14 @@ function App() {
         element={
           <ProtectedRoute requiredRole="admin">
             <AdminPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/database"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <DatabaseExplorerPage />
           </ProtectedRoute>
         }
       />

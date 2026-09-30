@@ -120,31 +120,6 @@ export function formatYouTubeVideoList(videos: TutorialVideo[]) {
     .join("\n");
 }
 
-function serializeYouTubeVideos(videos: TutorialVideo[]) {
-  return JSON.stringify(
-    videos
-      .map((video) => normalizeVideoEntry(video))
-      .filter((item): item is TutorialVideo => Boolean(item)),
-  );
-}
-
-function buildFrontmatter(document: TutorialDocument) {
-  return [
-    "---",
-    `title: ${document.title}`,
-    `slug: ${document.slug}`,
-    `dayLabel: ${document.dayLabel}`,
-    `level: ${document.level}`,
-    `estimatedMinutes: ${document.estimatedMinutes}`,
-    `order: ${document.order}`,
-    `track: ${document.track}`,
-    `youtubeVideos: ${serializeYouTubeVideos(document.youtubeVideos)}`,
-    "---",
-    "",
-    document.body,
-  ].join("\n");
-}
-
 export async function loadTutorialDocument(
   tutorial: TutorialMeta,
 ): Promise<TutorialDocument> {
@@ -171,7 +146,7 @@ export async function loadTutorialDocument(
   }
 
   const payload = (await response.json()) as {
-    lesson?: Partial<TutorialDocument> & { body?: string } | null;
+    lesson?: (Partial<TutorialDocument> & { body?: string; youtubeVideos?: TutorialVideo[] }) | null;
   };
   const lesson = payload.lesson;
 
@@ -179,30 +154,22 @@ export async function loadTutorialDocument(
     throw new Error(`No backend content found for ${tutorial.track}/${tutorial.slug}.`);
   }
 
-  const { frontmatter, body } = parseFrontmatter(lesson.body);
+  // Older saves embedded frontmatter directly in body; strip it defensively so it never
+  // duplicates the lesson's own fields (title, level, etc.) that are already stored separately.
+  const { body } = parseFrontmatter(lesson.body);
 
   const document: TutorialDocument = {
-    title: frontmatter.title ?? lesson.title ?? tutorial.title,
-    slug: frontmatter.slug ?? lesson.slug ?? tutorial.slug,
-    dayLabel: frontmatter.dayLabel ?? lesson.dayLabel ?? tutorial.dayLabel,
-    level:
-      (frontmatter.level as TutorialMeta["level"]) ??
-      (lesson.level as TutorialMeta["level"]) ??
-      tutorial.level,
-    estimatedMinutes: Number(
-      frontmatter.estimatedMinutes ??
-        lesson.estimatedMinutes ??
-        tutorial.estimatedMinutes,
-    ),
-    order: Number(frontmatter.order ?? lesson.order ?? tutorial.order),
-    track:
-      (frontmatter.track as TutorialMeta["track"]) ??
-      (lesson.track as TutorialMeta["track"]) ??
-      tutorial.track,
+    title: lesson.title ?? tutorial.title,
+    slug: lesson.slug ?? tutorial.slug,
+    dayLabel: lesson.dayLabel ?? tutorial.dayLabel,
+    level: (lesson.level as TutorialMeta["level"]) ?? tutorial.level,
+    estimatedMinutes: Number(lesson.estimatedMinutes ?? tutorial.estimatedMinutes),
+    order: Number(lesson.order ?? tutorial.order),
+    track: (lesson.track as TutorialMeta["track"]) ?? tutorial.track,
     body,
     contentPath: lesson.contentPath ?? tutorial.contentPath,
     fileName: lesson.fileName ?? tutorial.fileName,
-    youtubeVideos: parseYouTubeVideosField(frontmatter.youtubeVideos),
+    youtubeVideos: Array.isArray(lesson.youtubeVideos) ? lesson.youtubeVideos : [],
   };
 
   lessonDocumentCache.set(cacheKey, {
@@ -211,6 +178,38 @@ export async function loadTutorialDocument(
   });
 
   return document;
+}
+
+export type LessonSummary = {
+  slug: string;
+  title: string;
+  contentPath: string;
+  order: number;
+};
+
+// Lists everything actually stored in MongoDB for a track, independent of the frontend's static catalog.
+export async function fetchLessonsSummaryByTrack(track: string): Promise<LessonSummary[]> {
+  if (!contentApiBaseUrl) {
+    throw new Error("VITE_CONTENT_API_BASE_URL is not configured.");
+  }
+
+  const apiUrl = `${contentApiBaseUrl}/api/lessons?track=${encodeURIComponent(track)}`;
+  const response = await fetch(apiUrl, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error(`Content API returned HTTP ${response.status} for track "${track}".`);
+  }
+
+  const payload = (await response.json()) as {
+    lessons?: Array<{ slug?: string; title?: string; contentPath?: string; order?: number }>;
+  };
+
+  return (payload.lessons ?? []).map((lesson) => ({
+    slug: lesson.slug ?? "",
+    title: lesson.title ?? "",
+    contentPath: lesson.contentPath ?? "",
+    order: Number(lesson.order ?? 0),
+  }));
 }
 
 export async function loadCodingLessonMarkdown(
@@ -270,7 +269,7 @@ export async function saveTutorialDocument(
         moduleNumber: 1,
         moduleSlug: "module-1",
         contentPath: document.contentPath,
-        rawContent: buildFrontmatter(document),
+        rawContent: document.body,
         youtubeVideos: document.youtubeVideos,
       }),
     });

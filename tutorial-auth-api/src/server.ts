@@ -6,10 +6,13 @@ import express, {
 } from "express";
 import helmet from "helmet";
 import jwt, { type JwtPayload } from "jsonwebtoken";
+import { ObjectId } from "mongodb";
+import { EJSON } from "bson";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { appConfig } from "./config.js";
 import { findLessonByTrackAndSlug, upsertLesson } from "./contentDb.js";
+import { getDatabase } from "./db.js";
 import { synthesizeSpeech } from "./tts.js";
 
 type UserRole = "admin" | "user";
@@ -566,6 +569,194 @@ app.post(
     }
   },
 );
+
+function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  const token = readToken(req);
+
+  if (!token) {
+    res.status(401).json({ ok: false, message: "Missing bearer token." });
+    return;
+  }
+
+  try {
+    const decoded = jwt.verify(token, jwtSecret) as JwtPayload & AuthUser;
+
+    if (decoded.role !== "admin") {
+      res.status(403).json({ ok: false, message: "Admin role required." });
+      return;
+    }
+
+    next();
+  } catch {
+    res.status(401).json({ ok: false, message: "Token is invalid or expired." });
+  }
+}
+
+async function resolveCollectionName(db: Awaited<ReturnType<typeof getDatabase>>, name: string) {
+  const collections = await db.listCollections({ name }).toArray();
+  return collections.length > 0 ? name : null;
+}
+
+app.get("/api/db/collections", requireAdmin, async (_req: Request, res: Response) => {
+  try {
+    const db = await getDatabase();
+    const collections = await db.listCollections().toArray();
+
+    const withCounts = await Promise.all(
+      collections.map(async ({ name }) => ({
+        name,
+        count: await db.collection(name).countDocuments(),
+      })),
+    );
+
+    return res.json({ ok: true, collections: withCounts });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ ok: false, message: "Failed to list collections." });
+  }
+});
+
+app.get(
+  "/api/db/collections/:name/documents",
+  requireAdmin,
+  async (req: Request<{ name: string }>, res: Response) => {
+    try {
+      const db = await getDatabase();
+      const collectionName = await resolveCollectionName(db, req.params.name);
+
+      if (!collectionName) {
+        return res.status(404).json({ ok: false, message: `Collection "${req.params.name}" was not found.` });
+      }
+
+      const documents = await db.collection(collectionName).find({}).toArray();
+
+      // EJSON preserves ObjectId/Date types exactly instead of collapsing them to plain strings.
+      return res.json({ ok: true, documents: JSON.parse(EJSON.stringify(documents, { relaxed: false })) });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ ok: false, message: "Failed to load collection documents." });
+    }
+  },
+);
+
+app.put(
+  "/api/db/collections/:name/documents/:id",
+  requireAdmin,
+  async (req: Request<{ name: string; id: string }>, res: Response) => {
+    try {
+      const db = await getDatabase();
+      const collectionName = await resolveCollectionName(db, req.params.name);
+
+      if (!collectionName) {
+        return res.status(404).json({ ok: false, message: `Collection "${req.params.name}" was not found.` });
+      }
+
+      let objectId: ObjectId;
+      try {
+        objectId = new ObjectId(req.params.id);
+      } catch {
+        return res.status(400).json({ ok: false, message: "Invalid document id." });
+      }
+
+      const updates = EJSON.parse(JSON.stringify(req.body ?? {})) as Record<string, unknown>;
+      delete updates._id;
+
+      const result = await db
+        .collection(collectionName)
+        .updateOne({ _id: objectId }, { $set: updates });
+
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ ok: false, message: "Document not found." });
+      }
+
+      return res.json({ ok: true, modifiedCount: result.modifiedCount });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ ok: false, message: "Failed to update document." });
+    }
+  },
+);
+
+app.delete(
+  "/api/db/collections/:name/documents/:id",
+  requireAdmin,
+  async (req: Request<{ name: string; id: string }>, res: Response) => {
+    try {
+      const db = await getDatabase();
+      const collectionName = await resolveCollectionName(db, req.params.name);
+
+      if (!collectionName) {
+        return res.status(404).json({ ok: false, message: `Collection "${req.params.name}" was not found.` });
+      }
+
+      let objectId: ObjectId;
+      try {
+        objectId = new ObjectId(req.params.id);
+      } catch {
+        return res.status(400).json({ ok: false, message: "Invalid document id." });
+      }
+
+      const result = await db.collection(collectionName).deleteOne({ _id: objectId });
+
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ ok: false, message: "Document not found." });
+      }
+
+      return res.json({ ok: true });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ ok: false, message: "Failed to delete document." });
+    }
+  },
+);
+
+app.post(
+  "/api/db/collections/:name/documents/import",
+  requireAdmin,
+  async (req: Request<{ name: string }, unknown, { documents?: unknown[] }>, res: Response) => {
+    try {
+      const db = await getDatabase();
+      const collectionName = await resolveCollectionName(db, req.params.name);
+
+      if (!collectionName) {
+        return res.status(404).json({ ok: false, message: `Collection "${req.params.name}" was not found.` });
+      }
+
+      const incomingDocuments = Array.isArray(req.body.documents) ? req.body.documents : [];
+
+      if (incomingDocuments.length === 0) {
+        return res.status(400).json({ ok: false, message: "documents must be a non-empty array." });
+      }
+
+      const collection = db.collection(collectionName);
+      let inserted = 0;
+      let updated = 0;
+
+      for (const rawDocument of incomingDocuments) {
+        const document = EJSON.parse(JSON.stringify(rawDocument)) as Record<string, unknown> & { _id?: ObjectId };
+        const { _id, ...fields } = document;
+
+        if (_id) {
+          const result = await collection.updateOne({ _id }, { $set: fields }, { upsert: true });
+          if (result.upsertedCount > 0) {
+            inserted += 1;
+          } else {
+            updated += 1;
+          }
+        } else {
+          await collection.insertOne(fields);
+          inserted += 1;
+        }
+      }
+
+      return res.json({ ok: true, inserted, updated });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ ok: false, message: "Failed to import documents." });
+    }
+  },
+);
+
 
 app.use((_req, res) => {
   res.status(404).json({ ok: false, message: "Route not found." });

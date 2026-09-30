@@ -1,9 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { MarkdownLesson } from "../components/MarkdownLesson";
 import { tracks, type TrackKey } from "../data/tracks";
 import { tutorials } from "../data/tutorials";
-import { formatYouTubeVideoList, loadTutorialDocument, parseYouTubeVideosField, saveTutorialDocument, type TutorialDocument } from "../services/contentAdmin";
+import {
+  formatYouTubeVideoList,
+  loadTutorialDocument,
+  parseFrontmatter,
+  parseYouTubeVideosField,
+  saveTutorialDocument,
+  type TutorialDocument,
+} from "../services/contentAdmin";
 import { invalidateLessonMarkdownCache } from "./TutorialPage";
 import type { TutorialMeta } from "../types/tutorial";
 
@@ -21,6 +28,43 @@ function buildEmptyDocument(tutorial: TutorialMeta): TutorialDocument {
     fileName: tutorial.fileName,
     youtubeVideos: [],
   };
+}
+
+// Client-side only representation used for .md export/import; never sent to the backend as-is.
+function buildMarkdownForExport(document: TutorialDocument) {
+  return [
+    "---",
+    `title: ${document.title}`,
+    `slug: ${document.slug}`,
+    `dayLabel: ${document.dayLabel}`,
+    `level: ${document.level}`,
+    `estimatedMinutes: ${document.estimatedMinutes}`,
+    `order: ${document.order}`,
+    `track: ${document.track}`,
+    `youtubeVideos: ${JSON.stringify(document.youtubeVideos)}`,
+    "---",
+    "",
+    document.body,
+  ].join("\n");
+}
+
+function downloadTextFile(fileName: string, contents: string, mimeType: string) {
+  const blob = new Blob([contents], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = window.document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function isTutorialDocumentShape(value: unknown): value is TutorialDocument {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Partial<TutorialDocument>;
+  return typeof candidate.slug === "string" && typeof candidate.body === "string" && typeof candidate.track === "string";
 }
 
 function useTutorialEditorState(selectedTutorial: TutorialMeta | null) {
@@ -218,6 +262,80 @@ export function AdminPage() {
     });
   };
 
+  const markdownFileInputRef = useRef<HTMLInputElement | null>(null);
+  const jsonFileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleExportMarkdown = () => {
+    if (!document) {
+      return;
+    }
+
+    downloadTextFile(`${document.slug}.md`, buildMarkdownForExport(document), "text/markdown;charset=utf-8");
+  };
+
+  const handleExportJson = () => {
+    if (!document) {
+      return;
+    }
+
+    downloadTextFile(`${document.slug}.json`, JSON.stringify(document, null, 2), "application/json;charset=utf-8");
+  };
+
+  const handleImportMarkdownFile = async (file: File) => {
+    const rawContent = await file.text();
+    const { frontmatter, body } = parseFrontmatter(rawContent);
+
+    setDocument((currentDocument) => {
+      if (!currentDocument) {
+        return currentDocument;
+      }
+
+      const youtubeVideos = frontmatter.youtubeVideos
+        ? parseYouTubeVideosField(frontmatter.youtubeVideos)
+        : currentDocument.youtubeVideos;
+
+      return {
+        ...currentDocument,
+        title: frontmatter.title ?? currentDocument.title,
+        slug: frontmatter.slug ?? currentDocument.slug,
+        dayLabel: frontmatter.dayLabel ?? currentDocument.dayLabel,
+        level: (frontmatter.level as TutorialDocument["level"]) ?? currentDocument.level,
+        estimatedMinutes: frontmatter.estimatedMinutes
+          ? Number(frontmatter.estimatedMinutes)
+          : currentDocument.estimatedMinutes,
+        order: frontmatter.order ? Number(frontmatter.order) : currentDocument.order,
+        track: (frontmatter.track as TutorialDocument["track"]) ?? currentDocument.track,
+        body,
+        youtubeVideos,
+      };
+    });
+
+    setYoutubeVideosText((previousText) => {
+      if (!frontmatter.youtubeVideos) {
+        return previousText;
+      }
+
+      return formatYouTubeVideoList(parseYouTubeVideosField(frontmatter.youtubeVideos));
+    });
+    setStatusMessage(`Loaded content from ${file.name}. Review the fields, then save to backend.`);
+    setErrorMessage("");
+  };
+
+  const handleImportJsonFile = async (file: File) => {
+    const rawContent = await file.text();
+    const parsed: unknown = JSON.parse(rawContent);
+
+    if (!isTutorialDocumentShape(parsed)) {
+      setErrorMessage(`${file.name} is missing required lesson fields (slug, track, body).`);
+      return;
+    }
+
+    setDocument(parsed);
+    setYoutubeVideosText(formatYouTubeVideoList(parsed.youtubeVideos ?? []));
+    setStatusMessage(`Loaded content from ${file.name}. Review the fields, then save to backend.`);
+    setErrorMessage("");
+  };
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,#f0fdf4,#fff7ed_42%,#eff6ff)] text-slate-900">
       <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4 sm:py-6 md:px-6 md:py-10">
@@ -230,6 +348,13 @@ export function AdminPage() {
                 Edit lesson metadata and markdown here. Save will call a separate content backend when configured.
               </p>
             </div>
+
+            <Link
+              to="/admin/database"
+              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-emerald-50"
+            >
+              Database Explorer
+            </Link>
 
             <Link
               to="/react"
@@ -455,6 +580,67 @@ export function AdminPage() {
                   >
                     {isSaving ? "Saving..." : "Save to Backend"}
                   </button>
+
+                  <span className="mx-1 h-6 w-px bg-slate-200" aria-hidden="true" />
+
+                  <button
+                    type="button"
+                    onClick={handleExportMarkdown}
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  >
+                    Export .md
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleExportJson}
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  >
+                    Export .json
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => markdownFileInputRef.current?.click()}
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  >
+                    Import .md
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => jsonFileInputRef.current?.click()}
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  >
+                    Import .json
+                  </button>
+                  <input
+                    ref={markdownFileInputRef}
+                    type="file"
+                    accept=".md,text/markdown"
+                    className="hidden"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      event.target.value = "";
+                      if (file) {
+                        void handleImportMarkdownFile(file).catch((error) => {
+                          setErrorMessage(error instanceof Error ? error.message : "Unable to parse Markdown file.");
+                        });
+                      }
+                    }}
+                  />
+                  <input
+                    ref={jsonFileInputRef}
+                    type="file"
+                    accept=".json,application/json"
+                    className="hidden"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      event.target.value = "";
+                      if (file) {
+                        void handleImportJsonFile(file).catch((error) => {
+                          setErrorMessage(error instanceof Error ? error.message : "Unable to parse JSON file.");
+                        });
+                      }
+                    }}
+                  />
                 </div>
               </div>
             ) : (
