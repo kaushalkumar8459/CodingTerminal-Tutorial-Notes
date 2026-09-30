@@ -10,36 +10,49 @@ if (uri.startsWith("mongodb+srv://")) {
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
+let connectionPromise: Promise<Db> | null = null;
 
-export async function connectToDatabase() {
+export async function connectToDatabase(): Promise<Db> {
   if (!uri) {
     throw new Error(
       "MONGODB_URI is not configured. Set it in the backend .env file.",
     );
   }
 
-  if (!client) {
-    client = new MongoClient(uri);
-    await client.connect();
-    db = client.db(dbName);
+  if (db) {
+    return db;
   }
 
-  return db;
+  if (!connectionPromise) {
+    const nextClient = new MongoClient(uri);
+    connectionPromise = (async () => {
+      try {
+        await nextClient.connect();
+        const connectedDb = nextClient.db(dbName);
+        client = nextClient;
+        db = connectedDb;
+        return connectedDb;
+      } catch (error) {
+        await nextClient.close().catch(() => undefined);
+        throw error;
+      } finally {
+        connectionPromise = null;
+      }
+    })();
+  }
+
+  return connectionPromise;
 }
 
 export async function getDatabase(): Promise<Db> {
-  if (!db) {
-    const connectedDb = await connectToDatabase();
-    if (!connectedDb) {
-      throw new Error("Database connection could not be established.");
-    }
-    return connectedDb;
-  }
-
-  return db;
+  return db ?? connectToDatabase();
 }
 
 export async function closeDatabase() {
+  if (connectionPromise) {
+    await connectionPromise.catch(() => undefined);
+  }
+
   if (client) {
     await client.close();
     client = null;

@@ -62,6 +62,12 @@ type VideoSuggestionsBody = {
 const app = express();
 const port = appConfig.port;
 const frontendOrigin = appConfig.frontendOrigin;
+const allowedFrontendOrigins = new Set(
+  frontendOrigin
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+);
 const jwtSecret = appConfig.jwtSecret;
 
 const credentialBook: Record<UserRole, { username: string; password: string }> =
@@ -77,7 +83,17 @@ const credentialBook: Record<UserRole, { username: string; password: string }> =
   };
 
 app.use(helmet());
-app.use(cors({ origin: frontendOrigin, credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedFrontendOrigins.has(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`Origin ${origin} is not allowed by CORS.`));
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
