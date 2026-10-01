@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Spinner } from "../components/Spinner";
 
 const apiBaseUrl = import.meta.env.VITE_AUTH_API_BASE_URL?.trim() || "";
 const STORAGE_KEY = "youtube-details-sticky-note";
@@ -289,7 +290,7 @@ export function YouTubeDetailsPage() {
           >
             {isLoading ? (
               <>
-                <span aria-hidden="true" className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                <Spinner className="h-4 w-4 border-2 border-white/40 border-t-white" />
                 Loading...
               </>
             ) : "Get details"}
