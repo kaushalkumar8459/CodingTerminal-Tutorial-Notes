@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { MarkdownLesson } from "../components/MarkdownLesson";
+import { Spinner } from "../components/Spinner";
 import { tracks, type TrackKey } from "../data/tracks";
 import { tutorials } from "../data/tutorials";
 import {
@@ -576,9 +577,14 @@ export function AdminPage() {
                     type="button"
                     onClick={() => void handleSave()}
                     disabled={isSaving || isLoading}
-                    className="rounded-xl border border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-xl border border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {isSaving ? "Saving..." : "Save to Backend"}
+                    {isSaving ? (
+                      <>
+                        <Spinner className="h-4 w-4 border-2 border-white/40 border-t-white" />
+                        Saving...
+                      </>
+                    ) : "Save to Backend"}
                   </button>
 
                   <span className="mx-1 h-6 w-px bg-slate-200" aria-hidden="true" />
@@ -645,7 +651,12 @@ export function AdminPage() {
               </div>
             ) : (
               <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-600">
-                {isLoading ? "Loading tutorial..." : "Pick a tutorial from the left to start editing."}
+                {isLoading ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Spinner className="h-4 w-4 border-2 border-slate-300 border-t-emerald-600" />
+                    Loading tutorial...
+                  </span>
+                ) : "Pick a tutorial from the left to start editing."}
               </div>
             )}
           </section>

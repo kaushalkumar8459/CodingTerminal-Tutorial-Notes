@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MarkdownLesson } from "../components/MarkdownLesson";
 import { PracticeEditor } from "../components/PracticeEditor";
+import { Spinner } from "../components/Spinner";
 import { getCodingLessonBySlug, getCodingLessonsByTrack } from "../data/codingLessons";
 import { getCodingTrackLabel, isCodingTrackKey } from "../data/codingTracks";
 import { loadCodingLessonMarkdown } from "../services/contentAdmin";
@@ -137,7 +138,10 @@ export function CodingPage() {
         {viewMode === "solution" && !lesson.hasSolution ? (
           <p className="text-sm text-slate-600">The solution for this day hasn't been added yet — check back soon.</p>
         ) : isLoading ? (
-          <p className="text-sm text-slate-600">Loading {viewMode}...</p>
+          <p className="flex items-center gap-2 text-sm text-slate-600">
+            <Spinner className="h-4 w-4 border-2 border-slate-300 border-t-cyan-600" />
+            Loading {viewMode}...
+          </p>
         ) : error ? (
           <p className="text-sm text-rose-700">{error}</p>
         ) : (

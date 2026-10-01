@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AudioPlayer } from "../components/AudioPlayer";
 import { MarkdownLesson } from "../components/MarkdownLesson";
+import { Spinner } from "../components/Spinner";
 import { TableOfContents } from "../components/TableOfContents";
 import { getTutorialBySlug, getTutorialsByTrack } from "../data/tutorials";
 import { getTrackLabel, isTrackKey } from "../data/tracks";
@@ -188,7 +189,8 @@ type TutorialStatePanelProps = Readonly<{
 function getTutorialStatePanel({ isLoading, error, track, tutorialFileName }: TutorialStatePanelProps) {
   if (isLoading) {
     return (
-      <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-700 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.7)] sm:p-10">
+      <section className="flex items-center gap-3 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-700 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.7)] sm:p-10">
+        <Spinner className="h-5 w-5 border-2 border-slate-300 border-t-cyan-600" />
         Loading lesson content...
       </section>
     );

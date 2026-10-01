@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import { Spinner } from "../components/Spinner";
 
 const apiBaseUrl = import.meta.env.VITE_CONTENT_API_BASE_URL?.trim() ?? "";
 
@@ -48,6 +49,7 @@ export function DatabaseExplorerPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [fieldFilters, setFieldFilters] = useState<Record<string, string>>({});
 
   const loadCollections = useCallback(async () => {
@@ -101,10 +103,17 @@ export function DatabaseExplorerPage() {
   useEffect(() => {
     if (activeCollection) {
       setSearchText("");
+      setDebouncedSearchText("");
       setFieldFilters({});
       void loadDocuments(activeCollection);
     }
   }, [activeCollection, loadDocuments]);
+
+  // Delay applying the search text so fast typing doesn't re-filter 1000+ documents on every keystroke.
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => setDebouncedSearchText(searchText), 200);
+    return () => window.clearTimeout(timeoutId);
+  }, [searchText]);
 
   // Auto-detect simple, low-cardinality fields (e.g. track, level, status) to offer as dropdown filters.
   const filterableFields = useMemo(() => {
@@ -136,25 +145,32 @@ export function DatabaseExplorerPage() {
       .sort((left, right) => left.field.localeCompare(right.field));
   }, [documents]);
 
+  // Precomputed once per document load so the search filter doesn't re-stringify every document on each keystroke.
+  const searchableText = useMemo(
+    () => (documents ?? []).map((document) => JSON.stringify(document).toLowerCase()),
+    [documents],
+  );
+
   const filteredDocuments = useMemo(() => {
     if (!documents) {
       return null;
     }
 
-    const normalizedSearch = searchText.trim().toLowerCase();
+    const normalizedSearch = debouncedSearchText.trim().toLowerCase();
     const activeFieldFilters = Object.entries(fieldFilters).filter(([, value]) => value !== "");
 
-    return documents.filter((document) => {
-      if (normalizedSearch && !JSON.stringify(document).toLowerCase().includes(normalizedSearch)) {
+    return documents.filter((document, index) => {
+      if (normalizedSearch && !searchableText[index]?.includes(normalizedSearch)) {
         return false;
       }
 
       return activeFieldFilters.every(([field, value]) => String(document[field] ?? "") === value);
     });
-  }, [documents, searchText, fieldFilters]);
+  }, [documents, searchableText, debouncedSearchText, fieldFilters]);
 
   const handleClearFilters = () => {
     setSearchText("");
+    setDebouncedSearchText("");
     setFieldFilters({});
   };
 
@@ -395,7 +411,12 @@ export function DatabaseExplorerPage() {
         {errorMessage ? <p className="text-sm font-semibold text-rose-700">{errorMessage}</p> : null}
 
         <div className="space-y-3">
-          {isLoading ? <p className="text-sm text-slate-600">Loading documents...</p> : null}
+          {isLoading ? (
+            <p className="flex items-center gap-2 text-sm text-slate-600">
+              <Spinner className="h-4 w-4 border-2 border-slate-300 border-t-emerald-600" />
+              Loading documents...
+            </p>
+          ) : null}
 
           {!isLoading && filteredDocuments?.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-600">

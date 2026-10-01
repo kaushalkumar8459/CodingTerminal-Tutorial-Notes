@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { UserRole } from "../auth/authContextObject";
 import { useAuth } from "../auth/useAuth";
+import { Spinner } from "../components/Spinner";
 
 function useRedirectPath() {
   const location = useLocation();
@@ -115,9 +116,14 @@ export function LoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-xl border border-cyan-500 bg-cyan-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-600"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-500 bg-cyan-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-600 disabled:cursor-not-allowed disabled:opacity-75"
           >
-            {isSubmitting ? "Checking..." : "Login"}
+            {isSubmitting ? (
+              <>
+                <Spinner className="h-4 w-4 border-2 border-white/40 border-t-white" />
+                Checking...
+              </>
+            ) : "Login"}
           </button>
         </form>
 
