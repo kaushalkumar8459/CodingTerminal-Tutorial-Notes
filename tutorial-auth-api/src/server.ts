@@ -12,6 +12,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { appConfig } from "./config.js";
 import { findLessonByTrackAndSlug, upsertLesson } from "./contentDb.js";
+import { findLocalLessonByTrackAndSlug, findLocalLessonsByTrack } from "./localContent.js";
 import { getDatabase } from "./db.js";
 import { synthesizeSpeech } from "./tts.js";
 
@@ -442,6 +443,16 @@ app.get("/api/lessons", async (req: Request, res: Response) => {
   }
 
   try {
+    if (appConfig.content.source === "local") {
+      if (slug) {
+        const lesson = await findLocalLessonByTrackAndSlug(track, slug);
+        return res.json({ ok: true, lesson });
+      }
+
+      const lessons = await findLocalLessonsByTrack(track);
+      return res.json({ ok: true, lessons });
+    }
+
     if (slug) {
       const lesson = await findLessonByTrackAndSlug(track, slug);
       return res.json({ ok: true, lesson: lesson ?? null });
@@ -461,6 +472,13 @@ app.get("/api/lessons", async (req: Request, res: Response) => {
 app.post(
   "/api/lessons/save",
   async (req: Request<unknown, unknown, SaveTutorialBody>, res: Response) => {
+    if (appConfig.content.source === "local") {
+      return res.status(409).json({
+        ok: false,
+        message: "Lesson saving is disabled when CONTENT_SOURCE=local.",
+      });
+    }
+
     const contentPath = req.body.contentPath?.trim() ?? "";
     const rawContent = req.body.rawContent ?? "";
     const track = String(req.body.track ?? "").trim();

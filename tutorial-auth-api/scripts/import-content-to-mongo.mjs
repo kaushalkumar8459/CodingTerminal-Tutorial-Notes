@@ -4,6 +4,7 @@ import path from "node:path";
 import process from "node:process";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
+import { isLessonMarkdownFile, normalizeLessonBody } from "./content-normalization.mjs";
 
 const currentDir = process.cwd();
 const runtimeMode = process.env.NODE_ENV === "production" ? "production" : "development";
@@ -43,6 +44,7 @@ const KNOWN_LANGUAGES = [
   "typescript",
   "javascript",
   "angular",
+  "html",
   "nextjs",
   "nodejs",
   "python",
@@ -69,16 +71,16 @@ function parseFrontmatter(markdown) {
   const normalizedMarkdown = markdown.replace(/^\uFEFF/, "");
 
   if (!normalizedMarkdown.startsWith("---")) {
-    return { frontmatter: {}, body: normalizedMarkdown };
+    return { frontmatter: {}, body: normalizeLessonBody(normalizedMarkdown) };
   }
 
   const endIndex = normalizedMarkdown.indexOf("\n---", 3);
   if (endIndex === -1) {
-    return { frontmatter: {}, body: normalizedMarkdown };
+    return { frontmatter: {}, body: normalizeLessonBody(normalizedMarkdown) };
   }
 
   const rawFrontmatter = normalizedMarkdown.slice(3, endIndex).trim();
-  const body = normalizedMarkdown.slice(endIndex + 4).replace(/^\r?\n/, "");
+  const body = normalizeLessonBody(normalizedMarkdown.slice(endIndex + 4).replace(/^\r?\n/, ""));
   const frontmatter = {};
 
   for (const line of rawFrontmatter.split(/\r?\n/)) {
@@ -96,6 +98,11 @@ function parseFrontmatter(markdown) {
 }
 
 function extractTitle(body) {
+  const dayHeadingMatch = body.match(/^#\s+Day\s+\d+\s*[—–-]\s*(.+)$/m);
+  if (dayHeadingMatch) {
+    return dayHeadingMatch[1].trim();
+  }
+
   const headingMatch = body.match(/^#\s+(.+)$/m);
   if (headingMatch) {
     return headingMatch[1].trim();
@@ -143,7 +150,7 @@ async function walkMarkdownFiles(directoryPath, files = []) {
       continue;
     }
 
-    if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
+    if (entry.isFile() && isLessonMarkdownFile(entry.name)) {
       files.push(absolutePath);
     }
   }
