@@ -19,6 +19,10 @@ function getTrackBadgeLabel(track: TrackKey) {
     return "JS";
   }
 
+  if (track === "html") {
+    return "H";
+  }
+
   if (track === "java") {
     return "J";
   }

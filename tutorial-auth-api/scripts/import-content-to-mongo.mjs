@@ -5,6 +5,11 @@ import process from "node:process";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import { isLessonMarkdownFile, normalizeLessonBody } from "./content-normalization.mjs";
+import {
+  buildQuestionAnswerPairs,
+  extractCodingContextMarkdown,
+} from "./question-answer-normalization.mjs";
+import { splitEmbeddedSolution } from "./embedded-solution-markdown.mjs";
 
 const currentDir = process.cwd();
 const runtimeMode = process.env.NODE_ENV === "production" ? "production" : "development";
@@ -65,6 +70,14 @@ function normalizeTrack(value) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     || "javascript";
+}
+
+function getCodingTrackSegment(relativeParts) {
+  if (normalizeTrack(relativeParts[0] ?? "") === "angular-practise" && relativeParts[1]) {
+    return relativeParts[1];
+  }
+
+  return relativeParts[0] ?? "javascript";
 }
 
 function parseFrontmatter(markdown) {
@@ -185,11 +198,26 @@ async function collectMarkdownFiles(root, languageFilter) {
 async function main() {
   try {
     const args = process.argv.slice(2);
-    const languageFilter = args.find((arg) => !arg.startsWith("--"))?.trim().toLowerCase() || null;
+    const trackOptionIndex = args.indexOf("--track");
+    const trackOptionValue = trackOptionIndex >= 0 ? args[trackOptionIndex + 1] : null;
+    if (trackOptionIndex >= 0 && (!trackOptionValue || trackOptionValue.startsWith("--"))) {
+      throw new Error("Pass a track after --track (e.g. --track htmlinterview).");
+    }
+    const trackFilter = trackOptionValue ? normalizeTrack(trackOptionValue) : null;
+    const positionalArgs = args.filter((arg, index) => {
+      if (arg.startsWith("--")) {
+        return false;
+      }
+      if (trackOptionIndex >= 0 && index === trackOptionIndex + 1) {
+        return false;
+      }
+      return true;
+    });
+    const languageFilter = positionalArgs[0]?.trim().toLowerCase() || null;
     const includeAll = args.includes("--all");
 
-    if (!languageFilter && !includeAll) {
-      throw new Error("Specify a language (e.g. javascript) or pass --all to import every tutorial folder.");
+    if (!languageFilter && !trackFilter && !includeAll) {
+      throw new Error("Specify a language, pass --track <track>, or use --all to import every tutorial folder.");
     }
 
     const validRoots = [];
@@ -207,7 +235,7 @@ async function main() {
       throw new Error("No valid source folders found (coding/tutorials).");
     }
 
-    console.log(`Import scope: ${languageFilter || "all tutorial folders"}`);
+    console.log(`Import scope: ${trackFilter ? `track ${trackFilter}` : languageFilter || "all tutorial folders"}`);
 
     const client = new MongoClient(uri);
     await client.connect();
@@ -220,7 +248,18 @@ async function main() {
     const importedByLanguage = new Map();
 
     for (const root of validRoots) {
-      const files = await collectMarkdownFiles(root, languageFilter);
+      if (trackFilter && root.key !== "coding") {
+        continue;
+      }
+
+      let files = await collectMarkdownFiles(root, languageFilter);
+      if (trackFilter) {
+        files = files.filter((filePath) => {
+          const relativeParts = path.relative(root.absolutePath, filePath).split(path.sep);
+          const trackSegment = getCodingTrackSegment(relativeParts);
+          return normalizeTrack(trackSegment) === trackFilter;
+        });
+      }
       const solutionBodies = new Map();
 
       if (root.key === "coding") {
@@ -250,10 +289,16 @@ async function main() {
         if (root.key === "coding" && relativeParts.some((part) => part.toLowerCase() === "solutions")) {
           continue;
         }
-        const trackSegment = relativeParts[0] ?? "javascript";
+        const trackSegment = root.key === "coding"
+          ? getCodingTrackSegment(relativeParts)
+          : relativeParts[0] ?? "javascript";
         const fileName = path.basename(filePath, ".md");
         const markdown = await fs.readFile(filePath, "utf8");
-        const { frontmatter, body } = parseFrontmatter(markdown);
+        const { frontmatter, body: combinedBody } = parseFrontmatter(markdown);
+        const {
+          practiceMarkdown: body,
+          solutionMarkdown: embeddedSolutionBody,
+        } = splitEmbeddedSolution(combinedBody);
 
         const title = String(frontmatter.title || extractTitle(body)).trim();
         const slug = slugify(frontmatter.slug || fileName);
@@ -265,6 +310,16 @@ async function main() {
         const level = String(frontmatter.level || "Beginner").trim() || "Beginner";
         const estimatedMinutes = Number(frontmatter.estimatedMinutes || 30);
         const language = resolveLanguageFromTrack(track);
+        const solutionBody = embeddedSolutionBody || solutionBodies.get(filePath) || "";
+        const questions = root.key === "coding"
+          ? buildQuestionAnswerPairs(body, solutionBody)
+          : undefined;
+        const hasCompleteQuestions = Boolean(questions?.length);
+        const hasSolutionBody = Boolean(embeddedSolutionBody) || solutionBodies.has(filePath);
+
+        if (trackFilter && track !== trackFilter) {
+          continue;
+        }
 
         if (languageFilter && language !== languageFilter) {
           continue;
@@ -282,8 +337,12 @@ async function main() {
           moduleNumber,
           moduleSlug,
           contentPath: `${root.key}/${relativePath}`,
-          body,
-          ...(solutionBodies.has(filePath) ? { solutionBody: solutionBodies.get(filePath) } : {}),
+          ...(hasCompleteQuestions
+            ? { contextMarkdown: extractCodingContextMarkdown(body), questions }
+            : {
+                body,
+                ...(hasSolutionBody ? { solutionBody } : {}),
+              }),
           youtubeVideos: [],
           status: "active",
           isActive: true,
@@ -292,11 +351,17 @@ async function main() {
           updatedAt: new Date(),
         };
 
-        await collection.updateOne(
-          { track, slug },
-          { $set: lessonDocument },
-          { upsert: true },
-        );
+        const { createdAt, ...lessonUpdates } = lessonDocument;
+        const update = {
+          $set: lessonUpdates,
+          $setOnInsert: { createdAt },
+        };
+        if (hasCompleteQuestions) {
+          update.$unset = { body: "", solutionBody: "" };
+        } else {
+          update.$unset = { contextMarkdown: "", questions: "" };
+        }
+        await collection.updateOne({ track, slug }, update, { upsert: true });
 
         imported += 1;
         importedByLanguage.set(language, (importedByLanguage.get(language) ?? 0) + 1);

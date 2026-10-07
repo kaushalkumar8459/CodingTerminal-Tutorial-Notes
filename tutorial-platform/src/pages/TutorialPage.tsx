@@ -184,9 +184,10 @@ type TutorialStatePanelProps = Readonly<{
   error: string;
   track: string | null;
   tutorialFileName?: string;
+  onRetry: () => void;
 }>;
 
-function getTutorialStatePanel({ isLoading, error, track, tutorialFileName }: TutorialStatePanelProps) {
+function getTutorialStatePanel({ isLoading, error, track, tutorialFileName, onRetry }: TutorialStatePanelProps) {
   if (isLoading) {
     return (
       <section className="flex items-center gap-3 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-700 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.7)] sm:p-10">
@@ -198,8 +199,17 @@ function getTutorialStatePanel({ isLoading, error, track, tutorialFileName }: Tu
 
   if (error) {
     return (
-      <section className="rounded-3xl border border-rose-200 bg-rose-50 p-5 text-rose-700 sm:p-8">
-        {error}
+      <section role="alert" className="rounded-3xl border border-rose-200 bg-rose-50 p-5 text-rose-700 sm:p-8">
+        <h2 className="text-base font-bold">This lesson could not be loaded.</h2>
+        <p className="mt-2 text-sm">Check your connection and try again. The lesson service may be temporarily unavailable.</p>
+        <p className="mt-2 break-words text-xs text-rose-600">Details: {error}</p>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="mt-4 rounded-lg border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-800 transition hover:bg-rose-100"
+        >
+          Try again
+        </button>
       </section>
     );
   }
@@ -226,6 +236,7 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
   const [youtubeVideos, setYoutubeVideos] = useState<TutorialVideo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
   const [isSyllabusOpen, setIsSyllabusOpen] = useState(false);
   const [isMobileTocDrawerOpen, setIsMobileTocDrawerOpen] = useState(false);
 
@@ -344,7 +355,7 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
     return () => {
       isMounted = false;
     };
-  }, [tutorial]);
+  }, [tutorial, retryCount]);
 
   const scrollToSection = useCallback((hash: string, behavior: ScrollBehavior = "smooth") => {
     const targetId = decodeURIComponent(hash.replace(/^#/, ""));
@@ -428,6 +439,7 @@ export function TutorialPage({ isRightPanelCollapsed }: Readonly<TutorialPagePro
     error,
     track,
     tutorialFileName: tutorial?.fileName,
+    onRetry: () => setRetryCount((count) => count + 1),
   });
 
   if (statePanel) {

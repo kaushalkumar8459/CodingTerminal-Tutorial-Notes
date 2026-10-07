@@ -20,7 +20,7 @@ export const LOCAL_TUTORIAL_CATALOG: LocalTutorialSource[] = [
   { track: "java", roots: ["tutorials/java", "coding/Java"] },
   { track: "react", roots: ["tutorials/react"] },
   { track: "angular", roots: ["tutorials/angular/modules"] },
-  { track: "angularinterview", roots: ["tutorials/angular/interview"] },
+  { track: "angularinterview", roots: ["coding/Angular Practise/AngularInterview"] },
   { track: "nodejs", roots: ["tutorials/nodejs", "coding/NodeJS"] },
   { track: "python", roots: ["tutorials/python"] },
   { track: "nextjs", roots: ["tutorials/nextjs"] },
@@ -29,6 +29,9 @@ export const LOCAL_TUTORIAL_CATALOG: LocalTutorialSource[] = [
 ];
 
 type Frontmatter = Record<string, string>;
+
+const EMBEDDED_SOLUTION_START = "<!-- codingterminal-solution:start -->";
+const EMBEDDED_SOLUTION_END = "<!-- codingterminal-solution:end -->";
 
 let lessonIndexPromise: Promise<Map<string, TutorialLessonDocument[]>> | null = null;
 
@@ -74,6 +77,24 @@ function getTitle(frontmatter: Frontmatter, body: string, slug: string) {
     .join(" ");
 }
 
+function splitEmbeddedSolution(markdown: string) {
+  const start = markdown.indexOf(EMBEDDED_SOLUTION_START);
+  if (start < 0) {
+    return { practiceMarkdown: markdown, solutionMarkdown: "" };
+  }
+
+  const solutionStart = start + EMBEDDED_SOLUTION_START.length;
+  const end = markdown.indexOf(EMBEDDED_SOLUTION_END, solutionStart);
+  if (end < 0) {
+    throw new Error("Embedded solution start marker has no matching end marker.");
+  }
+
+  return {
+    practiceMarkdown: markdown.slice(0, start).trimEnd(),
+    solutionMarkdown: markdown.slice(solutionStart, end).trim(),
+  };
+}
+
 async function collectMarkdownFiles(directory: string): Promise<string[]> {
   let entries;
   try {
@@ -102,7 +123,11 @@ async function readLessonFile(
   filePath: string,
 ): Promise<TutorialLessonDocument> {
   const markdown = await readFile(filePath, "utf8");
-  const { frontmatter, body } = parseMarkdown(markdown);
+  const { frontmatter, body: combinedBody } = parseMarkdown(markdown);
+  const {
+    practiceMarkdown: body,
+    solutionMarkdown: embeddedSolutionBody,
+  } = splitEmbeddedSolution(combinedBody);
   const fileName = path.basename(filePath);
   const slug = frontmatter.slug || fileName.replace(/\.md$/i, "");
   const relativePath = path.relative(appConfig.content.localRoot, filePath).split(path.sep).join("/");
@@ -128,11 +153,15 @@ async function readLessonFile(
     updatedAt: modifiedAt,
   };
 
-  const solutionPath = path.join(path.dirname(filePath), "solutions", fileName);
-  try {
-    lesson.solutionBody = (await readFile(solutionPath, "utf8")).replace(/^\uFEFF/, "");
-  } catch {
-    // Tutorials without separate solution files simply omit solutionBody.
+  if (embeddedSolutionBody) {
+    lesson.solutionBody = embeddedSolutionBody;
+  } else {
+    const solutionPath = path.join(path.dirname(filePath), "solutions", fileName);
+    try {
+      lesson.solutionBody = (await readFile(solutionPath, "utf8")).replace(/^\uFEFF/, "");
+    } catch {
+      // Tutorials without separate solution files simply omit solutionBody.
+    }
   }
 
   return lesson;

@@ -15,6 +15,215 @@ export type CodingLessonMeta = {
 
 export const codingLessons: CodingLessonMeta[] = [
   {
+    "track": "htmlinterview",
+    "slug": "day-001-introduction-to-html",
+    "dayLabel": "Day 1",
+    "title": "HTML Document Foundations",
+    "order": 1,
+    "fileName": "day-001-introduction-to-html.md",
+    "contentPath": "coding/htmlinterview/day-001-introduction-to-html.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-001-introduction-to-html.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-002-text-content-and-formatting",
+    "dayLabel": "Day 2",
+    "title": "Text, Headings, and Meaning",
+    "order": 2,
+    "fileName": "day-002-text-content-and-formatting.md",
+    "contentPath": "coding/htmlinterview/day-002-text-content-and-formatting.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-002-text-content-and-formatting.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-003-links-images-and-paths",
+    "dayLabel": "Day 3",
+    "title": "Links, Images, and Paths",
+    "order": 3,
+    "fileName": "day-003-links-images-and-paths.md",
+    "contentPath": "coding/htmlinterview/day-003-links-images-and-paths.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-003-links-images-and-paths.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-004-lists-tables-and-content-groups",
+    "dayLabel": "Day 4",
+    "title": "Lists, Tables, and Flow Content",
+    "order": 4,
+    "fileName": "day-004-lists-tables-and-content-groups.md",
+    "contentPath": "coding/htmlinterview/day-004-lists-tables-and-content-groups.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-004-lists-tables-and-content-groups.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-005-forms-structure-and-controls",
+    "dayLabel": "Day 5",
+    "title": "Forms, Labels, and Controls",
+    "order": 5,
+    "fileName": "day-005-forms-structure-and-controls.md",
+    "contentPath": "coding/htmlinterview/day-005-forms-structure-and-controls.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-005-forms-structure-and-controls.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-006-input-types-and-validation",
+    "dayLabel": "Day 6",
+    "title": "Input Types and Validation",
+    "order": 6,
+    "fileName": "day-006-input-types-and-validation.md",
+    "contentPath": "coding/htmlinterview/day-006-input-types-and-validation.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-006-input-types-and-validation.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-007-semantic-html-and-accessibility",
+    "dayLabel": "Day 7",
+    "title": "Semantic HTML and Accessibility",
+    "order": 7,
+    "fileName": "day-007-semantic-html-and-accessibility.md",
+    "contentPath": "coding/htmlinterview/day-007-semantic-html-and-accessibility.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-007-semantic-html-and-accessibility.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-008-audio-video-and-embedded-content",
+    "dayLabel": "Day 8",
+    "title": "Media, Responsive Images, and Frames",
+    "order": 8,
+    "fileName": "day-008-audio-video-and-embedded-content.md",
+    "contentPath": "coding/htmlinterview/day-008-audio-video-and-embedded-content.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-008-audio-video-and-embedded-content.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-009-document-head-metadata-and-quality",
+    "dayLabel": "Day 9",
+    "title": "Document Head and Validation",
+    "order": 9,
+    "fileName": "day-009-document-head-metadata-and-quality.md",
+    "contentPath": "coding/htmlinterview/day-009-document-head-metadata-and-quality.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-009-document-head-metadata-and-quality.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-010-html-capstone-project-and-review",
+    "dayLabel": "Day 10",
+    "title": "Core HTML Capstone",
+    "order": 10,
+    "fileName": "day-010-html-capstone-project-and-review.md",
+    "contentPath": "coding/htmlinterview/day-010-html-capstone-project-and-review.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-010-html-capstone-project-and-review.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-011-html-styling-classes-ids-and-comments",
+    "dayLabel": "Day 11",
+    "title": "Classes, IDs, Styling, and Legacy Markup",
+    "order": 11,
+    "fileName": "day-011-html-styling-classes-ids-and-comments.md",
+    "contentPath": "coding/htmlinterview/day-011-html-styling-classes-ids-and-comments.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-011-html-styling-classes-ids-and-comments.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-012-layout-responsive-design-and-code-elements",
+    "dayLabel": "Day 12",
+    "title": "Layout, Paths, and Code Elements",
+    "order": 12,
+    "fileName": "day-012-layout-responsive-design-and-code-elements.md",
+    "contentPath": "coding/htmlinterview/day-012-layout-responsive-design-and-code-elements.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-012-layout-responsive-design-and-code-elements.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-013-entities-encoding-and-xhtml",
+    "dayLabel": "Day 13",
+    "title": "Entities, Encoding, URLs, and XHTML",
+    "order": 13,
+    "fileName": "day-013-entities-encoding-and-xhtml.md",
+    "contentPath": "coding/htmlinterview/day-013-entities-encoding-and-xhtml.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-013-entities-encoding-and-xhtml.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-014-advanced-form-elements-and-attributes",
+    "dayLabel": "Day 14",
+    "title": "Advanced Form Elements and Attributes",
+    "order": 14,
+    "fileName": "day-014-advanced-form-elements-and-attributes.md",
+    "contentPath": "coding/htmlinterview/day-014-advanced-form-elements-and-attributes.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-014-advanced-form-elements-and-attributes.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-015-embedded-content-and-third-party-media",
+    "dayLabel": "Day 15",
+    "title": "Iframes, YouTube, and Embedded Content",
+    "order": 15,
+    "fileName": "day-015-embedded-content-and-third-party-media.md",
+    "contentPath": "coding/htmlinterview/day-015-embedded-content-and-third-party-media.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-015-embedded-content-and-third-party-media.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-016-svg-and-canvas-graphics",
+    "dayLabel": "Day 16",
+    "title": "SVG and Canvas Practice",
+    "order": 16,
+    "fileName": "day-016-svg-and-canvas-graphics.md",
+    "contentPath": "coding/htmlinterview/day-016-svg-and-canvas-graphics.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-016-svg-and-canvas-graphics.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-017-geolocation-and-drag-and-drop-apis",
+    "dayLabel": "Day 17",
+    "title": "Geolocation and Drag-and-Drop APIs",
+    "order": 17,
+    "fileName": "day-017-geolocation-and-drag-and-drop-apis.md",
+    "contentPath": "coding/htmlinterview/day-017-geolocation-and-drag-and-drop-apis.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-017-geolocation-and-drag-and-drop-apis.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-018-web-storage-workers-and-server-sent-events",
+    "dayLabel": "Day 18",
+    "title": "Storage, Workers, and Server-Sent Events",
+    "order": 18,
+    "fileName": "day-018-web-storage-workers-and-server-sent-events.md",
+    "contentPath": "coding/htmlinterview/day-018-web-storage-workers-and-server-sent-events.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-018-web-storage-workers-and-server-sent-events.md"
+  },
+  {
+    "track": "htmlinterview",
+    "slug": "day-019-advanced-html-tables-and-accessibility",
+    "dayLabel": "Day 19",
+    "title": "Advanced Data Tables",
+    "order": 19,
+    "fileName": "day-019-advanced-html-tables-and-accessibility.md",
+    "contentPath": "coding/htmlinterview/day-019-advanced-html-tables-and-accessibility.md",
+    "hasSolution": true,
+    "solutionPath": "coding/htmlinterview/day-019-advanced-html-tables-and-accessibility.md"
+  },
+  {
     "track": "javascript",
     "slug": "day-001-variables-and-output",
     "dayLabel": "Day 1",
@@ -23,7 +232,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-001-variables-and-output.md",
     "contentPath": "coding/JavaScript/day-001-variables-and-output.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-001-variables-and-output.md"
+    "solutionPath": "coding/JavaScript/day-001-variables-and-output.md"
   },
   {
     "track": "javascript",
@@ -34,7 +243,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-002-data-types.md",
     "contentPath": "coding/JavaScript/day-002-data-types.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-002-data-types.md"
+    "solutionPath": "coding/JavaScript/day-002-data-types.md"
   },
   {
     "track": "javascript",
@@ -45,7 +254,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-003-type-conversion.md",
     "contentPath": "coding/JavaScript/day-003-type-conversion.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-003-type-conversion.md"
+    "solutionPath": "coding/JavaScript/day-003-type-conversion.md"
   },
   {
     "track": "javascript",
@@ -56,7 +265,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-004-arithmetic-operators.md",
     "contentPath": "coding/JavaScript/day-004-arithmetic-operators.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-004-arithmetic-operators.md"
+    "solutionPath": "coding/JavaScript/day-004-arithmetic-operators.md"
   },
   {
     "track": "javascript",
@@ -67,7 +276,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-005-comparison-operators.md",
     "contentPath": "coding/JavaScript/day-005-comparison-operators.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-005-comparison-operators.md"
+    "solutionPath": "coding/JavaScript/day-005-comparison-operators.md"
   },
   {
     "track": "javascript",
@@ -78,7 +287,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-006-logical-operators.md",
     "contentPath": "coding/JavaScript/day-006-logical-operators.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-006-logical-operators.md"
+    "solutionPath": "coding/JavaScript/day-006-logical-operators.md"
   },
   {
     "track": "javascript",
@@ -89,7 +298,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-007-conditional-practice.md",
     "contentPath": "coding/JavaScript/day-007-conditional-practice.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-007-conditional-practice.md"
+    "solutionPath": "coding/JavaScript/day-007-conditional-practice.md"
   },
   {
     "track": "javascript",
@@ -100,7 +309,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-008-ternary-and-switch.md",
     "contentPath": "coding/JavaScript/day-008-ternary-and-switch.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-008-ternary-and-switch.md"
+    "solutionPath": "coding/JavaScript/day-008-ternary-and-switch.md"
   },
   {
     "track": "javascript",
@@ -111,7 +320,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-009-functions.md",
     "contentPath": "coding/JavaScript/day-009-functions.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-009-functions.md"
+    "solutionPath": "coding/JavaScript/day-009-functions.md"
   },
   {
     "track": "javascript",
@@ -122,7 +331,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-010-function-parameters.md",
     "contentPath": "coding/JavaScript/day-010-function-parameters.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-010-function-parameters.md"
+    "solutionPath": "coding/JavaScript/day-010-function-parameters.md"
   },
   {
     "track": "javascript",
@@ -133,7 +342,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-011-arrow-functions.md",
     "contentPath": "coding/JavaScript/day-011-arrow-functions.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-011-arrow-functions.md"
+    "solutionPath": "coding/JavaScript/day-011-arrow-functions.md"
   },
   {
     "track": "javascript",
@@ -144,7 +353,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-012-truthy-falsy.md",
     "contentPath": "coding/JavaScript/day-012-truthy-falsy.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-012-truthy-falsy.md"
+    "solutionPath": "coding/JavaScript/day-012-truthy-falsy.md"
   },
   {
     "track": "javascript",
@@ -155,7 +364,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-013-events.md",
     "contentPath": "coding/JavaScript/day-013-events.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-013-events.md"
+    "solutionPath": "coding/JavaScript/day-013-events.md"
   },
   {
     "track": "javascript",
@@ -166,7 +375,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-014-local-storage.md",
     "contentPath": "coding/JavaScript/day-014-local-storage.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-014-local-storage.md"
+    "solutionPath": "coding/JavaScript/day-014-local-storage.md"
   },
   {
     "track": "javascript",
@@ -177,7 +386,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-015-module-1-project.md",
     "contentPath": "coding/JavaScript/day-015-module-1-project.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-015-module-1-project.md"
+    "solutionPath": "coding/JavaScript/day-015-module-1-project.md"
   },
   {
     "track": "javascript",
@@ -188,7 +397,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-016-loop-basics.md",
     "contentPath": "coding/JavaScript/day-016-loop-basics.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-016-loop-basics.md"
+    "solutionPath": "coding/JavaScript/day-016-loop-basics.md"
   },
   {
     "track": "javascript",
@@ -199,7 +408,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-017-while-and-do-while.md",
     "contentPath": "coding/JavaScript/day-017-while-and-do-while.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-017-while-and-do-while.md"
+    "solutionPath": "coding/JavaScript/day-017-while-and-do-while.md"
   },
   {
     "track": "javascript",
@@ -210,7 +419,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-018-break-and-continue.md",
     "contentPath": "coding/JavaScript/day-018-break-and-continue.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-018-break-and-continue.md"
+    "solutionPath": "coding/JavaScript/day-018-break-and-continue.md"
   },
   {
     "track": "javascript",
@@ -221,7 +430,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-019-nested-loops.md",
     "contentPath": "coding/JavaScript/day-019-nested-loops.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-019-nested-loops.md"
+    "solutionPath": "coding/JavaScript/day-019-nested-loops.md"
   },
   {
     "track": "javascript",
@@ -232,7 +441,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-020-number-problems.md",
     "contentPath": "coding/JavaScript/day-020-number-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-020-number-problems.md"
+    "solutionPath": "coding/JavaScript/day-020-number-problems.md"
   },
   {
     "track": "javascript",
@@ -243,7 +452,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-021-more-number-problems.md",
     "contentPath": "coding/JavaScript/day-021-more-number-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-021-more-number-problems.md"
+    "solutionPath": "coding/JavaScript/day-021-more-number-problems.md"
   },
   {
     "track": "javascript",
@@ -254,7 +463,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-022-for-of-practice.md",
     "contentPath": "coding/JavaScript/day-022-for-of-practice.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-022-for-of-practice.md"
+    "solutionPath": "coding/JavaScript/day-022-for-of-practice.md"
   },
   {
     "track": "javascript",
@@ -265,7 +474,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-023-for-in-practice.md",
     "contentPath": "coding/JavaScript/day-023-for-in-practice.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-023-for-in-practice.md"
+    "solutionPath": "coding/JavaScript/day-023-for-in-practice.md"
   },
   {
     "track": "javascript",
@@ -276,7 +485,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-024-string-problems.md",
     "contentPath": "coding/JavaScript/day-024-string-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-024-string-problems.md"
+    "solutionPath": "coding/JavaScript/day-024-string-problems.md"
   },
   {
     "track": "javascript",
@@ -287,7 +496,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-025-pattern-problems.md",
     "contentPath": "coding/JavaScript/day-025-pattern-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-025-pattern-problems.md"
+    "solutionPath": "coding/JavaScript/day-025-pattern-problems.md"
   },
   {
     "track": "javascript",
@@ -298,7 +507,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-026-problem-solving-challenge.md",
     "contentPath": "coding/JavaScript/day-026-problem-solving-challenge.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-026-problem-solving-challenge.md"
+    "solutionPath": "coding/JavaScript/day-026-problem-solving-challenge.md"
   },
   {
     "track": "javascript",
@@ -309,7 +518,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-027-module-2-assessment.md",
     "contentPath": "coding/JavaScript/day-027-module-2-assessment.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-027-module-2-assessment.md"
+    "solutionPath": "coding/JavaScript/day-027-module-2-assessment.md"
   },
   {
     "track": "javascript",
@@ -320,7 +529,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-028-string-methods.md",
     "contentPath": "coding/JavaScript/day-028-string-methods.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-028-string-methods.md"
+    "solutionPath": "coding/JavaScript/day-028-string-methods.md"
   },
   {
     "track": "javascript",
@@ -331,7 +540,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-029-string-transformation.md",
     "contentPath": "coding/JavaScript/day-029-string-transformation.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-029-string-transformation.md"
+    "solutionPath": "coding/JavaScript/day-029-string-transformation.md"
   },
   {
     "track": "javascript",
@@ -342,7 +551,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-030-string-interview-problems.md",
     "contentPath": "coding/JavaScript/day-030-string-interview-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-030-string-interview-problems.md"
+    "solutionPath": "coding/JavaScript/day-030-string-interview-problems.md"
   },
   {
     "track": "javascript",
@@ -353,7 +562,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-031-arrays-basics.md",
     "contentPath": "coding/JavaScript/day-031-arrays-basics.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-031-arrays-basics.md"
+    "solutionPath": "coding/JavaScript/day-031-arrays-basics.md"
   },
   {
     "track": "javascript",
@@ -364,7 +573,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-032-array-modification.md",
     "contentPath": "coding/JavaScript/day-032-array-modification.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-032-array-modification.md"
+    "solutionPath": "coding/JavaScript/day-032-array-modification.md"
   },
   {
     "track": "javascript",
@@ -375,7 +584,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-033-array-search.md",
     "contentPath": "coding/JavaScript/day-033-array-search.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-033-array-search.md"
+    "solutionPath": "coding/JavaScript/day-033-array-search.md"
   },
   {
     "track": "javascript",
@@ -386,7 +595,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-034-foreach.md",
     "contentPath": "coding/JavaScript/day-034-foreach.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-034-foreach.md"
+    "solutionPath": "coding/JavaScript/day-034-foreach.md"
   },
   {
     "track": "javascript",
@@ -397,7 +606,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-035-map.md",
     "contentPath": "coding/JavaScript/day-035-map.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-035-map.md"
+    "solutionPath": "coding/JavaScript/day-035-map.md"
   },
   {
     "track": "javascript",
@@ -408,7 +617,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-036-filter.md",
     "contentPath": "coding/JavaScript/day-036-filter.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-036-filter.md"
+    "solutionPath": "coding/JavaScript/day-036-filter.md"
   },
   {
     "track": "javascript",
@@ -419,7 +628,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-037-reduce.md",
     "contentPath": "coding/JavaScript/day-037-reduce.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-037-reduce.md"
+    "solutionPath": "coding/JavaScript/day-037-reduce.md"
   },
   {
     "track": "javascript",
@@ -430,7 +639,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-038-advanced-array-methods.md",
     "contentPath": "coding/JavaScript/day-038-advanced-array-methods.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-038-advanced-array-methods.md"
+    "solutionPath": "coding/JavaScript/day-038-advanced-array-methods.md"
   },
   {
     "track": "javascript",
@@ -441,7 +650,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-039-array-of-objects.md",
     "contentPath": "coding/JavaScript/day-039-array-of-objects.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-039-array-of-objects.md"
+    "solutionPath": "coding/JavaScript/day-039-array-of-objects.md"
   },
   {
     "track": "javascript",
@@ -452,7 +661,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-040-object-basics.md",
     "contentPath": "coding/JavaScript/day-040-object-basics.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-040-object-basics.md"
+    "solutionPath": "coding/JavaScript/day-040-object-basics.md"
   },
   {
     "track": "javascript",
@@ -463,7 +672,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-041-object-methods.md",
     "contentPath": "coding/JavaScript/day-041-object-methods.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-041-object-methods.md"
+    "solutionPath": "coding/JavaScript/day-041-object-methods.md"
   },
   {
     "track": "javascript",
@@ -474,7 +683,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-042-destructuring.md",
     "contentPath": "coding/JavaScript/day-042-destructuring.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-042-destructuring.md"
+    "solutionPath": "coding/JavaScript/day-042-destructuring.md"
   },
   {
     "track": "javascript",
@@ -485,7 +694,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-043-spread-and-rest.md",
     "contentPath": "coding/JavaScript/day-043-spread-and-rest.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-043-spread-and-rest.md"
+    "solutionPath": "coding/JavaScript/day-043-spread-and-rest.md"
   },
   {
     "track": "javascript",
@@ -496,7 +705,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-044-shallow-vs-deep-copy.md",
     "contentPath": "coding/JavaScript/day-044-shallow-vs-deep-copy.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-044-shallow-vs-deep-copy.md"
+    "solutionPath": "coding/JavaScript/day-044-shallow-vs-deep-copy.md"
   },
   {
     "track": "javascript",
@@ -507,7 +716,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-045-data-transformation.md",
     "contentPath": "coding/JavaScript/day-045-data-transformation.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-045-data-transformation.md"
+    "solutionPath": "coding/JavaScript/day-045-data-transformation.md"
   },
   {
     "track": "javascript",
@@ -518,7 +727,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-046-real-world-data-challenge.md",
     "contentPath": "coding/JavaScript/day-046-real-world-data-challenge.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-046-real-world-data-challenge.md"
+    "solutionPath": "coding/JavaScript/day-046-real-world-data-challenge.md"
   },
   {
     "track": "javascript",
@@ -529,7 +738,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-047-module-3-assessment.md",
     "contentPath": "coding/JavaScript/day-047-module-3-assessment.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-047-module-3-assessment.md"
+    "solutionPath": "coding/JavaScript/day-047-module-3-assessment.md"
   },
   {
     "track": "javascript",
@@ -540,7 +749,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-048-scope-practice.md",
     "contentPath": "coding/JavaScript/day-048-scope-practice.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-048-scope-practice.md"
+    "solutionPath": "coding/JavaScript/day-048-scope-practice.md"
   },
   {
     "track": "javascript",
@@ -551,7 +760,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-049-hoisting-challenges.md",
     "contentPath": "coding/JavaScript/day-049-hoisting-challenges.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-049-hoisting-challenges.md"
+    "solutionPath": "coding/JavaScript/day-049-hoisting-challenges.md"
   },
   {
     "track": "javascript",
@@ -562,7 +771,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-050-reference-vs-value.md",
     "contentPath": "coding/JavaScript/day-050-reference-vs-value.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-050-reference-vs-value.md"
+    "solutionPath": "coding/JavaScript/day-050-reference-vs-value.md"
   },
   {
     "track": "javascript",
@@ -573,7 +782,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-051-higher-order-functions.md",
     "contentPath": "coding/JavaScript/day-051-higher-order-functions.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-051-higher-order-functions.md"
+    "solutionPath": "coding/JavaScript/day-051-higher-order-functions.md"
   },
   {
     "track": "javascript",
@@ -584,7 +793,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-052-callback-functions.md",
     "contentPath": "coding/JavaScript/day-052-callback-functions.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-052-callback-functions.md"
+    "solutionPath": "coding/JavaScript/day-052-callback-functions.md"
   },
   {
     "track": "javascript",
@@ -595,7 +804,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-053-closures.md",
     "contentPath": "coding/JavaScript/day-053-closures.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-053-closures.md"
+    "solutionPath": "coding/JavaScript/day-053-closures.md"
   },
   {
     "track": "javascript",
@@ -606,7 +815,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-054-advanced-closure-problems.md",
     "contentPath": "coding/JavaScript/day-054-advanced-closure-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-054-advanced-closure-problems.md"
+    "solutionPath": "coding/JavaScript/day-054-advanced-closure-problems.md"
   },
   {
     "track": "javascript",
@@ -617,7 +826,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-055-this-keyword.md",
     "contentPath": "coding/JavaScript/day-055-this-keyword.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-055-this-keyword.md"
+    "solutionPath": "coding/JavaScript/day-055-this-keyword.md"
   },
   {
     "track": "javascript",
@@ -628,7 +837,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-056-call-apply-bind.md",
     "contentPath": "coding/JavaScript/day-056-call-apply-bind.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-056-call-apply-bind.md"
+    "solutionPath": "coding/JavaScript/day-056-call-apply-bind.md"
   },
   {
     "track": "javascript",
@@ -639,7 +848,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-057-constructor-functions.md",
     "contentPath": "coding/JavaScript/day-057-constructor-functions.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-057-constructor-functions.md"
+    "solutionPath": "coding/JavaScript/day-057-constructor-functions.md"
   },
   {
     "track": "javascript",
@@ -650,7 +859,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-058-prototype.md",
     "contentPath": "coding/JavaScript/day-058-prototype.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-058-prototype.md"
+    "solutionPath": "coding/JavaScript/day-058-prototype.md"
   },
   {
     "track": "javascript",
@@ -661,7 +870,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-059-prototype-inheritance.md",
     "contentPath": "coding/JavaScript/day-059-prototype-inheritance.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-059-prototype-inheritance.md"
+    "solutionPath": "coding/JavaScript/day-059-prototype-inheritance.md"
   },
   {
     "track": "javascript",
@@ -672,7 +881,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-060-getters-and-setters.md",
     "contentPath": "coding/JavaScript/day-060-getters-and-setters.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-060-getters-and-setters.md"
+    "solutionPath": "coding/JavaScript/day-060-getters-and-setters.md"
   },
   {
     "track": "javascript",
@@ -683,7 +892,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-061-advanced-object-challenge.md",
     "contentPath": "coding/JavaScript/day-061-advanced-object-challenge.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-061-advanced-object-challenge.md"
+    "solutionPath": "coding/JavaScript/day-061-advanced-object-challenge.md"
   },
   {
     "track": "javascript",
@@ -694,7 +903,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-062-functional-programming-practice.md",
     "contentPath": "coding/JavaScript/day-062-functional-programming-practice.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-062-functional-programming-practice.md"
+    "solutionPath": "coding/JavaScript/day-062-functional-programming-practice.md"
   },
   {
     "track": "javascript",
@@ -705,7 +914,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-063-module-4-interview-challenge.md",
     "contentPath": "coding/JavaScript/day-063-module-4-interview-challenge.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-063-module-4-interview-challenge.md"
+    "solutionPath": "coding/JavaScript/day-063-module-4-interview-challenge.md"
   },
   {
     "track": "javascript",
@@ -716,7 +925,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-064-classes.md",
     "contentPath": "coding/JavaScript/day-064-classes.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-064-classes.md"
+    "solutionPath": "coding/JavaScript/day-064-classes.md"
   },
   {
     "track": "javascript",
@@ -727,7 +936,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-065-constructors-and-methods.md",
     "contentPath": "coding/JavaScript/day-065-constructors-and-methods.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-065-constructors-and-methods.md"
+    "solutionPath": "coding/JavaScript/day-065-constructors-and-methods.md"
   },
   {
     "track": "javascript",
@@ -738,7 +947,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-066-encapsulation.md",
     "contentPath": "coding/JavaScript/day-066-encapsulation.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-066-encapsulation.md"
+    "solutionPath": "coding/JavaScript/day-066-encapsulation.md"
   },
   {
     "track": "javascript",
@@ -749,7 +958,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-067-getters-and-setters-employee-system.md",
     "contentPath": "coding/JavaScript/day-067-getters-and-setters-employee-system.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-067-getters-and-setters-employee-system.md"
+    "solutionPath": "coding/JavaScript/day-067-getters-and-setters-employee-system.md"
   },
   {
     "track": "javascript",
@@ -760,7 +969,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-068-inheritance.md",
     "contentPath": "coding/JavaScript/day-068-inheritance.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-068-inheritance.md"
+    "solutionPath": "coding/JavaScript/day-068-inheritance.md"
   },
   {
     "track": "javascript",
@@ -771,7 +980,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-069-polymorphism.md",
     "contentPath": "coding/JavaScript/day-069-polymorphism.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-069-polymorphism.md"
+    "solutionPath": "coding/JavaScript/day-069-polymorphism.md"
   },
   {
     "track": "javascript",
@@ -782,7 +991,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-070-composition.md",
     "contentPath": "coding/JavaScript/day-070-composition.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-070-composition.md"
+    "solutionPath": "coding/JavaScript/day-070-composition.md"
   },
   {
     "track": "javascript",
@@ -793,7 +1002,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-071-static-methods.md",
     "contentPath": "coding/JavaScript/day-071-static-methods.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-071-static-methods.md"
+    "solutionPath": "coding/JavaScript/day-071-static-methods.md"
   },
   {
     "track": "javascript",
@@ -804,7 +1013,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-072-set.md",
     "contentPath": "coding/JavaScript/day-072-set.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-072-set.md"
+    "solutionPath": "coding/JavaScript/day-072-set.md"
   },
   {
     "track": "javascript",
@@ -815,7 +1024,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-073-map.md",
     "contentPath": "coding/JavaScript/day-073-map.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-073-map.md"
+    "solutionPath": "coding/JavaScript/day-073-map.md"
   },
   {
     "track": "javascript",
@@ -826,7 +1035,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-074-weakmap-weakset.md",
     "contentPath": "coding/JavaScript/day-074-weakmap-weakset.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-074-weakmap-weakset.md"
+    "solutionPath": "coding/JavaScript/day-074-weakmap-weakset.md"
   },
   {
     "track": "javascript",
@@ -837,7 +1046,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-075-oop-project-shopping-cart.md",
     "contentPath": "coding/JavaScript/day-075-oop-project-shopping-cart.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-075-oop-project-shopping-cart.md"
+    "solutionPath": "coding/JavaScript/day-075-oop-project-shopping-cart.md"
   },
   {
     "track": "javascript",
@@ -848,7 +1057,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-076-module-5-assessment.md",
     "contentPath": "coding/JavaScript/day-076-module-5-assessment.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-076-module-5-assessment.md"
+    "solutionPath": "coding/JavaScript/day-076-module-5-assessment.md"
   },
   {
     "track": "javascript",
@@ -859,7 +1068,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-077-timers.md",
     "contentPath": "coding/JavaScript/day-077-timers.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-077-timers.md"
+    "solutionPath": "coding/JavaScript/day-077-timers.md"
   },
   {
     "track": "javascript",
@@ -870,7 +1079,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-078-callback-async.md",
     "contentPath": "coding/JavaScript/day-078-callback-async.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-078-callback-async.md"
+    "solutionPath": "coding/JavaScript/day-078-callback-async.md"
   },
   {
     "track": "javascript",
@@ -881,7 +1090,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-079-callback-hell.md",
     "contentPath": "coding/JavaScript/day-079-callback-hell.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-079-callback-hell.md"
+    "solutionPath": "coding/JavaScript/day-079-callback-hell.md"
   },
   {
     "track": "javascript",
@@ -892,7 +1101,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-080-promise-basics.md",
     "contentPath": "coding/JavaScript/day-080-promise-basics.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-080-promise-basics.md"
+    "solutionPath": "coding/JavaScript/day-080-promise-basics.md"
   },
   {
     "track": "javascript",
@@ -903,7 +1112,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-081-promise-chaining.md",
     "contentPath": "coding/JavaScript/day-081-promise-chaining.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-081-promise-chaining.md"
+    "solutionPath": "coding/JavaScript/day-081-promise-chaining.md"
   },
   {
     "track": "javascript",
@@ -914,7 +1123,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-082-promise-error-handling.md",
     "contentPath": "coding/JavaScript/day-082-promise-error-handling.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-082-promise-error-handling.md"
+    "solutionPath": "coding/JavaScript/day-082-promise-error-handling.md"
   },
   {
     "track": "javascript",
@@ -925,7 +1134,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-083-promise-all.md",
     "contentPath": "coding/JavaScript/day-083-promise-all.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-083-promise-all.md"
+    "solutionPath": "coding/JavaScript/day-083-promise-all.md"
   },
   {
     "track": "javascript",
@@ -936,7 +1145,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-084-promise-combinators.md",
     "contentPath": "coding/JavaScript/day-084-promise-combinators.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-084-promise-combinators.md"
+    "solutionPath": "coding/JavaScript/day-084-promise-combinators.md"
   },
   {
     "track": "javascript",
@@ -947,7 +1156,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-085-async-await.md",
     "contentPath": "coding/JavaScript/day-085-async-await.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-085-async-await.md"
+    "solutionPath": "coding/JavaScript/day-085-async-await.md"
   },
   {
     "track": "javascript",
@@ -958,7 +1167,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-086-sequential-vs-parallel.md",
     "contentPath": "coding/JavaScript/day-086-sequential-vs-parallel.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-086-sequential-vs-parallel.md"
+    "solutionPath": "coding/JavaScript/day-086-sequential-vs-parallel.md"
   },
   {
     "track": "javascript",
@@ -969,7 +1178,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-087-event-loop-challenges.md",
     "contentPath": "coding/JavaScript/day-087-event-loop-challenges.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-087-event-loop-challenges.md"
+    "solutionPath": "coding/JavaScript/day-087-event-loop-challenges.md"
   },
   {
     "track": "javascript",
@@ -980,7 +1189,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-088-fetch-api.md",
     "contentPath": "coding/JavaScript/day-088-fetch-api.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-088-fetch-api.md"
+    "solutionPath": "coding/JavaScript/day-088-fetch-api.md"
   },
   {
     "track": "javascript",
@@ -991,7 +1200,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-089-api-data-processing.md",
     "contentPath": "coding/JavaScript/day-089-api-data-processing.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-089-api-data-processing.md"
+    "solutionPath": "coding/JavaScript/day-089-api-data-processing.md"
   },
   {
     "track": "javascript",
@@ -1002,7 +1211,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-090-user-management-dashboard.md",
     "contentPath": "coding/JavaScript/day-090-user-management-dashboard.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-090-user-management-dashboard.md"
+    "solutionPath": "coding/JavaScript/day-090-user-management-dashboard.md"
   },
   {
     "track": "javascript",
@@ -1013,7 +1222,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-091-async-assessment.md",
     "contentPath": "coding/JavaScript/day-091-async-assessment.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-091-async-assessment.md"
+    "solutionPath": "coding/JavaScript/day-091-async-assessment.md"
   },
   {
     "track": "javascript",
@@ -1024,7 +1233,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-092-dom-selection.md",
     "contentPath": "coding/JavaScript/day-092-dom-selection.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-092-dom-selection.md"
+    "solutionPath": "coding/JavaScript/day-092-dom-selection.md"
   },
   {
     "track": "javascript",
@@ -1035,7 +1244,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-093-dom-manipulation.md",
     "contentPath": "coding/JavaScript/day-093-dom-manipulation.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-093-dom-manipulation.md"
+    "solutionPath": "coding/JavaScript/day-093-dom-manipulation.md"
   },
   {
     "track": "javascript",
@@ -1046,7 +1255,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-094-create-delete-dom.md",
     "contentPath": "coding/JavaScript/day-094-create-delete-dom.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-094-create-delete-dom.md"
+    "solutionPath": "coding/JavaScript/day-094-create-delete-dom.md"
   },
   {
     "track": "javascript",
@@ -1057,7 +1266,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-095-dom-events-projects.md",
     "contentPath": "coding/JavaScript/day-095-dom-events-projects.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-095-dom-events-projects.md"
+    "solutionPath": "coding/JavaScript/day-095-dom-events-projects.md"
   },
   {
     "track": "javascript",
@@ -1068,7 +1277,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-096-event-bubbling-capturing.md",
     "contentPath": "coding/JavaScript/day-096-event-bubbling-capturing.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-096-event-bubbling-capturing.md"
+    "solutionPath": "coding/JavaScript/day-096-event-bubbling-capturing.md"
   },
   {
     "track": "javascript",
@@ -1079,7 +1288,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-097-event-delegation.md",
     "contentPath": "coding/JavaScript/day-097-event-delegation.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-097-event-delegation.md"
+    "solutionPath": "coding/JavaScript/day-097-event-delegation.md"
   },
   {
     "track": "javascript",
@@ -1090,7 +1299,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-098-forms.md",
     "contentPath": "coding/JavaScript/day-098-forms.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-098-forms.md"
+    "solutionPath": "coding/JavaScript/day-098-forms.md"
   },
   {
     "track": "javascript",
@@ -1101,7 +1310,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-099-local-storage-todo-app.md",
     "contentPath": "coding/JavaScript/day-099-local-storage-todo-app.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-099-local-storage-todo-app.md"
+    "solutionPath": "coding/JavaScript/day-099-local-storage-todo-app.md"
   },
   {
     "track": "javascript",
@@ -1112,7 +1321,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-100-json-data-viewer.md",
     "contentPath": "coding/JavaScript/day-100-json-data-viewer.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-100-json-data-viewer.md"
+    "solutionPath": "coding/JavaScript/day-100-json-data-viewer.md"
   },
   {
     "track": "javascript",
@@ -1123,7 +1332,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-101-es-modules.md",
     "contentPath": "coding/JavaScript/day-101-es-modules.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-101-es-modules.md"
+    "solutionPath": "coding/JavaScript/day-101-es-modules.md"
   },
   {
     "track": "javascript",
@@ -1134,7 +1343,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-102-dynamic-import.md",
     "contentPath": "coding/JavaScript/day-102-dynamic-import.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-102-dynamic-import.md"
+    "solutionPath": "coding/JavaScript/day-102-dynamic-import.md"
   },
   {
     "track": "javascript",
@@ -1145,7 +1354,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-103-regex.md",
     "contentPath": "coding/JavaScript/day-103-regex.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-103-regex.md"
+    "solutionPath": "coding/JavaScript/day-103-regex.md"
   },
   {
     "track": "javascript",
@@ -1156,7 +1365,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-104-iterators.md",
     "contentPath": "coding/JavaScript/day-104-iterators.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-104-iterators.md"
+    "solutionPath": "coding/JavaScript/day-104-iterators.md"
   },
   {
     "track": "javascript",
@@ -1167,7 +1376,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-105-generators.md",
     "contentPath": "coding/JavaScript/day-105-generators.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-105-generators.md"
+    "solutionPath": "coding/JavaScript/day-105-generators.md"
   },
   {
     "track": "javascript",
@@ -1178,7 +1387,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-106-debounce.md",
     "contentPath": "coding/JavaScript/day-106-debounce.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-106-debounce.md"
+    "solutionPath": "coding/JavaScript/day-106-debounce.md"
   },
   {
     "track": "javascript",
@@ -1189,7 +1398,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-107-throttle.md",
     "contentPath": "coding/JavaScript/day-107-throttle.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-107-throttle.md"
+    "solutionPath": "coding/JavaScript/day-107-throttle.md"
   },
   {
     "track": "javascript",
@@ -1200,7 +1409,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-108-memory-and-performance.md",
     "contentPath": "coding/JavaScript/day-108-memory-and-performance.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-108-memory-and-performance.md"
+    "solutionPath": "coding/JavaScript/day-108-memory-and-performance.md"
   },
   {
     "track": "javascript",
@@ -1211,7 +1420,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-109-professional-javascript-challenge.md",
     "contentPath": "coding/JavaScript/day-109-professional-javascript-challenge.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-109-professional-javascript-challenge.md"
+    "solutionPath": "coding/JavaScript/day-109-professional-javascript-challenge.md"
   },
   {
     "track": "javascript",
@@ -1222,7 +1431,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-110-final-coding-challenge.md",
     "contentPath": "coding/JavaScript/day-110-final-coding-challenge.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-110-final-coding-challenge.md"
+    "solutionPath": "coding/JavaScript/day-110-final-coding-challenge.md"
   },
   {
     "track": "javascript",
@@ -1233,7 +1442,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-111-sorting-algorithms-1.md",
     "contentPath": "coding/JavaScript/day-111-sorting-algorithms-1.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-111-sorting-algorithms-1.md"
+    "solutionPath": "coding/JavaScript/day-111-sorting-algorithms-1.md"
   },
   {
     "track": "javascript",
@@ -1244,7 +1453,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-112-sorting-algorithms-2.md",
     "contentPath": "coding/JavaScript/day-112-sorting-algorithms-2.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-112-sorting-algorithms-2.md"
+    "solutionPath": "coding/JavaScript/day-112-sorting-algorithms-2.md"
   },
   {
     "track": "javascript",
@@ -1255,7 +1464,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-113-searching-algorithms.md",
     "contentPath": "coding/JavaScript/day-113-searching-algorithms.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-113-searching-algorithms.md"
+    "solutionPath": "coding/JavaScript/day-113-searching-algorithms.md"
   },
   {
     "track": "javascript",
@@ -1266,7 +1475,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-114-stack-and-queue.md",
     "contentPath": "coding/JavaScript/day-114-stack-and-queue.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-114-stack-and-queue.md"
+    "solutionPath": "coding/JavaScript/day-114-stack-and-queue.md"
   },
   {
     "track": "javascript",
@@ -1277,7 +1486,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-115-linked-list.md",
     "contentPath": "coding/JavaScript/day-115-linked-list.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-115-linked-list.md"
+    "solutionPath": "coding/JavaScript/day-115-linked-list.md"
   },
   {
     "track": "javascript",
@@ -1288,7 +1497,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-116-hash-table-and-lru-cache.md",
     "contentPath": "coding/JavaScript/day-116-hash-table-and-lru-cache.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-116-hash-table-and-lru-cache.md"
+    "solutionPath": "coding/JavaScript/day-116-hash-table-and-lru-cache.md"
   },
   {
     "track": "javascript",
@@ -1299,7 +1508,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-117-tree-and-graph-traversal.md",
     "contentPath": "coding/JavaScript/day-117-tree-and-graph-traversal.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-117-tree-and-graph-traversal.md"
+    "solutionPath": "coding/JavaScript/day-117-tree-and-graph-traversal.md"
   },
   {
     "track": "javascript",
@@ -1310,7 +1519,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-118-advanced-patterns.md",
     "contentPath": "coding/JavaScript/day-118-advanced-patterns.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-118-advanced-patterns.md"
+    "solutionPath": "coding/JavaScript/day-118-advanced-patterns.md"
   },
   {
     "track": "javascript",
@@ -1321,7 +1530,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-119-mini-projects-pack.md",
     "contentPath": "coding/JavaScript/day-119-mini-projects-pack.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-119-mini-projects-pack.md"
+    "solutionPath": "coding/JavaScript/day-119-mini-projects-pack.md"
   },
   {
     "track": "javascript",
@@ -1332,7 +1541,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-120-coding-problem-bank-arrays-and-numbers.md",
     "contentPath": "coding/JavaScript/day-120-coding-problem-bank-arrays-and-numbers.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-120-coding-problem-bank-arrays-and-numbers.md"
+    "solutionPath": "coding/JavaScript/day-120-coding-problem-bank-arrays-and-numbers.md"
   },
   {
     "track": "javascript",
@@ -1343,7 +1552,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-121-coding-problem-bank-strings-and-objects.md",
     "contentPath": "coding/JavaScript/day-121-coding-problem-bank-strings-and-objects.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-121-coding-problem-bank-strings-and-objects.md"
+    "solutionPath": "coding/JavaScript/day-121-coding-problem-bank-strings-and-objects.md"
   },
   {
     "track": "javascript",
@@ -1354,7 +1563,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-122-error-handling-and-custom-errors.md",
     "contentPath": "coding/JavaScript/day-122-error-handling-and-custom-errors.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-122-error-handling-and-custom-errors.md"
+    "solutionPath": "coding/JavaScript/day-122-error-handling-and-custom-errors.md"
   },
   {
     "track": "javascript",
@@ -1365,7 +1574,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-123-date-and-time.md",
     "contentPath": "coding/JavaScript/day-123-date-and-time.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-123-date-and-time.md"
+    "solutionPath": "coding/JavaScript/day-123-date-and-time.md"
   },
   {
     "track": "javascript",
@@ -1376,7 +1585,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-124-symbol-bigint-modern-operators.md",
     "contentPath": "coding/JavaScript/day-124-symbol-bigint-modern-operators.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-124-symbol-bigint-modern-operators.md"
+    "solutionPath": "coding/JavaScript/day-124-symbol-bigint-modern-operators.md"
   },
   {
     "track": "javascript",
@@ -1387,7 +1596,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-125-proxy-reflect-and-property-descriptors.md",
     "contentPath": "coding/JavaScript/day-125-proxy-reflect-and-property-descriptors.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-125-proxy-reflect-and-property-descriptors.md"
+    "solutionPath": "coding/JavaScript/day-125-proxy-reflect-and-property-descriptors.md"
   },
   {
     "track": "javascript",
@@ -1398,7 +1607,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-126-event-loop-deep-dive.md",
     "contentPath": "coding/JavaScript/day-126-event-loop-deep-dive.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-126-event-loop-deep-dive.md"
+    "solutionPath": "coding/JavaScript/day-126-event-loop-deep-dive.md"
   },
   {
     "track": "javascript",
@@ -1409,7 +1618,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-127-memory-management-and-garbage-collection.md",
     "contentPath": "coding/JavaScript/day-127-memory-management-and-garbage-collection.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-127-memory-management-and-garbage-collection.md"
+    "solutionPath": "coding/JavaScript/day-127-memory-management-and-garbage-collection.md"
   },
   {
     "track": "javascript",
@@ -1420,7 +1629,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-128-javascript-modules-deep-dive.md",
     "contentPath": "coding/JavaScript/day-128-javascript-modules-deep-dive.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-128-javascript-modules-deep-dive.md"
+    "solutionPath": "coding/JavaScript/day-128-javascript-modules-deep-dive.md"
   },
   {
     "track": "javascript",
@@ -1431,7 +1640,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-129-web-workers-and-background-processing.md",
     "contentPath": "coding/JavaScript/day-129-web-workers-and-background-processing.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-129-web-workers-and-background-processing.md"
+    "solutionPath": "coding/JavaScript/day-129-web-workers-and-background-processing.md"
   },
   {
     "track": "javascript",
@@ -1442,7 +1651,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-130-browser-web-apis.md",
     "contentPath": "coding/JavaScript/day-130-browser-web-apis.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-130-browser-web-apis.md"
+    "solutionPath": "coding/JavaScript/day-130-browser-web-apis.md"
   },
   {
     "track": "javascript",
@@ -1453,7 +1662,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-131-web-storage-and-indexeddb.md",
     "contentPath": "coding/JavaScript/day-131-web-storage-and-indexeddb.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-131-web-storage-and-indexeddb.md"
+    "solutionPath": "coding/JavaScript/day-131-web-storage-and-indexeddb.md"
   },
   {
     "track": "javascript",
@@ -1464,7 +1673,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-132-frontend-security.md",
     "contentPath": "coding/JavaScript/day-132-frontend-security.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-132-frontend-security.md"
+    "solutionPath": "coding/JavaScript/day-132-frontend-security.md"
   },
   {
     "track": "javascript",
@@ -1475,7 +1684,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-133-javascript-performance-and-optimization.md",
     "contentPath": "coding/JavaScript/day-133-javascript-performance-and-optimization.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-133-javascript-performance-and-optimization.md"
+    "solutionPath": "coding/JavaScript/day-133-javascript-performance-and-optimization.md"
   },
   {
     "track": "javascript",
@@ -1486,7 +1695,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-134-internationalization.md",
     "contentPath": "coding/JavaScript/day-134-internationalization.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScript/solutions/day-134-internationalization.md"
+    "solutionPath": "coding/JavaScript/day-134-internationalization.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1497,7 +1706,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-001-browser-fundamentals.md",
     "contentPath": "coding/JavaScriptBrowser/day-001-browser-fundamentals.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-001-browser-fundamentals.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-001-browser-fundamentals.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1508,7 +1717,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-002-dom-deep-dive.md",
     "contentPath": "coding/JavaScriptBrowser/day-002-dom-deep-dive.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-002-dom-deep-dive.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-002-dom-deep-dive.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1519,7 +1728,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-003-events-and-event-delegation.md",
     "contentPath": "coding/JavaScriptBrowser/day-003-events-and-event-delegation.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-003-events-and-event-delegation.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-003-events-and-event-delegation.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1530,7 +1739,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-004-browser-rendering-pipeline.md",
     "contentPath": "coding/JavaScriptBrowser/day-004-browser-rendering-pipeline.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-004-browser-rendering-pipeline.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-004-browser-rendering-pipeline.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1541,7 +1750,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-005-browser-storage-and-cookies.md",
     "contentPath": "coding/JavaScriptBrowser/day-005-browser-storage-and-cookies.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-005-browser-storage-and-cookies.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-005-browser-storage-and-cookies.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1552,7 +1761,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-006-network-http-cors-cache.md",
     "contentPath": "coding/JavaScriptBrowser/day-006-network-http-cors-cache.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-006-network-http-cors-cache.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-006-network-http-cors-cache.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1563,7 +1772,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-007-browser-performance-and-core-web-vitals.md",
     "contentPath": "coding/JavaScriptBrowser/day-007-browser-performance-and-core-web-vitals.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-007-browser-performance-and-core-web-vitals.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-007-browser-performance-and-core-web-vitals.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1574,7 +1783,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-008-workers-and-service-workers.md",
     "contentPath": "coding/JavaScriptBrowser/day-008-workers-and-service-workers.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-008-workers-and-service-workers.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-008-workers-and-service-workers.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1585,7 +1794,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-009-websockets-and-realtime-browser-apps.md",
     "contentPath": "coding/JavaScriptBrowser/day-009-websockets-and-realtime-browser-apps.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-009-websockets-and-realtime-browser-apps.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-009-websockets-and-realtime-browser-apps.md"
   },
   {
     "track": "javascriptbrowser",
@@ -1596,7 +1805,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-010-browser-interview-question-bank.md",
     "contentPath": "coding/JavaScriptBrowser/day-010-browser-interview-question-bank.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptBrowser/solutions/day-010-browser-interview-question-bank.md"
+    "solutionPath": "coding/JavaScriptBrowser/day-010-browser-interview-question-bank.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1607,7 +1816,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-001-javascript-core-revision.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-001-javascript-core-revision.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-001-javascript-core-revision.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-001-javascript-core-revision.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1618,7 +1827,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-002-functions-closures-this.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-002-functions-closures-this.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-002-functions-closures-this.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-002-functions-closures-this.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1629,7 +1838,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-003-objects-prototypes-classes.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-003-objects-prototypes-classes.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-003-objects-prototypes-classes.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-003-objects-prototypes-classes.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1640,7 +1849,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-004-arrays-strings-map-set.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-004-arrays-strings-map-set.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-004-arrays-strings-map-set.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-004-arrays-strings-map-set.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1651,7 +1860,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-005-async-promises-event-loop.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-005-async-promises-event-loop.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-005-async-promises-event-loop.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-005-async-promises-event-loop.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1662,7 +1871,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-006-browser-dom-events.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-006-browser-dom-events.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-006-browser-dom-events.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-006-browser-dom-events.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1673,7 +1882,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-007-storage-network-security.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-007-storage-network-security.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-007-storage-network-security.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-007-storage-network-security.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1684,7 +1893,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-008-performance-web-apis.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-008-performance-web-apis.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-008-performance-web-apis.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-008-performance-web-apis.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1695,7 +1904,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-009-typescript-revision.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-009-typescript-revision.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-009-typescript-revision.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-009-typescript-revision.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1706,7 +1915,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-010-machine-coding-revision.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-010-machine-coding-revision.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-010-machine-coding-revision.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-010-machine-coding-revision.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1717,7 +1926,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-011-problem-solving-patterns.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-011-problem-solving-patterns.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-011-problem-solving-patterns.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-011-problem-solving-patterns.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1728,7 +1937,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-012-frontend-debugging-scenarios.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-012-frontend-debugging-scenarios.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-012-frontend-debugging-scenarios.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-012-frontend-debugging-scenarios.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1739,7 +1948,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-013-senior-javascript-revision.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-013-senior-javascript-revision.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-013-senior-javascript-revision.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-013-senior-javascript-revision.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1750,7 +1959,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-014-frontend-system-design.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-014-frontend-system-design.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-014-frontend-system-design.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-014-frontend-system-design.md"
   },
   {
     "track": "javascriptinterviewrevision",
@@ -1761,7 +1970,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-015-final-interview-pack.md",
     "contentPath": "coding/JavaScriptInterviewRevision/day-015-final-interview-pack.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptInterviewRevision/solutions/day-015-final-interview-pack.md"
+    "solutionPath": "coding/JavaScriptInterviewRevision/day-015-final-interview-pack.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1772,7 +1981,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-001-machine-coding-fundamentals.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-001-machine-coding-fundamentals.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-001-machine-coding-fundamentals.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-001-machine-coding-fundamentals.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1783,7 +1992,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-002-todo-app.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-002-todo-app.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-002-todo-app.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-002-todo-app.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1794,7 +2003,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-003-counter-timer.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-003-counter-timer.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-003-counter-timer.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-003-counter-timer.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1805,7 +2014,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-004-search-autocomplete.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-004-search-autocomplete.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-004-search-autocomplete.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-004-search-autocomplete.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1816,7 +2025,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-005-pagination-data-table.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-005-pagination-data-table.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-005-pagination-data-table.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-005-pagination-data-table.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1827,7 +2036,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-006-tabs-accordion.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-006-tabs-accordion.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-006-tabs-accordion.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-006-tabs-accordion.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1838,7 +2047,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-007-modal-dialog.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-007-modal-dialog.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-007-modal-dialog.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-007-modal-dialog.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1849,7 +2058,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-008-dropdown-select.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-008-dropdown-select.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-008-dropdown-select.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-008-dropdown-select.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1860,7 +2069,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-009-form-builder.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-009-form-builder.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-009-form-builder.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-009-form-builder.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1871,7 +2080,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-010-file-upload.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-010-file-upload.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-010-file-upload.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-010-file-upload.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1882,7 +2091,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-011-infinite-scroll.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-011-infinite-scroll.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-011-infinite-scroll.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-011-infinite-scroll.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1893,7 +2102,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-012-kanban-board.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-012-kanban-board.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-012-kanban-board.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-012-kanban-board.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1904,7 +2113,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-013-nested-comments.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-013-nested-comments.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-013-nested-comments.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-013-nested-comments.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1915,7 +2124,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-014-file-explorer.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-014-file-explorer.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-014-file-explorer.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-014-file-explorer.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1926,7 +2135,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-015-shopping-cart.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-015-shopping-cart.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-015-shopping-cart.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-015-shopping-cart.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1937,7 +2146,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-016-chat-ui.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-016-chat-ui.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-016-chat-ui.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-016-chat-ui.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1948,7 +2157,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-017-notification-system.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-017-notification-system.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-017-notification-system.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-017-notification-system.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1959,7 +2168,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-018-image-gallery.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-018-image-gallery.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-018-image-gallery.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-018-image-gallery.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1970,7 +2179,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-019-dashboard-widgets.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-019-dashboard-widgets.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-019-dashboard-widgets.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-019-dashboard-widgets.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1981,7 +2190,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-020-undo-redo-editor.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-020-undo-redo-editor.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-020-undo-redo-editor.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-020-undo-redo-editor.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -1992,7 +2201,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-021-autocomplete-command-palette.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-021-autocomplete-command-palette.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-021-autocomplete-command-palette.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-021-autocomplete-command-palette.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -2003,7 +2212,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-022-virtualized-list.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-022-virtualized-list.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-022-virtualized-list.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-022-virtualized-list.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -2014,7 +2223,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-023-realtime-dashboard.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-023-realtime-dashboard.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-023-realtime-dashboard.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-023-realtime-dashboard.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -2025,7 +2234,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-024-senior-machine-coding.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-024-senior-machine-coding.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-024-senior-machine-coding.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-024-senior-machine-coding.md"
   },
   {
     "track": "javascriptmachinecoding",
@@ -2036,7 +2245,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-025-final-machine-coding-pack.md",
     "contentPath": "coding/JavaScriptMachineCoding/day-025-final-machine-coding-pack.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptMachineCoding/solutions/day-025-final-machine-coding-pack.md"
+    "solutionPath": "coding/JavaScriptMachineCoding/day-025-final-machine-coding-pack.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2047,7 +2256,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-001-javascript-interview-problem-solving.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-001-javascript-interview-problem-solving.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-001-javascript-interview-problem-solving.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-001-javascript-interview-problem-solving.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2058,7 +2267,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-002-beginner-problem-solving.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-002-beginner-problem-solving.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-002-beginner-problem-solving.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-002-beginner-problem-solving.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2069,7 +2278,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-003-strings-patterns.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-003-strings-patterns.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-003-strings-patterns.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-003-strings-patterns.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2080,7 +2289,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-004-arrays-hashing.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-004-arrays-hashing.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-004-arrays-hashing.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-004-arrays-hashing.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2091,7 +2300,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-005-two-pointers.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-005-two-pointers.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-005-two-pointers.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-005-two-pointers.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2102,7 +2311,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-006-sliding-window.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-006-sliding-window.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-006-sliding-window.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-006-sliding-window.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2113,7 +2322,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-007-recursion-backtracking.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-007-recursion-backtracking.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-007-recursion-backtracking.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-007-recursion-backtracking.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2124,7 +2333,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-008-stack-queue.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-008-stack-queue.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-008-stack-queue.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-008-stack-queue.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2135,7 +2344,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-009-linked-list.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-009-linked-list.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-009-linked-list.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-009-linked-list.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2146,7 +2355,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-010-binary-search.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-010-binary-search.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-010-binary-search.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-010-binary-search.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2157,7 +2366,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-011-sorting-searching.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-011-sorting-searching.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-011-sorting-searching.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-011-sorting-searching.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2168,7 +2377,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-012-trees-bst.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-012-trees-bst.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-012-trees-bst.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-012-trees-bst.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2179,7 +2388,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-013-heap-priority-queue.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-013-heap-priority-queue.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-013-heap-priority-queue.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-013-heap-priority-queue.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2190,7 +2399,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-014-graphs.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-014-graphs.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-014-graphs.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-014-graphs.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2201,7 +2410,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-015-greedy.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-015-greedy.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-015-greedy.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-015-greedy.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2212,7 +2421,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-016-dynamic-programming.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-016-dynamic-programming.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-016-dynamic-programming.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-016-dynamic-programming.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2223,7 +2432,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-017-advanced-data-structures.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-017-advanced-data-structures.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-017-advanced-data-structures.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-017-advanced-data-structures.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2234,7 +2443,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-018-advanced-javascript.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-018-advanced-javascript.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-018-advanced-javascript.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-018-advanced-javascript.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2245,7 +2454,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-019-async-browser.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-019-async-browser.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-019-async-browser.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-019-async-browser.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2256,7 +2465,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-020-real-world-frontend.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-020-real-world-frontend.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-020-real-world-frontend.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-020-real-world-frontend.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2267,7 +2476,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-021-senior-javascript.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-021-senior-javascript.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-021-senior-javascript.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-021-senior-javascript.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2278,7 +2487,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-022-frontend-system-design.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-022-frontend-system-design.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-022-frontend-system-design.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-022-frontend-system-design.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2289,7 +2498,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-023-performance-optimization.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-023-performance-optimization.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-023-performance-optimization.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-023-performance-optimization.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2300,7 +2509,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-024-senior-10-year.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-024-senior-10-year.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-024-senior-10-year.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-024-senior-10-year.md"
   },
   {
     "track": "javascriptproblemsolving",
@@ -2311,73 +2520,73 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-025-final-interview-pack.md",
     "contentPath": "coding/JavaScriptProblemSolving/day-025-final-interview-pack.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptProblemSolving/solutions/day-025-final-interview-pack.md"
+    "solutionPath": "coding/JavaScriptProblemSolving/day-025-final-interview-pack.md"
   },
   {
     "track": "javascriptrealinterview",
     "slug": "day-001-array-string-problems",
     "dayLabel": "Day 1",
-    "title": "Array String Problems",
+    "title": "Array & String — Detailed Solutions",
     "order": 1,
     "fileName": "day-001-array-string-problems.md",
     "contentPath": "coding/JavaScriptRealInterview/day-001-array-string-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-001-array-string-problems.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-001-array-string-problems.md"
   },
   {
     "track": "javascriptrealinterview",
     "slug": "day-002-output-and-language-questions",
     "dayLabel": "Day 2",
-    "title": "Output And Language Questions",
+    "title": "Output & Language — Detailed Solutions",
     "order": 2,
     "fileName": "day-002-output-and-language-questions.md",
     "contentPath": "coding/JavaScriptRealInterview/day-002-output-and-language-questions.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-002-output-and-language-questions.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-002-output-and-language-questions.md"
   },
   {
     "track": "javascriptrealinterview",
     "slug": "day-003-polyfills-and-core-apis",
     "dayLabel": "Day 3",
-    "title": "Polyfills And Core Apis",
+    "title": "Polyfills & Core APIs — Detailed Solutions",
     "order": 3,
     "fileName": "day-003-polyfills-and-core-apis.md",
     "contentPath": "coding/JavaScriptRealInterview/day-003-polyfills-and-core-apis.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-003-polyfills-and-core-apis.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-003-polyfills-and-core-apis.md"
   },
   {
     "track": "javascriptrealinterview",
     "slug": "day-004-practical-dom-async",
     "dayLabel": "Day 4",
-    "title": "Practical Dom Async",
+    "title": "DOM & Async — Detailed Solutions",
     "order": 4,
     "fileName": "day-004-practical-dom-async.md",
     "contentPath": "coding/JavaScriptRealInterview/day-004-practical-dom-async.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-004-practical-dom-async.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-004-practical-dom-async.md"
   },
   {
     "track": "javascriptrealinterview",
     "slug": "day-005-company-style-challenges",
     "dayLabel": "Day 5",
-    "title": "Company Style Challenges",
+    "title": "Company-Style Challenges — Detailed Solutions",
     "order": 5,
     "fileName": "day-005-company-style-challenges.md",
     "contentPath": "coding/JavaScriptRealInterview/day-005-company-style-challenges.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-005-company-style-challenges.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-005-company-style-challenges.md"
   },
   {
     "track": "javascriptrealinterview",
     "slug": "day-006-100-plus-question-bank",
     "dayLabel": "Day 6",
-    "title": "100 Plus Question Bank",
+    "title": "100+ Question Bank — Detailed Solutions",
     "order": 6,
     "fileName": "day-006-100-plus-question-bank.md",
     "contentPath": "coding/JavaScriptRealInterview/day-006-100-plus-question-bank.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-006-100-plus-question-bank.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-006-100-plus-question-bank.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2388,7 +2597,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-007-coding-problem-bank-arrays-and-numbers.md",
     "contentPath": "coding/JavaScriptRealInterview/day-007-coding-problem-bank-arrays-and-numbers.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-007-coding-problem-bank-arrays-and-numbers.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-007-coding-problem-bank-arrays-and-numbers.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2399,7 +2608,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-008-coding-problem-bank-strings-and-objects.md",
     "contentPath": "coding/JavaScriptRealInterview/day-008-coding-problem-bank-strings-and-objects.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-008-coding-problem-bank-strings-and-objects.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-008-coding-problem-bank-strings-and-objects.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2410,7 +2619,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-009-big-mnc-google-meta-amazon-microsoft.md",
     "contentPath": "coding/JavaScriptRealInterview/day-009-big-mnc-google-meta-amazon-microsoft.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-009-big-mnc-google-meta-amazon-microsoft.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-009-big-mnc-google-meta-amazon-microsoft.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2421,7 +2630,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-010-big-mnc-apple-netflix-uber-linkedin.md",
     "contentPath": "coding/JavaScriptRealInterview/day-010-big-mnc-apple-netflix-uber-linkedin.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-010-big-mnc-apple-netflix-uber-linkedin.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-010-big-mnc-apple-netflix-uber-linkedin.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2432,7 +2641,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-011-big-mnc-adobe-atlassian-paypal-stripe.md",
     "contentPath": "coding/JavaScriptRealInterview/day-011-big-mnc-adobe-atlassian-paypal-stripe.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-011-big-mnc-adobe-atlassian-paypal-stripe.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-011-big-mnc-adobe-atlassian-paypal-stripe.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2443,7 +2652,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-012-big-mnc-canva-airbnb-shopify-pinterest.md",
     "contentPath": "coding/JavaScriptRealInterview/day-012-big-mnc-canva-airbnb-shopify-pinterest.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-012-big-mnc-canva-airbnb-shopify-pinterest.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-012-big-mnc-canva-airbnb-shopify-pinterest.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2454,7 +2663,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-013-big-mnc-discord-coinbase-figma-lyft.md",
     "contentPath": "coding/JavaScriptRealInterview/day-013-big-mnc-discord-coinbase-figma-lyft.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-013-big-mnc-discord-coinbase-figma-lyft.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-013-big-mnc-discord-coinbase-figma-lyft.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2465,7 +2674,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-014-big-mnc-openai-microsoft-bloomberg-walmart.md",
     "contentPath": "coding/JavaScriptRealInterview/day-014-big-mnc-openai-microsoft-bloomberg-walmart.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-014-big-mnc-openai-microsoft-bloomberg-walmart.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-014-big-mnc-openai-microsoft-bloomberg-walmart.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2476,7 +2685,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-015-big-mnc-snap-snowflake-databricks-robinhood.md",
     "contentPath": "coding/JavaScriptRealInterview/day-015-big-mnc-snap-snowflake-databricks-robinhood.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-015-big-mnc-snap-snowflake-databricks-robinhood.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-015-big-mnc-snap-snowflake-databricks-robinhood.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2487,7 +2696,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-016-big-mnc-dropbox-roblox-palantir-rippling.md",
     "contentPath": "coding/JavaScriptRealInterview/day-016-big-mnc-dropbox-roblox-palantir-rippling.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-016-big-mnc-dropbox-roblox-palantir-rippling.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-016-big-mnc-dropbox-roblox-palantir-rippling.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2498,7 +2707,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-017-big-mnc-ramp-anthropic.md",
     "contentPath": "coding/JavaScriptRealInterview/day-017-big-mnc-ramp-anthropic.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-017-big-mnc-ramp-anthropic.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-017-big-mnc-ramp-anthropic.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2509,7 +2718,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-018-big-mnc-tiktok-bytedance.md",
     "contentPath": "coding/JavaScriptRealInterview/day-018-big-mnc-tiktok-bytedance.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-018-big-mnc-tiktok-bytedance.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-018-big-mnc-tiktok-bytedance.md"
   },
   {
     "track": "javascriptrealinterview",
@@ -2520,7 +2729,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-019-complete-company-interview-roadmap.md",
     "contentPath": "coding/JavaScriptRealInterview/day-019-complete-company-interview-roadmap.md",
     "hasSolution": true,
-    "solutionPath": "coding/JavaScriptRealInterview/solutions/day-019-complete-company-interview-roadmap.md"
+    "solutionPath": "coding/JavaScriptRealInterview/day-019-complete-company-interview-roadmap.md"
   },
   {
     "track": "typescript",
@@ -2531,7 +2740,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-001-typescript-fundamentals.md",
     "contentPath": "coding/TypeScript/day-001-typescript-fundamentals.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-001-typescript-fundamentals.md"
+    "solutionPath": "coding/TypeScript/day-001-typescript-fundamentals.md"
   },
   {
     "track": "typescript",
@@ -2542,7 +2751,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-002-types-and-type-system.md",
     "contentPath": "coding/TypeScript/day-002-types-and-type-system.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-002-types-and-type-system.md"
+    "solutionPath": "coding/TypeScript/day-002-types-and-type-system.md"
   },
   {
     "track": "typescript",
@@ -2553,7 +2762,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-003-interfaces.md",
     "contentPath": "coding/TypeScript/day-003-interfaces.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-003-interfaces.md"
+    "solutionPath": "coding/TypeScript/day-003-interfaces.md"
   },
   {
     "track": "typescript",
@@ -2564,7 +2773,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-004-functions.md",
     "contentPath": "coding/TypeScript/day-004-functions.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-004-functions.md"
+    "solutionPath": "coding/TypeScript/day-004-functions.md"
   },
   {
     "track": "typescript",
@@ -2575,7 +2784,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-005-classes-and-oop.md",
     "contentPath": "coding/TypeScript/day-005-classes-and-oop.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-005-classes-and-oop.md"
+    "solutionPath": "coding/TypeScript/day-005-classes-and-oop.md"
   },
   {
     "track": "typescript",
@@ -2586,7 +2795,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-006-generics.md",
     "contentPath": "coding/TypeScript/day-006-generics.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-006-generics.md"
+    "solutionPath": "coding/TypeScript/day-006-generics.md"
   },
   {
     "track": "typescript",
@@ -2597,7 +2806,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-007-utility-types.md",
     "contentPath": "coding/TypeScript/day-007-utility-types.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-007-utility-types.md"
+    "solutionPath": "coding/TypeScript/day-007-utility-types.md"
   },
   {
     "track": "typescript",
@@ -2608,7 +2817,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-008-type-guards.md",
     "contentPath": "coding/TypeScript/day-008-type-guards.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-008-type-guards.md"
+    "solutionPath": "coding/TypeScript/day-008-type-guards.md"
   },
   {
     "track": "typescript",
@@ -2619,7 +2828,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-009-keyof-and-indexed-access.md",
     "contentPath": "coding/TypeScript/day-009-keyof-and-indexed-access.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-009-keyof-and-indexed-access.md"
+    "solutionPath": "coding/TypeScript/day-009-keyof-and-indexed-access.md"
   },
   {
     "track": "typescript",
@@ -2630,7 +2839,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-010-typeof-and-const-assertions.md",
     "contentPath": "coding/TypeScript/day-010-typeof-and-const-assertions.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-010-typeof-and-const-assertions.md"
+    "solutionPath": "coding/TypeScript/day-010-typeof-and-const-assertions.md"
   },
   {
     "track": "typescript",
@@ -2641,7 +2850,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-011-advanced-types.md",
     "contentPath": "coding/TypeScript/day-011-advanced-types.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-011-advanced-types.md"
+    "solutionPath": "coding/TypeScript/day-011-advanced-types.md"
   },
   {
     "track": "typescript",
@@ -2652,7 +2861,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-012-conditional-types.md",
     "contentPath": "coding/TypeScript/day-012-conditional-types.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-012-conditional-types.md"
+    "solutionPath": "coding/TypeScript/day-012-conditional-types.md"
   },
   {
     "track": "typescript",
@@ -2663,7 +2872,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-013-mapped-types.md",
     "contentPath": "coding/TypeScript/day-013-mapped-types.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-013-mapped-types.md"
+    "solutionPath": "coding/TypeScript/day-013-mapped-types.md"
   },
   {
     "track": "typescript",
@@ -2674,7 +2883,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-014-infer.md",
     "contentPath": "coding/TypeScript/day-014-infer.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-014-infer.md"
+    "solutionPath": "coding/TypeScript/day-014-infer.md"
   },
   {
     "track": "typescript",
@@ -2685,7 +2894,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-015-template-literal-types.md",
     "contentPath": "coding/TypeScript/day-015-template-literal-types.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-015-template-literal-types.md"
+    "solutionPath": "coding/TypeScript/day-015-template-literal-types.md"
   },
   {
     "track": "typescript",
@@ -2696,7 +2905,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-016-modules.md",
     "contentPath": "coding/TypeScript/day-016-modules.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-016-modules.md"
+    "solutionPath": "coding/TypeScript/day-016-modules.md"
   },
   {
     "track": "typescript",
@@ -2707,7 +2916,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-017-declaration-files.md",
     "contentPath": "coding/TypeScript/day-017-declaration-files.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-017-declaration-files.md"
+    "solutionPath": "coding/TypeScript/day-017-declaration-files.md"
   },
   {
     "track": "typescript",
@@ -2718,7 +2927,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-018-decorators.md",
     "contentPath": "coding/TypeScript/day-018-decorators.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-018-decorators.md"
+    "solutionPath": "coding/TypeScript/day-018-decorators.md"
   },
   {
     "track": "typescript",
@@ -2729,7 +2938,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-019-typescript-and-javascript.md",
     "contentPath": "coding/TypeScript/day-019-typescript-and-javascript.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-019-typescript-and-javascript.md"
+    "solutionPath": "coding/TypeScript/day-019-typescript-and-javascript.md"
   },
   {
     "track": "typescript",
@@ -2740,7 +2949,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-020-tsconfig.md",
     "contentPath": "coding/TypeScript/day-020-tsconfig.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-020-tsconfig.md"
+    "solutionPath": "coding/TypeScript/day-020-tsconfig.md"
   },
   {
     "track": "typescript",
@@ -2751,7 +2960,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-021-advanced-interview-problems.md",
     "contentPath": "coding/TypeScript/day-021-advanced-interview-problems.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-021-advanced-interview-problems.md"
+    "solutionPath": "coding/TypeScript/day-021-advanced-interview-problems.md"
   },
   {
     "track": "typescript",
@@ -2762,7 +2971,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-022-angular-typescript.md",
     "contentPath": "coding/TypeScript/day-022-angular-typescript.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-022-angular-typescript.md"
+    "solutionPath": "coding/TypeScript/day-022-angular-typescript.md"
   },
   {
     "track": "typescript",
@@ -2773,7 +2982,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-023-typescript-api-design.md",
     "contentPath": "coding/TypeScript/day-023-typescript-api-design.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-023-typescript-api-design.md"
+    "solutionPath": "coding/TypeScript/day-023-typescript-api-design.md"
   },
   {
     "track": "typescript",
@@ -2784,7 +2993,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-024-typescript-performance-and-maintainability.md",
     "contentPath": "coding/TypeScript/day-024-typescript-performance-and-maintainability.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-024-typescript-performance-and-maintainability.md"
+    "solutionPath": "coding/TypeScript/day-024-typescript-performance-and-maintainability.md"
   },
   {
     "track": "typescript",
@@ -2795,7 +3004,7 @@ export const codingLessons: CodingLessonMeta[] = [
     "fileName": "day-025-typescript-final-interview-pack.md",
     "contentPath": "coding/TypeScript/day-025-typescript-final-interview-pack.md",
     "hasSolution": true,
-    "solutionPath": "coding/TypeScript/solutions/day-025-typescript-final-interview-pack.md"
+    "solutionPath": "coding/TypeScript/day-025-typescript-final-interview-pack.md"
   }
 ];
 

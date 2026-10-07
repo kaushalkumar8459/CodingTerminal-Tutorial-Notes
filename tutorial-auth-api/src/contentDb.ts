@@ -4,6 +4,15 @@ import { getLessonCollectionName, resolveLanguageFromTrack } from "./config.js";
 
 export type LessonLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
+export type CodingQuestionAnswer = {
+  id: string;
+  order: number;
+  number: number;
+  section: string;
+  promptMarkdown: string;
+  answerMarkdown: string;
+};
+
 export type TutorialLessonDocument = {
   _id?: ObjectId;
   language: string;
@@ -17,8 +26,10 @@ export type TutorialLessonDocument = {
   moduleNumber: number;
   moduleSlug: string;
   contentPath: string;
-  body: string;
+  body?: string;
+  contextMarkdown?: string;
   solutionBody?: string;
+  questions?: CodingQuestionAnswer[];
   youtubeVideos: Array<{ title: string; url: string; description?: string }>;
   createdAt: Date;
   updatedAt: Date;

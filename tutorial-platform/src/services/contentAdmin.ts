@@ -1,4 +1,5 @@
 import type { TutorialMeta, TutorialVideo } from "../types/tutorial";
+import type { CodingQuestionAnswer } from "../types/codingQuestionAnswer";
 
 export type TutorialDocument = {
   title: string;
@@ -212,10 +213,14 @@ export async function fetchLessonsSummaryByTrack(track: string): Promise<LessonS
   }));
 }
 
-export async function loadCodingLessonMarkdown(
+export async function loadCodingLessonPair(
   lesson: { track: string; slug: string },
-  mode: "practice" | "solution",
-): Promise<string> {
+): Promise<{
+  practice: string;
+  contextMarkdown: string;
+  solution: string;
+  questions: CodingQuestionAnswer[];
+}> {
   if (!contentApiBaseUrl) {
     throw new Error("VITE_CONTENT_API_BASE_URL is not configured.");
   }
@@ -228,13 +233,36 @@ export async function loadCodingLessonMarkdown(
   }
 
   const payload = (await response.json()) as {
-    lesson?: { body?: string; solutionBody?: string } | null;
+    lesson?: {
+      body?: string;
+      contextMarkdown?: string;
+      solutionBody?: string;
+      questions?: CodingQuestionAnswer[];
+    } | null;
   };
-  const markdown = mode === "solution"
-    ? payload.lesson?.solutionBody
-    : payload.lesson?.body;
+  const practice = payload.lesson?.body ?? "";
+  const questions = Array.isArray(payload.lesson?.questions) ? payload.lesson.questions : [];
 
-  if (!markdown?.trim()) {
+  if (!practice.trim() && questions.length === 0) {
+    throw new Error(`No practice content found in the backend for ${lesson.slug}.`);
+  }
+
+  return {
+    practice,
+    contextMarkdown: payload.lesson?.contextMarkdown ?? "",
+    solution: payload.lesson?.solutionBody ?? "",
+    questions,
+  };
+}
+
+export async function loadCodingLessonMarkdown(
+  lesson: { track: string; slug: string },
+  mode: "practice" | "solution",
+): Promise<string> {
+  const content = await loadCodingLessonPair(lesson);
+  const markdown = mode === "solution" ? content.solution : content.practice;
+
+  if (!markdown.trim()) {
     throw new Error(`No ${mode} content found in the backend for ${lesson.slug}.`);
   }
 

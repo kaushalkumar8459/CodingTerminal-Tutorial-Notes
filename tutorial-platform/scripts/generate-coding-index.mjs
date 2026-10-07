@@ -5,6 +5,7 @@ const rootDir = process.cwd();
 const codingRoot = path.join(rootDir, "public", "coding");
 const outputFile = path.join(rootDir, "src", "data", "codingLessons.ts");
 const dayFilePattern = /^day-(\d{3})-.+\.md$/i;
+const embeddedSolutionMarker = "<!-- codingterminal-solution:start -->";
 
 function toPosixPath(input) {
   return input.replaceAll("\\", "/");
@@ -49,6 +50,10 @@ async function buildIndex() {
     }
 
     const track = trackKeyFromFolder(folder.name);
+    if (track === "angularinterview") {
+      continue;
+    }
+
     const folderPath = path.join(codingRoot, folder.name);
     const files = await fs.readdir(folderPath, { withFileTypes: true });
 
@@ -62,8 +67,16 @@ async function buildIndex() {
       const slug = file.name.replace(/\.md$/i, "");
       const filePath = path.join(folderPath, file.name);
       const title = await extractTitle(filePath, slug);
+      const markdown = await fs.readFile(filePath, "utf8");
       const solutionFilePath = path.join(folderPath, "solutions", file.name);
-      const hasSolution = await fileExists(solutionFilePath);
+      const hasSeparateSolution = await fileExists(solutionFilePath);
+      const hasEmbeddedSolution = markdown.includes(embeddedSolutionMarker);
+      const hasSolution = hasSeparateSolution || hasEmbeddedSolution;
+      const solutionPath = hasSeparateSolution
+        ? toPosixPath(path.join("coding", folder.name, "solutions", file.name))
+        : hasEmbeddedSolution
+          ? toPosixPath(path.join("coding", folder.name, file.name))
+          : null;
 
       lessons.push({
         track,
@@ -74,11 +87,7 @@ async function buildIndex() {
         fileName: file.name,
         contentPath: toPosixPath(path.join("coding", folder.name, file.name)),
         hasSolution,
-        solutionPath: hasSolution
-          ? toPosixPath(
-              path.join("coding", folder.name, "solutions", file.name),
-            )
-          : null,
+        solutionPath,
       });
     }
   }

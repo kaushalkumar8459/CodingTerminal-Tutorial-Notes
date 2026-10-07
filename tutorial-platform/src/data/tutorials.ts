@@ -10546,6 +10546,218 @@ const tutorialsChunkAngular: TutorialMeta[] = [
   },
 ];
 
+const tutorialsChunkHTML: TutorialMeta[] = [
+  {
+    track: "html",
+    slug: "day-001-introduction-to-html",
+    dayLabel: "Day 1",
+    title: "Introduction to HTML",
+    level: "Beginner",
+    estimatedMinutes: 30,
+    order: 1,
+    fileName: "day-001-introduction-to-html.md",
+    contentPath: "tutorials/html/day-001-introduction-to-html.md",
+  },
+  {
+    track: "html",
+    slug: "day-002-text-content-and-formatting",
+    dayLabel: "Day 2",
+    title: "Text Content and Formatting",
+    level: "Beginner",
+    estimatedMinutes: 40,
+    order: 2,
+    fileName: "day-002-text-content-and-formatting.md",
+    contentPath: "tutorials/html/day-002-text-content-and-formatting.md",
+  },
+  {
+    track: "html",
+    slug: "day-003-links-images-and-paths",
+    dayLabel: "Day 3",
+    title: "Links Images and Paths",
+    level: "Beginner",
+    estimatedMinutes: 45,
+    order: 3,
+    fileName: "day-003-links-images-and-paths.md",
+    contentPath: "tutorials/html/day-003-links-images-and-paths.md",
+  },
+  {
+    track: "html",
+    slug: "day-004-lists-tables-and-content-groups",
+    dayLabel: "Day 4",
+    title: "Lists Tables and Content Groups",
+    level: "Beginner",
+    estimatedMinutes: 45,
+    order: 4,
+    fileName: "day-004-lists-tables-and-content-groups.md",
+    contentPath: "tutorials/html/day-004-lists-tables-and-content-groups.md",
+  },
+  {
+    track: "html",
+    slug: "day-005-forms-structure-and-controls",
+    dayLabel: "Day 5",
+    title: "Forms Structure and Controls",
+    level: "Beginner",
+    estimatedMinutes: 50,
+    order: 5,
+    fileName: "day-005-forms-structure-and-controls.md",
+    contentPath: "tutorials/html/day-005-forms-structure-and-controls.md",
+  },
+  {
+    track: "html",
+    slug: "day-006-input-types-and-validation",
+    dayLabel: "Day 6",
+    title: "Input Types and Form Validation",
+    level: "Intermediate",
+    estimatedMinutes: 50,
+    order: 6,
+    fileName: "day-006-input-types-and-validation.md",
+    contentPath: "tutorials/html/day-006-input-types-and-validation.md",
+  },
+  {
+    track: "html",
+    slug: "day-007-semantic-html-and-accessibility",
+    dayLabel: "Day 7",
+    title: "Semantic HTML and Accessibility",
+    level: "Intermediate",
+    estimatedMinutes: 50,
+    order: 7,
+    fileName: "day-007-semantic-html-and-accessibility.md",
+    contentPath: "tutorials/html/day-007-semantic-html-and-accessibility.md",
+  },
+  {
+    track: "html",
+    slug: "day-008-audio-video-and-embedded-content",
+    dayLabel: "Day 8",
+    title: "Audio Video and Embedded Content",
+    level: "Intermediate",
+    estimatedMinutes: 45,
+    order: 8,
+    fileName: "day-008-audio-video-and-embedded-content.md",
+    contentPath: "tutorials/html/day-008-audio-video-and-embedded-content.md",
+  },
+  {
+    track: "html",
+    slug: "day-009-document-head-metadata-and-quality",
+    dayLabel: "Day 9",
+    title: "Document Head Metadata and HTML Quality",
+    level: "Advanced",
+    estimatedMinutes: 45,
+    order: 9,
+    fileName: "day-009-document-head-metadata-and-quality.md",
+    contentPath: "tutorials/html/day-009-document-head-metadata-and-quality.md",
+  },
+  {
+    track: "html",
+    slug: "day-010-html-capstone-project-and-review",
+    dayLabel: "Day 10",
+    title: "Core HTML Capstone Project and Review",
+    level: "Advanced",
+    estimatedMinutes: 60,
+    order: 10,
+    fileName: "day-010-html-capstone-project-and-review.md",
+    contentPath: "tutorials/html/day-010-html-capstone-project-and-review.md",
+  },
+  {
+    track: "html",
+    slug: "day-011-html-styling-classes-ids-and-comments",
+    dayLabel: "Day 11",
+    title: "HTML Styling Classes IDs and Comments",
+    level: "Intermediate",
+    estimatedMinutes: 45,
+    order: 11,
+    fileName: "day-011-html-styling-classes-ids-and-comments.md",
+    contentPath: "tutorials/html/day-011-html-styling-classes-ids-and-comments.md",
+  },
+  {
+    track: "html",
+    slug: "day-012-layout-responsive-design-and-code-elements",
+    dayLabel: "Day 12",
+    title: "Layout Responsive Design and Code Elements",
+    level: "Intermediate",
+    estimatedMinutes: 45,
+    order: 12,
+    fileName: "day-012-layout-responsive-design-and-code-elements.md",
+    contentPath: "tutorials/html/day-012-layout-responsive-design-and-code-elements.md",
+  },
+  {
+    track: "html",
+    slug: "day-013-entities-encoding-and-xhtml",
+    dayLabel: "Day 13",
+    title: "Entities Encoding and XHTML",
+    level: "Intermediate",
+    estimatedMinutes: 45,
+    order: 13,
+    fileName: "day-013-entities-encoding-and-xhtml.md",
+    contentPath: "tutorials/html/day-013-entities-encoding-and-xhtml.md",
+  },
+  {
+    track: "html",
+    slug: "day-014-advanced-form-elements-and-attributes",
+    dayLabel: "Day 14",
+    title: "Advanced Form Elements and Attributes",
+    level: "Advanced",
+    estimatedMinutes: 55,
+    order: 14,
+    fileName: "day-014-advanced-form-elements-and-attributes.md",
+    contentPath: "tutorials/html/day-014-advanced-form-elements-and-attributes.md",
+  },
+  {
+    track: "html",
+    slug: "day-015-embedded-content-and-third-party-media",
+    dayLabel: "Day 15",
+    title: "Embedded Content and Third-Party Media",
+    level: "Advanced",
+    estimatedMinutes: 45,
+    order: 15,
+    fileName: "day-015-embedded-content-and-third-party-media.md",
+    contentPath: "tutorials/html/day-015-embedded-content-and-third-party-media.md",
+  },
+  {
+    track: "html",
+    slug: "day-016-svg-and-canvas-graphics",
+    dayLabel: "Day 16",
+    title: "SVG and Canvas Graphics",
+    level: "Advanced",
+    estimatedMinutes: 50,
+    order: 16,
+    fileName: "day-016-svg-and-canvas-graphics.md",
+    contentPath: "tutorials/html/day-016-svg-and-canvas-graphics.md",
+  },
+  {
+    track: "html",
+    slug: "day-017-geolocation-and-drag-and-drop-apis",
+    dayLabel: "Day 17",
+    title: "Geolocation and Drag and Drop APIs",
+    level: "Advanced",
+    estimatedMinutes: 50,
+    order: 17,
+    fileName: "day-017-geolocation-and-drag-and-drop-apis.md",
+    contentPath: "tutorials/html/day-017-geolocation-and-drag-and-drop-apis.md",
+  },
+  {
+    track: "html",
+    slug: "day-018-web-storage-workers-and-server-sent-events",
+    dayLabel: "Day 18",
+    title: "Web Storage Workers and Server-Sent Events",
+    level: "Advanced",
+    estimatedMinutes: 60,
+    order: 18,
+    fileName: "day-018-web-storage-workers-and-server-sent-events.md",
+    contentPath: "tutorials/html/day-018-web-storage-workers-and-server-sent-events.md",
+  },
+  {
+    track: "html",
+    slug: "day-019-advanced-html-tables-and-accessibility",
+    dayLabel: "Day 19",
+    title: "Advanced HTML Tables and Accessibility",
+    level: "Advanced",
+    estimatedMinutes: 55,
+    order: 19,
+    fileName: "day-019-advanced-html-tables-and-accessibility.md",
+    contentPath: "tutorials/html/day-019-advanced-html-tables-and-accessibility.md",
+  },
+];
+
 const tutorialsChunkAngularInterview: TutorialMeta[] = [
   {
     track: "angularinterview",
@@ -10556,7 +10768,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 10,
     fileName: "day-001.md",
-    contentPath: "tutorials/angular/interview/day-001.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-001.md",
   },
   {
     track: "angularinterview",
@@ -10567,7 +10779,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 20,
     fileName: "day-002.md",
-    contentPath: "tutorials/angular/interview/day-002.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-002.md",
   },
   {
     track: "angularinterview",
@@ -10578,7 +10790,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 30,
     fileName: "day-003.md",
-    contentPath: "tutorials/angular/interview/day-003.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-003.md",
   },
   {
     track: "angularinterview",
@@ -10589,7 +10801,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 40,
     fileName: "day-004.md",
-    contentPath: "tutorials/angular/interview/day-004.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-004.md",
   },
   {
     track: "angularinterview",
@@ -10600,7 +10812,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 50,
     fileName: "day-005.md",
-    contentPath: "tutorials/angular/interview/day-005.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-005.md",
   },
   {
     track: "angularinterview",
@@ -10611,7 +10823,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 60,
     fileName: "day-006.md",
-    contentPath: "tutorials/angular/interview/day-006.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-006.md",
   },
   {
     track: "angularinterview",
@@ -10622,7 +10834,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 70,
     fileName: "day-007.md",
-    contentPath: "tutorials/angular/interview/day-007.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-007.md",
   },
   {
     track: "angularinterview",
@@ -10633,7 +10845,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 80,
     fileName: "day-008.md",
-    contentPath: "tutorials/angular/interview/day-008.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-008.md",
   },
   {
     track: "angularinterview",
@@ -10644,7 +10856,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 90,
     fileName: "day-009.md",
-    contentPath: "tutorials/angular/interview/day-009.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-009.md",
   },
   {
     track: "angularinterview",
@@ -10655,7 +10867,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 100,
     fileName: "day-010.md",
-    contentPath: "tutorials/angular/interview/day-010.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-010.md",
   },
   {
     track: "angularinterview",
@@ -10666,7 +10878,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 110,
     fileName: "day-011.md",
-    contentPath: "tutorials/angular/interview/day-011.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-011.md",
   },
   {
     track: "angularinterview",
@@ -10677,7 +10889,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 120,
     fileName: "day-012.md",
-    contentPath: "tutorials/angular/interview/day-012.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-012.md",
   },
   {
     track: "angularinterview",
@@ -10688,7 +10900,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 130,
     fileName: "day-013.md",
-    contentPath: "tutorials/angular/interview/day-013.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-013.md",
   },
   {
     track: "angularinterview",
@@ -10699,7 +10911,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 140,
     fileName: "day-014.md",
-    contentPath: "tutorials/angular/interview/day-014.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-014.md",
   },
   {
     track: "angularinterview",
@@ -10710,7 +10922,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 150,
     fileName: "day-015.md",
-    contentPath: "tutorials/angular/interview/day-015.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-015.md",
   },
   {
     track: "angularinterview",
@@ -10721,7 +10933,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 160,
     fileName: "day-016.md",
-    contentPath: "tutorials/angular/interview/day-016.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-016.md",
   },
   {
     track: "angularinterview",
@@ -10732,7 +10944,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 170,
     fileName: "day-017.md",
-    contentPath: "tutorials/angular/interview/day-017.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-017.md",
   },
   {
     track: "angularinterview",
@@ -10743,7 +10955,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 180,
     fileName: "day-018.md",
-    contentPath: "tutorials/angular/interview/day-018.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-018.md",
   },
   {
     track: "angularinterview",
@@ -10754,7 +10966,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 190,
     fileName: "day-019.md",
-    contentPath: "tutorials/angular/interview/day-019.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-019.md",
   },
   {
     track: "angularinterview",
@@ -10765,7 +10977,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 200,
     fileName: "day-020.md",
-    contentPath: "tutorials/angular/interview/day-020.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-020.md",
   },
   {
     track: "angularinterview",
@@ -10776,7 +10988,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 210,
     fileName: "day-021.md",
-    contentPath: "tutorials/angular/interview/day-021.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-021.md",
   },
   {
     track: "angularinterview",
@@ -10787,7 +10999,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 220,
     fileName: "day-022.md",
-    contentPath: "tutorials/angular/interview/day-022.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-022.md",
   },
   {
     track: "angularinterview",
@@ -10798,7 +11010,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 230,
     fileName: "day-023.md",
-    contentPath: "tutorials/angular/interview/day-023.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-023.md",
   },
   {
     track: "angularinterview",
@@ -10809,7 +11021,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 240,
     fileName: "day-024.md",
-    contentPath: "tutorials/angular/interview/day-024.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-024.md",
   },
   {
     track: "angularinterview",
@@ -10820,7 +11032,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 250,
     fileName: "day-025.md",
-    contentPath: "tutorials/angular/interview/day-025.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-025.md",
   },
   {
     track: "angularinterview",
@@ -10831,7 +11043,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 260,
     fileName: "day-026.md",
-    contentPath: "tutorials/angular/interview/day-026.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-026.md",
   },
   {
     track: "angularinterview",
@@ -10842,7 +11054,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 270,
     fileName: "day-027.md",
-    contentPath: "tutorials/angular/interview/day-027.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-027.md",
   },
   {
     track: "angularinterview",
@@ -10853,7 +11065,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 280,
     fileName: "day-028.md",
-    contentPath: "tutorials/angular/interview/day-028.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-028.md",
   },
   {
     track: "angularinterview",
@@ -10864,7 +11076,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 290,
     fileName: "day-029.md",
-    contentPath: "tutorials/angular/interview/day-029.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-029.md",
   },
   {
     track: "angularinterview",
@@ -10875,7 +11087,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 300,
     fileName: "day-030.md",
-    contentPath: "tutorials/angular/interview/day-030.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-030.md",
   },
   {
     track: "angularinterview",
@@ -10886,7 +11098,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 310,
     fileName: "day-031.md",
-    contentPath: "tutorials/angular/interview/day-031.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-031.md",
   },
   {
     track: "angularinterview",
@@ -10897,7 +11109,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 311,
     fileName: "day-031-alt.md",
-    contentPath: "tutorials/angular/interview/day-031-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-031-alt.md",
   },
   {
     track: "angularinterview",
@@ -10908,7 +11120,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 320,
     fileName: "day-032.md",
-    contentPath: "tutorials/angular/interview/day-032.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-032.md",
   },
   {
     track: "angularinterview",
@@ -10919,7 +11131,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 321,
     fileName: "day-032-alt.md",
-    contentPath: "tutorials/angular/interview/day-032-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-032-alt.md",
   },
   {
     track: "angularinterview",
@@ -10930,7 +11142,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 330,
     fileName: "day-033.md",
-    contentPath: "tutorials/angular/interview/day-033.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-033.md",
   },
   {
     track: "angularinterview",
@@ -10941,7 +11153,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 331,
     fileName: "day-033-alt.md",
-    contentPath: "tutorials/angular/interview/day-033-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-033-alt.md",
   },
   {
     track: "angularinterview",
@@ -10952,7 +11164,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 340,
     fileName: "day-034.md",
-    contentPath: "tutorials/angular/interview/day-034.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-034.md",
   },
   {
     track: "angularinterview",
@@ -10963,7 +11175,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 341,
     fileName: "day-034-alt.md",
-    contentPath: "tutorials/angular/interview/day-034-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-034-alt.md",
   },
   {
     track: "angularinterview",
@@ -10974,7 +11186,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 350,
     fileName: "day-035.md",
-    contentPath: "tutorials/angular/interview/day-035.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-035.md",
   },
   {
     track: "angularinterview",
@@ -10985,7 +11197,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 351,
     fileName: "day-035-alt.md",
-    contentPath: "tutorials/angular/interview/day-035-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-035-alt.md",
   },
   {
     track: "angularinterview",
@@ -10996,7 +11208,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 360,
     fileName: "day-036.md",
-    contentPath: "tutorials/angular/interview/day-036.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-036.md",
   },
   {
     track: "angularinterview",
@@ -11007,7 +11219,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 361,
     fileName: "day-036-alt.md",
-    contentPath: "tutorials/angular/interview/day-036-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-036-alt.md",
   },
   {
     track: "angularinterview",
@@ -11018,7 +11230,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 370,
     fileName: "day-037.md",
-    contentPath: "tutorials/angular/interview/day-037.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-037.md",
   },
   {
     track: "angularinterview",
@@ -11029,7 +11241,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 371,
     fileName: "day-037-alt.md",
-    contentPath: "tutorials/angular/interview/day-037-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-037-alt.md",
   },
   {
     track: "angularinterview",
@@ -11040,7 +11252,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 380,
     fileName: "day-038.md",
-    contentPath: "tutorials/angular/interview/day-038.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-038.md",
   },
   {
     track: "angularinterview",
@@ -11051,7 +11263,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 381,
     fileName: "day-038-alt.md",
-    contentPath: "tutorials/angular/interview/day-038-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-038-alt.md",
   },
   {
     track: "angularinterview",
@@ -11062,7 +11274,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 390,
     fileName: "day-039.md",
-    contentPath: "tutorials/angular/interview/day-039.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-039.md",
   },
   {
     track: "angularinterview",
@@ -11073,7 +11285,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 391,
     fileName: "day-039-alt.md",
-    contentPath: "tutorials/angular/interview/day-039-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-039-alt.md",
   },
   {
     track: "angularinterview",
@@ -11084,7 +11296,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 400,
     fileName: "day-040.md",
-    contentPath: "tutorials/angular/interview/day-040.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-040.md",
   },
   {
     track: "angularinterview",
@@ -11095,7 +11307,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 401,
     fileName: "day-040-alt.md",
-    contentPath: "tutorials/angular/interview/day-040-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-040-alt.md",
   },
   {
     track: "angularinterview",
@@ -11106,7 +11318,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 410,
     fileName: "day-041.md",
-    contentPath: "tutorials/angular/interview/day-041.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-041.md",
   },
   {
     track: "angularinterview",
@@ -11117,7 +11329,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 420,
     fileName: "day-042.md",
-    contentPath: "tutorials/angular/interview/day-042.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-042.md",
   },
   {
     track: "angularinterview",
@@ -11128,7 +11340,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 430,
     fileName: "day-043.md",
-    contentPath: "tutorials/angular/interview/day-043.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-043.md",
   },
   {
     track: "angularinterview",
@@ -11139,7 +11351,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 440,
     fileName: "day-044.md",
-    contentPath: "tutorials/angular/interview/day-044.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-044.md",
   },
   {
     track: "angularinterview",
@@ -11150,7 +11362,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 450,
     fileName: "day-045.md",
-    contentPath: "tutorials/angular/interview/day-045.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-045.md",
   },
   {
     track: "angularinterview",
@@ -11161,7 +11373,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 460,
     fileName: "day-046.md",
-    contentPath: "tutorials/angular/interview/day-046.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-046.md",
   },
   {
     track: "angularinterview",
@@ -11172,7 +11384,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 470,
     fileName: "day-047.md",
-    contentPath: "tutorials/angular/interview/day-047.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-047.md",
   },
   {
     track: "angularinterview",
@@ -11183,7 +11395,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 480,
     fileName: "day-048.md",
-    contentPath: "tutorials/angular/interview/day-048.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-048.md",
   },
   {
     track: "angularinterview",
@@ -11194,7 +11406,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 490,
     fileName: "day-049.md",
-    contentPath: "tutorials/angular/interview/day-049.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-049.md",
   },
   {
     track: "angularinterview",
@@ -11205,7 +11417,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 500,
     fileName: "day-050.md",
-    contentPath: "tutorials/angular/interview/day-050.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-050.md",
   },
   {
     track: "angularinterview",
@@ -11216,7 +11428,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 510,
     fileName: "day-051.md",
-    contentPath: "tutorials/angular/interview/day-051.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-051.md",
   },
   {
     track: "angularinterview",
@@ -11227,7 +11439,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 520,
     fileName: "day-052.md",
-    contentPath: "tutorials/angular/interview/day-052.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-052.md",
   },
   {
     track: "angularinterview",
@@ -11238,7 +11450,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 530,
     fileName: "day-053.md",
-    contentPath: "tutorials/angular/interview/day-053.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-053.md",
   },
   {
     track: "angularinterview",
@@ -11249,7 +11461,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 540,
     fileName: "day-054.md",
-    contentPath: "tutorials/angular/interview/day-054.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-054.md",
   },
   {
     track: "angularinterview",
@@ -11260,7 +11472,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 550,
     fileName: "day-055.md",
-    contentPath: "tutorials/angular/interview/day-055.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-055.md",
   },
   {
     track: "angularinterview",
@@ -11271,7 +11483,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 560,
     fileName: "day-056.md",
-    contentPath: "tutorials/angular/interview/day-056.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-056.md",
   },
   {
     track: "angularinterview",
@@ -11282,7 +11494,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 570,
     fileName: "day-057.md",
-    contentPath: "tutorials/angular/interview/day-057.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-057.md",
   },
   {
     track: "angularinterview",
@@ -11293,7 +11505,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 580,
     fileName: "day-058.md",
-    contentPath: "tutorials/angular/interview/day-058.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-058.md",
   },
   {
     track: "angularinterview",
@@ -11304,7 +11516,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 590,
     fileName: "day-059.md",
-    contentPath: "tutorials/angular/interview/day-059.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-059.md",
   },
   {
     track: "angularinterview",
@@ -11315,7 +11527,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 600,
     fileName: "day-060.md",
-    contentPath: "tutorials/angular/interview/day-060.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-060.md",
   },
   {
     track: "angularinterview",
@@ -11326,7 +11538,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 610,
     fileName: "day-061.md",
-    contentPath: "tutorials/angular/interview/day-061.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-061.md",
   },
   {
     track: "angularinterview",
@@ -11337,7 +11549,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 611,
     fileName: "day-061-alt.md",
-    contentPath: "tutorials/angular/interview/day-061-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-061-alt.md",
   },
   {
     track: "angularinterview",
@@ -11348,7 +11560,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 620,
     fileName: "day-062.md",
-    contentPath: "tutorials/angular/interview/day-062.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-062.md",
   },
   {
     track: "angularinterview",
@@ -11359,7 +11571,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 621,
     fileName: "day-062-alt.md",
-    contentPath: "tutorials/angular/interview/day-062-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-062-alt.md",
   },
   {
     track: "angularinterview",
@@ -11370,7 +11582,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 630,
     fileName: "day-063.md",
-    contentPath: "tutorials/angular/interview/day-063.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-063.md",
   },
   {
     track: "angularinterview",
@@ -11381,7 +11593,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 631,
     fileName: "day-063-alt.md",
-    contentPath: "tutorials/angular/interview/day-063-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-063-alt.md",
   },
   {
     track: "angularinterview",
@@ -11392,7 +11604,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 640,
     fileName: "day-064.md",
-    contentPath: "tutorials/angular/interview/day-064.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-064.md",
   },
   {
     track: "angularinterview",
@@ -11403,7 +11615,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 641,
     fileName: "day-064-alt.md",
-    contentPath: "tutorials/angular/interview/day-064-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-064-alt.md",
   },
   {
     track: "angularinterview",
@@ -11414,7 +11626,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 650,
     fileName: "day-065.md",
-    contentPath: "tutorials/angular/interview/day-065.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-065.md",
   },
   {
     track: "angularinterview",
@@ -11425,7 +11637,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 651,
     fileName: "day-065-alt.md",
-    contentPath: "tutorials/angular/interview/day-065-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-065-alt.md",
   },
   {
     track: "angularinterview",
@@ -11436,7 +11648,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 660,
     fileName: "day-066.md",
-    contentPath: "tutorials/angular/interview/day-066.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-066.md",
   },
   {
     track: "angularinterview",
@@ -11447,7 +11659,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 661,
     fileName: "day-066-alt.md",
-    contentPath: "tutorials/angular/interview/day-066-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-066-alt.md",
   },
   {
     track: "angularinterview",
@@ -11458,7 +11670,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 670,
     fileName: "day-067.md",
-    contentPath: "tutorials/angular/interview/day-067.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-067.md",
   },
   {
     track: "angularinterview",
@@ -11469,7 +11681,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 671,
     fileName: "day-067-alt.md",
-    contentPath: "tutorials/angular/interview/day-067-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-067-alt.md",
   },
   {
     track: "angularinterview",
@@ -11480,7 +11692,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 680,
     fileName: "day-068.md",
-    contentPath: "tutorials/angular/interview/day-068.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-068.md",
   },
   {
     track: "angularinterview",
@@ -11491,7 +11703,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 681,
     fileName: "day-068-alt.md",
-    contentPath: "tutorials/angular/interview/day-068-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-068-alt.md",
   },
   {
     track: "angularinterview",
@@ -11502,7 +11714,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 690,
     fileName: "day-069.md",
-    contentPath: "tutorials/angular/interview/day-069.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-069.md",
   },
   {
     track: "angularinterview",
@@ -11513,7 +11725,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 691,
     fileName: "day-069-alt.md",
-    contentPath: "tutorials/angular/interview/day-069-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-069-alt.md",
   },
   {
     track: "angularinterview",
@@ -11524,7 +11736,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 700,
     fileName: "day-070.md",
-    contentPath: "tutorials/angular/interview/day-070.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-070.md",
   },
   {
     track: "angularinterview",
@@ -11535,7 +11747,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 701,
     fileName: "day-070-alt.md",
-    contentPath: "tutorials/angular/interview/day-070-alt.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-070-alt.md",
   },
   {
     track: "angularinterview",
@@ -11546,7 +11758,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 710,
     fileName: "day-071.md",
-    contentPath: "tutorials/angular/interview/day-071.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-071.md",
   },
   {
     track: "angularinterview",
@@ -11557,7 +11769,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 720,
     fileName: "day-072.md",
-    contentPath: "tutorials/angular/interview/day-072.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-072.md",
   },
   {
     track: "angularinterview",
@@ -11568,7 +11780,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 730,
     fileName: "day-073.md",
-    contentPath: "tutorials/angular/interview/day-073.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-073.md",
   },
   {
     track: "angularinterview",
@@ -11579,7 +11791,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 740,
     fileName: "day-074.md",
-    contentPath: "tutorials/angular/interview/day-074.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-074.md",
   },
   {
     track: "angularinterview",
@@ -11590,7 +11802,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 750,
     fileName: "day-075.md",
-    contentPath: "tutorials/angular/interview/day-075.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-075.md",
   },
   {
     track: "angularinterview",
@@ -11601,7 +11813,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 760,
     fileName: "day-076.md",
-    contentPath: "tutorials/angular/interview/day-076.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-076.md",
   },
   {
     track: "angularinterview",
@@ -11612,7 +11824,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 770,
     fileName: "day-077.md",
-    contentPath: "tutorials/angular/interview/day-077.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-077.md",
   },
   {
     track: "angularinterview",
@@ -11623,7 +11835,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 780,
     fileName: "day-078.md",
-    contentPath: "tutorials/angular/interview/day-078.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-078.md",
   },
   {
     track: "angularinterview",
@@ -11634,7 +11846,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 790,
     fileName: "day-079.md",
-    contentPath: "tutorials/angular/interview/day-079.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-079.md",
   },
   {
     track: "angularinterview",
@@ -11645,7 +11857,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 800,
     fileName: "day-080.md",
-    contentPath: "tutorials/angular/interview/day-080.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-080.md",
   },
   {
     track: "angularinterview",
@@ -11656,7 +11868,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 810,
     fileName: "day-081.md",
-    contentPath: "tutorials/angular/interview/day-081.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-081.md",
   },
   {
     track: "angularinterview",
@@ -11667,7 +11879,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 820,
     fileName: "day-082.md",
-    contentPath: "tutorials/angular/interview/day-082.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-082.md",
   },
   {
     track: "angularinterview",
@@ -11678,7 +11890,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 830,
     fileName: "day-083.md",
-    contentPath: "tutorials/angular/interview/day-083.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-083.md",
   },
   {
     track: "angularinterview",
@@ -11689,7 +11901,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 840,
     fileName: "day-084.md",
-    contentPath: "tutorials/angular/interview/day-084.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-084.md",
   },
   {
     track: "angularinterview",
@@ -11700,7 +11912,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 850,
     fileName: "day-085.md",
-    contentPath: "tutorials/angular/interview/day-085.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-085.md",
   },
   {
     track: "angularinterview",
@@ -11711,7 +11923,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 860,
     fileName: "day-086.md",
-    contentPath: "tutorials/angular/interview/day-086.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-086.md",
   },
   {
     track: "angularinterview",
@@ -11722,7 +11934,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 870,
     fileName: "day-087.md",
-    contentPath: "tutorials/angular/interview/day-087.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-087.md",
   },
   {
     track: "angularinterview",
@@ -11733,7 +11945,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 880,
     fileName: "day-088.md",
-    contentPath: "tutorials/angular/interview/day-088.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-088.md",
   },
   {
     track: "angularinterview",
@@ -11744,7 +11956,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 890,
     fileName: "day-089.md",
-    contentPath: "tutorials/angular/interview/day-089.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-089.md",
   },
   {
     track: "angularinterview",
@@ -11755,7 +11967,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 900,
     fileName: "day-090.md",
-    contentPath: "tutorials/angular/interview/day-090.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-090.md",
   },
   {
     track: "angularinterview",
@@ -11766,7 +11978,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 910,
     fileName: "day-091.md",
-    contentPath: "tutorials/angular/interview/day-091.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-091.md",
   },
   {
     track: "angularinterview",
@@ -11777,7 +11989,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 920,
     fileName: "day-092.md",
-    contentPath: "tutorials/angular/interview/day-092.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-092.md",
   },
   {
     track: "angularinterview",
@@ -11788,7 +12000,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 930,
     fileName: "day-093.md",
-    contentPath: "tutorials/angular/interview/day-093.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-093.md",
   },
   {
     track: "angularinterview",
@@ -11799,7 +12011,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 940,
     fileName: "day-094.md",
-    contentPath: "tutorials/angular/interview/day-094.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-094.md",
   },
   {
     track: "angularinterview",
@@ -11810,7 +12022,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 950,
     fileName: "day-095.md",
-    contentPath: "tutorials/angular/interview/day-095.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-095.md",
   },
   {
     track: "angularinterview",
@@ -11821,7 +12033,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 960,
     fileName: "day-096.md",
-    contentPath: "tutorials/angular/interview/day-096.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-096.md",
   },
   {
     track: "angularinterview",
@@ -11832,7 +12044,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 970,
     fileName: "day-097.md",
-    contentPath: "tutorials/angular/interview/day-097.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-097.md",
   },
   {
     track: "angularinterview",
@@ -11843,7 +12055,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 980,
     fileName: "day-098.md",
-    contentPath: "tutorials/angular/interview/day-098.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-098.md",
   },
   {
     track: "angularinterview",
@@ -11854,7 +12066,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 990,
     fileName: "day-099.md",
-    contentPath: "tutorials/angular/interview/day-099.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-099.md",
   },
   {
     track: "angularinterview",
@@ -11865,7 +12077,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1000,
     fileName: "day-100.md",
-    contentPath: "tutorials/angular/interview/day-100.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-100.md",
   },
   {
     track: "angularinterview",
@@ -11876,7 +12088,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1010,
     fileName: "day-101.md",
-    contentPath: "tutorials/angular/interview/day-101.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-101.md",
   },
   {
     track: "angularinterview",
@@ -11887,7 +12099,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1020,
     fileName: "day-102.md",
-    contentPath: "tutorials/angular/interview/day-102.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-102.md",
   },
   {
     track: "angularinterview",
@@ -11898,7 +12110,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1030,
     fileName: "day-103.md",
-    contentPath: "tutorials/angular/interview/day-103.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-103.md",
   },
   {
     track: "angularinterview",
@@ -11909,7 +12121,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1040,
     fileName: "day-104.md",
-    contentPath: "tutorials/angular/interview/day-104.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-104.md",
   },
   {
     track: "angularinterview",
@@ -11920,7 +12132,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1050,
     fileName: "day-105.md",
-    contentPath: "tutorials/angular/interview/day-105.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-105.md",
   },
   {
     track: "angularinterview",
@@ -11931,7 +12143,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1060,
     fileName: "day-106.md",
-    contentPath: "tutorials/angular/interview/day-106.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-106.md",
   },
   {
     track: "angularinterview",
@@ -11942,7 +12154,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1070,
     fileName: "day-107.md",
-    contentPath: "tutorials/angular/interview/day-107.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-107.md",
   },
   {
     track: "angularinterview",
@@ -11953,7 +12165,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1080,
     fileName: "day-108.md",
-    contentPath: "tutorials/angular/interview/day-108.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-108.md",
   },
   {
     track: "angularinterview",
@@ -11964,7 +12176,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1090,
     fileName: "day-109.md",
-    contentPath: "tutorials/angular/interview/day-109.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-109.md",
   },
   {
     track: "angularinterview",
@@ -11975,7 +12187,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1100,
     fileName: "day-110.md",
-    contentPath: "tutorials/angular/interview/day-110.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-110.md",
   },
   {
     track: "angularinterview",
@@ -11986,7 +12198,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1110,
     fileName: "day-111.md",
-    contentPath: "tutorials/angular/interview/day-111.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-111.md",
   },
   {
     track: "angularinterview",
@@ -11997,7 +12209,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1120,
     fileName: "day-112.md",
-    contentPath: "tutorials/angular/interview/day-112.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-112.md",
   },
   {
     track: "angularinterview",
@@ -12008,7 +12220,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1130,
     fileName: "day-113.md",
-    contentPath: "tutorials/angular/interview/day-113.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-113.md",
   },
   {
     track: "angularinterview",
@@ -12019,7 +12231,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1140,
     fileName: "day-114.md",
-    contentPath: "tutorials/angular/interview/day-114.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-114.md",
   },
   {
     track: "angularinterview",
@@ -12030,7 +12242,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1150,
     fileName: "day-115.md",
-    contentPath: "tutorials/angular/interview/day-115.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-115.md",
   },
   {
     track: "angularinterview",
@@ -12041,7 +12253,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1160,
     fileName: "day-116.md",
-    contentPath: "tutorials/angular/interview/day-116.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-116.md",
   },
   {
     track: "angularinterview",
@@ -12052,7 +12264,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1170,
     fileName: "day-117.md",
-    contentPath: "tutorials/angular/interview/day-117.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-117.md",
   },
   {
     track: "angularinterview",
@@ -12063,7 +12275,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1180,
     fileName: "day-118.md",
-    contentPath: "tutorials/angular/interview/day-118.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-118.md",
   },
   {
     track: "angularinterview",
@@ -12074,7 +12286,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1190,
     fileName: "day-119.md",
-    contentPath: "tutorials/angular/interview/day-119.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-119.md",
   },
   {
     track: "angularinterview",
@@ -12085,7 +12297,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1200,
     fileName: "day-120.md",
-    contentPath: "tutorials/angular/interview/day-120.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-120.md",
   },
   {
     track: "angularinterview",
@@ -12096,7 +12308,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1210,
     fileName: "day-121.md",
-    contentPath: "tutorials/angular/interview/day-121.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-121.md",
   },
   {
     track: "angularinterview",
@@ -12107,7 +12319,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1220,
     fileName: "day-122.md",
-    contentPath: "tutorials/angular/interview/day-122.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-122.md",
   },
   {
     track: "angularinterview",
@@ -12118,7 +12330,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1230,
     fileName: "day-123.md",
-    contentPath: "tutorials/angular/interview/day-123.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-123.md",
   },
   {
     track: "angularinterview",
@@ -12129,7 +12341,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1240,
     fileName: "day-124.md",
-    contentPath: "tutorials/angular/interview/day-124.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-124.md",
   },
   {
     track: "angularinterview",
@@ -12140,7 +12352,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1250,
     fileName: "day-125.md",
-    contentPath: "tutorials/angular/interview/day-125.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-125.md",
   },
   {
     track: "angularinterview",
@@ -12151,7 +12363,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1260,
     fileName: "day-126.md",
-    contentPath: "tutorials/angular/interview/day-126.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-126.md",
   },
   {
     track: "angularinterview",
@@ -12162,7 +12374,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1270,
     fileName: "day-127.md",
-    contentPath: "tutorials/angular/interview/day-127.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-127.md",
   },
   {
     track: "angularinterview",
@@ -12173,7 +12385,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1280,
     fileName: "day-128.md",
-    contentPath: "tutorials/angular/interview/day-128.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-128.md",
   },
   {
     track: "angularinterview",
@@ -12184,7 +12396,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1290,
     fileName: "day-129.md",
-    contentPath: "tutorials/angular/interview/day-129.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-129.md",
   },
   {
     track: "angularinterview",
@@ -12195,7 +12407,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1300,
     fileName: "day-130.md",
-    contentPath: "tutorials/angular/interview/day-130.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-130.md",
   },
   {
     track: "angularinterview",
@@ -12206,7 +12418,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1310,
     fileName: "day-131.md",
-    contentPath: "tutorials/angular/interview/day-131.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-131.md",
   },
   {
     track: "angularinterview",
@@ -12217,7 +12429,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1320,
     fileName: "day-132.md",
-    contentPath: "tutorials/angular/interview/day-132.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-132.md",
   },
   {
     track: "angularinterview",
@@ -12228,7 +12440,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1330,
     fileName: "day-133.md",
-    contentPath: "tutorials/angular/interview/day-133.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-133.md",
   },
   {
     track: "angularinterview",
@@ -12239,7 +12451,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1340,
     fileName: "day-134.md",
-    contentPath: "tutorials/angular/interview/day-134.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-134.md",
   },
   {
     track: "angularinterview",
@@ -12250,7 +12462,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1350,
     fileName: "day-135.md",
-    contentPath: "tutorials/angular/interview/day-135.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-135.md",
   },
   {
     track: "angularinterview",
@@ -12261,7 +12473,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1360,
     fileName: "day-136.md",
-    contentPath: "tutorials/angular/interview/day-136.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-136.md",
   },
   {
     track: "angularinterview",
@@ -12272,7 +12484,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1370,
     fileName: "day-137.md",
-    contentPath: "tutorials/angular/interview/day-137.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-137.md",
   },
   {
     track: "angularinterview",
@@ -12283,7 +12495,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1380,
     fileName: "day-138.md",
-    contentPath: "tutorials/angular/interview/day-138.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-138.md",
   },
   {
     track: "angularinterview",
@@ -12294,7 +12506,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1390,
     fileName: "day-139.md",
-    contentPath: "tutorials/angular/interview/day-139.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-139.md",
   },
   {
     track: "angularinterview",
@@ -12305,7 +12517,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1400,
     fileName: "day-140.md",
-    contentPath: "tutorials/angular/interview/day-140.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-140.md",
   },
   {
     track: "angularinterview",
@@ -12316,7 +12528,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1410,
     fileName: "day-141.md",
-    contentPath: "tutorials/angular/interview/day-141.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-141.md",
   },
   {
     track: "angularinterview",
@@ -12327,7 +12539,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1420,
     fileName: "day-142.md",
-    contentPath: "tutorials/angular/interview/day-142.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-142.md",
   },
   {
     track: "angularinterview",
@@ -12338,7 +12550,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1430,
     fileName: "day-143.md",
-    contentPath: "tutorials/angular/interview/day-143.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-143.md",
   },
   {
     track: "angularinterview",
@@ -12349,7 +12561,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1440,
     fileName: "day-144.md",
-    contentPath: "tutorials/angular/interview/day-144.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-144.md",
   },
   {
     track: "angularinterview",
@@ -12360,7 +12572,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1450,
     fileName: "day-145.md",
-    contentPath: "tutorials/angular/interview/day-145.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-145.md",
   },
   {
     track: "angularinterview",
@@ -12371,7 +12583,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1460,
     fileName: "day-146.md",
-    contentPath: "tutorials/angular/interview/day-146.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-146.md",
   },
   {
     track: "angularinterview",
@@ -12382,7 +12594,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1470,
     fileName: "day-147.md",
-    contentPath: "tutorials/angular/interview/day-147.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-147.md",
   },
   {
     track: "angularinterview",
@@ -12393,7 +12605,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1480,
     fileName: "day-148.md",
-    contentPath: "tutorials/angular/interview/day-148.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-148.md",
   },
   {
     track: "angularinterview",
@@ -12404,7 +12616,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1490,
     fileName: "day-149.md",
-    contentPath: "tutorials/angular/interview/day-149.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-149.md",
   },
   {
     track: "angularinterview",
@@ -12415,7 +12627,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1500,
     fileName: "day-150.md",
-    contentPath: "tutorials/angular/interview/day-150.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-150.md",
   },
   {
     track: "angularinterview",
@@ -12426,7 +12638,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1510,
     fileName: "day-151.md",
-    contentPath: "tutorials/angular/interview/day-151.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-151.md",
   },
   {
     track: "angularinterview",
@@ -12437,7 +12649,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1520,
     fileName: "day-152.md",
-    contentPath: "tutorials/angular/interview/day-152.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-152.md",
   },
   {
     track: "angularinterview",
@@ -12448,7 +12660,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1530,
     fileName: "day-153.md",
-    contentPath: "tutorials/angular/interview/day-153.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-153.md",
   },
   {
     track: "angularinterview",
@@ -12459,7 +12671,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1540,
     fileName: "day-154.md",
-    contentPath: "tutorials/angular/interview/day-154.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-154.md",
   },
   {
     track: "angularinterview",
@@ -12470,7 +12682,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1550,
     fileName: "day-155.md",
-    contentPath: "tutorials/angular/interview/day-155.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-155.md",
   },
   {
     track: "angularinterview",
@@ -12481,7 +12693,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1560,
     fileName: "day-156.md",
-    contentPath: "tutorials/angular/interview/day-156.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-156.md",
   },
   {
     track: "angularinterview",
@@ -12492,7 +12704,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1570,
     fileName: "day-157.md",
-    contentPath: "tutorials/angular/interview/day-157.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-157.md",
   },
   {
     track: "angularinterview",
@@ -12503,7 +12715,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1580,
     fileName: "day-158.md",
-    contentPath: "tutorials/angular/interview/day-158.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-158.md",
   },
   {
     track: "angularinterview",
@@ -12514,7 +12726,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1590,
     fileName: "day-159.md",
-    contentPath: "tutorials/angular/interview/day-159.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-159.md",
   },
   {
     track: "angularinterview",
@@ -12525,7 +12737,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1600,
     fileName: "day-160.md",
-    contentPath: "tutorials/angular/interview/day-160.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-160.md",
   },
   {
     track: "angularinterview",
@@ -12536,7 +12748,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1610,
     fileName: "day-161.md",
-    contentPath: "tutorials/angular/interview/day-161.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-161.md",
   },
   {
     track: "angularinterview",
@@ -12547,7 +12759,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1620,
     fileName: "day-162.md",
-    contentPath: "tutorials/angular/interview/day-162.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-162.md",
   },
   {
     track: "angularinterview",
@@ -12558,7 +12770,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1630,
     fileName: "day-163.md",
-    contentPath: "tutorials/angular/interview/day-163.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-163.md",
   },
   {
     track: "angularinterview",
@@ -12569,7 +12781,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1640,
     fileName: "day-164.md",
-    contentPath: "tutorials/angular/interview/day-164.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-164.md",
   },
   {
     track: "angularinterview",
@@ -12580,7 +12792,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1650,
     fileName: "day-165.md",
-    contentPath: "tutorials/angular/interview/day-165.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-165.md",
   },
   {
     track: "angularinterview",
@@ -12591,7 +12803,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1660,
     fileName: "day-166.md",
-    contentPath: "tutorials/angular/interview/day-166.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-166.md",
   },
   {
     track: "angularinterview",
@@ -12602,7 +12814,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1670,
     fileName: "day-167.md",
-    contentPath: "tutorials/angular/interview/day-167.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-167.md",
   },
   {
     track: "angularinterview",
@@ -12613,7 +12825,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1680,
     fileName: "day-168.md",
-    contentPath: "tutorials/angular/interview/day-168.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-168.md",
   },
   {
     track: "angularinterview",
@@ -12624,7 +12836,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1690,
     fileName: "day-169.md",
-    contentPath: "tutorials/angular/interview/day-169.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-169.md",
   },
   {
     track: "angularinterview",
@@ -12635,7 +12847,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1700,
     fileName: "day-170.md",
-    contentPath: "tutorials/angular/interview/day-170.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-170.md",
   },
   {
     track: "angularinterview",
@@ -12646,7 +12858,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1710,
     fileName: "day-171.md",
-    contentPath: "tutorials/angular/interview/day-171.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-171.md",
   },
   {
     track: "angularinterview",
@@ -12657,7 +12869,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1720,
     fileName: "day-172.md",
-    contentPath: "tutorials/angular/interview/day-172.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-172.md",
   },
   {
     track: "angularinterview",
@@ -12668,7 +12880,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1730,
     fileName: "day-173.md",
-    contentPath: "tutorials/angular/interview/day-173.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-173.md",
   },
   {
     track: "angularinterview",
@@ -12679,7 +12891,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1740,
     fileName: "day-174.md",
-    contentPath: "tutorials/angular/interview/day-174.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-174.md",
   },
   {
     track: "angularinterview",
@@ -12690,7 +12902,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1750,
     fileName: "day-175.md",
-    contentPath: "tutorials/angular/interview/day-175.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-175.md",
   },
   {
     track: "angularinterview",
@@ -12701,7 +12913,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1760,
     fileName: "day-176.md",
-    contentPath: "tutorials/angular/interview/day-176.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-176.md",
   },
   {
     track: "angularinterview",
@@ -12712,7 +12924,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1770,
     fileName: "day-177.md",
-    contentPath: "tutorials/angular/interview/day-177.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-177.md",
   },
   {
     track: "angularinterview",
@@ -12723,7 +12935,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1780,
     fileName: "day-178.md",
-    contentPath: "tutorials/angular/interview/day-178.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-178.md",
   },
   {
     track: "angularinterview",
@@ -12734,7 +12946,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1790,
     fileName: "day-179.md",
-    contentPath: "tutorials/angular/interview/day-179.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-179.md",
   },
   {
     track: "angularinterview",
@@ -12745,7 +12957,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1800,
     fileName: "day-180.md",
-    contentPath: "tutorials/angular/interview/day-180.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-180.md",
   },
   {
     track: "angularinterview",
@@ -12756,7 +12968,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1810,
     fileName: "day-181.md",
-    contentPath: "tutorials/angular/interview/day-181.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-181.md",
   },
   {
     track: "angularinterview",
@@ -12767,7 +12979,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1820,
     fileName: "day-182.md",
-    contentPath: "tutorials/angular/interview/day-182.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-182.md",
   },
   {
     track: "angularinterview",
@@ -12778,7 +12990,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1830,
     fileName: "day-183.md",
-    contentPath: "tutorials/angular/interview/day-183.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-183.md",
   },
   {
     track: "angularinterview",
@@ -12789,7 +13001,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1840,
     fileName: "day-184.md",
-    contentPath: "tutorials/angular/interview/day-184.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-184.md",
   },
   {
     track: "angularinterview",
@@ -12800,7 +13012,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1850,
     fileName: "day-185.md",
-    contentPath: "tutorials/angular/interview/day-185.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-185.md",
   },
   {
     track: "angularinterview",
@@ -12811,7 +13023,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1860,
     fileName: "day-186.md",
-    contentPath: "tutorials/angular/interview/day-186.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-186.md",
   },
   {
     track: "angularinterview",
@@ -12822,7 +13034,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1870,
     fileName: "day-187.md",
-    contentPath: "tutorials/angular/interview/day-187.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-187.md",
   },
   {
     track: "angularinterview",
@@ -12833,7 +13045,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1880,
     fileName: "day-188.md",
-    contentPath: "tutorials/angular/interview/day-188.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-188.md",
   },
   {
     track: "angularinterview",
@@ -12844,7 +13056,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1890,
     fileName: "day-189.md",
-    contentPath: "tutorials/angular/interview/day-189.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-189.md",
   },
   {
     track: "angularinterview",
@@ -12855,7 +13067,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1900,
     fileName: "day-190.md",
-    contentPath: "tutorials/angular/interview/day-190.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-190.md",
   },
   {
     track: "angularinterview",
@@ -12866,7 +13078,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1910,
     fileName: "day-191.md",
-    contentPath: "tutorials/angular/interview/day-191.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-191.md",
   },
   {
     track: "angularinterview",
@@ -12877,7 +13089,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1920,
     fileName: "day-192.md",
-    contentPath: "tutorials/angular/interview/day-192.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-192.md",
   },
   {
     track: "angularinterview",
@@ -12888,7 +13100,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1930,
     fileName: "day-193.md",
-    contentPath: "tutorials/angular/interview/day-193.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-193.md",
   },
   {
     track: "angularinterview",
@@ -12899,7 +13111,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1940,
     fileName: "day-194.md",
-    contentPath: "tutorials/angular/interview/day-194.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-194.md",
   },
   {
     track: "angularinterview",
@@ -12910,7 +13122,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1950,
     fileName: "day-195.md",
-    contentPath: "tutorials/angular/interview/day-195.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-195.md",
   },
   {
     track: "angularinterview",
@@ -12921,7 +13133,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1960,
     fileName: "day-196.md",
-    contentPath: "tutorials/angular/interview/day-196.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-196.md",
   },
   {
     track: "angularinterview",
@@ -12932,7 +13144,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1970,
     fileName: "day-197.md",
-    contentPath: "tutorials/angular/interview/day-197.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-197.md",
   },
   {
     track: "angularinterview",
@@ -12943,7 +13155,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1980,
     fileName: "day-198.md",
-    contentPath: "tutorials/angular/interview/day-198.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-198.md",
   },
   {
     track: "angularinterview",
@@ -12954,7 +13166,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 1990,
     fileName: "day-199.md",
-    contentPath: "tutorials/angular/interview/day-199.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-199.md",
   },
   {
     track: "angularinterview",
@@ -12965,7 +13177,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2000,
     fileName: "day-200.md",
-    contentPath: "tutorials/angular/interview/day-200.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-200.md",
   },
   {
     track: "angularinterview",
@@ -12976,7 +13188,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2010,
     fileName: "day-201.md",
-    contentPath: "tutorials/angular/interview/day-201.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-201.md",
   },
   {
     track: "angularinterview",
@@ -12987,7 +13199,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2020,
     fileName: "day-202.md",
-    contentPath: "tutorials/angular/interview/day-202.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-202.md",
   },
   {
     track: "angularinterview",
@@ -12998,7 +13210,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2030,
     fileName: "day-203.md",
-    contentPath: "tutorials/angular/interview/day-203.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-203.md",
   },
   {
     track: "angularinterview",
@@ -13009,7 +13221,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2040,
     fileName: "day-204.md",
-    contentPath: "tutorials/angular/interview/day-204.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-204.md",
   },
   {
     track: "angularinterview",
@@ -13020,7 +13232,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2050,
     fileName: "day-205.md",
-    contentPath: "tutorials/angular/interview/day-205.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-205.md",
   },
   {
     track: "angularinterview",
@@ -13031,7 +13243,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2060,
     fileName: "day-206.md",
-    contentPath: "tutorials/angular/interview/day-206.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-206.md",
   },
   {
     track: "angularinterview",
@@ -13042,7 +13254,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2070,
     fileName: "day-207.md",
-    contentPath: "tutorials/angular/interview/day-207.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-207.md",
   },
   {
     track: "angularinterview",
@@ -13053,7 +13265,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2080,
     fileName: "day-208.md",
-    contentPath: "tutorials/angular/interview/day-208.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-208.md",
   },
   {
     track: "angularinterview",
@@ -13064,7 +13276,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2090,
     fileName: "day-209.md",
-    contentPath: "tutorials/angular/interview/day-209.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-209.md",
   },
   {
     track: "angularinterview",
@@ -13075,7 +13287,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2100,
     fileName: "day-210.md",
-    contentPath: "tutorials/angular/interview/day-210.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-210.md",
   },
   {
     track: "angularinterview",
@@ -13086,7 +13298,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2110,
     fileName: "day-211.md",
-    contentPath: "tutorials/angular/interview/day-211.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-211.md",
   },
   {
     track: "angularinterview",
@@ -13097,7 +13309,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2120,
     fileName: "day-212.md",
-    contentPath: "tutorials/angular/interview/day-212.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-212.md",
   },
   {
     track: "angularinterview",
@@ -13108,7 +13320,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2130,
     fileName: "day-213.md",
-    contentPath: "tutorials/angular/interview/day-213.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-213.md",
   },
   {
     track: "angularinterview",
@@ -13119,7 +13331,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2140,
     fileName: "day-214.md",
-    contentPath: "tutorials/angular/interview/day-214.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-214.md",
   },
   {
     track: "angularinterview",
@@ -13130,7 +13342,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2150,
     fileName: "day-215.md",
-    contentPath: "tutorials/angular/interview/day-215.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-215.md",
   },
   {
     track: "angularinterview",
@@ -13141,7 +13353,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2160,
     fileName: "day-216.md",
-    contentPath: "tutorials/angular/interview/day-216.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-216.md",
   },
   {
     track: "angularinterview",
@@ -13152,7 +13364,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2170,
     fileName: "day-217.md",
-    contentPath: "tutorials/angular/interview/day-217.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-217.md",
   },
   {
     track: "angularinterview",
@@ -13163,7 +13375,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2180,
     fileName: "day-218.md",
-    contentPath: "tutorials/angular/interview/day-218.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-218.md",
   },
   {
     track: "angularinterview",
@@ -13174,7 +13386,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2190,
     fileName: "day-219.md",
-    contentPath: "tutorials/angular/interview/day-219.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-219.md",
   },
   {
     track: "angularinterview",
@@ -13185,7 +13397,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2200,
     fileName: "day-220.md",
-    contentPath: "tutorials/angular/interview/day-220.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-220.md",
   },
   {
     track: "angularinterview",
@@ -13196,7 +13408,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2210,
     fileName: "day-221.md",
-    contentPath: "tutorials/angular/interview/day-221.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-221.md",
   },
   {
     track: "angularinterview",
@@ -13207,7 +13419,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2220,
     fileName: "day-222.md",
-    contentPath: "tutorials/angular/interview/day-222.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-222.md",
   },
   {
     track: "angularinterview",
@@ -13218,7 +13430,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2230,
     fileName: "day-223.md",
-    contentPath: "tutorials/angular/interview/day-223.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-223.md",
   },
   {
     track: "angularinterview",
@@ -13229,7 +13441,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2240,
     fileName: "day-224.md",
-    contentPath: "tutorials/angular/interview/day-224.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-224.md",
   },
   {
     track: "angularinterview",
@@ -13240,7 +13452,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2250,
     fileName: "day-225.md",
-    contentPath: "tutorials/angular/interview/day-225.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-225.md",
   },
   {
     track: "angularinterview",
@@ -13251,7 +13463,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2260,
     fileName: "day-226.md",
-    contentPath: "tutorials/angular/interview/day-226.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-226.md",
   },
   {
     track: "angularinterview",
@@ -13262,7 +13474,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2270,
     fileName: "day-227.md",
-    contentPath: "tutorials/angular/interview/day-227.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-227.md",
   },
   {
     track: "angularinterview",
@@ -13273,7 +13485,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2280,
     fileName: "day-228.md",
-    contentPath: "tutorials/angular/interview/day-228.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-228.md",
   },
   {
     track: "angularinterview",
@@ -13284,7 +13496,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2290,
     fileName: "day-229.md",
-    contentPath: "tutorials/angular/interview/day-229.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-229.md",
   },
   {
     track: "angularinterview",
@@ -13295,7 +13507,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2300,
     fileName: "day-230.md",
-    contentPath: "tutorials/angular/interview/day-230.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-230.md",
   },
   {
     track: "angularinterview",
@@ -13306,7 +13518,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2310,
     fileName: "day-231.md",
-    contentPath: "tutorials/angular/interview/day-231.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-231.md",
   },
   {
     track: "angularinterview",
@@ -13317,7 +13529,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2320,
     fileName: "day-232.md",
-    contentPath: "tutorials/angular/interview/day-232.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-232.md",
   },
   {
     track: "angularinterview",
@@ -13328,7 +13540,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2330,
     fileName: "day-233.md",
-    contentPath: "tutorials/angular/interview/day-233.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-233.md",
   },
   {
     track: "angularinterview",
@@ -13339,7 +13551,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2340,
     fileName: "day-234.md",
-    contentPath: "tutorials/angular/interview/day-234.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-234.md",
   },
   {
     track: "angularinterview",
@@ -13350,7 +13562,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2350,
     fileName: "day-235.md",
-    contentPath: "tutorials/angular/interview/day-235.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-235.md",
   },
   {
     track: "angularinterview",
@@ -13361,7 +13573,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2360,
     fileName: "day-236.md",
-    contentPath: "tutorials/angular/interview/day-236.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-236.md",
   },
   {
     track: "angularinterview",
@@ -13372,7 +13584,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2370,
     fileName: "day-237.md",
-    contentPath: "tutorials/angular/interview/day-237.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-237.md",
   },
   {
     track: "angularinterview",
@@ -13383,7 +13595,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2380,
     fileName: "day-238.md",
-    contentPath: "tutorials/angular/interview/day-238.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-238.md",
   },
   {
     track: "angularinterview",
@@ -13394,7 +13606,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2390,
     fileName: "day-239.md",
-    contentPath: "tutorials/angular/interview/day-239.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-239.md",
   },
   {
     track: "angularinterview",
@@ -13405,7 +13617,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2400,
     fileName: "day-240.md",
-    contentPath: "tutorials/angular/interview/day-240.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-240.md",
   },
   {
     track: "angularinterview",
@@ -13416,7 +13628,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2410,
     fileName: "day-241.md",
-    contentPath: "tutorials/angular/interview/day-241.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-241.md",
   },
   {
     track: "angularinterview",
@@ -13427,7 +13639,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2420,
     fileName: "day-242.md",
-    contentPath: "tutorials/angular/interview/day-242.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-242.md",
   },
   {
     track: "angularinterview",
@@ -13438,7 +13650,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2430,
     fileName: "day-243.md",
-    contentPath: "tutorials/angular/interview/day-243.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-243.md",
   },
   {
     track: "angularinterview",
@@ -13449,7 +13661,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2440,
     fileName: "day-244.md",
-    contentPath: "tutorials/angular/interview/day-244.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-244.md",
   },
   {
     track: "angularinterview",
@@ -13460,7 +13672,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2450,
     fileName: "day-245.md",
-    contentPath: "tutorials/angular/interview/day-245.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-245.md",
   },
   {
     track: "angularinterview",
@@ -13471,7 +13683,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2460,
     fileName: "day-246.md",
-    contentPath: "tutorials/angular/interview/day-246.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-246.md",
   },
   {
     track: "angularinterview",
@@ -13482,7 +13694,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2470,
     fileName: "day-247.md",
-    contentPath: "tutorials/angular/interview/day-247.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-247.md",
   },
   {
     track: "angularinterview",
@@ -13493,7 +13705,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2480,
     fileName: "day-248.md",
-    contentPath: "tutorials/angular/interview/day-248.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-248.md",
   },
   {
     track: "angularinterview",
@@ -13504,7 +13716,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2490,
     fileName: "day-249.md",
-    contentPath: "tutorials/angular/interview/day-249.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-249.md",
   },
   {
     track: "angularinterview",
@@ -13515,7 +13727,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2500,
     fileName: "day-250.md",
-    contentPath: "tutorials/angular/interview/day-250.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-250.md",
   },
   {
     track: "angularinterview",
@@ -13526,7 +13738,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2510,
     fileName: "day-251.md",
-    contentPath: "tutorials/angular/interview/day-251.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-251.md",
   },
   {
     track: "angularinterview",
@@ -13537,7 +13749,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2520,
     fileName: "day-252.md",
-    contentPath: "tutorials/angular/interview/day-252.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-252.md",
   },
   {
     track: "angularinterview",
@@ -13548,7 +13760,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2530,
     fileName: "day-253.md",
-    contentPath: "tutorials/angular/interview/day-253.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-253.md",
   },
   {
     track: "angularinterview",
@@ -13559,7 +13771,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2540,
     fileName: "day-254.md",
-    contentPath: "tutorials/angular/interview/day-254.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-254.md",
   },
   {
     track: "angularinterview",
@@ -13570,7 +13782,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2550,
     fileName: "day-255.md",
-    contentPath: "tutorials/angular/interview/day-255.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-255.md",
   },
   {
     track: "angularinterview",
@@ -13581,7 +13793,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2560,
     fileName: "day-256.md",
-    contentPath: "tutorials/angular/interview/day-256.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-256.md",
   },
   {
     track: "angularinterview",
@@ -13592,7 +13804,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2570,
     fileName: "day-257.md",
-    contentPath: "tutorials/angular/interview/day-257.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-257.md",
   },
   {
     track: "angularinterview",
@@ -13603,7 +13815,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2580,
     fileName: "day-258.md",
-    contentPath: "tutorials/angular/interview/day-258.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-258.md",
   },
   {
     track: "angularinterview",
@@ -13614,7 +13826,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2590,
     fileName: "day-259.md",
-    contentPath: "tutorials/angular/interview/day-259.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-259.md",
   },
   {
     track: "angularinterview",
@@ -13625,7 +13837,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2600,
     fileName: "day-260.md",
-    contentPath: "tutorials/angular/interview/day-260.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-260.md",
   },
   {
     track: "angularinterview",
@@ -13636,7 +13848,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2610,
     fileName: "day-261.md",
-    contentPath: "tutorials/angular/interview/day-261.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-261.md",
   },
   {
     track: "angularinterview",
@@ -13647,7 +13859,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2620,
     fileName: "day-262.md",
-    contentPath: "tutorials/angular/interview/day-262.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-262.md",
   },
   {
     track: "angularinterview",
@@ -13658,7 +13870,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2630,
     fileName: "day-263.md",
-    contentPath: "tutorials/angular/interview/day-263.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-263.md",
   },
   {
     track: "angularinterview",
@@ -13669,7 +13881,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2640,
     fileName: "day-264.md",
-    contentPath: "tutorials/angular/interview/day-264.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-264.md",
   },
   {
     track: "angularinterview",
@@ -13680,7 +13892,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2650,
     fileName: "day-265.md",
-    contentPath: "tutorials/angular/interview/day-265.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-265.md",
   },
   {
     track: "angularinterview",
@@ -13691,7 +13903,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2660,
     fileName: "day-266.md",
-    contentPath: "tutorials/angular/interview/day-266.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-266.md",
   },
   {
     track: "angularinterview",
@@ -13702,7 +13914,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2670,
     fileName: "day-267.md",
-    contentPath: "tutorials/angular/interview/day-267.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-267.md",
   },
   {
     track: "angularinterview",
@@ -13713,7 +13925,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2680,
     fileName: "day-268.md",
-    contentPath: "tutorials/angular/interview/day-268.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-268.md",
   },
   {
     track: "angularinterview",
@@ -13724,7 +13936,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2690,
     fileName: "day-269.md",
-    contentPath: "tutorials/angular/interview/day-269.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-269.md",
   },
   {
     track: "angularinterview",
@@ -13735,7 +13947,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2700,
     fileName: "day-270.md",
-    contentPath: "tutorials/angular/interview/day-270.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-270.md",
   },
   {
     track: "angularinterview",
@@ -13746,7 +13958,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2710,
     fileName: "day-271.md",
-    contentPath: "tutorials/angular/interview/day-271.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-271.md",
   },
   {
     track: "angularinterview",
@@ -13757,7 +13969,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2720,
     fileName: "day-272.md",
-    contentPath: "tutorials/angular/interview/day-272.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-272.md",
   },
   {
     track: "angularinterview",
@@ -13768,7 +13980,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2730,
     fileName: "day-273.md",
-    contentPath: "tutorials/angular/interview/day-273.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-273.md",
   },
   {
     track: "angularinterview",
@@ -13779,7 +13991,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2740,
     fileName: "day-274.md",
-    contentPath: "tutorials/angular/interview/day-274.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-274.md",
   },
   {
     track: "angularinterview",
@@ -13790,7 +14002,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2750,
     fileName: "day-275.md",
-    contentPath: "tutorials/angular/interview/day-275.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-275.md",
   },
   {
     track: "angularinterview",
@@ -13801,7 +14013,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2760,
     fileName: "day-276.md",
-    contentPath: "tutorials/angular/interview/day-276.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-276.md",
   },
   {
     track: "angularinterview",
@@ -13812,7 +14024,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2770,
     fileName: "day-277.md",
-    contentPath: "tutorials/angular/interview/day-277.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-277.md",
   },
   {
     track: "angularinterview",
@@ -13823,7 +14035,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2780,
     fileName: "day-278.md",
-    contentPath: "tutorials/angular/interview/day-278.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-278.md",
   },
   {
     track: "angularinterview",
@@ -13834,7 +14046,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2790,
     fileName: "day-279.md",
-    contentPath: "tutorials/angular/interview/day-279.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-279.md",
   },
   {
     track: "angularinterview",
@@ -13845,7 +14057,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2800,
     fileName: "day-280.md",
-    contentPath: "tutorials/angular/interview/day-280.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-280.md",
   },
   {
     track: "angularinterview",
@@ -13856,7 +14068,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2810,
     fileName: "day-281.md",
-    contentPath: "tutorials/angular/interview/day-281.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-281.md",
   },
   {
     track: "angularinterview",
@@ -13867,7 +14079,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2820,
     fileName: "day-282.md",
-    contentPath: "tutorials/angular/interview/day-282.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-282.md",
   },
   {
     track: "angularinterview",
@@ -13878,7 +14090,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2830,
     fileName: "day-283.md",
-    contentPath: "tutorials/angular/interview/day-283.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-283.md",
   },
   {
     track: "angularinterview",
@@ -13889,7 +14101,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2840,
     fileName: "day-284.md",
-    contentPath: "tutorials/angular/interview/day-284.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-284.md",
   },
   {
     track: "angularinterview",
@@ -13900,7 +14112,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2850,
     fileName: "day-285.md",
-    contentPath: "tutorials/angular/interview/day-285.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-285.md",
   },
   {
     track: "angularinterview",
@@ -13911,7 +14123,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2860,
     fileName: "day-286.md",
-    contentPath: "tutorials/angular/interview/day-286.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-286.md",
   },
   {
     track: "angularinterview",
@@ -13922,7 +14134,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2870,
     fileName: "day-287.md",
-    contentPath: "tutorials/angular/interview/day-287.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-287.md",
   },
   {
     track: "angularinterview",
@@ -13933,7 +14145,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2880,
     fileName: "day-288.md",
-    contentPath: "tutorials/angular/interview/day-288.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-288.md",
   },
   {
     track: "angularinterview",
@@ -13944,7 +14156,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2890,
     fileName: "day-289.md",
-    contentPath: "tutorials/angular/interview/day-289.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-289.md",
   },
   {
     track: "angularinterview",
@@ -13955,7 +14167,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2900,
     fileName: "day-290.md",
-    contentPath: "tutorials/angular/interview/day-290.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-290.md",
   },
   {
     track: "angularinterview",
@@ -13966,7 +14178,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2910,
     fileName: "day-291.md",
-    contentPath: "tutorials/angular/interview/day-291.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-291.md",
   },
   {
     track: "angularinterview",
@@ -13977,7 +14189,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2920,
     fileName: "day-292.md",
-    contentPath: "tutorials/angular/interview/day-292.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-292.md",
   },
   {
     track: "angularinterview",
@@ -13988,7 +14200,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2930,
     fileName: "day-293.md",
-    contentPath: "tutorials/angular/interview/day-293.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-293.md",
   },
   {
     track: "angularinterview",
@@ -13999,7 +14211,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2940,
     fileName: "day-294.md",
-    contentPath: "tutorials/angular/interview/day-294.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-294.md",
   },
   {
     track: "angularinterview",
@@ -14010,7 +14222,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2950,
     fileName: "day-295.md",
-    contentPath: "tutorials/angular/interview/day-295.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-295.md",
   },
   {
     track: "angularinterview",
@@ -14021,7 +14233,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2960,
     fileName: "day-296.md",
-    contentPath: "tutorials/angular/interview/day-296.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-296.md",
   },
   {
     track: "angularinterview",
@@ -14032,7 +14244,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2970,
     fileName: "day-297.md",
-    contentPath: "tutorials/angular/interview/day-297.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-297.md",
   },
   {
     track: "angularinterview",
@@ -14043,7 +14255,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2980,
     fileName: "day-298.md",
-    contentPath: "tutorials/angular/interview/day-298.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-298.md",
   },
   {
     track: "angularinterview",
@@ -14054,7 +14266,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 2990,
     fileName: "day-299.md",
-    contentPath: "tutorials/angular/interview/day-299.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-299.md",
   },
   {
     track: "angularinterview",
@@ -14065,7 +14277,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3000,
     fileName: "day-300.md",
-    contentPath: "tutorials/angular/interview/day-300.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-300.md",
   },
   {
     track: "angularinterview",
@@ -14076,7 +14288,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3010,
     fileName: "day-301.md",
-    contentPath: "tutorials/angular/interview/day-301.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-301.md",
   },
   {
     track: "angularinterview",
@@ -14087,7 +14299,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3020,
     fileName: "day-302.md",
-    contentPath: "tutorials/angular/interview/day-302.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-302.md",
   },
   {
     track: "angularinterview",
@@ -14098,7 +14310,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3030,
     fileName: "day-303.md",
-    contentPath: "tutorials/angular/interview/day-303.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-303.md",
   },
   {
     track: "angularinterview",
@@ -14109,7 +14321,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3040,
     fileName: "day-304.md",
-    contentPath: "tutorials/angular/interview/day-304.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-304.md",
   },
   {
     track: "angularinterview",
@@ -14120,7 +14332,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3050,
     fileName: "day-305.md",
-    contentPath: "tutorials/angular/interview/day-305.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-305.md",
   },
   {
     track: "angularinterview",
@@ -14131,7 +14343,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3060,
     fileName: "day-306.md",
-    contentPath: "tutorials/angular/interview/day-306.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-306.md",
   },
   {
     track: "angularinterview",
@@ -14142,7 +14354,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3070,
     fileName: "day-307.md",
-    contentPath: "tutorials/angular/interview/day-307.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-307.md",
   },
   {
     track: "angularinterview",
@@ -14153,7 +14365,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3080,
     fileName: "day-308.md",
-    contentPath: "tutorials/angular/interview/day-308.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-308.md",
   },
   {
     track: "angularinterview",
@@ -14164,7 +14376,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3090,
     fileName: "day-309.md",
-    contentPath: "tutorials/angular/interview/day-309.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-309.md",
   },
   {
     track: "angularinterview",
@@ -14175,7 +14387,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3100,
     fileName: "day-310.md",
-    contentPath: "tutorials/angular/interview/day-310.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-310.md",
   },
   {
     track: "angularinterview",
@@ -14186,7 +14398,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3110,
     fileName: "day-311.md",
-    contentPath: "tutorials/angular/interview/day-311.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-311.md",
   },
   {
     track: "angularinterview",
@@ -14197,7 +14409,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3120,
     fileName: "day-312.md",
-    contentPath: "tutorials/angular/interview/day-312.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-312.md",
   },
   {
     track: "angularinterview",
@@ -14208,7 +14420,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3130,
     fileName: "day-313.md",
-    contentPath: "tutorials/angular/interview/day-313.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-313.md",
   },
   {
     track: "angularinterview",
@@ -14219,7 +14431,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3140,
     fileName: "day-314.md",
-    contentPath: "tutorials/angular/interview/day-314.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-314.md",
   },
   {
     track: "angularinterview",
@@ -14230,7 +14442,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3150,
     fileName: "day-315.md",
-    contentPath: "tutorials/angular/interview/day-315.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-315.md",
   },
   {
     track: "angularinterview",
@@ -14241,7 +14453,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3160,
     fileName: "day-316.md",
-    contentPath: "tutorials/angular/interview/day-316.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-316.md",
   },
   {
     track: "angularinterview",
@@ -14252,7 +14464,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3170,
     fileName: "day-317.md",
-    contentPath: "tutorials/angular/interview/day-317.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-317.md",
   },
   {
     track: "angularinterview",
@@ -14263,7 +14475,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3180,
     fileName: "day-318.md",
-    contentPath: "tutorials/angular/interview/day-318.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-318.md",
   },
   {
     track: "angularinterview",
@@ -14274,7 +14486,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3190,
     fileName: "day-319.md",
-    contentPath: "tutorials/angular/interview/day-319.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-319.md",
   },
   {
     track: "angularinterview",
@@ -14285,7 +14497,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3200,
     fileName: "day-320.md",
-    contentPath: "tutorials/angular/interview/day-320.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-320.md",
   },
   {
     track: "angularinterview",
@@ -14296,7 +14508,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3210,
     fileName: "day-321.md",
-    contentPath: "tutorials/angular/interview/day-321.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-321.md",
   },
   {
     track: "angularinterview",
@@ -14307,7 +14519,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3220,
     fileName: "day-322.md",
-    contentPath: "tutorials/angular/interview/day-322.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-322.md",
   },
   {
     track: "angularinterview",
@@ -14318,7 +14530,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3230,
     fileName: "day-323.md",
-    contentPath: "tutorials/angular/interview/day-323.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-323.md",
   },
   {
     track: "angularinterview",
@@ -14329,7 +14541,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3240,
     fileName: "day-324.md",
-    contentPath: "tutorials/angular/interview/day-324.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-324.md",
   },
   {
     track: "angularinterview",
@@ -14340,7 +14552,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3250,
     fileName: "day-325.md",
-    contentPath: "tutorials/angular/interview/day-325.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-325.md",
   },
   {
     track: "angularinterview",
@@ -14351,7 +14563,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3260,
     fileName: "day-326.md",
-    contentPath: "tutorials/angular/interview/day-326.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-326.md",
   },
   {
     track: "angularinterview",
@@ -14362,7 +14574,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3270,
     fileName: "day-327.md",
-    contentPath: "tutorials/angular/interview/day-327.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-327.md",
   },
   {
     track: "angularinterview",
@@ -14373,7 +14585,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3280,
     fileName: "day-328.md",
-    contentPath: "tutorials/angular/interview/day-328.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-328.md",
   },
   {
     track: "angularinterview",
@@ -14384,7 +14596,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3290,
     fileName: "day-329.md",
-    contentPath: "tutorials/angular/interview/day-329.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-329.md",
   },
   {
     track: "angularinterview",
@@ -14395,7 +14607,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3300,
     fileName: "day-330.md",
-    contentPath: "tutorials/angular/interview/day-330.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-330.md",
   },
   {
     track: "angularinterview",
@@ -14406,7 +14618,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3310,
     fileName: "day-331.md",
-    contentPath: "tutorials/angular/interview/day-331.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-331.md",
   },
   {
     track: "angularinterview",
@@ -14417,7 +14629,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3320,
     fileName: "day-332.md",
-    contentPath: "tutorials/angular/interview/day-332.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-332.md",
   },
   {
     track: "angularinterview",
@@ -14428,7 +14640,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3330,
     fileName: "day-333.md",
-    contentPath: "tutorials/angular/interview/day-333.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-333.md",
   },
   {
     track: "angularinterview",
@@ -14439,7 +14651,7 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3340,
     fileName: "day-334.md",
-    contentPath: "tutorials/angular/interview/day-334.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-334.md",
   },
   {
     track: "angularinterview",
@@ -14450,12 +14662,13 @@ const tutorialsChunkAngularInterview: TutorialMeta[] = [
     estimatedMinutes: 20,
     order: 3350,
     fileName: "day-335.md",
-    contentPath: "tutorials/angular/interview/day-335.md",
+    contentPath: "coding/Angular Practise/AngularInterview/day-335.md",
   },
 ];
 
 export const tutorials: TutorialMeta[] = [
   ...tutorialsChunkAngularInterview,
+  ...tutorialsChunkHTML,
   ...tutorialsChunkAngular,
   ...tutorialsChunk0,
   ...tutorialsChunk1,
@@ -14476,6 +14689,7 @@ const tutorialsByTrack = tutorials.reduce(
     return accumulator;
   },
   {
+    html: [] as TutorialMeta[],
     angular: [] as TutorialMeta[],
     angularinterview: [] as TutorialMeta[],
     java: [] as TutorialMeta[],

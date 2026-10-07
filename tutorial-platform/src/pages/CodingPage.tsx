@@ -2,12 +2,19 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MarkdownLesson } from "../components/MarkdownLesson";
 import { PracticeEditor } from "../components/PracticeEditor";
+import { buildQuestionAnswerSegments, QuestionAnswerLesson } from "../components/QuestionAnswerLesson";
 import { Spinner } from "../components/Spinner";
 import { getCodingLessonBySlug, getCodingLessonsByTrack } from "../data/codingLessons";
 import { getCodingTrackLabel, isCodingTrackKey } from "../data/codingTracks";
-import { loadCodingLessonMarkdown } from "../services/contentAdmin";
+import { loadCodingLessonPair } from "../services/contentAdmin";
+import type { CodingQuestionAnswer } from "../types/codingQuestionAnswer";
 
-const markdownCache = new Map<string, string>();
+const contentPairCache = new Map<string, {
+  practice: string;
+  contextMarkdown: string;
+  solution: string;
+  questions: CodingQuestionAnswer[];
+}>();
 type ViewMode = "practice" | "solution";
 
 export function CodingPage() {
@@ -19,7 +26,10 @@ export function CodingPage() {
   const lessons = useMemo(() => getCodingLessonsByTrack(track), [track]);
   const lesson = slug ? getCodingLessonBySlug(track, slug) : undefined;
 
-  const [markdown, setMarkdown] = useState("");
+  const [practiceMarkdown, setPracticeMarkdown] = useState("");
+  const [contextMarkdown, setContextMarkdown] = useState("");
+  const [solutionMarkdown, setSolutionMarkdown] = useState("");
+  const [storedQuestionAnswers, setStoredQuestionAnswers] = useState<CodingQuestionAnswer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("practice");
@@ -36,47 +46,45 @@ export function CodingPage() {
     if (!lesson) {
       setError("This practice day is not available.");
       setIsLoading(false);
-      setMarkdown("");
-      return;
-    }
-
-    const activePath = viewMode === "solution" ? lesson.solutionPath : lesson.contentPath;
-
-    if (!activePath) {
-      setIsLoading(false);
-      setError("");
-      setMarkdown("");
+      setPracticeMarkdown("");
+      setContextMarkdown("");
+      setSolutionMarkdown("");
+      setStoredQuestionAnswers([]);
       return;
     }
 
     let isMounted = true;
+    const cacheKey = `${track}::${lesson.slug}`;
 
     const loadMarkdown = async () => {
       try {
         setIsLoading(true);
         setError("");
 
-        const cached = markdownCache.get(activePath);
+        const cached = contentPairCache.get(cacheKey);
         if (cached) {
-          setMarkdown(cached);
+          setPracticeMarkdown(cached.practice);
+          setContextMarkdown(cached.contextMarkdown);
+          setSolutionMarkdown(cached.solution);
+          setStoredQuestionAnswers(cached.questions);
           return;
         }
 
-        const content = await loadCodingLessonMarkdown(
-          {
-            track,
-            slug: lesson.slug,
-          },
-          viewMode,
-        );
+        const content = await loadCodingLessonPair({ track, slug: lesson.slug });
         if (isMounted) {
-          markdownCache.set(activePath, content);
-          setMarkdown(content);
+          contentPairCache.set(cacheKey, content);
+          setPracticeMarkdown(content.practice);
+          setContextMarkdown(content.contextMarkdown);
+          setSolutionMarkdown(content.solution);
+          setStoredQuestionAnswers(content.questions);
         }
       } catch (loadError) {
         if (isMounted) {
           setError(loadError instanceof Error ? loadError.message : "Failed to load content.");
-          setMarkdown("");
+          setPracticeMarkdown("");
+          setContextMarkdown("");
+          setSolutionMarkdown("");
+          setStoredQuestionAnswers([]);
         }
       } finally {
         if (isMounted) {
@@ -90,7 +98,14 @@ export function CodingPage() {
     return () => {
       isMounted = false;
     };
-  }, [lesson, viewMode]);
+  }, [lesson, track]);
+
+  const questionAnswerSegments = useMemo(
+    () => lesson?.hasSolution && !isRealInterviewTrack
+      ? buildQuestionAnswerSegments(practiceMarkdown, solutionMarkdown, storedQuestionAnswers)
+      : null,
+    [isRealInterviewTrack, lesson, practiceMarkdown, solutionMarkdown, storedQuestionAnswers],
+  );
 
   if (!lesson) {
     return (
@@ -110,7 +125,7 @@ export function CodingPage() {
           {lesson.dayLabel}: {lesson.title}
         </h1>
 
-        {!isRealInterviewTrack ? <div className="mt-4 inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
+        {!isRealInterviewTrack && !questionAnswerSegments ? <div className="mt-4 inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
           <button
             type="button"
             onClick={() => setViewMode("practice")}
@@ -135,7 +150,16 @@ export function CodingPage() {
       </header>
 
       <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.55)] sm:p-6">
-        {viewMode === "solution" && !lesson.hasSolution ? (
+        {questionAnswerSegments ? (
+          <>
+            {contextMarkdown.trim() ? (
+              <div className="mb-5">
+                <MarkdownLesson markdown={contextMarkdown} onHashLinkClick={() => {}} />
+              </div>
+            ) : null}
+            <QuestionAnswerLesson segments={questionAnswerSegments} />
+          </>
+        ) : viewMode === "solution" && !lesson.hasSolution ? (
           <p className="text-sm text-slate-600">The solution for this day hasn't been added yet — check back soon.</p>
         ) : isLoading ? (
           <p className="flex items-center gap-2 text-sm text-slate-600">
@@ -145,7 +169,11 @@ export function CodingPage() {
         ) : error ? (
           <p className="text-sm text-rose-700">{error}</p>
         ) : (
-          <MarkdownLesson markdown={markdown} onHashLinkClick={() => {}} useSolutionEditor={isRealInterviewTrack} />
+          <MarkdownLesson
+            markdown={viewMode === "solution" ? solutionMarkdown : practiceMarkdown}
+            onHashLinkClick={() => {}}
+            useSolutionEditor={isRealInterviewTrack}
+          />
         )}
       </div>
 

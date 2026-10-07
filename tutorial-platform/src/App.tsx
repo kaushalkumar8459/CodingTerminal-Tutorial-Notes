@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { MainNavigation } from "./components/MainNavigation";
 import { JavaScriptSubNavigation } from "./components/JavaScriptSubNavigation";
 import { AngularSubNavigation } from "./components/AngularSubNavigation";
+import { HTMLSubNavigation } from "./components/HTMLSubNavigation";
 import { CodingNav } from "./components/CodingNav";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { TopProgressBar } from "./components/TopProgressBar";
@@ -53,6 +54,7 @@ function TutorialLayout() {
 
           <MainNavigation currentTrack={track === "angularinterview" ? "angular" : track} />
           {track === "javascript" ? <JavaScriptSubNavigation /> : null}
+          {track === "html" ? <HTMLSubNavigation /> : null}
           {track === "angular" || track === "angularinterview" ? <AngularSubNavigation /> : null}
         </header>
 
@@ -124,7 +126,7 @@ function CodingLayout() {
             No question-count limits — work through as many problems as each day needs.
           </p>
 
-          <MainNavigation currentTrack="javascript" />
+          <MainNavigation currentTrack={track === "htmlinterview" ? "html" : "javascript"} />
           {track === "javascript" ||
           track === "javascriptproblemsolving" ||
           track === "javascriptrealinterview" ||
@@ -134,6 +136,7 @@ function CodingLayout() {
           track === "typescript" ? (
             <JavaScriptSubNavigation />
           ) : null}
+          {track === "htmlinterview" ? <HTMLSubNavigation /> : null}
         </header>
 
         <div className="grid gap-4 sm:gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">

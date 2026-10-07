@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 const rootDir = process.cwd();
-const interviewRoot = path.join(rootDir, "public", "tutorials", "angular", "interview");
+const interviewRoot = path.join(rootDir, "public", "coding", "Angular Practise", "AngularInterview");
 const tutorialsFile = path.join(rootDir, "src", "data", "tutorials.ts");
 const searchIndexFile = path.join(rootDir, "public", "search-index.json");
 
@@ -96,10 +96,11 @@ async function buildEntries() {
 
 async function updateTutorialsFile(entries) {
   let content = await fs.readFile(tutorialsFile, "utf8");
+  const newline = content.includes("\r\n") ? "\r\n" : "\n";
 
-  content = content.replace(/ {2}\{\n {4}track: "angularinterview",[\s\S]*?\n {2}\},\n/g, "");
-  content = content.replace(/const tutorialsChunkAngularInterview: TutorialMeta\[\] = \[[\s\S]*?\n\];\n\n/, "");
-  content = content.replace(/ {2}\.\.\.tutorialsChunkAngularInterview,\n/, "");
+  content = content.replace(/ {2}\{\r?\n {4}track: "angularinterview",[\s\S]*?\r?\n {2}\},\r?\n/g, "");
+  content = content.replace(/const tutorialsChunkAngularInterview: TutorialMeta\[\] = \[[\s\S]*?\r?\n\];\r?\n\r?\n/, "");
+  content = content.replace(/ {2}\.\.\.tutorialsChunkAngularInterview,\r?\n/, "");
 
   const entryBlocks = entries
     .map((entry) => {
@@ -116,21 +117,21 @@ async function updateTutorialsFile(entries) {
         `    fileName: "${entry.fileName}",`,
         `    contentPath: "${entry.contentPath}",`,
         "  },",
-      ].join("\n");
+      ].join(newline);
     })
-    .join("\n");
+    .join(newline);
 
-  const chunkDeclaration = `const tutorialsChunkAngularInterview: TutorialMeta[] = [\n${entryBlocks}\n];\n\n`;
-  const exportMarker = "export const tutorials: TutorialMeta[] = [\n";
+  const chunkDeclaration = `const tutorialsChunkAngularInterview: TutorialMeta[] = [${newline}${entryBlocks}${newline}];${newline}${newline}`;
+  const exportMarker = `export const tutorials: TutorialMeta[] = [${newline}`;
   content = content.replace(
     exportMarker,
-    `${chunkDeclaration}${exportMarker}  ...tutorialsChunkAngularInterview,\n`,
+    `${chunkDeclaration}${exportMarker}  ...tutorialsChunkAngularInterview,${newline}`,
   );
 
   if (!/angularinterview: \[\] as TutorialMeta\[\],/.test(content)) {
     content = content.replace(
       /(java: \[\] as TutorialMeta\[\],)/,
-      "angularinterview: [] as TutorialMeta[],\n    $1",
+      `angularinterview: [] as TutorialMeta[],${newline}    $1`,
     );
   }
 

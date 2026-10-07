@@ -8,6 +8,7 @@
     "content:sync": "node ./scripts/content-pipeline.mjs sync",
     "content:generate": "node ./scripts/content-pipeline.mjs generate",
     "content:coding": "node ./scripts/generate-coding-index.mjs",
+    "content:html": "node ./scripts/generate-html-tutorials.mjs",
     "content:validate": "node ./scripts/content-pipeline.mjs validate",
     "content:validate:react": "node ./scripts/validate-react-docs.mjs",
     "content:fix:react": "node ./scripts/fix-react-mojibake.mjs",

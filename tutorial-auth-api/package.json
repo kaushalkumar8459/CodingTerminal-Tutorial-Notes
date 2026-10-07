@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
     "build": "tsc -p tsconfig.json",
+    "content:migrate:qna": "node ./scripts/migrate-coding-question-answers.mjs",
+    "content:merge:javascript": "node ./scripts/merge-javascript-solutions.mjs",
+    "content:merge:coding": "node ./scripts/merge-javascript-solutions.mjs",
+    "test": "node --test",
     "start": "cross-env NODE_ENV=production node dist/server.js"
   },
   "dependencies": {
