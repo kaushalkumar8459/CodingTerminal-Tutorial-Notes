@@ -216,6 +216,38 @@ function describeNumber(n) {
 console.log(describeNumber(-4)); // "-4 is even and not positive"
 ```
 
+## Challenge
+
+**24. Reusable utility file**
+
+Place the functions from the earlier exercises in `utils.js`, then export them so other files can reuse them:
+
+```js
+export function add(a, b) {
+  return a + b;
+}
+
+export function isEven(value) {
+  return value % 2 === 0;
+}
+
+export function isPrime(value) {
+  if (value <= 1) return false;
+  for (let divisor = 2; divisor <= Math.sqrt(value); divisor++) {
+    if (value % divisor === 0) return false;
+  }
+  return true;
+}
+
+export function factorial(value) {
+  let result = 1;
+  for (let factor = 2; factor <= value; factor++) result *= factor;
+  return result;
+}
+```
+
+Use the same named-export pattern for the remaining functions, and import only the utilities each consumer needs.
+
 ## Interview-style questions
 
 **21. Parameters vs arguments**

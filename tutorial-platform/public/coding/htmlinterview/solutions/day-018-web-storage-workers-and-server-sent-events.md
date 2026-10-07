@@ -1,5 +1,62 @@
 # Day 018 — Solution: Storage, Workers, and Server-Sent Events
 
+## Practice Answers
+
+**1. Save and restore a preference safely**
+
+```js
+function savePreference(value) {
+  try { localStorage.setItem("reading-list-preference-v1", JSON.stringify(value)); }
+  catch { /* Storage may be blocked or full. */ }
+}
+```
+
+**2. Parse and validate stored JSON**
+
+```js
+function readPreference() {
+  try {
+    const value = localStorage.getItem("reading-list-preference-v1");
+    const parsed = value ? JSON.parse(value) : null;
+    return typeof parsed === "string" ? parsed : "default";
+  } catch {
+    return "default";
+  }
+}
+```
+
+**3. Send data to a module worker and return a sum**
+
+```js
+const worker = new Worker("/scripts/sum-worker.js", { type: "module" });
+worker.postMessage({ numbers: [2, 4, 6] });
+```
+
+```js
+self.addEventListener("message", (event) => {
+  const numbers = event.data?.numbers;
+  if (!Array.isArray(numbers) || !numbers.every(Number.isFinite)) return;
+  self.postMessage({ total: numbers.reduce((sum, value) => sum + value, 0) });
+});
+```
+
+**4. Append event text safely**
+
+```js
+const source = new EventSource("/events");
+source.addEventListener("message", (event) => {
+  const item = document.createElement("li");
+  item.textContent = event.data;
+  document.querySelector("#updates").append(item);
+});
+```
+
+**5. Close the stream when leaving the view**
+
+```js
+source.close();
+```
+
 ## Storage Example
 
 ```js

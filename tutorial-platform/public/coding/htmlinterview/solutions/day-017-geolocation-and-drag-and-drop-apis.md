@@ -1,5 +1,65 @@
 # Day 017 — Solution: Geolocation and Drag-and-Drop APIs
 
+## Practice Answers
+
+**1. Check API availability**
+
+```js
+if (!navigator.geolocation) {
+  status.textContent = "Location is unavailable. Enter a city instead.";
+}
+```
+
+**2. Ask after a user action**
+
+```js
+document.querySelector("#find-nearby").addEventListener("click", () => {
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
+});
+```
+
+**3. Handle permission and availability errors**
+
+```js
+function onError(error) {
+  status.textContent = error.code === error.PERMISSION_DENIED
+    ? "Permission was not granted. Enter a city instead."
+    : "Location could not be determined. Enter a city instead.";
+}
+```
+
+**4. Offer a manual fallback**
+
+```html
+<label for="city">Or enter a city</label>
+<input id="city" name="city">
+```
+
+**5. Identify dragged items with DataTransfer**
+
+```js
+list.addEventListener("dragstart", (event) => {
+  const item = event.target.closest("li[data-id]");
+  if (!item) return;
+  event.dataTransfer.setData("text/plain", item.dataset.id);
+});
+```
+
+**6. Provide an equivalent keyboard action**
+
+```html
+<button type="button" id="move-guide">Move Trail guide to top</button>
+<p id="move-status" role="status" aria-live="polite"></p>
+```
+
+```js
+document.querySelector("#move-guide").addEventListener("click", () => {
+  const guide = list.querySelector('[data-id="guide"]');
+  if (guide) list.prepend(guide);
+  status.textContent = "Trail guide moved to the top.";
+});
+```
+
 ## Geolocation Pattern
 
 ```html

@@ -177,6 +177,17 @@ console.log(getMissingFields({ name: "Ana", email: "", password: "1234" }));
 // ["email"]
 ```
 
+**20. Check whether an array is non-empty**
+
+```js
+function hasItems(items) {
+  return Boolean(items.length);
+}
+
+console.log(hasItems([])); // false
+console.log(hasItems(["item"])); // true
+```
+
 ## Interview-style questions
 
 **21. The exact 6 falsy values**

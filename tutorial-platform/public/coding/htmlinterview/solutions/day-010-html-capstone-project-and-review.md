@@ -2,6 +2,74 @@
 
 This is a compact reference implementation. Replace placeholder paths and connect a real server endpoint before using the form.
 
+## Build Answers
+
+**1. Document shell and metadata**
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Foundations Workshop | Example Learning</title>
+    <meta name="description" content="Join a practical HTML workshop in your community.">
+  </head>
+  <body></body>
+</html>
+```
+
+**2. Semantic page regions**
+
+```html
+<header><nav aria-label="Primary"><a href="#schedule">Schedule</a></nav></header>
+<main><article><h1>Web Foundations Workshop</h1></article></main>
+<footer><a href="mailto:learn@example.com">Contact the organizers</a></footer>
+```
+
+**3. Accessible schedule table**
+
+```html
+<table>
+  <caption>Workshop sessions</caption>
+  <thead><tr><th scope="col">Time</th><th scope="col">Session</th></tr></thead>
+  <tbody><tr><th scope="row">09:00</th><td>Document structure</td></tr></tbody>
+</table>
+```
+
+**4. Labeled registration form**
+
+```html
+<form action="/registrations" method="post">
+  <label for="email">Email</label>
+  <input id="email" name="email" type="email" autocomplete="email" required>
+  <fieldset>
+    <legend>Session preference</legend>
+    <label><input type="radio" name="session" value="morning" checked> Morning</label>
+    <label><input type="radio" name="session" value="afternoon"> Afternoon</label>
+  </fieldset>
+  <button type="submit">Request a place</button>
+</form>
+```
+
+**5. Informative image with dimensions**
+
+```html
+<figure>
+  <img src="images/speaker.jpg" alt="Workshop instructor demonstrating a page outline" width="800" height="600">
+  <figcaption>Instructor Maya Chen introduces semantic page structure.</figcaption>
+</figure>
+```
+
+**6. FAQ disclosure and contact link**
+
+```html
+<details><summary>Do I need experience?</summary><p>No prior HTML experience is required.</p></details>
+<a href="mailto:learn@example.com">Contact the organizers</a>
+```
+
+## Complete Example
+
 ```html
 <!doctype html>
 <html lang="en">
