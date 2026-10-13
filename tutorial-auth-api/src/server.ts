@@ -8,13 +8,11 @@ import helmet from "helmet";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 import { EJSON } from "bson";
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { appConfig } from "./config.js";
-import { findLessonByTrackAndSlug, upsertLesson } from "./contentDb.js";
-import { findLocalLessonByTrackAndSlug, findLocalLessonsByTrack } from "./localContent.js";
+import { findLessonByTrackAndSlug, findLessonsByTrack } from "./contentDb.js";
 import { getDatabase } from "./db.js";
 import { synthesizeSpeech } from "./tts.js";
+import { createCodingLessonRouter, createLessonRouter } from "./lessonRoutes.js";
 
 type UserRole = "admin" | "user";
 
@@ -27,21 +25,6 @@ type LoginBody = {
   username?: string;
   password?: string;
   role?: UserRole;
-};
-
-type SaveTutorialBody = {
-  track?: string;
-  slug?: string;
-  title?: string;
-  dayLabel?: string;
-  level?: string;
-  estimatedMinutes?: number;
-  order?: number;
-  moduleNumber?: number;
-  moduleSlug?: string;
-  contentPath?: string;
-  rawContent?: string;
-  youtubeVideos?: Array<{ title: string; url: string; description?: string }>;
 };
 
 type TtsBody = {
@@ -420,20 +403,6 @@ app.get("/auth/validate", (req, res) => {
   }
 });
 
-function isSafeContentPath(contentPath: string) {
-  const hasKnownPrefix = contentPath.startsWith("tutorials/") || contentPath.startsWith("coding/");
-
-  if (!hasKnownPrefix || !contentPath.endsWith(".md")) {
-    return false;
-  }
-
-  if (contentPath.includes("..") || path.isAbsolute(contentPath)) {
-    return false;
-  }
-
-  return true;
-}
-
 app.get("/api/lessons", async (req: Request, res: Response) => {
   const track = String(req.query.track ?? "").trim();
   const slug = String(req.query.slug ?? "").trim();
@@ -443,25 +412,12 @@ app.get("/api/lessons", async (req: Request, res: Response) => {
   }
 
   try {
-    if (appConfig.content.source === "local") {
-      if (slug) {
-        const lesson = await findLocalLessonByTrackAndSlug(track, slug);
-        return res.json({ ok: true, lesson });
-      }
-
-      const lessons = await findLocalLessonsByTrack(track);
-      return res.json({ ok: true, lessons });
-    }
-
     if (slug) {
       const lesson = await findLessonByTrackAndSlug(track, slug);
       return res.json({ ok: true, lesson: lesson ?? null });
     }
 
-    const lessons = await (
-      await import("./contentDb.js")
-    ).findLessonsByTrack(track);
-
+    const lessons = await findLessonsByTrack(track);
     return res.json({ ok: true, lessons });
   } catch (error) {
     console.error(error);
@@ -469,66 +425,8 @@ app.get("/api/lessons", async (req: Request, res: Response) => {
   }
 });
 
-app.post(
-  "/api/lessons/save",
-  async (req: Request<unknown, unknown, SaveTutorialBody>, res: Response) => {
-    if (appConfig.content.source === "local") {
-      return res.status(409).json({
-        ok: false,
-        message: "Lesson saving is disabled when CONTENT_SOURCE=local.",
-      });
-    }
-
-    const contentPath = req.body.contentPath?.trim() ?? "";
-    const rawContent = req.body.rawContent ?? "";
-    const track = String(req.body.track ?? "").trim();
-    const slug = String(req.body.slug ?? "").trim();
-
-    if (!contentPath || !rawContent || !track || !slug) {
-      return res.status(400).json({
-        ok: false,
-        message: "track, slug, contentPath and rawContent are required.",
-      });
-    }
-
-    if (!isSafeContentPath(contentPath)) {
-      return res
-        .status(400)
-        .json({ ok: false, message: "Invalid content path." });
-    }
-
-    try {
-      const saved = await upsertLesson({
-        track,
-        slug,
-        title: String(req.body.title ?? slug),
-        dayLabel: String(req.body.dayLabel ?? ""),
-        level: (String(req.body.level ?? "Beginner") as any) || "Beginner",
-        estimatedMinutes: Number(req.body.estimatedMinutes ?? 30),
-        order: Number(req.body.order ?? 1),
-        moduleNumber: Number(req.body.moduleNumber ?? 0),
-        moduleSlug: String(req.body.moduleSlug ?? "module-0"),
-        contentPath,
-        body: rawContent,
-        youtubeVideos: Array.isArray(req.body.youtubeVideos)
-          ? req.body.youtubeVideos
-          : [],
-      });
-
-      return res.json({
-        ok: true,
-        message: `Saved ${contentPath}`,
-        savedPath: contentPath,
-        db: saved,
-      });
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .json({ ok: false, message: "Failed to save tutorial to database." });
-    }
-  },
-);
+app.use("/api/html-lessons", createLessonRouter(requireAdmin, isAdminRequest));
+app.use("/api/admin/coding-lessons", createCodingLessonRouter(requireAdmin));
 
 const MAX_TTS_TEXT_LENGTH = 10000;
 
@@ -587,6 +485,17 @@ app.post(
     }
   },
 );
+
+function isAdminRequest(req: Request) {
+  const token = readToken(req);
+  if (!token) return false;
+
+  try {
+    return (jwt.verify(token, jwtSecret) as JwtPayload & AuthUser).role === "admin";
+  } catch {
+    return false;
+  }
+}
 
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
   const token = readToken(req);

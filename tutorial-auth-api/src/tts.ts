@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 type Language = "english" | "hindi";
 type Gender = "male" | "female";
 type SpeechRate = "slow" | "normal" | "fast";
-type TextChunk = { text: string; bold: boolean };
+type TextChunk = { text: string };
 
 const MAX_TEXT_LENGTH = 10000;
 
@@ -27,27 +27,13 @@ function stripEmoji(text: string): string {
     .trim();
 }
 
-// Splits text into paragraphs, then into bold/normal runs based on **markdown** markers (asterisks are stripped).
+// Split plain text into speakable paragraphs.
 function splitIntoChunks(text: string): TextChunk[] {
-  const chunks: TextChunk[] = [];
-
-  for (const rawParagraph of text.split(/\n+/)) {
-    const paragraph = rawParagraph.trim();
-    if (!paragraph) continue;
-
-    for (const part of paragraph.split(/(\*\*[^*]+\*\*)/g)) {
-      const boldMatch = /^\*\*([^*]+)\*\*$/.exec(part);
-      if (boldMatch) {
-        const boldText = stripEmoji(boldMatch[1]);
-        if (boldText) chunks.push({ text: boldText, bold: true });
-      } else {
-        const normalText = stripEmoji(part);
-        if (normalText) chunks.push({ text: normalText, bold: false });
-      }
-    }
-  }
-
-  return chunks;
+  return text
+    .split(/\n+/)
+    .map(stripEmoji)
+    .filter(Boolean)
+    .map((paragraph) => ({ text: paragraph }));
 }
 
 // The free Edge TTS endpoint only reliably handles one prosody request per connection, so each
@@ -61,14 +47,9 @@ async function synthesizeChunks(
   const { MsEdgeTTS } = await import("msedge-tts");
   const buffers: Buffer[] = [];
   const edgeRate = baseRate === "normal" ? "medium" : baseRate;
-  const boldRate = baseRate === "fast" ? "medium" : "slow";
 
   for (const chunk of chunks) {
-    // "x-loud" is an absolute SSML volume level, so it stays audible regardless of the base volume,
-    // and combined with a higher pitch + slower rate it reads as clearly stressed/bold.
-    const options = chunk.bold
-      ? { rate: boldRate, pitch: "+18%", volume: "x-loud" }
-      : { rate: edgeRate, volume: "soft" };
+    const options = { rate: edgeRate, volume: "soft" };
 
     const tts = new MsEdgeTTS();
     await tts.setMetadata(voice, outputFormat);
@@ -110,7 +91,7 @@ export async function synthesizeSpeech(
   const voice = VOICES[language][gender];
   const { OUTPUT_FORMAT } = await import("msedge-tts");
   const chunks = splitIntoChunks(text);
-  if (chunks.length === 0) chunks.push({ text, bold: false });
+  if (chunks.length === 0) chunks.push({ text });
 
   return synthesizeChunks(
     voice,

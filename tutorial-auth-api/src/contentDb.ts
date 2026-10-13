@@ -1,35 +1,37 @@
 import { ObjectId } from "mongodb";
 import { getDatabase } from "./db.js";
-import { getLessonCollectionName, resolveLanguageFromTrack } from "./config.js";
+import { getLessonCollectionName } from "./config.js";
 
 export type LessonLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
-export type CodingQuestionAnswer = {
+export type CodingQuestionHtml = {
   id: string;
   order: number;
   number: number;
   section: string;
-  promptMarkdown: string;
-  answerMarkdown: string;
+  promptHtml: string;
+  answerHtml: string;
 };
 
 export type TutorialLessonDocument = {
   _id?: ObjectId;
   language: string;
   track: string;
-  slug: string;
+  slug?: string;
   title: string;
-  dayLabel: string;
-  level: LessonLevel;
-  estimatedMinutes: number;
+  level?: LessonLevel;
+  estimatedMinutes?: number;
   order: number;
   moduleNumber: number;
-  moduleSlug: string;
-  contentPath: string;
-  body?: string;
-  contextMarkdown?: string;
-  solutionBody?: string;
-  questions?: CodingQuestionAnswer[];
+  contentFormat?: "html";
+  contentKind?: "tutorial" | "coding" | "reference";
+  bodyHtml?: string;
+  contextHtml?: string;
+  solutionHtml?: string;
+  questionsHtml?: CodingQuestionHtml[];
+  status?: string;
+  isActive?: boolean;
+  deletedAt?: Date | null;
   youtubeVideos: Array<{ title: string; url: string; description?: string }>;
   createdAt: Date;
   updatedAt: Date;
@@ -42,6 +44,8 @@ export async function findLessonByTrackAndSlug(track: string, slug: string) {
   return collection.findOne({
     track,
     slug,
+    contentFormat: "html",
+    contentKind: "coding",
   });
 }
 
@@ -50,42 +54,7 @@ export async function findLessonsByTrack(track: string) {
   const collection = db.collection<TutorialLessonDocument>(getLessonCollectionName());
 
   return collection
-    .find({ track })
+    .find({ track, contentFormat: "html", contentKind: "coding" })
     .sort({ order: 1, slug: 1 })
     .toArray();
-}
-
-export async function upsertLesson(lesson: Partial<TutorialLessonDocument>) {
-  const db = await getDatabase();
-
-  if (!lesson.track) {
-    throw new Error("track is required to resolve the lesson language.");
-  }
-
-  const collection = db.collection<TutorialLessonDocument>(getLessonCollectionName());
-
-  const payload = {
-    ...lesson,
-    language: lesson.language ?? resolveLanguageFromTrack(lesson.track),
-    updatedAt: new Date(),
-    ...(lesson.createdAt ? {} : { createdAt: new Date() }),
-  };
-
-  const filter = {
-    track: lesson.track,
-    slug: lesson.slug,
-  };
-
-  const result = await collection.updateOne(
-    filter,
-    { $set: payload },
-    { upsert: true },
-  );
-
-  return {
-    ok: true,
-    matchedCount: result.matchedCount,
-    modifiedCount: result.modifiedCount,
-    upsertedCount: result.upsertedCount,
-  };
 }
