@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import { tracks, type TrackKey } from "../data/tracks";
-import { getTutorialsByTrack } from "../data/tutorials";
 
 type MainNavigationProps = Readonly<{
   currentTrack: TrackKey;
@@ -61,16 +60,10 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
         continue;
       }
 
-      const firstLesson = getTutorialsByTrack(track.key)[0];
-
-      if (!firstLesson) {
-        continue;
-      }
-
       links.push({
         key: track.key,
         label: track.label,
-        to: `/${track.key}/tutorial/${firstLesson.slug}${hashSuffix}`,
+        to: `/${track.key}${hashSuffix}`,
       });
     }
 
@@ -181,7 +174,7 @@ export function MainNavigation(props: Readonly<MainNavigationProps>) {
           <Link
             to="/login"
             className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-cyan-50 sm:text-sm"
-          hidden>
+          >
             Login
           </Link>
         )}

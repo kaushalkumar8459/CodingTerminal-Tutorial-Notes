@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import { getTutorialsByTrack } from "../data/tutorials";
 
 type JavaScriptSubNavigationProps = {
   active?:
@@ -16,7 +15,6 @@ type JavaScriptSubNavigationProps = {
 
 export function JavaScriptSubNavigation({ active }: Readonly<JavaScriptSubNavigationProps>) {
   const location = useLocation();
-  const firstTutorial = getTutorialsByTrack("javascript")[0];
   const activeSection = active ?? (
     location.pathname.startsWith("/coding/javascriptrealinterview")
       ? "real-interview"
@@ -32,16 +30,14 @@ export function JavaScriptSubNavigation({ active }: Readonly<JavaScriptSubNaviga
           ? "typescript"
       : location.pathname.startsWith("/coding/javascript")
           ? "coding"
-          : /\/javascript\/tutorial\/day-02[5-7]-/.test(location.pathname)
-              ? "problem-solving"
-          : "tutorial"
+            : "tutorial"
   );
 
   const links = [
     {
       key: "tutorial",
       label: "JS Tutorial",
-      to: firstTutorial ? `/javascript/tutorial/${firstTutorial.slug}` : "/javascript",
+      to: "/learn/javascript",
     },
     {
       key: "problem-solving",

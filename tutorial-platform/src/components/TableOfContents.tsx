@@ -1,4 +1,4 @@
-import type { TocItem } from "../types/tutorial";
+import type { TocItem } from "../types/lesson";
 
 type TableOfContentsProps = {
   items: TocItem[];

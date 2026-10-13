@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { invalidateCache } from "../services/apiCache";
 import { AuthContext, type AuthUser, type AuthContextValue, type UserRole } from "./authContextObject";
 
 const AUTH_STORAGE_KEY = "tutorial-platform-auth";
@@ -78,6 +79,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
             token: payload.token,
           };
 
+          invalidateCache();
           setUser(loggedInUser);
           window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(loggedInUser));
 
@@ -112,6 +114,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
     };
 
     const logout = () => {
+      invalidateCache();
       setUser(null);
       window.localStorage.removeItem(AUTH_STORAGE_KEY);
     };

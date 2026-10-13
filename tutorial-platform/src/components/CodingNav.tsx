@@ -21,7 +21,7 @@ export function CodingNav({ track, lessons }: Readonly<CodingNavProps>) {
     return lessons.filter(
       (lesson) =>
         lesson.title.toLowerCase().includes(normalizedQuery) ||
-        lesson.dayLabel.toLowerCase().includes(normalizedQuery),
+        String(lesson.order).includes(normalizedQuery),
     );
   }, [lessons, normalizedQuery]);
 
@@ -52,7 +52,7 @@ export function CodingNav({ track, lessons }: Readonly<CodingNavProps>) {
               }`
             }
           >
-            <span className="mr-2 text-xs font-semibold text-cyan-700">{lesson.dayLabel}</span>
+            <span className="mr-2 text-xs font-semibold text-cyan-700">Day {lesson.order}</span>
             {lesson.title}
           </NavLink>
         ))}

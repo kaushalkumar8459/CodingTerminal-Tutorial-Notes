@@ -1,14 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { getTutorialsByTrack } from "../data/tutorials";
 
 export function HTMLSubNavigation() {
   const location = useLocation();
-  const firstTutorial = getTutorialsByTrack("html")[0];
   const isPractice = location.pathname.startsWith("/coding/htmlinterview");
   const links = [
     {
       label: "HTML Tutorial",
-      to: firstTutorial ? `/html/tutorial/${firstTutorial.slug}` : "/html",
+      to: "/learn/html",
       isActive: !isPractice,
     },
     {
