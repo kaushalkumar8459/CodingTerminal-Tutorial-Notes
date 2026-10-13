@@ -1,23 +1,20 @@
 # Tutorial Auth API
 
-Separate backend service for authentication validation.
+Backend service for authentication and MongoDB lesson content.
 
 ## Features
 
 - POST /auth/login validates credentials and returns JWT token + user role.
 - GET /auth/validate checks token validity and returns user payload.
 - GET /health for deployment health checks.
+- HTML lesson endpoints load sanitized lesson content and backend-driven navigation.
 
-## Tutorial content source
+## HTML lesson API
 
-`CONTENT_SOURCE` selects how `GET /api/lessons` reads lessons:
-
-- `database` (default): read from the configured MongoDB collection.
-- `local`: read Markdown files from the shared local catalog in `tutorial-platform/public`.
-
-Set `LOCAL_CONTENT_ROOT` to override the local content root. Paths in the catalog are relative to that directory. Add tracks and their local folders to `src/localContent.ts`.
-
-Local mode is read-only for lesson content. `POST /api/lessons/save` returns HTTP 409 in local mode; switch back to `database` to save lessons to MongoDB.
+`GET /api/html-lessons/nav` returns active tracks, sections, modules, and lessons.
+`GET /api/html-lessons/:track/:title` returns a sanitized HTML lesson.
+Admin-only `POST /api/html-lessons/:track` and `PUT /api/html-lessons/:track/:title` create and edit lessons.
+Coding practice records are served by `GET /api/lessons` from MongoDB.
 
 ## Run locally
 

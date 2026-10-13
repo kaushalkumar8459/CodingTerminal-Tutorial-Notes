@@ -10,12 +10,6 @@ dotenv.config();
 export const appConfig = {
   port: Number(process.env.PORT ?? 4001),
   frontendOrigin: process.env.FRONTEND_ORIGIN ?? "http://localhost:5173",
-  content: {
-    source: process.env.CONTENT_SOURCE?.trim().toLowerCase() === "local" ? "local" : "database",
-    localRoot: path.resolve(
-      process.env.LOCAL_CONTENT_ROOT?.trim() || path.join(process.cwd(), "../tutorial-platform/public"),
-    ),
-  },
   jwtSecret: process.env.JWT_SECRET ?? "replace-me-in-production",
   auth: {
     adminUsername: (process.env.ADMIN_USERNAME ?? "admin").trim().toLowerCase(),

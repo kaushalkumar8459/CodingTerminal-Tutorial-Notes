@@ -1,5 +1,6 @@
 export const tracks = [
   { key: "javascript", label: "JavaScript" },
+  { key: "html", label: "HTML" },
   { key: "java", label: "Java" },
   { key: "react", label: "React" },
   { key: "angular", label: "Angular" },

@@ -5,14 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "content:sync": "node ./scripts/content-pipeline.mjs sync",
-    "content:generate": "node ./scripts/content-pipeline.mjs generate",
-    "content:coding": "node ./scripts/generate-coding-index.mjs",
-    "content:validate": "node ./scripts/content-pipeline.mjs validate",
-    "content:validate:react": "node ./scripts/validate-react-docs.mjs",
-    "content:fix:react": "node ./scripts/fix-react-mojibake.mjs",
-    "content:frontmatter": "node ./scripts/content-pipeline.mjs frontmatter",
-    "content:migrate": "node ./scripts/content-pipeline.mjs migrate",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
@@ -20,12 +12,14 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@tiptap/core": "^3.31.4",
+    "@tiptap/extension-table": "^3.31.4",
+    "@tiptap/react": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
+    "dompurify": "^3.4.16",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.1",
-    "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.1",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
